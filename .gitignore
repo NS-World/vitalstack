@@ -1,0 +1,15 @@
+# WordPress exports / backups: contain user emails and comment data, never commit
+*.WordPress.*.xml
+exports/
+backups/
+*.sql
+*.sql.gz
+
+# Build / OS / editor junk
+node_modules/
+dist/
+*.zip
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
