@@ -20,7 +20,6 @@ function vitalstack_customize_register( $wp_customize ) {
 		)
 	);
 	$home_fields = array(
-		'vitalstack_home_kicker' => array( __( 'Hero eyebrow', 'vitalstack' ), 'text', vitalstack_default( 'home_kicker' ) ),
 		'vitalstack_home_title'  => array( __( 'Hero heading', 'vitalstack' ), 'text', vitalstack_default( 'home_title' ) ),
 		'vitalstack_home_desc'   => array( __( 'Hero description', 'vitalstack' ), 'textarea', vitalstack_default( 'home_desc' ) ),
 	);
@@ -82,6 +81,37 @@ function vitalstack_customize_register( $wp_customize ) {
 			'type'        => 'checkbox',
 		)
 	);
+
+	/* ── Accounts & email ── */
+	$wp_customize->add_section(
+		'vitalstack_members',
+		array(
+			'title'       => __( 'VitalStack: Accounts & Email', 'vitalstack' ),
+			'priority'    => 31,
+			'description' => __( 'Reader accounts live at /account/. Emails need working mail delivery: install an SMTP plugin (see the setup guide).', 'vitalstack' ),
+		)
+	);
+	$member_fields = array(
+		'vitalstack_accounts_enabled' => __( 'Allow readers to create accounts', 'vitalstack' ),
+		'vitalstack_notify_enabled'   => __( 'Email subscribers when a new post or tutorial is published', 'vitalstack' ),
+	);
+	foreach ( $member_fields as $id => $label ) {
+		$wp_customize->add_setting(
+			$id,
+			array(
+				'default'           => true,
+				'sanitize_callback' => 'wp_validate_boolean',
+			)
+		);
+		$wp_customize->add_control(
+			$id,
+			array(
+				'label'   => $label,
+				'section' => 'vitalstack_members',
+				'type'    => 'checkbox',
+			)
+		);
+	}
 
 	/* ── Header & footer ── */
 	$wp_customize->add_section(
@@ -182,9 +212,8 @@ function vitalstack_social_networks() {
  */
 function vitalstack_default( $key ) {
 	$defaults = array(
-		'home_kicker'    => __( 'Free, beginner-friendly guides', 'vitalstack' ),
-		'home_title'     => __( 'Learn AI & coding, explained simply.', 'vitalstack' ),
-		'home_desc'      => __( 'Step-by-step tutorials and practical AI guides for students, beginners and career switchers. No jargon, no fluff: just clear explanations and real examples you can try.', 'vitalstack' ),
+		'home_title'     => __( 'Learn to Code', 'vitalstack' ),
+		'home_desc'      => __( 'Free, step-by-step tutorials for HTML, CSS, JavaScript, SQL, Java and AI, written for complete beginners.', 'vitalstack' ),
 		'footer_tagline' => __( 'Clear, practical guides to AI and programming for beginners.', 'vitalstack' ),
 	);
 	return isset( $defaults[ $key ] ) ? $defaults[ $key ] : '';

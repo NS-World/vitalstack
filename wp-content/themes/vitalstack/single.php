@@ -1,6 +1,7 @@
 <?php
 /**
- * Single article (blog posts and news).
+ * Single guide (blog posts and news), in the same docs layout as tutorials:
+ * topic sidebar | article | "on this page".
  *
  * @package VitalStack
  */
@@ -11,84 +12,70 @@ while ( have_posts() ) :
 	the_post();
 	$vs_content = vitalstack_get_rendered_content();
 	?>
-	<article id="post-<?php the_ID(); ?>" <?php post_class( 'article' ); ?>>
-		<header class="article-head container">
+	<div class="doc">
+		<aside class="doc-side" id="doc-side" aria-label="<?php esc_attr_e( 'More in this topic', 'vitalstack' ); ?>">
+			<div class="doc-side-inner">
+				<?php vitalstack_topic_sidebar(); ?>
+			</div>
+		</aside>
+
+		<article id="post-<?php the_ID(); ?>" <?php post_class( 'doc-main' ); ?>>
+			<button type="button" class="side-toggle" data-toggle-side aria-controls="doc-side" aria-expanded="false"><?php echo vitalstack_icon( 'menu', 18 ); // phpcs:ignore ?> <?php esc_html_e( 'More in this topic', 'vitalstack' ); ?></button>
+
 			<?php vitalstack_breadcrumbs(); ?>
-			<h1 class="article-title<?php echo mb_strlen( get_the_title() ) > 70 ? ' is-long' : ''; ?>"><?php the_title(); ?></h1>
+			<h1 class="doc-title<?php echo mb_strlen( get_the_title() ) > 70 ? ' is-long' : ''; ?>"><?php the_title(); ?></h1>
 			<?php if ( has_excerpt() ) : ?>
-				<p class="article-dek"><?php echo esc_html( get_the_excerpt() ); ?></p>
+				<p class="doc-dek"><?php echo esc_html( get_the_excerpt() ); ?></p>
 			<?php endif; ?>
-			<div class="article-meta-row">
+			<div class="doc-foot-row doc-byline">
 				<?php vitalstack_byline(); ?>
 				<?php vitalstack_share(); ?>
 			</div>
-		</header>
 
-		<?php if ( has_post_thumbnail() ) : ?>
-			<figure class="article-hero container">
-				<?php the_post_thumbnail( 'vitalstack-hero', array( 'loading' => 'eager', 'fetchpriority' => 'high' ) ); ?>
-			</figure>
-		<?php endif; ?>
+			<?php if ( has_post_thumbnail() ) : ?>
+				<figure class="doc-hero">
+					<?php the_post_thumbnail( 'vitalstack-hero', array( 'loading' => 'eager', 'fetchpriority' => 'high' ) ); ?>
+				</figure>
+			<?php endif; ?>
 
-		<div class="container article-layout">
-			<aside class="article-aside">
-				<div class="sticky-aside">
+			<?php if ( count( $GLOBALS['vitalstack_toc'] ) >= 3 ) : ?>
+				<details class="toc-mobile">
+					<summary><?php echo vitalstack_icon( 'list', 16 ); // phpcs:ignore ?> <?php esc_html_e( 'On this page', 'vitalstack' ); ?></summary>
 					<?php vitalstack_toc(); ?>
-					<?php if ( is_active_sidebar( 'sidebar-single' ) ) : ?>
-						<div class="aside-widgets"><?php dynamic_sidebar( 'sidebar-single' ); ?></div>
-					<?php endif; ?>
-				</div>
-			</aside>
+				</details>
+			<?php endif; ?>
 
-			<div class="article-main">
-				<?php if ( count( $GLOBALS['vitalstack_toc'] ) >= 3 ) : ?>
-					<details class="toc-mobile">
-						<summary><?php echo vitalstack_icon( 'list', 16 ); // phpcs:ignore ?> <?php esc_html_e( 'On this page', 'vitalstack' ); ?></summary>
-						<?php vitalstack_toc(); ?>
-					</details>
-				<?php endif; ?>
-
-				<div class="prose">
-					<?php echo $vs_content; // phpcs:ignore WordPress.Security.EscapeOutput -- filtered post content ?>
-				</div>
-
-				<?php
-				wp_link_pages(
-					array(
-						'before' => '<nav class="page-links">',
-						'after'  => '</nav>',
-					)
-				);
-				?>
-
-				<footer class="article-foot">
-					<?php
-					$vs_tags = get_the_tags();
-					if ( $vs_tags ) :
-						?>
-						<div class="tag-list">
-							<?php foreach ( $vs_tags as $vs_tag ) : ?>
-								<a class="chip" href="<?php echo esc_url( get_tag_link( $vs_tag ) ); ?>">#<?php echo esc_html( $vs_tag->name ); ?></a>
-							<?php endforeach; ?>
-						</div>
-					<?php endif; ?>
-					<div class="article-foot-share">
-						<p><?php esc_html_e( 'Found this useful? Share it with a friend who is learning too.', 'vitalstack' ); ?></p>
-						<?php vitalstack_share(); ?>
-					</div>
-					<?php vitalstack_author_box(); ?>
-				</footer>
+			<div class="prose">
+				<?php echo $vs_content; // phpcs:ignore WordPress.Security.EscapeOutput -- filtered post content ?>
 			</div>
-		</div>
-	</article>
 
-	<div class="container">
-		<?php vitalstack_related(); ?>
-		<?php
-		if ( comments_open() || get_comments_number() ) {
-			comments_template();
-		}
-		?>
+			<?php
+			$vs_tags = get_the_tags();
+			if ( $vs_tags ) :
+				?>
+				<div class="tag-list">
+					<?php foreach ( $vs_tags as $vs_tag ) : ?>
+						<a class="chip" href="<?php echo esc_url( get_tag_link( $vs_tag ) ); ?>">#<?php echo esc_html( $vs_tag->name ); ?></a>
+					<?php endforeach; ?>
+				</div>
+			<?php endif; ?>
+
+			<?php vitalstack_subscribe_box( 'inline' ); ?>
+			<?php vitalstack_author_box(); ?>
+			<?php vitalstack_related(); ?>
+
+			<?php
+			if ( comments_open() || get_comments_number() ) {
+				comments_template();
+			}
+			?>
+		</article>
+
+		<aside class="doc-toc" aria-label="<?php esc_attr_e( 'On this page', 'vitalstack' ); ?>">
+			<div class="doc-toc-inner">
+				<?php vitalstack_toc(); ?>
+			</div>
+		</aside>
 	</div>
 	<?php
 endwhile;

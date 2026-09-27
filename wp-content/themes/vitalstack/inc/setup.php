@@ -75,7 +75,7 @@ add_action( 'widgets_init', 'vitalstack_widgets_init' );
 function vitalstack_assets() {
 	wp_enqueue_style(
 		'vitalstack-fonts',
-		'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap',
+		'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Code+Pro:wght@400;600&display=swap',
 		array(),
 		null
 	);
@@ -92,13 +92,18 @@ function vitalstack_assets() {
 		)
 	);
 
-	if ( is_singular() && vitalstack_post_has_code() ) {
-		wp_enqueue_style(
-			'vitalstack-hljs',
-			'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css',
-			array(),
-			null
-		);
+	$data = array(
+		'loggedIn'   => is_user_logged_in(),
+		'accountUrl' => vitalstack_account_url(),
+	);
+	if ( is_user_logged_in() ) {
+		$data['restUrl']   = esc_url_raw( rest_url( 'vitalstack/v1/progress' ) );
+		$data['restNonce'] = wp_create_nonce( 'wp_rest' );
+	}
+	wp_localize_script( 'vitalstack-main', 'vitalstackData', $data );
+
+	// Syntax highlighting only where there is code. Colours come from style.css.
+	if ( is_front_page() || ( is_singular() && vitalstack_post_has_code() ) ) {
 		wp_enqueue_script(
 			'vitalstack-hljs',
 			'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js',
