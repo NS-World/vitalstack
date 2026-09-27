@@ -1,117 +1,98 @@
 <?php
 /**
- * archive.php — Generic Archive Template
- *
- * Used for: date archives, author archives, tag archives.
- * Category archives use category.php (Point 5).
+ * Archives: categories, tags, authors, news, dates.
  *
  * @package VitalStack
  */
 
 get_header();
 
-// Determine archive title & description
-$archive_title = get_the_archive_title();
-$archive_desc  = get_the_archive_description();
+$vs_term = get_queried_object();
+$vs_desc = get_the_archive_description();
 ?>
 
-<main id="main" class="site-main">
+<header class="page-hero">
+	<div class="container">
+		<?php if ( is_author() ) : ?>
+			<div class="author-hero">
+				<?php echo vitalstack_monogram( get_queried_object_id(), 'xl' ); // phpcs:ignore ?>
+				<div>
+					<p class="eyebrow"><?php esc_html_e( 'Author', 'vitalstack' ); ?></p>
+					<h1 class="page-title"><?php echo esc_html( get_the_author_meta( 'display_name', get_queried_object_id() ) ); ?></h1>
+					<?php if ( get_the_author_meta( 'description', get_queried_object_id() ) ) : ?>
+						<p class="page-desc"><?php echo esc_html( get_the_author_meta( 'description', get_queried_object_id() ) ); ?></p>
+					<?php endif; ?>
+				</div>
+			</div>
+		<?php else : ?>
+			<p class="eyebrow">
+				<?php
+				if ( is_category() ) {
+					esc_html_e( 'Topic', 'vitalstack' );
+				} elseif ( is_tag() ) {
+					esc_html_e( 'Tag', 'vitalstack' );
+				} elseif ( is_post_type_archive( 'news' ) || is_tax( 'news_category' ) ) {
+					esc_html_e( 'News', 'vitalstack' );
+				} else {
+					esc_html_e( 'Archive', 'vitalstack' );
+				}
+				?>
+			</p>
+			<h1 class="page-title"><?php echo esc_html( wp_strip_all_tags( get_the_archive_title() ) ); ?></h1>
+			<?php if ( $vs_desc ) : ?>
+				<div class="page-desc"><?php echo wp_kses_post( $vs_desc ); ?></div>
+			<?php endif; ?>
 
-<!-- Page hero -->
-<section class="page-hero" aria-label="<?php esc_attr_e( 'Archive header', 'vitalstack' ); ?>">
-  <div class="container" style="position:relative;">
+			<?php
+			// Sub-topic chips for parent categories.
+			if ( is_category() && $vs_term instanceof WP_Term ) :
+				$vs_children = get_categories(
+					array(
+						'parent'     => $vs_term->parent ? $vs_term->parent : $vs_term->term_id,
+						'hide_empty' => true,
+					)
+				);
+				if ( $vs_children ) :
+					?>
+					<div class="chips">
+						<?php if ( $vs_term->parent ) : ?>
+							<a class="chip" href="<?php echo esc_url( get_category_link( $vs_term->parent ) ); ?>"><?php esc_html_e( 'All', 'vitalstack' ); ?></a>
+						<?php else : ?>
+							<span class="chip is-active"><?php esc_html_e( 'All', 'vitalstack' ); ?></span>
+						<?php endif; ?>
+						<?php foreach ( $vs_children as $vs_child ) : ?>
+							<?php if ( $vs_child->term_id === $vs_term->term_id ) : ?>
+								<span class="chip is-active"><?php echo esc_html( $vs_child->name ); ?></span>
+							<?php else : ?>
+								<a class="chip" href="<?php echo esc_url( get_category_link( $vs_child ) ); ?>"><?php echo esc_html( $vs_child->name ); ?></a>
+							<?php endif; ?>
+						<?php endforeach; ?>
+					</div>
+					<?php
+				endif;
+			endif;
+			?>
+		<?php endif; ?>
+	</div>
+</header>
 
-    <?php
-    // Get archive title & description
-    $archive_title = get_the_archive_title();
-    $archive_desc  = get_the_archive_description();
-
-    // Optional: remove unwanted <span> from title (WordPress adds it for dates)
-    // Uncomment if you want plain text instead
-    // $archive_title = str_replace( array('<span>', '</span>'), '', $archive_title );
-    ?>
-
-    <!-- Breadcrumb -->
-    <nav class="breadcrumb" aria-label="<?php esc_attr_e( 'Breadcrumb', 'vitalstack' ); ?>">
-      <a href="<?php echo esc_url( home_url( '/' ) ); ?>">
-        <?php esc_html_e( 'Home', 'vitalstack' ); ?>
-      </a>
-      <span>/</span>
-      <span><?php echo wp_kses_post( $archive_title ); ?></span>
-    </nav>
-
-    <!-- Title -->
-    <h1><?php echo wp_kses_post( $archive_title ); ?></h1>
-
-    <!-- Description -->
-    <?php if ( ! empty( $archive_desc ) ) : ?>
-      <p><?php echo wp_kses_post( $archive_desc ); ?></p>
-    <?php endif; ?>
-
-  </div>
+<section class="section section-tight">
+	<div class="container">
+		<?php if ( have_posts() ) : ?>
+			<div class="grid grid-3">
+				<?php
+				while ( have_posts() ) :
+					the_post();
+					vitalstack_card();
+				endwhile;
+				?>
+			</div>
+			<?php vitalstack_pagination(); ?>
+		<?php else : ?>
+			<?php get_template_part( 'template-parts/none' ); ?>
+		<?php endif; ?>
+	</div>
 </section>
 
-  <!-- Archive layout — sidebar LEFT -->
-  <div class="container content-sidebar-wrap">
-
-    <aside id="secondary" class="sidebar" role="complementary">
-      <?php if ( is_active_sidebar( 'sidebar-blog' ) ) : ?>
-        <?php dynamic_sidebar( 'sidebar-blog' ); ?>
-      <?php else : ?>
-        <div class="widget">
-          <h3 class="widget-title"><?php esc_html_e( 'Search', 'vitalstack' ); ?></h3>
-          <?php get_search_form(); ?>
-        </div>
-        <div class="widget">
-          <h3 class="widget-title"><?php esc_html_e( 'Categories', 'vitalstack' ); ?></h3>
-          <ul><?php wp_list_categories( array( 'show_count' => true, 'title_li' => '', 'hide_empty' => true ) ); ?></ul>
-        </div>
-      <?php endif; ?>
-    </aside>
-
-    <div id="primary" class="content-area">
-      <?php if ( have_posts() ) : ?>
-        <div class="cards-grid">
-          <?php while ( have_posts() ) : the_post(); ?>
-            <?php vitalstack_article_card( get_the_ID() ); ?>
-          <?php endwhile; ?>
-        </div>
-        <nav class="pagination-wrap" aria-label="<?php esc_attr_e( 'Archive pagination', 'vitalstack' ); ?>">
-          <?php
-          the_posts_pagination( array(
-            'mid_size'  => 2,
-            'prev_text' => '← ' . __( 'Prev', 'vitalstack' ),
-            'next_text' => __( 'Next', 'vitalstack' ) . ' →',
-          ) );
-          ?>
-        </nav>
-      <?php else : ?>
-        <div class="no-posts-notice">
-          <h2><?php esc_html_e( 'Nothing found.', 'vitalstack' ); ?></h2>
-          <p><?php esc_html_e( 'Try browsing a different archive or using the search below.', 'vitalstack' ); ?></p>
-          <?php get_search_form(); ?>
-        </div>
-      <?php endif; ?>
-    </div>
-
-  </div>
-
-<style>
-.content-sidebar-wrap {
-  display: grid;
-  grid-template-columns: 280px 1fr;
-  gap: 40px;
-  padding-top: 48px;
-  padding-bottom: 80px;
-  align-items: start;
-}
-.sidebar { position: sticky; top: 100px; display: flex; flex-direction: column; gap: 20px; }
-@media (max-width: 1024px) {
-  .content-sidebar-wrap { grid-template-columns: 1fr; }
-  .sidebar { position: static; }
-}
-</style>
-
-</main>
-
-<?php get_footer(); ?>
+<?php
+get_footer();

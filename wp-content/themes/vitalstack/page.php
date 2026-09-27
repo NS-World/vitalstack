@@ -1,6 +1,6 @@
 <?php
 /**
- * Template Name: Legal Page
+ * Default page.
  *
  * @package VitalStack
  */
@@ -12,12 +12,7 @@ while ( have_posts() ) :
 	?>
 	<header class="page-hero page-hero-sm">
 		<div class="container narrow">
-			<p class="eyebrow"><?php esc_html_e( 'Legal', 'vitalstack' ); ?></p>
 			<h1 class="page-title"><?php the_title(); ?></h1>
-			<p class="page-desc">
-				<?php esc_html_e( 'Last updated:', 'vitalstack' ); ?>
-				<time datetime="<?php echo esc_attr( get_the_modified_date( 'c' ) ); ?>"><?php echo esc_html( get_the_modified_date() ); ?></time>
-			</p>
 		</div>
 	</header>
 	<section class="section section-tight">

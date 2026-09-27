@@ -6,8 +6,11 @@ Source for [vitalstack.co.in](https://vitalstack.co.in/): a WordPress site hoste
 
 ```
 wp-content/themes/vitalstack/   Custom WordPress theme (deployed to Hostinger)
-content/                        Article drafts, editorial briefs, content calendar
-docs/                           Audit, roadmap, editorial guidelines
+  inc/                          PHP modules: setup, post types, learning paths, TOC, SEO, customizer
+  assets/js/main.js             Dark mode, search, TOC highlight, code copy, lesson progress
+  style.css                     Whole design system (light + dark)
+content/                        Page texts, cleanup list, article drafts
+docs/                           Audit, roadmap, setup guides
 ```
 
 WordPress core, plugins, uploads and the database live on Hostinger and are
@@ -25,3 +28,5 @@ emails and are git-ignored on purpose.
 
 - [`docs/AUDIT-2026-09.md`](docs/AUDIT-2026-09.md): why AdSense rejected the site
 - [`docs/ROADMAP.md`](docs/ROADMAP.md): step-by-step plan to approval and growth
+- [`docs/THEME-V2-SETUP.md`](docs/THEME-V2-SETUP.md): how to install theme v2 and clean up authors, menus and pages
+- [`content/cleanup-list.csv`](content/cleanup-list.csv): what to do with every existing post

@@ -48,6 +48,12 @@ Proposed top-level structure (at most 4–5 sections):
 - Target: **30–40 strong articles** in the focus niche before reapplying.
 
 ## Phase 3: engagement features (theme work, weeks 3–10)
+Done in theme v2: TOC with active-section highlight, reading progress bar,
+read time, learning paths with lesson order + saved progress + next-lesson
+CTA, code copy buttons with syntax highlighting, related posts, search modal,
+dark mode, WhatsApp/LinkedIn/X sharing. Still to do: live code playground,
+interactive tools.
+
 Things that raise time-on-site:
 - Table of contents + reading progress bar + estimated read time
 - Tutorial learning paths with progress tracking and "Next lesson" CTA
