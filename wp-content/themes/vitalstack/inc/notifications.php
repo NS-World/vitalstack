@@ -19,13 +19,16 @@ define( 'VITALSTACK_MAIL_BATCH', 40 );
  * @param string $to      Recipient.
  * @param string $subject Subject.
  * @param string $body    Inner HTML (already escaped).
- * @param array  $extra   { @type string $unsubscribe Unsubscribe URL. }
+ * @param array  $extra   { @type string $unsubscribe Unsubscribe URL. @type string $reply_to Reply-To value. @type string $footer Footer HTML (escaped). }
  */
 function vitalstack_mail( $to, $subject, $body, $extra = array() ) {
 	$site    = wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES );
 	$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
-	$footer = esc_html__( 'You are receiving this because you have an account on', 'vitalstack' ) . ' <a href="' . esc_url( home_url( '/' ) ) . '" style="color:#0a7d4f">' . esc_html( $site ) . '</a>.';
+	$footer = isset( $extra['footer'] ) ? $extra['footer'] : esc_html__( 'You are receiving this because you have an account on', 'vitalstack' ) . ' <a href="' . esc_url( home_url( '/' ) ) . '" style="color:#0a7d4f">' . esc_html( $site ) . '</a>.';
+	if ( ! empty( $extra['reply_to'] ) ) {
+		$headers[] = 'Reply-To: ' . $extra['reply_to'];
+	}
 	if ( ! empty( $extra['unsubscribe'] ) ) {
 		$headers[] = 'List-Unsubscribe: <' . esc_url_raw( $extra['unsubscribe'] ) . '>';
 		$headers[] = 'List-Unsubscribe-Post: List-Unsubscribe=One-Click';

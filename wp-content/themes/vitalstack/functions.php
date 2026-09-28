@@ -27,3 +27,4 @@ require VITALSTACK_DIR . '/inc/notifications.php';
 require VITALSTACK_DIR . '/inc/accounts.php';
 require VITALSTACK_DIR . '/inc/progress-api.php';
 require VITALSTACK_DIR . '/inc/ui.php';
+require VITALSTACK_DIR . '/inc/contact.php';
