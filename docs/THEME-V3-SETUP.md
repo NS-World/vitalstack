@@ -32,10 +32,12 @@ way as before (Appearance → Themes → Add New → Upload → Replace). Then
 WordPress's default mail often lands in spam or is blocked on shared
 hosting. Without this, verification and new-post emails won't arrive.
 
-1. hPanel → **Emails** → create `hello@vitalstack.co.in` (included in your plan).
+1. hPanel → **Emails**: make sure the mailbox `contact@vitalstack.co.in` exists
+   and you know its password.
 2. WordPress → Plugins → Add New → install **WP Mail SMTP** (or *FluentSMTP*).
 3. Mailer: **Other SMTP**. Host `smtp.hostinger.com`, port `465`, encryption
-   `SSL`, username/password = the mailbox from step 1. From email = the same address.
+   `SSL`, username `contact@vitalstack.co.in` + its password.
+   From email: `contact@vitalstack.co.in`, From name: `VitalStack`.
 4. Send the plugin's test email to your Gmail and check it arrives in the inbox.
 5. hPanel → Domains → DNS: make sure **SPF**, **DKIM** and **DMARC** records
    exist for the domain (Hostinger adds SPF/DKIM automatically for its mail;
@@ -45,6 +47,26 @@ Hostinger's mailbox has a daily sending limit. With 40 emails every 5
 minutes, 1,000 subscribers take about 2 hours. When you pass a few
 thousand subscribers, switch the SMTP plugin to a sending service like
 Brevo or Amazon SES.
+
+## 2b. Contact page
+The site email is **contact@vitalstack.co.in** (shown on the Contact page,
+and used as the "From" address for site emails). The Contact page picks its
+form automatically:
+1. If Contact Form 7 is active, it shows your existing CF7 form ("Contact
+   form", ID 122 on the live site). It already sends **to**
+   `contact@vitalstack.co.in`, but its **From** is
+   `[_site_title] <wordpress@vitalstack.co.in>`, a mailbox that doesn't
+   exist, so messages can land in spam or bounce. Fix: CF7 → Contact Forms →
+   Contact form → *Mail* tab → From: `VitalStack <contact@vitalstack.co.in>`,
+   and add `Reply-To: [your-name] <[your-email]>` under Additional headers.
+   (In WP Mail SMTP, ticking *Force From Email* also fixes it.)
+2. If CF7 is deactivated, the theme's built-in form appears instead (name,
+   email, topic, message; spam-protected), which sends to the same address with
+   Reply-To set to the visitor. So you can remove CF7 later if you want one
+   plugin less.
+
+The old text on the Contact Us page ("Contact VitalStack… Send Us a
+Message…") is no longer shown; the template has its own heading and intro.
 
 ## 3. WP-Cron (5 min): recommended
 New-post emails are sent by WP-Cron, which only runs when someone visits

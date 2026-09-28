@@ -173,8 +173,8 @@ function vitalstack_customize_register( $wp_customize ) {
 		)
 	);
 	$contact_fields = array(
-		'vitalstack_cf7_form_id'   => array( __( 'Contact Form 7 form ID', 'vitalstack' ), 'absint' ),
-		'vitalstack_email_general' => array( __( 'Contact email', 'vitalstack' ), 'sanitize_email' ),
+		'vitalstack_cf7_form_id'   => array( __( 'Contact Form 7 form ID (empty = first CF7 form)', 'vitalstack' ), 'absint' ),
+		'vitalstack_email_general' => array( __( 'Contact email (default: contact@vitalstack.co.in)', 'vitalstack' ), 'sanitize_email' ),
 	);
 	foreach ( $contact_fields as $id => $f ) {
 		$wp_customize->add_setting(
