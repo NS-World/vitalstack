@@ -223,6 +223,8 @@ function vitalstack_account_messages() {
 		'subscribed_unv' => array( 'info', __( 'Subscribed! Confirm your email address first: we only send to confirmed addresses.', 'vitalstack' ) ),
 		'unsubscribed'   => array( 'success', __( 'You are unsubscribed and won’t get any more emails from us.', 'vitalstack' ) ),
 		'saved'          => array( 'success', __( 'Saved.', 'vitalstack' ) ),
+		'contact_sent'   => array( 'success', __( 'Thanks! Your message has been sent. We usually reply within 2 working days.', 'vitalstack' ) ),
+		'contact_failed' => array( 'error', __( 'Sorry, your message could not be sent. Please email us directly instead.', 'vitalstack' ) ),
 	);
 }
 
