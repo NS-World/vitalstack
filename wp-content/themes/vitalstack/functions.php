@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'VITALSTACK_VERSION', '3.0.0' );
+define( 'VITALSTACK_VERSION', '3.1.0' );
 define( 'VITALSTACK_DIR', get_template_directory() );
 define( 'VITALSTACK_URI', get_template_directory_uri() );
 
@@ -28,3 +28,4 @@ require VITALSTACK_DIR . '/inc/accounts.php';
 require VITALSTACK_DIR . '/inc/progress-api.php';
 require VITALSTACK_DIR . '/inc/ui.php';
 require VITALSTACK_DIR . '/inc/contact.php';
+require VITALSTACK_DIR . '/inc/ads.php';

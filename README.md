@@ -29,6 +29,7 @@ emails and are git-ignored on purpose.
 ## Key docs
 
 - [`docs/AUDIT-2026-09.md`](docs/AUDIT-2026-09.md): why AdSense rejected the site
+- [`docs/ADSENSE-APPROVAL.md`](docs/ADSENSE-APPROVAL.md): **the final checklist to get AdSense approval**
 - [`docs/ROADMAP.md`](docs/ROADMAP.md): step-by-step plan to approval and growth
 - [`docs/THEME-V2-SETUP.md`](docs/THEME-V2-SETUP.md): how to install the theme and clean up authors, menus and pages
 - [`docs/THEME-V3-SETUP.md`](docs/THEME-V3-SETUP.md): v3 extras: accounts, email delivery (SMTP), cron, topic bar
