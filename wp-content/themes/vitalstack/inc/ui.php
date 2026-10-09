@@ -40,7 +40,8 @@ function vitalstack_subject_label( $post_id ) {
 
 /**
  * Links in the dark topic bar. Uses the "Topic Bar" menu when assigned,
- * otherwise every tutorial (as a subject) followed by the main guide topics.
+ * otherwise one link per learning path (subject), pointing at its first
+ * lesson, followed by the main guide topics.
  */
 function vitalstack_topic_links() {
 	$locations = get_nav_menu_locations();
@@ -56,11 +57,17 @@ function vitalstack_topic_links() {
 		return;
 	}
 
-	$current = is_singular( 'tutorials' ) ? get_queried_object_id() : 0;
-	foreach ( vitalstack_learning_paths() as $path ) {
-		foreach ( vitalstack_path_lessons( $path ) as $lesson_id ) {
-			echo '<a href="' . esc_url( get_permalink( $lesson_id ) ) . '"' . ( $lesson_id === $current ? ' class="is-active" aria-current="page"' : '' ) . '>' . esc_html( vitalstack_subject_label( $lesson_id ) ) . '</a>';
+	$current_path = is_singular( 'tutorials' ) ? vitalstack_tutorial_path() : null;
+	if ( is_tax( 'tutorial_category' ) ) {
+		$current_path = get_queried_object();
+		while ( $current_path && $current_path->parent ) {
+			$current_path = get_term( $current_path->parent, 'tutorial_category' );
 		}
+	}
+	foreach ( vitalstack_learning_paths() as $path ) {
+		$lessons = vitalstack_path_lessons( $path );
+		$active  = $current_path && $current_path->term_id === $path->term_id;
+		echo '<a href="' . esc_url( get_permalink( $lessons[0] ) ) . '"' . ( $active ? ' class="is-active" aria-current="true"' : '' ) . '>' . esc_html( $path->name ) . '</a>';
 	}
 	$extra = array(
 		'artificial-intelligence' => __( 'AI Guides', 'vitalstack' ),
@@ -241,6 +248,18 @@ function vitalstack_lesson_buttons() {
 	$i       = array_search( get_the_ID(), $lessons, true );
 	$prev    = ( false !== $i && $i > 0 ) ? $lessons[ $i - 1 ] : 0;
 	$next    = ( false !== $i && $i < count( $lessons ) - 1 ) ? $lessons[ $i + 1 ] : 0;
+
+	// Last lesson of a subject: carry on into the next subject (HTML → CSS → JavaScript…).
+	$next_path = null;
+	if ( ! $next ) {
+		$paths = vitalstack_learning_paths();
+		foreach ( $paths as $k => $p ) {
+			if ( $p->term_id === $path->term_id && isset( $paths[ $k + 1 ] ) ) {
+				$next_path = $paths[ $k + 1 ];
+				break;
+			}
+		}
+	}
 	?>
 	<div class="step-buttons">
 		<?php if ( $prev ) : ?>
@@ -250,6 +269,13 @@ function vitalstack_lesson_buttons() {
 		<?php endif; ?>
 		<?php if ( $next ) : ?>
 			<a class="btn btn-primary" href="<?php echo esc_url( get_permalink( $next ) ); ?>" rel="next"><?php esc_html_e( 'Next', 'vitalstack' ); ?> ❯</a>
+		<?php elseif ( $next_path ) : ?>
+			<a class="btn btn-primary" href="<?php echo esc_url( get_permalink( vitalstack_path_lessons( $next_path )[0] ) ); ?>">
+				<?php
+				/* translators: %s: next subject name */
+				echo esc_html( sprintf( __( 'Next: %s', 'vitalstack' ), $next_path->name ) );
+				?>
+				❯</a>
 		<?php else : ?>
 			<a class="btn btn-primary" href="<?php echo esc_url( vitalstack_tutorials_url() ); ?>"><?php esc_html_e( 'All tutorials', 'vitalstack' ); ?> ❯</a>
 		<?php endif; ?>
@@ -261,15 +287,21 @@ function vitalstack_lesson_buttons() {
  * Example code shown on the homepage per learning path (kept short and runnable).
  */
 function vitalstack_path_example( $term ) {
-	$slug = $term ? $term->slug . ' ' . strtolower( $term->name ) : '';
-	if ( preg_match( '/database|sql|mongo/', $slug ) ) {
-		return array( 'SQL', "SELECT name, city\nFROM customers\nWHERE country = 'India'\nORDER BY name;", '' );
-	}
-	if ( preg_match( '/backend|api|java|server/', $slug ) ) {
-		return array( 'JavaScript', "// Call a REST API and read JSON\nfetch('https://jsonplaceholder.typicode.com/users/1')\n  .then(res => res.json())\n  .then(user => console.log(user.name));", 'js' );
-	}
-	if ( preg_match( '/fundamental|basic|programming|oop/', $slug ) ) {
-		return array( 'JavaScript', "for (let i = 1; i <= 5; i++) {\n  console.log('Step ' + i + ': keep learning!');\n}", 'js' );
+	$key = $term ? ' ' . $term->slug . ' ' . strtolower( $term->name ) . ' ' : '';
+	// Checked in order; "javascript" must be tested before "java".
+	$examples = array(
+		'/javascript|\bjs\b/'                 => array( 'JavaScript', "const name = 'VitalStack';\n\nfor (let i = 1; i <= 3; i++) {\n  console.log('Lesson ' + i + ' on ' + name);\n}", 'js' ),
+		'/\bcss\b/'                           => array( 'CSS', "<!DOCTYPE html>\n<html>\n<head>\n<style>\n  body { font-family: sans-serif; }\n  h1 { color: #0a7d4f; text-align: center; }\n  p { background: #e3f3eb; padding: 12px; }\n</style>\n</head>\n<body>\n\n<h1>Styled with CSS</h1>\n<p>Change the colours and press Run.</p>\n\n</body>\n</html>", 'html' ),
+		'/python/'                            => array( 'Python', "name = \"VitalStack\"\n\nfor i in range(1, 4):\n    print(f\"Lesson {i} on {name}\")", '' ),
+		'/database|sql|mongo/'                => array( 'SQL', "SELECT name, city\nFROM customers\nWHERE country = 'India'\nORDER BY name;", '' ),
+		'/react/'                             => array( 'React', "function Welcome({ name }) {\n  return <h1>Hello, {name}!</h1>;\n}", '' ),
+		'/\bjava\b|backend|api|server/'       => array( 'JavaScript', "// Call a REST API and read JSON\nfetch('https://jsonplaceholder.typicode.com/users/1')\n  .then(res => res.json())\n  .then(user => console.log(user.name));", 'js' ),
+		'/fundamental|basic|programming|oop/' => array( 'JavaScript', "for (let i = 1; i <= 5; i++) {\n  console.log('Step ' + i + ': keep learning!');\n}", 'js' ),
+	);
+	foreach ( $examples as $pattern => $example ) {
+		if ( preg_match( $pattern, $key ) ) {
+			return $example;
+		}
 	}
 	return array( 'HTML', "<!DOCTYPE html>\n<html>\n<body>\n\n<h1>My First Heading</h1>\n<p>My first paragraph.</p>\n\n</body>\n</html>", 'html' );
 }

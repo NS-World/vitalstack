@@ -34,10 +34,18 @@ function vitalstack_learning_paths() {
 			}
 		)
 	);
-	// Biggest paths first; they are the best starting points.
+	// Paths with an explicit order (term meta "vs_order", set by VitalStack
+	// Setup) come first in that order; the rest follow, biggest first.
 	usort(
 		$paths,
 		function ( $a, $b ) {
+			$oa = (int) get_term_meta( $a->term_id, 'vs_order', true );
+			$ob = (int) get_term_meta( $b->term_id, 'vs_order', true );
+			$oa = $oa ? $oa : PHP_INT_MAX;
+			$ob = $ob ? $ob : PHP_INT_MAX;
+			if ( $oa !== $ob ) {
+				return $oa < $ob ? -1 : 1;
+			}
 			return count( vitalstack_path_lessons( $b ) ) - count( vitalstack_path_lessons( $a ) ) ?: strcmp( $a->name, $b->name );
 		}
 	);

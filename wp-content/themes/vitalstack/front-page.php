@@ -57,14 +57,22 @@ foreach ( $vs_paths as $vs_i => $vs_path ) :
 					?>
 				</p>
 				<ol class="subject-lessons">
-					<?php foreach ( $vs_lessons as $vs_n => $vs_lesson ) : ?>
+					<?php foreach ( array_slice( $vs_lessons, 0, 6 ) as $vs_n => $vs_lesson ) : ?>
 						<li data-lesson="<?php echo (int) $vs_lesson; ?>">
 							<a href="<?php echo esc_url( get_permalink( $vs_lesson ) ); ?>">
 								<span class="lesson-num"><span class="lesson-n"><?php echo (int) $vs_n + 1; ?></span><?php echo vitalstack_icon( 'check', 12 ); // phpcs:ignore ?></span>
-								<?php echo esc_html( vitalstack_subject_label( $vs_lesson ) ); ?>
+								<?php echo esc_html( vitalstack_short_title( $vs_lesson ) ); ?>
 							</a>
 						</li>
 					<?php endforeach; ?>
+					<?php if ( count( $vs_lessons ) > 6 ) : ?>
+						<li><a href="<?php echo esc_url( get_term_link( $vs_path ) ); ?>">
+							<?php
+							/* translators: %d: number of more lessons */
+							echo esc_html( sprintf( __( '+%d more lessons', 'vitalstack' ), count( $vs_lessons ) - 6 ) );
+							?>
+						</a></li>
+					<?php endif; ?>
 				</ol>
 				<div class="subject-actions">
 					<a class="btn btn-primary btn-lg path-start" href="<?php echo esc_url( get_permalink( $vs_lessons[0] ) ); ?>" data-resume-label="<?php esc_attr_e( 'Continue learning', 'vitalstack' ); ?>"><?php esc_html_e( 'Start learning', 'vitalstack' ); ?> ❯</a>

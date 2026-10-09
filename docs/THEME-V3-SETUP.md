@@ -24,7 +24,7 @@ switches) still applies. Do that first, then the steps below.
   one-click unsubscribe link).
 
 ## 1. Upload (5 min)
-Take a Hostinger backup, then upload `vitalstack-theme-v3.1.zip` the same
+Take a Hostinger backup, then upload `vitalstack-theme-v3.2.zip` the same
 way as before (Appearance → Themes → Add New → Upload → Replace). Then
 **Settings → Permalinks → Save** once so `/account/` works.
 
