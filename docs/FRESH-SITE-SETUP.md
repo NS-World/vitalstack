@@ -5,7 +5,7 @@ Total time: about 1 hour, plus writing lessons.
 
 ## 1. Upload the theme (5 min)
 1. WordPress admin → **Appearance → Themes → Add New → Upload Theme**.
-2. Choose `vitalstack-theme-v3.2.zip` → **Install Now** → **Activate**
+2. Choose `vitalstack-theme-v3.3.zip` → **Install Now** → **Activate**
    (or **Replace current with uploaded** if an older VitalStack is installed).
 
 ## 2. Click the setup button (2 min)
@@ -58,6 +58,11 @@ You don't need Contact Form 7: the theme's contact form works on its own
 and sends to `contact@vitalstack.co.in`.
 
 ## 6. Write your first lesson (the important part)
+
+Full guide with screenshots, templates and a 100-lesson plan:
+[CONTENT-GUIDE.md](CONTENT-GUIDE.md). Fastest start: import the 5 ready HTML
+lessons described there.
+
 **Tutorials → Add New Tutorial**:
 
 1. **Title**: short, like W3Schools: `HTML Introduction`, `HTML Elements`,
@@ -68,7 +73,7 @@ and sends to `contact@vitalstack.co.in`.
 3. Right sidebar:
    - **Learning Paths** → tick the subject (e.g. *HTML*).
    - **Difficulty** → *Beginner*.
-   - **Order** (in the *Summary/Page attributes* panel) → lesson number: 1, 2, 3…
+   - **Lesson number** → 1, 2, 3… (leave empty and it gets the next number automatically)
    - **Excerpt** → one sentence about the lesson (shown on cards and in emails).
    - **Featured image** (optional).
 4. **Publish**.

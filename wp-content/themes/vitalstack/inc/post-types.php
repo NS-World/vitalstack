@@ -71,8 +71,9 @@ function vitalstack_register_content_types() {
 			),
 			'menu_position' => 6,
 			'menu_icon'     => 'dashicons-welcome-learn-more',
-			// page-attributes gives each tutorial an "Order" field = lesson number in its path.
-			'supports'      => array( 'title', 'editor', 'author', 'thumbnail', 'excerpt', 'revisions', 'custom-fields', 'page-attributes' ),
+			// The lesson number (menu_order) is set by the "Lesson number" box below,
+			// because the block editor no longer shows an "Order" field.
+			'supports'      => array( 'title', 'editor', 'author', 'thumbnail', 'excerpt', 'revisions', 'custom-fields' ),
 			'show_in_rest'  => true,
 			'taxonomies'    => array( 'tutorial_category', 'tutorial_difficulty', 'post_tag' ),
 		)
@@ -116,6 +117,101 @@ function vitalstack_register_content_types() {
 add_action( 'init', 'vitalstack_register_content_types' );
 
 /* ── Tutorial video meta box (optional video per tutorial) ─────────────────── */
+
+/* ── Lesson number (stored as menu_order) ──────────────────────────────────── */
+
+function vitalstack_lesson_number_box() {
+	add_meta_box( 'vitalstack_lesson_number', __( 'Lesson number', 'vitalstack' ), 'vitalstack_lesson_number_html', 'tutorials', 'side', 'high' );
+}
+add_action( 'add_meta_boxes', 'vitalstack_lesson_number_box' );
+
+function vitalstack_lesson_number_html( $post ) {
+	wp_nonce_field( 'vs_lesson_number', 'vs_lesson_number_nonce' );
+	$n = (int) $post->menu_order;
+	?>
+	<p>
+		<label for="vs_lesson_number" class="screen-reader-text"><?php esc_html_e( 'Lesson number', 'vitalstack' ); ?></label>
+		<input type="number" min="1" step="1" id="vs_lesson_number" name="vs_lesson_number" value="<?php echo $n ? (int) $n : ''; ?>" placeholder="<?php esc_attr_e( 'Auto', 'vitalstack' ); ?>" style="width:90px">
+	</p>
+	<p class="description"><?php esc_html_e( 'Position of this lesson in its subject (1, 2, 3…). Leave empty and it becomes the next number automatically when published.', 'vitalstack' ); ?></p>
+	<?php
+}
+
+/**
+ * Saves the number typed in the box (classic meta-box request).
+ */
+function vitalstack_lesson_number_save( $data, $postarr ) {
+	if ( 'tutorials' !== $data['post_type'] || ! isset( $_POST['vs_lesson_number_nonce'], $_POST['vs_lesson_number'] ) ) {
+		return $data;
+	}
+	if ( ! wp_verify_nonce( sanitize_key( $_POST['vs_lesson_number_nonce'] ), 'vs_lesson_number' ) ) {
+		return $data;
+	}
+	$n = absint( $_POST['vs_lesson_number'] );
+	if ( $n ) {
+		$data['menu_order'] = $n;
+	}
+	return $data;
+}
+add_filter( 'wp_insert_post_data', 'vitalstack_lesson_number_save', 10, 2 );
+
+/**
+ * A published lesson without a number gets the next free number in its
+ * subject, so lessons line up in the order they were written.
+ */
+function vitalstack_lesson_auto_number( $post_id, $post ) {
+	if ( 'tutorials' !== $post->post_type || 'publish' !== $post->post_status || (int) $post->menu_order > 0 ) {
+		return;
+	}
+	$path = vitalstack_tutorial_path( $post_id );
+	if ( ! $path ) {
+		return; // No subject yet; numbered once one is chosen.
+	}
+	global $wpdb;
+	$max = (int) $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		$wpdb->prepare(
+			"SELECT MAX(p.menu_order) FROM {$wpdb->posts} p
+			INNER JOIN {$wpdb->term_relationships} tr ON tr.object_id = p.ID
+			INNER JOIN {$wpdb->term_taxonomy} tt ON tt.term_taxonomy_id = tr.term_taxonomy_id
+			WHERE p.post_type = 'tutorials' AND p.ID <> %d AND tt.taxonomy = 'tutorial_category'
+			AND ( tt.term_id = %d OR tt.parent = %d )",
+			$post_id,
+			$path->term_id,
+			$path->term_id
+		)
+	);
+	$wpdb->update( $wpdb->posts, array( 'menu_order' => $max + 1 ), array( 'ID' => $post_id ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+	clean_post_cache( $post_id );
+}
+add_action( 'wp_after_insert_post', 'vitalstack_lesson_auto_number', 10, 2 );
+
+/**
+ * "Lesson" column in Tutorials list so the order is visible at a glance.
+ */
+add_filter(
+	'manage_tutorials_posts_columns',
+	function ( $cols ) {
+		$out = array();
+		foreach ( $cols as $key => $label ) {
+			$out[ $key ] = $label;
+			if ( 'title' === $key ) {
+				$out['vs_lesson'] = __( 'Lesson #', 'vitalstack' );
+			}
+		}
+		return $out;
+	}
+);
+add_action(
+	'manage_tutorials_posts_custom_column',
+	function ( $col, $post_id ) {
+		if ( 'vs_lesson' === $col ) {
+			$n = (int) get_post_field( 'menu_order', $post_id );
+			echo $n ? (int) $n : '—';
+		}
+	},
+	10,
+	2
+);
 
 function vitalstack_tutorial_meta_box() {
 	add_meta_box( 'vitalstack_tutorial_video', __( 'Tutorial Video (optional)', 'vitalstack' ), 'vitalstack_tutorial_video_callback', 'tutorials', 'normal', 'default' );

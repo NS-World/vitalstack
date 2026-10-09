@@ -1,0 +1,1330 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0"
+	xmlns:excerpt="http://wordpress.org/export/1.2/excerpt/"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:wp="http://wordpress.org/export/1.2/">
+<channel>
+	<title>VitalStack lessons</title>
+	<link>https://vitalstack.co.in</link>
+	<description>Lesson import</description>
+	<pubDate>Fri, 09 Oct 2026 11:41:08 +0000</pubDate>
+	<language>en-US</language>
+	<wp:wxr_version>1.2</wp:wxr_version>
+	<wp:base_site_url>https://vitalstack.co.in</wp:base_site_url>
+	<wp:base_blog_url>https://vitalstack.co.in</wp:base_blog_url>
+	<wp:author><wp:author_id>1</wp:author_id><wp:author_login><![CDATA[admin]]></wp:author_login><wp:author_email><![CDATA[]]></wp:author_email><wp:author_display_name><![CDATA[admin]]></wp:author_display_name></wp:author>
+	<wp:term>
+		<wp:term_id>1</wp:term_id>
+		<wp:term_taxonomy><![CDATA[tutorial_category]]></wp:term_taxonomy>
+		<wp:term_slug><![CDATA[html]]></wp:term_slug>
+		<wp:term_parent><![CDATA[]]></wp:term_parent>
+		<wp:term_name><![CDATA[HTML]]></wp:term_name>
+	</wp:term>
+	<wp:term>
+		<wp:term_id>2</wp:term_id>
+		<wp:term_taxonomy><![CDATA[tutorial_difficulty]]></wp:term_taxonomy>
+		<wp:term_slug><![CDATA[beginner]]></wp:term_slug>
+		<wp:term_parent><![CDATA[]]></wp:term_parent>
+		<wp:term_name><![CDATA[Beginner]]></wp:term_name>
+	</wp:term>
+	<item>
+		<title><![CDATA[HTML Introduction]]></title>
+		<link>https://vitalstack.co.in/tutorials/html-introduction/</link>
+		<pubDate>Fri, 09 Oct 2026 11:41:08 +0000</pubDate>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<guid isPermaLink="false">https://vitalstack.co.in/?post_type=tutorials&amp;p=1</guid>
+		<description></description>
+		<content:encoded><![CDATA[<!-- wp:paragraph -->
+<p>HTML is the language every web page is built with. When you open any website, your browser receives HTML and turns it into the headings, paragraphs, links and images you see. If you want to build websites, HTML is the first thing to learn, and it is also the easiest.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>In this lesson you will learn what HTML is, how it works, and you will write your first web page.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">What is HTML?</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p><strong>HTML</strong> stands for <strong>HyperText Markup Language</strong>.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><strong>HyperText</strong> means text that contains links to other pages. Links are what turn separate pages into the web.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Markup</strong> means you "mark up" ordinary text with labels, called <strong>tags</strong>, that tell the browser what each piece of text is: a heading, a paragraph, a link, a list.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Language</strong> means it follows rules, so every browser understands it the same way.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>HTML is not a programming language. It has no calculations, no conditions and no loops. It only <strong>describes the structure</strong> of a page. That's why beginners can learn it in a few days.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Your first HTML page</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Here is a complete web page. Click <strong>Try it Yourself</strong> to open it in the editor, change the text, and press <strong>Run</strong>.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;My First Page&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+  &lt;h1&gt;Hello, world!&lt;/h1&gt;
+  &lt;p&gt;This is my first web page.&lt;/p&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>The browser shows a big heading and a paragraph underneath. The tags themselves, the words in angle brackets, are never shown. They only tell the browser how to display the content.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">How the example works</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Every line has a job:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><code>&lt;!DOCTYPE html&gt;</code> tells the browser this is a modern HTML document.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>&lt;html&gt;</code> is the root element. Everything else goes inside it.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>&lt;head&gt;</code> holds information <strong>about</strong> the page, such as its title. It is not shown on the page itself.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>&lt;title&gt;</code> sets the text shown in the browser tab and in search results.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>&lt;body&gt;</code> holds everything that is <strong>visible</strong> on the page.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>&lt;h1&gt;</code> is a main heading.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>&lt;p&gt;</code> is a paragraph.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>You'll learn each of these in detail in the next lessons. For now, notice the pattern: most content sits between an <strong>opening tag</strong> like <code>&lt;p&gt;</code> and a <strong>closing tag</strong> like <code>&lt;/p&gt;</code>. The closing tag has a forward slash.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">What does a browser do with HTML?</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li>You visit a web address.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>The server sends back an HTML file, which is plain text.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>The browser reads the tags from top to bottom.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>It builds the page you see on screen.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>You can see the HTML of any page yourself: right-click a page and choose <strong>View page source</strong> (or press <code>Ctrl + U</code>). Try it on this page.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">HTML, CSS and JavaScript</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Almost every website uses three languages together:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><strong>HTML</strong> gives the page its <strong>structure</strong>: headings, paragraphs, images, links.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>CSS</strong> controls the <strong>look</strong>: colours, fonts, spacing, layout.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>JavaScript</strong> adds <strong>behaviour</strong>: buttons that react, menus that open, content that updates.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>A simple way to remember it: HTML is the skeleton, CSS is the clothes, and JavaScript is the movement. This tutorial starts with HTML because the other two are built on top of it.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">What you need</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Nothing to buy and nothing to install:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>A <strong>text editor</strong> to write HTML. Any computer already has one (Notepad on Windows, TextEdit on Mac), and the next lesson shows a better free one.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>A <strong>web browser</strong> to view the result: Chrome, Firefox, Edge or Safari.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>You can also practise directly on this site: every example has a <strong>Try it Yourself</strong> button.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Exercise</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Open the first example with <strong>Try it Yourself</strong> and make these changes, pressing <strong>Run</strong> after each one:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li>Change the heading to your own name.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Change the paragraph to say why you want to learn web development.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Add a second paragraph below the first one. (Hint: copy the whole <code>&lt;p&gt;…&lt;/p&gt;</code> line.)</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>If all three show up on the right, you have just edited your first web page.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Summary</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>HTML is the language that describes the <strong>structure</strong> of web pages.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Content is marked up with <strong>tags</strong>, usually in pairs like <code>&lt;p&gt;</code> and <code>&lt;/p&gt;</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Every page has the same basic outline: <code>&lt;!DOCTYPE html&gt;</code>, <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code> and <code>&lt;body&gt;</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>HTML handles structure, CSS handles style, JavaScript handles behaviour.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>In the next lesson you'll set up a free code editor and create an HTML file on your own computer.</p>
+<!-- /wp:paragraph -->
+]]></content:encoded>
+		<excerpt:encoded><![CDATA[What HTML is, what a web page is made of, and your first complete HTML page that you can edit and run right away.]]></excerpt:encoded>
+		<wp:post_id>1</wp:post_id>
+		<wp:post_date><![CDATA[2026-10-09 11:41:08]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-10-09 11:41:08]]></wp:post_date_gmt>
+		<wp:comment_status><![CDATA[open]]></wp:comment_status>
+		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+		<wp:post_name><![CDATA[html-introduction]]></wp:post_name>
+		<wp:status><![CDATA[draft]]></wp:status>
+		<wp:post_parent>0</wp:post_parent>
+		<wp:menu_order>1</wp:menu_order>
+		<wp:post_type><![CDATA[tutorials]]></wp:post_type>
+		<wp:post_password><![CDATA[]]></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+		<category domain="tutorial_category" nicename="html"><![CDATA[HTML]]></category>
+		<category domain="tutorial_difficulty" nicename="beginner"><![CDATA[Beginner]]></category>
+	</item>
+	<item>
+		<title><![CDATA[HTML Editors]]></title>
+		<link>https://vitalstack.co.in/tutorials/html-editors/</link>
+		<pubDate>Fri, 09 Oct 2026 11:41:08 +0000</pubDate>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<guid isPermaLink="false">https://vitalstack.co.in/?post_type=tutorials&amp;p=2</guid>
+		<description></description>
+		<content:encoded><![CDATA[<!-- wp:paragraph -->
+<p>You can write HTML in any program that saves plain text. In this lesson you'll create a real HTML file on your computer, open it in your browser, and then set up <strong>Visual Studio Code</strong>, the free editor most web developers use every day.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Option 1: The editor you already have</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Every computer comes with a simple text editor. It's enough for your first page.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">On Windows (Notepad)</h3>
+<!-- /wp:heading -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li>Open the Start menu, type <strong>Notepad</strong> and open it.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Type or paste the page below.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Click <strong>File → Save As</strong>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Choose a folder (for example, Desktop).</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Set <strong>Save as type</strong> to <strong>All files</strong>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Name the file <code>index.html</code> and set <strong>Encoding</strong> to <strong>UTF-8</strong>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Click <strong>Save</strong>.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">On Mac (TextEdit)</h3>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>TextEdit saves rich text by default, which breaks HTML. Change that first:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li>Open <strong>TextEdit → Settings</strong> (or Preferences).</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>On the <strong>New Document</strong> tab, select <strong>Plain text</strong>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>On the <strong>Open and Save</strong> tab, tick <strong>Display HTML files as HTML code instead of formatted text</strong>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Create a new document, type the page below, and save it as <code>index.html</code>.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Here is the page to type:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;My Computer Page&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;It works!&lt;/h1&gt;
+  &lt;p&gt;I wrote this file on my own computer.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Open the file in a browser</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Find <code>index.html</code> in the folder where you saved it and <strong>double-click</strong> it. It opens in your default browser and shows your heading and paragraph.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Every time you change the file:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li>Save it in the editor (<code>Ctrl + S</code>, or <code>Cmd + S</code> on Mac).</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Switch to the browser and <strong>refresh</strong> (<code>F5</code>, or <code>Cmd + R</code> on Mac).</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>That save-and-refresh loop is how you'll work through this whole tutorial.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Option 2: Visual Studio Code (recommended)</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Notepad works, but a code editor makes HTML much easier. <strong>Visual Studio Code</strong> (VS Code) is free, works on Windows, Mac and Linux, and is used by most professional web developers.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>What it does for you:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Colours</strong> your code, so tags, text and attributes are easy to tell apart.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Auto-completes</strong> tags: type <code>&lt;p</code> and it suggests the rest.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Closes tags</strong> for you, so you don't forget <code>&lt;/p&gt;</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Emmet shortcut</strong>: in a new <code>.html</code> file, type <code>!</code> and press <code>Tab</code> to get a full page outline instantly.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Set it up</h3>
+<!-- /wp:heading -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li>Download VS Code from the official site, <strong>code.visualstudio.com</strong>, and install it.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Create a folder for your practice files, for example <code>html-practice</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>In VS Code choose <strong>File → Open Folder</strong> and select that folder.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Click the <strong>New File</strong> icon and name it <code>index.html</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Type <code>!</code> then press <code>Tab</code>. VS Code writes the page outline for you.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Add <code>&lt;h1&gt;Hello from VS Code&lt;/h1&gt;</code> inside the <code>&lt;body&gt;</code>, then save.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Live Server: refresh automatically</h3>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>The <strong>Live Server</strong> extension reloads the browser every time you save:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li>Click the <strong>Extensions</strong> icon on the left (four squares).</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Search for <strong>Live Server</strong> and click <strong>Install</strong>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Right-click <code>index.html</code> and choose <strong>Open with Live Server</strong>.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Now every save updates the browser by itself, with no manual refresh needed.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Practising on VitalStack</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Every example in these lessons has a <strong>Try it Yourself</strong> button. It opens an editor right here in your browser: change the code on the left, press <strong>Run</strong>, and see the result on the right. It's the quickest way to test a small idea. For anything you want to keep, use your own files.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Common mistakes</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><strong>The page shows the code instead of the result.</strong> The file was saved as <code>.txt</code> or rich text. Make sure the name ends in <code>.html</code> and the format is plain text.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Strange characters (Ã© instead of é).</strong> Save the file as <strong>UTF-8</strong> and keep the <code>&lt;meta charset="UTF-8"&gt;</code> line in the <code>&lt;head&gt;</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Changes don't appear.</strong> You forgot to save, or to refresh the browser.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Exercise</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li>Create a folder called <code>html-practice</code> with an <code>index.html</code> file inside it.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Write a page with your name as the <code>&lt;h1&gt;</code> and one paragraph about yourself.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Open it in the browser, change the paragraph, save, and refresh to see the update.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Summary</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>HTML files are plain text files ending in <code>.html</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>You can write them in Notepad or TextEdit, but <strong>VS Code</strong> is free and much easier.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Open the file in a browser to see the result; save and refresh after every change.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Save files as <strong>UTF-8</strong> to avoid broken characters.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Next, you'll learn what each part of the basic page structure means.</p>
+<!-- /wp:paragraph -->
+]]></content:encoded>
+		<excerpt:encoded><![CDATA[Write HTML on your own computer: create your first .html file in Notepad or TextEdit, then set up VS Code, the free editor most developers use.]]></excerpt:encoded>
+		<wp:post_id>2</wp:post_id>
+		<wp:post_date><![CDATA[2026-10-09 11:41:08]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-10-09 11:41:08]]></wp:post_date_gmt>
+		<wp:comment_status><![CDATA[open]]></wp:comment_status>
+		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+		<wp:post_name><![CDATA[html-editors]]></wp:post_name>
+		<wp:status><![CDATA[draft]]></wp:status>
+		<wp:post_parent>0</wp:post_parent>
+		<wp:menu_order>2</wp:menu_order>
+		<wp:post_type><![CDATA[tutorials]]></wp:post_type>
+		<wp:post_password><![CDATA[]]></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+		<category domain="tutorial_category" nicename="html"><![CDATA[HTML]]></category>
+		<category domain="tutorial_difficulty" nicename="beginner"><![CDATA[Beginner]]></category>
+	</item>
+	<item>
+		<title><![CDATA[HTML Basic Structure]]></title>
+		<link>https://vitalstack.co.in/tutorials/html-basic-structure/</link>
+		<pubDate>Fri, 09 Oct 2026 11:41:08 +0000</pubDate>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<guid isPermaLink="false">https://vitalstack.co.in/?post_type=tutorials&amp;p=3</guid>
+		<description></description>
+		<content:encoded><![CDATA[<!-- wp:paragraph -->
+<p>Every HTML page, from a one-line test to a huge website, starts from the same outline. Once you know it, you can start any new page in seconds and understand the source of pages you find online.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">The complete outline</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+  &lt;title&gt;Page title shown in the tab&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+  &lt;h1&gt;Visible content goes here&lt;/h1&gt;
+  &lt;p&gt;Everything inside body appears on the page.&lt;/p&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Let's go through it line by line.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">The doctype</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>&lt;!DOCTYPE html&gt;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>The very first line tells the browser to use <strong>modern HTML</strong> (HTML5). Without it, browsers fall back to an old "quirks mode" where some layouts and styles behave differently. It is not a tag and has no closing part. Just put it at the top of every page.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">The html element</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>&lt;html lang="en"&gt;
+  ...
+&lt;/html&gt;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p><code>&lt;html&gt;</code> is the <strong>root</strong>: every other element lives inside it. The <code>lang</code> attribute says which language the page is written in. Screen readers use it to pronounce words correctly, and search engines use it to show your page to the right readers. Use <code>en</code> for English and <code>hi</code> for Hindi.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">The head: information about the page</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>The <code>&lt;head&gt;</code> holds details <strong>about</strong> the page. Nothing here appears in the page itself.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+  &lt;title&gt;HTML Basic Structure&lt;/title&gt;
+&lt;/head&gt;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><code>&lt;meta charset="UTF-8"&gt;</code> sets the character encoding, so letters like é, ñ and Hindi or emoji characters display correctly. Keep it as the first line inside <code>&lt;head&gt;</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>&lt;meta name="viewport" ...&gt;</code> makes the page fit phone screens instead of showing a tiny desktop version. Every page you build should have it.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>&lt;title&gt;</code> sets the text in the browser tab, in bookmarks, and as the clickable headline in Google results. Make it short and describe the page.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Later you'll also put links to CSS files and other page information in the head.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">The body: everything visible</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>&lt;body&gt;
+  &lt;h1&gt;Welcome&lt;/h1&gt;
+  &lt;p&gt;Hello! This text is visible.&lt;/p&gt;
+&lt;/body&gt;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Headings, paragraphs, images, links, tables and forms all go inside <code>&lt;body&gt;</code>. A page has exactly <strong>one</strong> <code>&lt;head&gt;</code> and <strong>one</strong> <code>&lt;body&gt;</code>.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Indentation keeps code readable</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Browsers ignore extra spaces and line breaks in your code, so these two are identical to the browser:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>&lt;body&gt;&lt;h1&gt;Title&lt;/h1&gt;&lt;p&gt;Text&lt;/p&gt;&lt;/body&gt;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>&lt;body&gt;
+  &lt;h1&gt;Title&lt;/h1&gt;
+  &lt;p&gt;Text&lt;/p&gt;
+&lt;/body&gt;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>The second is far easier for people to read. Indent the contents of an element by two spaces, so you can see at a glance what is inside what.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Comments</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Comments are notes for yourself or other developers. The browser skips them.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>&lt;!-- This is a comment. It does not appear on the page. --&gt;
+&lt;p&gt;This paragraph does appear.&lt;/p&gt;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Use comments to explain sections of a long page, or to temporarily hide some HTML while testing.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Common mistakes</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Content in the head.</strong> Visible content belongs in <code>&lt;body&gt;</code>. If you put a paragraph in <code>&lt;head&gt;</code>, the browser quietly moves it into the body to repair the page, so it may look fine while your HTML is actually invalid.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Forgetting the viewport meta tag.</strong> The page looks fine on a computer but tiny on phones.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Two body elements.</strong> Keep exactly one; put all content inside it.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Missing doctype.</strong> The page may look slightly different in each browser.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Exercise</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Open the complete outline with <strong>Try it Yourself</strong> and:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li>Change the <code>&lt;title&gt;</code> to "My Practice Page". (The tab title isn't visible in the editor's result, but it will be in your own files.)</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Add a comment above the heading that says what the page is for.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Add a second heading with <code>&lt;h2&gt;</code> and a paragraph under it.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Change <code>lang="en"</code> to <code>lang="hi"</code> and add a short Hindi sentence in a new paragraph.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Summary</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Start every page with <code>&lt;!DOCTYPE html&gt;</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>&lt;html lang="…"&gt;</code> wraps everything and states the language.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>&lt;head&gt;</code> holds information about the page: charset, viewport and title.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>&lt;body&gt;</code> holds everything the reader sees.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Indent nested elements and use <code>&lt;!-- comments --&gt;</code> to keep code readable.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Next, you'll look closely at elements: opening tags, closing tags and how to nest them.</p>
+<!-- /wp:paragraph -->
+]]></content:encoded>
+		<excerpt:encoded><![CDATA[The outline every HTML page shares: doctype, html, head, title, meta tags and body, what each one does and the mistakes to avoid.]]></excerpt:encoded>
+		<wp:post_id>3</wp:post_id>
+		<wp:post_date><![CDATA[2026-10-09 11:41:08]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-10-09 11:41:08]]></wp:post_date_gmt>
+		<wp:comment_status><![CDATA[open]]></wp:comment_status>
+		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+		<wp:post_name><![CDATA[html-basic-structure]]></wp:post_name>
+		<wp:status><![CDATA[draft]]></wp:status>
+		<wp:post_parent>0</wp:post_parent>
+		<wp:menu_order>3</wp:menu_order>
+		<wp:post_type><![CDATA[tutorials]]></wp:post_type>
+		<wp:post_password><![CDATA[]]></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+		<category domain="tutorial_category" nicename="html"><![CDATA[HTML]]></category>
+		<category domain="tutorial_difficulty" nicename="beginner"><![CDATA[Beginner]]></category>
+	</item>
+	<item>
+		<title><![CDATA[HTML Elements]]></title>
+		<link>https://vitalstack.co.in/tutorials/html-elements/</link>
+		<pubDate>Fri, 09 Oct 2026 11:41:08 +0000</pubDate>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<guid isPermaLink="false">https://vitalstack.co.in/?post_type=tutorials&amp;p=4</guid>
+		<description></description>
+		<content:encoded><![CDATA[<!-- wp:paragraph -->
+<p>A web page is made of <strong>elements</strong>. Each heading, paragraph, link and image is one element. In this lesson you'll learn how elements are written, how they fit inside each other, and the few rules that keep a page from breaking.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Anatomy of an element</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Most elements have three parts:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>&lt;p&gt;This is a paragraph.&lt;/p&gt;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><code>&lt;p&gt;</code> is the <strong>opening tag</strong>: the element's name in angle brackets.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>This is a paragraph.</code> is the <strong>content</strong>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>&lt;/p&gt;</code> is the <strong>closing tag</strong>: the same name with a forward slash.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Together, the opening tag, the content and the closing tag form one <strong>element</strong>. People often say "tag" when they mean element; the meaning is usually clear from context.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Some elements you'll use constantly</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>&lt;h1&gt;Main heading&lt;/h1&gt;
+&lt;h2&gt;Smaller heading&lt;/h2&gt;
+&lt;p&gt;A paragraph of text.&lt;/p&gt;
+&lt;a href="https://example.com"&gt;A link&lt;/a&gt;
+&lt;strong&gt;Important text&lt;/strong&gt;
+&lt;em&gt;Emphasised text&lt;/em&gt;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>You'll learn each of these properly in later lessons. Open the example with <strong>Try it Yourself</strong> to see how each one looks.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Nesting elements</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Elements can contain other elements. This is called <strong>nesting</strong>:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>&lt;p&gt;Learning &lt;strong&gt;HTML&lt;/strong&gt; is &lt;em&gt;fun&lt;/em&gt;.&lt;/p&gt;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Here <code>&lt;strong&gt;</code> and <code>&lt;em&gt;</code> sit <strong>inside</strong> the paragraph. The whole page is nested too: <code>&lt;body&gt;</code> is inside <code>&lt;html&gt;</code>, headings and paragraphs are inside <code>&lt;body&gt;</code>.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">The one rule of nesting</h3>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p><strong>Close elements in the reverse order you opened them.</strong> The last one opened is the first one closed.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>&lt;!-- Correct --&gt;
+&lt;p&gt;This is &lt;strong&gt;very important&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;!-- Wrong: strong opened inside p, but p closes first --&gt;
+&lt;p&gt;This is &lt;strong&gt;very important.&lt;/p&gt;&lt;/strong&gt;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Browsers try to repair wrong nesting, but each browser repairs it differently, and the result is often not what you meant. Correct nesting avoids those surprises. VS Code's auto-closing and indentation make wrong nesting easy to spot.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Empty elements</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Some elements have no content and therefore no closing tag. They're called <strong>empty</strong> (or void) elements:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>&lt;p&gt;First line&lt;br&gt;Second line&lt;/p&gt;
+&lt;hr&gt;
+&lt;img src="https://picsum.photos/200/120" alt="A random sample photo"&gt;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><code>&lt;br&gt;</code> inserts a line break inside text.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>&lt;hr&gt;</code> draws a horizontal line, used to separate sections.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>&lt;img&gt;</code> displays an image; you'll learn its <code>src</code> and <code>alt</code> attributes in the next lesson.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>You may see these written as <code>&lt;br /&gt;</code> in older code. Both forms work in HTML5; this tutorial uses the shorter <code>&lt;br&gt;</code>.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Don't skip closing tags</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Browsers often show a page correctly even when you forget a closing tag:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>&lt;p&gt;First paragraph
+&lt;p&gt;Second paragraph</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>It looks fine here, but missing closing tags cause hard-to-find layout bugs as pages grow, especially once you add CSS. <strong>Always close every element that has a closing tag.</strong></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Upper or lower case?</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p><code>&lt;P&gt;</code> and <code>&lt;p&gt;</code> mean the same thing; tag names are not case-sensitive. The convention, and what you'll see in almost all modern code, is <strong>lowercase</strong>. Stick to it.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Block and inline elements</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Elements display in one of two basic ways:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Block</strong> elements start on a new line and take the full width available: <code>&lt;h1&gt;</code> to <code>&lt;h6&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;div&gt;</code>, <code>&lt;ul&gt;</code>, <code>&lt;table&gt;</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Inline</strong> elements stay inside the line of text and take only the space they need: <code>&lt;a&gt;</code>, <code>&lt;strong&gt;</code>, <code>&lt;em&gt;</code>, <code>&lt;span&gt;</code>, <code>&lt;img&gt;</code>.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>&lt;p&gt;This paragraph is a block.&lt;/p&gt;
+&lt;p&gt;So is this one. It starts on a new line.&lt;/p&gt;
+&lt;p&gt;Inline elements like &lt;strong&gt;strong&lt;/strong&gt; and &lt;a href="#"&gt;links&lt;/a&gt; stay within the line.&lt;/p&gt;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Two generic elements have no meaning of their own and are used to group content for styling later: <code>&lt;div&gt;</code> (block) and <code>&lt;span&gt;</code> (inline). You'll use them a lot once you start CSS.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Exercise</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Use <strong>Try it Yourself</strong> on any example above and build this:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li>An <code>&lt;h1&gt;</code> with the title "My Favourite Things".</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>A paragraph that contains one word in <code>&lt;strong&gt;</code> and one in <code>&lt;em&gt;</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>A <code>&lt;hr&gt;</code> line.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>A paragraph with a line break (<code>&lt;br&gt;</code>) in the middle.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Check your nesting: every element closes in the reverse order it opened.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Summary</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>An element is usually an opening tag, content and a closing tag.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Elements can be <strong>nested</strong>; close them in reverse order.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Empty elements</strong> like <code>&lt;br&gt;</code>, <code>&lt;hr&gt;</code> and <code>&lt;img&gt;</code> have no closing tag.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Always close elements, and write tag names in lowercase.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Block</strong> elements start on a new line; <strong>inline</strong> elements flow within text.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Next, you'll learn attributes, which give elements extra information, like where a link goes or which image to show.</p>
+<!-- /wp:paragraph -->
+]]></content:encoded>
+		<excerpt:encoded><![CDATA[How HTML elements work: opening and closing tags, content, nesting elements correctly, empty elements like br and img, and block versus inline.]]></excerpt:encoded>
+		<wp:post_id>4</wp:post_id>
+		<wp:post_date><![CDATA[2026-10-09 11:41:08]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-10-09 11:41:08]]></wp:post_date_gmt>
+		<wp:comment_status><![CDATA[open]]></wp:comment_status>
+		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+		<wp:post_name><![CDATA[html-elements]]></wp:post_name>
+		<wp:status><![CDATA[draft]]></wp:status>
+		<wp:post_parent>0</wp:post_parent>
+		<wp:menu_order>4</wp:menu_order>
+		<wp:post_type><![CDATA[tutorials]]></wp:post_type>
+		<wp:post_password><![CDATA[]]></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+		<category domain="tutorial_category" nicename="html"><![CDATA[HTML]]></category>
+		<category domain="tutorial_difficulty" nicename="beginner"><![CDATA[Beginner]]></category>
+	</item>
+	<item>
+		<title><![CDATA[HTML Attributes]]></title>
+		<link>https://vitalstack.co.in/tutorials/html-attributes/</link>
+		<pubDate>Fri, 09 Oct 2026 11:41:08 +0000</pubDate>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<guid isPermaLink="false">https://vitalstack.co.in/?post_type=tutorials&amp;p=5</guid>
+		<description></description>
+		<content:encoded><![CDATA[<!-- wp:paragraph -->
+<p>Tags tell the browser <strong>what</strong> something is. <strong>Attributes</strong> add the details: where a link goes, which image to show, what language the page is in. Almost every real page uses them, so this lesson covers the ones you'll need most.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">What an attribute looks like</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>&lt;a href="https://www.example.com"&gt;Visit Example&lt;/a&gt;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Attributes always go inside the <strong>opening tag</strong>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>They're written as <strong>name="value"</strong>: here the name is <code>href</code> and the value is the web address.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>An element can have several attributes, separated by spaces.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">href: where a link goes</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>The <code>&lt;a&gt;</code> (anchor) element creates a link. Its <code>href</code> attribute holds the destination:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>&lt;p&gt;&lt;a href="https://developer.mozilla.org"&gt;Read the MDN Web Docs&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="about.html"&gt;About this site&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://developer.mozilla.org" target="_blank"&gt;Open MDN in a new tab&lt;/a&gt;&lt;/p&gt;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>A full web address (<code>https://…</code>) links to another site.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>A file name like <code>about.html</code> links to a page in the same folder.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>target="_blank"</code> opens the link in a new tab. Use it sparingly; readers generally prefer to choose that themselves.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">src and alt: showing an image</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p><code>&lt;img&gt;</code> needs two attributes:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>&lt;img src="https://picsum.photos/320/180" alt="A sample landscape photo" width="320" height="180"&gt;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><code>src</code> (source) is the address of the image file.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>alt</code> (alternative text) describes the image. Screen readers read it aloud for blind users, it appears if the image fails to load, and search engines use it to understand the image. **Always write an <code>alt</code>.** If an image is purely decorative, use an empty one: <code>alt=""</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>width</code> and <code>height</code> (in pixels) let the browser reserve space before the image loads, so the page doesn't jump around.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">lang: the page language</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>&lt;html lang="en"&gt;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>As you saw in the structure lesson, <code>lang</code> on the <code>&lt;html&gt;</code> element states the page's language. You can also mark a single phrase in another language:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>&lt;p&gt;The word for thank you in Hindi is &lt;span lang="hi"&gt;धन्यवाद&lt;/span&gt;.&lt;/p&gt;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">title: extra information on hover</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>&lt;p&gt;&lt;abbr title="HyperText Markup Language"&gt;HTML&lt;/abbr&gt; is easy to learn.&lt;/p&gt;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>The <code>title</code> attribute shows a small tooltip when you hover over the element with a mouse. It's handy for abbreviations, but don't put important information only in a title: it isn't visible on phones.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">id and class: names for styling and scripts</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>&lt;h2 id="contact"&gt;Contact us&lt;/h2&gt;
+&lt;p class="note"&gt;Replies within two days.&lt;/p&gt;
+&lt;p class="note"&gt;We read every message.&lt;/p&gt;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><code>id</code> gives one element a <strong>unique</strong> name. No two elements on a page may share an id. You can link straight to it: <code>&lt;a href="#contact"&gt;Jump to contact&lt;/a&gt;</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>class</code> gives a <strong>shared</strong> name to any number of elements, so CSS can style them all at once.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>You'll use <code>id</code> and <code>class</code> constantly in the CSS and JavaScript tutorials.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">style: quick inline styling</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>&lt;p style="color: green; font-size: 20px;"&gt;This text is green and larger.&lt;/p&gt;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>The <code>style</code> attribute applies CSS directly to one element. It's fine for quick experiments, but real pages keep their styles in CSS files, which you'll learn in the CSS tutorial.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Rules for writing attributes</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Use lowercase names</strong>: <code>href</code>, not <code>HREF</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Always quote values</strong>: <code>href="page.html"</code>. Quotes are required as soon as a value contains a space, so quoting every value avoids mistakes.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Use double quotes normally. If the value itself contains double quotes, wrap it in single quotes: <code>title='She said "hi"'</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Boolean attributes</strong> need no value. Their presence alone turns them on:</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>&lt;input type="checkbox" checked&gt; I agree
+&lt;button disabled&gt;Not available yet&lt;/button&gt;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Exercise</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Open any example with <strong>Try it Yourself</strong> and build a small profile card:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li>An <code>&lt;h2&gt;</code> with your name and <code>id="profile"</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>An image with <code>src="https://picsum.photos/200"</code>, a meaningful <code>alt</code> text, and <code>width="200"</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>A paragraph that contains a link to your favourite website, opening in a new tab.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>An abbreviation with a <code>title</code>, for example <code>&lt;abbr title="Cascading Style Sheets"&gt;CSS&lt;/abbr&gt;</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>A link at the top of the page that jumps to <code>#profile</code>.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Summary</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Attributes add information to elements and always go in the <strong>opening tag</strong>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>They're written as <code>name="value"</code>; use lowercase names and quote every value.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Key attributes: <code>href</code> (links), <code>src</code> and <code>alt</code> (images), <code>lang</code>, <code>title</code>, <code>id</code>, <code>class</code>, <code>style</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Always give images a useful <code>alt</code> text.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Next up: headings and paragraphs, and how to structure the text of a page so it's easy to read.</p>
+<!-- /wp:paragraph -->
+]]></content:encoded>
+		<excerpt:encoded><![CDATA[Attributes give elements extra information: href for links, src and alt for images, lang, title, id and class, with the rules for writing them correctly.]]></excerpt:encoded>
+		<wp:post_id>5</wp:post_id>
+		<wp:post_date><![CDATA[2026-10-09 11:41:08]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-10-09 11:41:08]]></wp:post_date_gmt>
+		<wp:comment_status><![CDATA[open]]></wp:comment_status>
+		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+		<wp:post_name><![CDATA[html-attributes]]></wp:post_name>
+		<wp:status><![CDATA[draft]]></wp:status>
+		<wp:post_parent>0</wp:post_parent>
+		<wp:menu_order>5</wp:menu_order>
+		<wp:post_type><![CDATA[tutorials]]></wp:post_type>
+		<wp:post_password><![CDATA[]]></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+		<category domain="tutorial_category" nicename="html"><![CDATA[HTML]]></category>
+		<category domain="tutorial_difficulty" nicename="beginner"><![CDATA[Beginner]]></category>
+	</item>
+</channel>
+</rss>
