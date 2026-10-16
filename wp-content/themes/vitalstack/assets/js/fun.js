@@ -219,6 +219,14 @@
 		if (!window.matchMedia || !window.matchMedia('(prefers-reduced-motion: reduce)').matches) start();
 	});
 
+	/* ── Stacky in tip boxes ───────────────────────────────────────────────── */
+	document.querySelectorAll('.vs-tip').forEach(function (tip) {
+		if (tip.querySelector('.mascot')) return;
+		var m = document.createElement('span');
+		m.innerHTML = mascot('happy');
+		if (m.firstChild) tip.insertBefore(m.firstChild, tip.firstChild);
+	});
+
 	paint(stats);
 	document.querySelectorAll('[data-count]').forEach(function (el) {
 		var to = parseInt(el.textContent, 10) || 0;

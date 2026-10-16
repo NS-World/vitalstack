@@ -23,7 +23,8 @@ Guides (blog posts) use `category:` instead of `subject:` and `lesson:`:
 
 The body supports the Markdown that lessons need: ## and ### headings,
 paragraphs, - and 1. lists, | tables |, fenced ``` code blocks, `inline code`,
-**bold** and [links](/path/). It is converted to block-editor markup, so imported lessons open
+**bold** and [links](/path/), plus `::viz name {json}` (live visualizer),
+`::tip text` and `::hint Label | text`. It is converted to block-editor markup, so imported lessons open
 cleanly in the WordPress editor.
 
 Import the result in WordPress: Tools -> Import -> WordPress. Lessons are
@@ -36,6 +37,7 @@ Usage (folders are searched recursively; several may be given):
 
 import argparse
 import html
+import json
 import pathlib
 import re
 import sys
@@ -117,6 +119,26 @@ def markdown_to_blocks(body):
             escaped = html.escape("\n".join(code), quote=False)
             out.append(block("code", f'<pre class="wp-block-code"><code>{escaped}</code></pre>'))
             continue
+        if line.startswith("::viz "):
+            # ::viz binary-search {"arr": [1, 3, 5], "target": 3}
+            m = re.match(r"^::viz\s+([a-z0-9-]+)\s*(\{.*\})?\s*$", line.strip())
+            if not m:
+                sys.exit(f"Bad ::viz line: {line}")
+            data = m.group(2) or "{}"
+            json.loads(data)  # fail early on invalid JSON
+            div = f'<div class="vs-viz" data-viz="{m.group(1)}" data-input="{html.escape(data, quote=True)}"></div>'
+            out.append(block("html", div))
+            i += 1
+            continue
+        if line.startswith("::tip "):
+            out.append(block("html", f'<div class="vs-tip"><p>{inline(line[6:].strip())}</p></div>'))
+            i += 1
+            continue
+        if line.startswith("::hint "):
+            label, _, text = line[7:].partition("|")
+            out.append(block("html", f'<details class="vs-hint"><summary>{inline(label.strip())}</summary><p>{inline(text.strip())}</p></details>'))
+            i += 1
+            continue
         if line.startswith("### "):
             out.append(block("heading", f'<h3 class="wp-block-heading">{inline(line[4:].strip())}</h3>', '{"level":3}'))
             i += 1
@@ -156,7 +178,7 @@ def markdown_to_blocks(body):
             continue
         para = [line.strip()]
         i += 1
-        while i < len(lines) and lines[i].strip() and not re.match(r"^(#{2,3} |- |\d+\.\s|```|\|)", lines[i]):
+        while i < len(lines) and lines[i].strip() and not re.match(r"^(#{2,3} |- |\d+\.\s|```|\||::)", lines[i]):
             para.append(lines[i].strip())
             i += 1
         out.append(block("paragraph", f"<p>{inline(' '.join(para))}</p>"))
