@@ -4,7 +4,7 @@ Theme URI: https://vitalstack.co.in/
 Author: VitalStack
 Author URI: https://vitalstack.co.in/
 Description: Tutorial-site theme for VitalStack: topic bar, docs layout with lesson sidebar, Previous/Next lessons, "Try it Yourself" code editor, reader accounts with progress sync, and email notifications for new posts.
-Version: 3.6.0
+Version: 3.7.0
 Requires at least: 6.3
 Tested up to: 6.8
 Requires PHP: 8.0
@@ -261,7 +261,11 @@ button, input, textarea, select { font: inherit; color: inherit; }
 .topbar-inner { display: flex; align-items: center; gap: 20px; height: var(--topbar-h); max-width: none; }
 .logo { display: inline-flex; align-items: center; gap: 9px; color: var(--text); font-weight: 800; font-size: 21px; letter-spacing: -.02em; text-decoration: none !important; flex-shrink: 0; }
 .logo-img { max-height: 38px; width: auto; }
-.logo-mark { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 8px; background: var(--brand); color: var(--on-brand); }
+.logo-mark { display: inline-flex; width: 34px; height: 34px; flex-shrink: 0; }
+.logo-mark .vs-mark { width: 100%; height: 100%; display: block; }
+.vs-mark-bg { fill: var(--accent-deep); }
+.vs-mark-page { fill: #fff; }
+.vs-mark-ink { stroke: var(--accent-deep); fill: none; }
 .logo-text span { color: var(--brand); }
 .logo-invert { color: var(--on-dark); }
 
@@ -1232,7 +1236,7 @@ kbd { font-family: var(--font-mono); font-size: 12px; padding: 1px 7px; border-r
 	.topbar-actions .appearance { display: none; }
 	.icon-btn { width: 38px; height: 38px; }
 	.logo { font-size: 19px; gap: 8px; }
-	.logo-mark { width: 30px; height: 30px; }
+	.logo-mark { width: 31px; height: 31px; }
 	.logo-img { max-height: 32px; }
 	.xp-chip { padding: 5px 9px; gap: 6px; font-size: 13px; }
 	.home-hero { padding: 40px 0 56px; }

@@ -426,6 +426,18 @@ function vitalstack_tutorials_url() {
 	return $page ? get_permalink( $page ) : get_post_type_archive_link( 'tutorials' );
 }
 
+/**
+ * The VitalStack "book of code" mark. Colours come from CSS so it follows the accent.
+ */
+function vitalstack_logo_mark( $size = 32 ) {
+	return '<svg class="vs-mark" width="' . (int) $size . '" height="' . (int) $size . '" viewBox="0 0 48 48" focusable="false">'
+		. '<circle class="vs-mark-bg" cx="24" cy="24" r="24"/>'
+		. '<path class="vs-mark-page" d="M9 14.5c5.5-2.5 10.5-2 15 1.5 4.5-3.5 9.5-4 15-1.5v19c-5.5-2.5-10.5-2-15 1.5-4.5-3.5-9.5-4-15-1.5Z"/>'
+		. '<path class="vs-mark-ink" d="M24 16v19" stroke-width="2"/>'
+		. '<path class="vs-mark-ink" d="M17 21l-3 3.5 3 3.5M31 21l3 3.5-3 3.5" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>'
+		. '</svg>';
+}
+
 function vitalstack_logo() {
 	// custom_logo, or the logo uploaded through the v1 theme's own setting.
 	$logo_id = get_theme_mod( 'custom_logo' ) ?: get_theme_mod( 'vitalstack_header_logo' );
@@ -442,7 +454,7 @@ function vitalstack_logo() {
 		);
 		return;
 	}
-	echo '<span class="logo-mark" aria-hidden="true">' . vitalstack_icon( 'layers', 20 ) . '</span><span class="logo-text">Vital<span>Stack</span></span>'; // phpcs:ignore
+	echo '<span class="logo-mark" aria-hidden="true">' . vitalstack_logo_mark() . '</span><span class="logo-text">Vital<span>Stack</span></span>'; // phpcs:ignore
 }
 
 /* ── Menu fallbacks (used until menus are assigned in Appearance → Menus) ── */

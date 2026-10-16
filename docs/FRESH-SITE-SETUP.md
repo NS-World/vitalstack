@@ -5,7 +5,7 @@ Total time: about 1 hour. All lessons and guides are included in the theme.
 
 ## 1. Upload the theme (5 min)
 1. WordPress admin → **Appearance → Themes → Add New → Upload Theme**.
-2. Choose `vitalstack-theme-v3.6.zip` → **Install Now** → **Activate**
+2. Choose `vitalstack-theme-v3.7.zip` → **Install Now** → **Activate**
    (or **Replace current with uploaded** if an older VitalStack is installed).
 
 ## 2. Click the setup button (2 min)
@@ -63,7 +63,7 @@ something of your own (a tip, a screenshot, a better example). See
 [CONTENT-GUIDE.md](CONTENT-GUIDE.md).
 
 ### Already have the site running (updating from v3.4)?
-1. Upload `vitalstack-theme-v3.6.zip` → **Replace current with uploaded**.
+1. Upload `vitalstack-theme-v3.7.zip` → **Replace current with uploaded**.
 2. **Appearance → VitalStack Setup → Create starter structure** again. It adds
    only what's missing: the DSA and Interview Problems paths, the Brain Games
    and Interview Problems pages, and the two new menu links.

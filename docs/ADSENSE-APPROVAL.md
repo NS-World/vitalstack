@@ -92,6 +92,13 @@ AdSense reviewers check who runs the site and how to reach you.
 - [ ] Some real visitors from search. There's no official minimum, but a
       site with zero organic traffic often gets "low value content" again.
 - [ ] Navigation works on phone: menu, topic bar, search, footer links.
+- [ ] **Brand looks complete.** Theme v3.7+ adds the logo, favicon, phone icons and
+  a share image automatically. If an old *Site Icon* is set in
+  Appearance → Customize → Site Identity, remove it or replace it with
+  `assets/brand/icon-512.png`, so the browser tab shows the new icon.
+- [ ] **Yoast → Settings → Site representation:** Organization name "VitalStack",
+  logo = `logo.png`. **Yoast → Settings → Site basics → Site image** = `share.png`
+  (shown when a page is shared on WhatsApp, Facebook or LinkedIn).
 
 ## Stage 5: Apply
 
