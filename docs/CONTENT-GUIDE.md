@@ -17,7 +17,7 @@ Publish your first HTML lesson and **HTML** appears automatically.
 
 ---
 
-## What's already included: 100 lessons + 13 guides
+## What's already included: 180 lessons + 13 guides
 
 The theme ships with a complete starter library, imported in one click from
 **Appearance → VitalStack Setup → Import starter content** (steps in
@@ -30,6 +30,8 @@ The theme ships with a complete starter library, imported in one click from
 | JavaScript | 25 | To-Do List App |
 | SQL | 15 | Library Database |
 | Python | 20 | Simple Expense Tracker |
+| DSA (data structures and algorithms) | 29 | The DSA Interview Playbook |
+| Interview Problems | 51 | Classic big-tech questions, Easy to Hard |
 
 | Guide category | Guides |
 |---|---|
@@ -42,6 +44,16 @@ Every lesson has an introduction, explained examples, common mistakes, an
 exercise and a summary (600–1,500 words). HTML, CSS and JavaScript examples
 have a working **Try it Yourself** button. All SQL results were checked
 against a real database and all Python examples were run.
+
+DSA lessons teach one pattern each (two pointers, sliding window, BFS,
+dynamic programming…) with an everyday analogy, a **live animated diagram**
+(`::viz`) the reader can play step by step and feed their own input, and
+interview tips. Interview problems follow one format: problem, examples,
+hidden hints, brute force, the easy idea, the solution, complexity and
+similar problems. Each one is tagged with a pattern, a level and companies
+where it is **commonly reported**; the Interview Problems page uses those
+tags for its filters. Company names are a guide, not a promise: say so if
+you edit them.
 
 The source of every piece is a Markdown file in [`content/`](../content/), so
 you can also edit them in Git and rebuild (see `content/README.md`). An
@@ -139,9 +151,11 @@ Aim for 1,000–2,000 words.
 
 ## What to write next
 
-The first 100 lessons are done. Good next subjects, each as a new learning
-path (**Tutorials → Learning Paths → Add**): Git (10), React (20), Node.js and
-Express (15), pandas (15), Data Structures and Algorithms (20). Good next
+The first 180 lessons are done, including DSA and 51 interview problems.
+Good next subjects, each as a new learning path (**Tutorials → Learning
+Paths → Add**): Git (10), React (20), Node.js and Express (15), pandas (15).
+More interview problems are easy to add with the same front matter (see
+`content/README.md`); they appear on the Interview Problems page automatically. Good next
 guides answer questions readers type into Google: "X vs Y", "how to do X",
 "what is X", with honest, tested answers.
 

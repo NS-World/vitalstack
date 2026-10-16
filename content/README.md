@@ -59,6 +59,30 @@ excerpt: One sentence.
 ---
 ```
 
+Interview problem (extra fields shown on the Interview Problems page):
+
+```
+---
+title: Two Sum
+slug: problem-two-sum
+subject: dsa-problems
+lesson: 1
+difficulty: beginner                # beginner | intermediate | advanced
+level: Easy                         # Easy | Medium | Hard (badge and filter)
+pattern: Hashing                    # pattern chip and filter
+companies: Amazon, Google, Meta     # "often asked at" column and filter
+excerpt: One sentence.
+---
+```
+
+Special lines (each on its own line):
+
+| Line | Becomes |
+|---|---|
+| `::viz binary-search {"arr": [1, 3, 5], "target": 5}` | A live animated diagram. The name is an algorithm from `assets/js/viz.js`; the JSON is the starting input (optional). |
+| `::tip Text` | A tip box with the mascot |
+| `::hint Hint 1 \| Text` | A click-to-reveal hint |
+
 Supported Markdown: `##`/`###` headings, paragraphs, `-` and `1.` lists,
 `| tables |`, fenced code blocks, `inline code`, **bold** and `[links](/path/)`.
 Internal links use site paths: `/tutorials/<lesson-slug>/` for lessons and

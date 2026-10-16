@@ -5,7 +5,7 @@ Total time: about 1 hour. All lessons and guides are included in the theme.
 
 ## 1. Upload the theme (5 min)
 1. WordPress admin → **Appearance → Themes → Add New → Upload Theme**.
-2. Choose `vitalstack-theme-v3.4.1.zip` → **Install Now** → **Activate**
+2. Choose `vitalstack-theme-v3.5.zip` → **Install Now** → **Activate**
    (or **Replace current with uploaded** if an older VitalStack is installed).
 
 ## 2. Click the setup button (2 min)
@@ -17,12 +17,12 @@ It creates:
 
 | What | Details |
 |---|---|
-| Subjects (learning paths) | HTML, CSS, JavaScript, SQL, Python |
+| Subjects (learning paths) | HTML, CSS, JavaScript, SQL, Python, DSA, Interview Problems |
 | Blog categories | Artificial Intelligence, AI Tools, AI Career, Programming |
 | Difficulty levels | Beginner, Intermediate, Advanced |
-| Published pages | Tutorials, Blog, Contact Us |
+| Published pages | Tutorials, Blog, Contact Us, Brain Games (`/games/`), Interview Problems (`/dsa-problems/`) |
 | Draft pages (review these) | About Us, Editorial Policy, Privacy Policy, Terms of Service, Disclaimer, Cookie Policy |
-| Menus | Main menu + footer Company and Legal menus, already placed |
+| Menus | Main menu (with Interview Qs and Games) + footer Company and Legal menus, already placed |
 | Settings | "Post name" permalinks, tagline, privacy page, sample content removed |
 
 It's safe to click again later: it only adds what's missing.
@@ -33,15 +33,17 @@ AI Guides / AI Tools / Careers. That's normal.
 
 ## 3. Import the lessons and guides (2 min)
 Same page, section **Starter content: lessons and guides**. It contains
-**100 lessons** (HTML 20, CSS 20, JavaScript 25, SQL 15, Python 20) and
-**13 guides** (AI, AI Tools, AI Career, Programming), with code examples,
-exercises and summaries. Choose one option and click **Import starter content**:
+**180 lessons** (HTML 20, CSS 20, JavaScript 25, SQL 15, Python 20,
+DSA 29, Interview Problems 51) and **13 guides** (AI, AI Tools, AI Career,
+Programming), with code examples, exercises and summaries. DSA lessons and
+interview problems include live animated diagrams (play, step, try your own
+input) and hidden hints. Choose one option and click **Import starter content**:
 
 | Option | What happens | When to choose it |
 |---|---|---|
 | **Import as drafts** (recommended) | Everything arrives as drafts | You want to read and personalise each piece, then publish |
 | **Publish automatically, a few per day** | 2 per day (you choose 1–5), from tomorrow 09:00, HTML first, guides in between | You want a steady rhythm without daily work (about 8 weeks at 2/day) |
-| **Publish everything now** | All 113 go live at once | Only if you've already reviewed the content |
+| **Publish everything now** | All 193 go live at once | Only if you've already reviewed the content |
 
 - Safe to click again: anything that already exists is skipped, never overwritten.
 - Bulk imports don't email subscribers. With "a few per day" you can tick
@@ -59,6 +61,15 @@ exercises and summaries. Choose one option and click **Import starter content**:
 content". Before publishing, read each piece, run the examples, and add
 something of your own (a tip, a screenshot, a better example). See
 [CONTENT-GUIDE.md](CONTENT-GUIDE.md).
+
+### Already have the site running (updating from v3.4)?
+1. Upload `vitalstack-theme-v3.5.zip` → **Replace current with uploaded**.
+2. **Appearance → VitalStack Setup → Create starter structure** again. It adds
+   only what's missing: the DSA and Interview Problems paths, the Brain Games
+   and Interview Problems pages, and the two new menu links.
+3. **Import starter content** again. Only the 80 new items (29 DSA lessons,
+   51 interview problems) are added; existing lessons are left untouched.
+4. Publish them with the green **Publish the imported items** box.
 
 ## 4. Review and publish the 6 draft pages (20 min)
 The setup page lists them with edit links. For each one:
