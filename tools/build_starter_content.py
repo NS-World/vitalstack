@@ -23,7 +23,7 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 LESSONS = ROOT / "content" / "lessons"
 GUIDES = ROOT / "content" / "guides"
 OUTPUT = ROOT / "wp-content" / "themes" / "vitalstack" / "starter-content" / "content.json"
-SUBJECT_ORDER = ["html", "css", "javascript", "sql", "python"]
+SUBJECT_ORDER = ["html", "css", "javascript", "sql", "python", "dsa", "dsa-problems"]
 LESSONS_PER_GUIDE = 7
 
 
@@ -41,6 +41,10 @@ def load(path):
     else:
         item.update(type="tutorials", subject=meta["subject"], lesson=int(meta["lesson"]),
                     difficulty=meta.get("difficulty", "beginner").lower())
+        # Interview problems carry extra details shown on the problems page.
+        extra = {k: meta[k] for k in ("pattern", "companies", "level") if meta.get(k)}
+        if extra:
+            item["meta"] = extra
     return item
 
 

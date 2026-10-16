@@ -67,7 +67,16 @@ function vitalstack_topic_links() {
 	foreach ( vitalstack_learning_paths() as $path ) {
 		$lessons = vitalstack_path_lessons( $path );
 		$active  = $current_path && $current_path->term_id === $path->term_id;
-		echo '<a href="' . esc_url( get_permalink( $lessons[0] ) ) . '"' . ( $active ? ' class="is-active" aria-current="true"' : '' ) . '>' . esc_html( $path->name ) . '</a>';
+		$url     = get_permalink( $lessons[0] );
+		// The problem bank opens on its filterable list rather than problem #1.
+		if ( 'dsa-problems' === $path->slug && vitalstack_problems_url() ) {
+			$url    = vitalstack_problems_url();
+			$active = $active || is_page( 'dsa-problems' );
+		}
+		echo '<a href="' . esc_url( $url ) . '"' . ( $active ? ' class="is-active" aria-current="true"' : '' ) . '>' . esc_html( $path->name ) . '</a>';
+	}
+	if ( vitalstack_games_url() ) {
+		echo '<a class="topic-games' . ( is_page( 'games' ) ? ' is-active' : '' ) . '" href="' . esc_url( vitalstack_games_url() ) . '">🎮 ' . esc_html__( 'Games', 'vitalstack' ) . '</a>';
 	}
 	$extra = array(
 		'artificial-intelligence' => __( 'AI Guides', 'vitalstack' ),

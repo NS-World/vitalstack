@@ -134,6 +134,11 @@ function vitalstack_import_starter_content( $mode = 'draft', $per_day = 2, $noti
 			'menu_order'   => 'tutorials' === $item['type'] ? (int) $item['lesson'] : 0,
 			'meta_input'   => array( '_vs_starter' => 1 ),
 		);
+		foreach ( array( 'pattern', 'companies', 'level' ) as $vs_key ) {
+			if ( ! empty( $item['meta'][ $vs_key ] ) ) {
+				$postarr['meta_input'][ '_vs_' . $vs_key ] = sanitize_text_field( $item['meta'][ $vs_key ] );
+			}
+		}
 		if ( $date ) {
 			$postarr['post_date']     = $date;
 			$postarr['post_date_gmt'] = get_gmt_from_date( $date );
@@ -157,6 +162,8 @@ function vitalstack_import_starter_content( $mode = 'draft', $per_day = 2, $noti
 				'javascript' => 'JavaScript',
 				'sql'        => 'SQL',
 				'python'     => 'Python',
+				'dsa'        => 'DSA',
+				'dsa-problems' => 'Interview Problems',
 			);
 			$path_name = isset( $subject_names[ $item['subject'] ] ) ? $subject_names[ $item['subject'] ] : ucfirst( $item['subject'] );
 			wp_set_object_terms( $post_id, vitalstack_starter_term( 'tutorial_category', $item['subject'], $path_name ), 'tutorial_category' );
@@ -213,6 +220,8 @@ function vitalstack_starter_section() {
 		'javascript' => 'JavaScript',
 		'sql'        => 'SQL',
 		'python'     => 'Python',
+		'dsa'        => __( 'DSA patterns', 'vitalstack' ),
+		'dsa-problems' => __( 'Interview problems', 'vitalstack' ),
 		'guides'     => __( 'Guides (AI, AI Tools, AI Career, Programming)', 'vitalstack' ),
 	);
 	$imported = (int) ( new WP_Query(

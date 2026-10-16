@@ -219,6 +219,43 @@
 		if (!window.matchMedia || !window.matchMedia('(prefers-reduced-motion: reduce)').matches) start();
 	});
 
+	/* ── Interview problems: filters and random pick ─────────────────────── */
+	document.querySelectorAll('[data-problems]').forEach(function (wrap) {
+		var rows = [].slice.call(wrap.querySelectorAll('tbody tr'));
+		var text = wrap.querySelector('[data-filter-text]'), pattern = wrap.querySelector('[data-filter-pattern]');
+		var company = wrap.querySelector('[data-filter-company]'), hide = wrap.querySelector('[data-filter-hide]');
+		var empty = wrap.querySelector('.problems-empty'), level = '';
+		function apply() {
+			var q = text ? text.value.trim().toLowerCase() : '', shown = 0;
+			rows.forEach(function (r) {
+				var ok = (!q || r.getAttribute('data-title').indexOf(q) !== -1 || r.getAttribute('data-pattern').toLowerCase().indexOf(q) !== -1) &&
+					(!level || r.getAttribute('data-level') === level) &&
+					(!pattern || !pattern.value || r.getAttribute('data-pattern') === pattern.value) &&
+					(!company || !company.value || (', ' + r.getAttribute('data-companies') + ',').indexOf(', ' + company.value + ',') !== -1) &&
+					(!hide || !hide.checked || !r.classList.contains('is-done'));
+				r.hidden = !ok; if (ok) shown++;
+			});
+			if (empty) empty.hidden = shown > 0;
+		}
+		wrap.querySelectorAll('[data-filter-level]').forEach(function (b) {
+			b.addEventListener('click', function () {
+				wrap.querySelectorAll('[data-filter-level]').forEach(function (x) { x.classList.remove('is-active'); });
+				b.classList.add('is-active'); level = b.getAttribute('data-filter-level'); apply();
+			});
+		});
+		[text, pattern, company, hide].forEach(function (f) { if (f) f.addEventListener(f.tagName === 'INPUT' && f.type === 'search' ? 'input' : 'change', apply); });
+		var rnd = wrap.querySelector('[data-random-problem]');
+		if (rnd) rnd.addEventListener('click', function () {
+			var pool = rows.filter(function (r) { return !r.hidden && !r.classList.contains('is-done'); });
+			if (!pool.length) pool = rows.filter(function (r) { return !r.hidden; });
+			if (!pool.length) return;
+			var pick = pool[Math.floor(Math.random() * pool.length)];
+			pick.classList.add('is-picked');
+			pick.scrollIntoView({ behavior: 'smooth', block: 'center' });
+			setTimeout(function () { window.location.href = pick.querySelector('a').href; }, 900);
+		});
+	});
+
 	/* ── Stacky in tip boxes ───────────────────────────────────────────────── */
 	document.querySelectorAll('.vs-tip').forEach(function (tip) {
 		if (tip.querySelector('.mascot')) return;

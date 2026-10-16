@@ -50,7 +50,7 @@ function vitalstack_setup_page() {
 				<tr><td><strong><?php esc_html_e( 'Learning paths', 'vitalstack' ); ?></strong></td><td><?php echo esc_html( implode( ', ', wp_list_pluck( vitalstack_setup_paths(), 'name' ) ) ); ?></td></tr>
 				<tr><td><strong><?php esc_html_e( 'Blog categories', 'vitalstack' ); ?></strong></td><td><?php echo esc_html( implode( ', ', wp_list_pluck( vitalstack_setup_categories(), 'name' ) ) ); ?></td></tr>
 				<tr><td><strong><?php esc_html_e( 'Difficulty levels', 'vitalstack' ); ?></strong></td><td>Beginner, Intermediate, Advanced</td></tr>
-				<tr><td><strong><?php esc_html_e( 'Pages (published)', 'vitalstack' ); ?></strong></td><td>Tutorials, Blog, Contact Us</td></tr>
+				<tr><td><strong><?php esc_html_e( 'Pages (published)', 'vitalstack' ); ?></strong></td><td>Tutorials, Blog, Brain Games, Interview Problems, Contact Us</td></tr>
 				<tr><td><strong><?php esc_html_e( 'Pages (drafts to review)', 'vitalstack' ); ?></strong></td><td>About Us, Editorial Policy, Privacy Policy, Terms of Service, Disclaimer, Cookie Policy</td></tr>
 				<tr><td><strong><?php esc_html_e( 'Menus', 'vitalstack' ); ?></strong></td><td><?php esc_html_e( 'Main menu, footer Company and Legal menus, assigned to their locations', 'vitalstack' ); ?></td></tr>
 				<tr><td><strong><?php esc_html_e( 'Settings', 'vitalstack' ); ?></strong></td><td><?php esc_html_e( 'Post-name permalinks, site tagline, privacy page', 'vitalstack' ); ?></td></tr>
@@ -312,6 +312,8 @@ function vitalstack_run_setup( $remove_samples = true ) {
 function vitalstack_setup_main_menu_items( $ids ) {
 	return array(
 		array( 'page', 'tutorials' ),
+		array( 'page', 'dsa-problems', __( 'Interview Qs', 'vitalstack' ) ),
+		array( 'page', 'games', __( 'Games', 'vitalstack' ) ),
 		array( 'category', 'artificial-intelligence', __( 'AI Guides', 'vitalstack' ) ),
 		array( 'category', 'ai-tools' ),
 		array( 'category', 'ai-career', __( 'Careers', 'vitalstack' ) ),
@@ -397,6 +399,16 @@ function vitalstack_setup_paths() {
 			'name'        => 'Python',
 			'description' => 'A beginner-friendly language used for automation, data and AI.',
 		),
+		array(
+			'slug'        => 'dsa',
+			'name'        => 'DSA',
+			'description' => 'Data structures and algorithms, one pattern at a time, with live animations you can play, pause and replay.',
+		),
+		array(
+			'slug'        => 'dsa-problems',
+			'name'        => 'Interview Problems',
+			'description' => 'Classic coding interview problems solved step by step: brute force first, then the optimal pattern, in Python.',
+		),
 	);
 }
 
@@ -469,6 +481,18 @@ function vitalstack_setup_pages() {
 			'title'    => 'Blog',
 			'status'   => 'publish',
 			'template' => 'page-blog.php',
+			'content'  => '',
+		),
+		'games'            => array(
+			'title'    => 'Brain Games',
+			'status'   => 'publish',
+			'template' => 'page-games.php',
+			'content'  => '',
+		),
+		'dsa-problems'     => array(
+			'title'    => 'Interview Problems',
+			'status'   => 'publish',
+			'template' => 'page-dsa-problems.php',
 			'content'  => '',
 		),
 		'contact-us'       => array(

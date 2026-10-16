@@ -53,6 +53,8 @@ function vitalstack_fun_assets() {
 		'loggedIn'  => is_user_logged_in(),
 		'accountUrl' => vitalstack_account_url( array( 'tab' => 'register' ) ),
 		'gamesUrl'  => vitalstack_games_url(),
+		'problemsUrl' => vitalstack_problems_url(),
+		'lessonBase' => home_url( '/tutorials/' ),
 		'mascot'    => array(
 			'happy' => vitalstack_mascot( 'happy', 90 ),
 			'cheer' => vitalstack_mascot( 'cheer', 90 ),

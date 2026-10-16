@@ -49,6 +49,8 @@ SUBJECT_NAMES = {
     "javascript": "JavaScript",
     "sql": "SQL",
     "python": "Python",
+    "dsa": "DSA",
+    "dsa-problems": "Interview Problems",
 }
 
 CATEGORY_NAMES = {
@@ -213,6 +215,10 @@ def build_wxr(lessons, site):
                 level = meta["difficulty"].lower()
                 terms[("tutorial_difficulty", level)] = level.title()
                 cats.append(f'<category domain="tutorial_difficulty" nicename="{level}">{cdata(level.title())}</category>')
+        postmeta = "".join(
+            f"\n\t\t<wp:postmeta><wp:meta_key>{cdata('_vs_' + k)}</wp:meta_key><wp:meta_value>{cdata(meta[k])}</wp:meta_value></wp:postmeta>"
+            for k in ("pattern", "companies", "level") if meta.get(k)
+        )
         items.append(f"""	<item>
 		<title>{cdata(meta["title"])}</title>
 		<link>{site}/{path}{meta["slug"]}/</link>
@@ -234,7 +240,7 @@ def build_wxr(lessons, site):
 		<wp:post_type>{cdata(post_type)}</wp:post_type>
 		<wp:post_password>{cdata("")}</wp:post_password>
 		<wp:is_sticky>0</wp:is_sticky>
-		{chr(10).join("		" + c if i else c for i, c in enumerate(cats))}
+		{chr(10).join("		" + c if i else c for i, c in enumerate(cats))}{postmeta}
 	</item>""")
     term_xml = []
     for k, ((taxonomy, slug), name) in enumerate(sorted(terms.items()), start=1):

@@ -40,6 +40,21 @@ while ( have_posts() ) :
 				<span class="muted"><?php esc_html_e( 'Updated', 'vitalstack' ); ?> <time datetime="<?php echo esc_attr( get_the_modified_date( 'c' ) ); ?>"><?php echo esc_html( get_the_modified_date() ); ?></time></span>
 			</div>
 
+			<?php
+			$vs_pmeta = array(
+				'pattern'   => get_post_meta( get_the_ID(), '_vs_pattern', true ),
+				'level'     => get_post_meta( get_the_ID(), '_vs_level', true ),
+				'companies' => get_post_meta( get_the_ID(), '_vs_companies', true ),
+			);
+			if ( array_filter( $vs_pmeta ) ) :
+				?>
+				<div class="problem-meta">
+					<?php if ( $vs_pmeta['level'] ) : ?><span class="level-badge level-<?php echo esc_attr( strtolower( $vs_pmeta['level'] ) ); ?>"><?php echo esc_html( $vs_pmeta['level'] ); ?></span><?php endif; ?>
+					<?php if ( $vs_pmeta['pattern'] ) : ?><span class="pattern-chip"><?php echo esc_html( $vs_pmeta['pattern'] ); ?></span><?php endif; ?>
+					<?php if ( $vs_pmeta['companies'] ) : ?><span><?php esc_html_e( 'Often asked at:', 'vitalstack' ); ?> <?php echo esc_html( $vs_pmeta['companies'] ); ?></span><?php endif; ?>
+				</div>
+			<?php endif; ?>
+
 			<?php vitalstack_lesson_buttons(); ?>
 
 			<?php
