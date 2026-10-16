@@ -213,7 +213,7 @@ function vitalstack_social_networks() {
 function vitalstack_default( $key ) {
 	$defaults = array(
 		'home_title'     => __( 'Learn to Code', 'vitalstack' ),
-		'home_desc'      => __( 'Free, step-by-step tutorials for HTML, CSS, JavaScript, SQL, Java and AI, written for complete beginners.', 'vitalstack' ),
+		'home_desc'      => __( 'Free, step-by-step tutorials for HTML, CSS, JavaScript, SQL, Python and AI, written for complete beginners.', 'vitalstack' ),
 		'footer_tagline' => __( 'Clear, practical guides to AI and programming for beginners.', 'vitalstack' ),
 	);
 	return isset( $defaults[ $key ] ) ? $defaults[ $key ] : '';

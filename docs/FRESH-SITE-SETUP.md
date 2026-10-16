@@ -1,11 +1,11 @@
 # New WordPress site from scratch: step by step
 
 For a brand-new WordPress install on Hostinger with the VitalStack theme.
-Total time: about 1 hour, plus writing lessons.
+Total time: about 1 hour. All lessons and guides are included in the theme.
 
 ## 1. Upload the theme (5 min)
 1. WordPress admin → **Appearance → Themes → Add New → Upload Theme**.
-2. Choose `vitalstack-theme-v3.3.zip` → **Install Now** → **Activate**
+2. Choose `vitalstack-theme-v3.4.zip` → **Install Now** → **Activate**
    (or **Replace current with uploaded** if an older VitalStack is installed).
 
 ## 2. Click the setup button (2 min)
@@ -31,7 +31,33 @@ A subject only shows up in the dark top bar and on the homepage **after
 it has at least one published lesson**. An empty site shows only
 AI Guides / AI Tools / Careers. That's normal.
 
-## 3. Review and publish the 6 draft pages (20 min)
+## 3. Import the lessons and guides (2 min)
+Same page, section **Starter content: lessons and guides**. It contains
+**100 lessons** (HTML 20, CSS 20, JavaScript 25, SQL 15, Python 20) and
+**13 guides** (AI, AI Tools, AI Career, Programming), with code examples,
+exercises and summaries. Choose one option and click **Import starter content**:
+
+| Option | What happens | When to choose it |
+|---|---|---|
+| **Import as drafts** (recommended) | Everything arrives as drafts | You want to read and personalise each piece, then publish |
+| **Publish automatically, a few per day** | 2 per day (you choose 1–5), from tomorrow 09:00, HTML first, guides in between | You want a steady rhythm without daily work (about 8 weeks at 2/day) |
+| **Publish everything now** | All 113 go live at once | Only if you've already reviewed the content |
+
+- Safe to click again: anything that already exists is skipped, never overwritten.
+- Bulk imports don't email subscribers. With "a few per day" you can tick
+  *Email subscribers as each scheduled item goes live*.
+- Scheduled items need WP-Cron. On Hostinger set up a real cron job
+  ([THEME-V3-SETUP.md](THEME-V3-SETUP.md) §3) so they publish on time even
+  when nobody visits the site.
+- Subjects appear in the dark top bar and on the homepage once their first
+  lesson is published.
+
+**Important for AdSense:** Google rejected the old site for "low value
+content". Before publishing, read each piece, run the examples, and add
+something of your own (a tip, a screenshot, a better example). See
+[CONTENT-GUIDE.md](CONTENT-GUIDE.md).
+
+## 4. Review and publish the 6 draft pages (20 min)
 The setup page lists them with edit links. For each one:
 1. Read it. Change anything that isn't true for you.
 2. **About Us**: replace `[one honest line about you…]` with your own line.
@@ -39,12 +65,12 @@ The setup page lists them with edit links. For each one:
 
 These pages matter for AdSense: reviewers check them.
 
-## 4. Your author profile (5 min)
+## 5. Your author profile (5 min)
 **Users → Profile**:
 - First name / nickname = your pen name → *Display name publicly as* = pen name.
 - *Biographical Info*: 2–3 honest lines (shown under every article).
 
-## 5. Plugins (15 min)
+## 6. Plugins (15 min)
 Install only these (Plugins → Add New):
 
 | Plugin | Why |
@@ -57,45 +83,18 @@ Install only these (Plugins → Add New):
 You don't need Contact Form 7: the theme's contact form works on its own
 and sends to `contact@vitalstack.co.in`.
 
-## 6. Write your first lesson (the important part)
+## 7. Adding more lessons later
 
-Full guide with screenshots, templates and a 100-lesson plan:
-[CONTENT-GUIDE.md](CONTENT-GUIDE.md). Fastest start: import the 5 ready HTML
-lessons described there.
-
-**Tutorials → Add New Tutorial**:
-
-1. **Title**: short, like W3Schools: `HTML Introduction`, `HTML Elements`,
-   `HTML Attributes`. The subject name first, no year.
-2. **Content**: explain one thing. Use the **Code** block (type `/code`)
-   for examples. HTML and JavaScript examples automatically get a
-   **Try it Yourself** button.
-3. Right sidebar:
-   - **Learning Paths** → tick the subject (e.g. *HTML*).
-   - **Difficulty** → *Beginner*.
-   - **Lesson number** → 1, 2, 3… (leave empty and it gets the next number automatically)
-   - **Excerpt** → one sentence about the lesson (shown on cards and in emails).
-   - **Featured image** (optional).
-4. **Publish**.
-
-The lesson now appears in the top bar (under its subject), in the left
-sidebar, on the homepage, and with Previous/Next buttons. At the end of a
-subject's last lesson, "Next" moves on to the next subject automatically.
-
-Suggested first HTML lessons, in order:
-1. HTML Introduction 2. HTML Editors 3. HTML Basic Examples 4. HTML Elements
-5. HTML Attributes 6. HTML Headings 7. HTML Paragraphs 8. HTML Text Formatting
-9. HTML Links 10. HTML Images 11. HTML Lists 12. HTML Tables
-13. HTML Forms 14. HTML Semantic Elements 15. HTML Project: Your First Web Page
-
-## 7. Blog guides (AI and career articles)
-**Posts → Add New** for longer guides that aren't part of a lesson series
-("What are AI agents?", "Best free AI tools for students"). Pick one
-category (Artificial Intelligence / AI Tools / AI Career / Programming).
+Full guide with screenshots and templates: [CONTENT-GUIDE.md](CONTENT-GUIDE.md).
+In short, **Tutorials → Add New Tutorial**: a short title (`HTML Iframes`), the
+lesson text with **Code** blocks for examples, then in the sidebar tick the
+**Learning Path**, choose **Difficulty**, set the **Lesson number** (or leave it
+empty for "next"), write an **Excerpt**, and **Publish**. Guides are
+**Posts → Add New Post** with one category.
 
 ## 8. Before AdSense
 Follow [ADSENSE-APPROVAL.md](ADSENSE-APPROVAL.md). Short version: all 6
-pages published, 30+ strong lessons/guides, Search Console set up, then
+pages published, 30+ reviewed lessons/guides published, Search Console set up, then
 apply and paste your `ca-pub-…` ID in **Customize → VitalStack: Google AdSense**.
 
 ## Optional settings

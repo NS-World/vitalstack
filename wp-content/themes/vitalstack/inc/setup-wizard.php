@@ -64,6 +64,8 @@ function vitalstack_setup_page() {
 			<?php submit_button( __( 'Create starter structure', 'vitalstack' ), 'primary large', 'submit', false ); ?>
 		</form>
 
+		<?php vitalstack_starter_section(); ?>
+
 		<?php if ( $drafts ) : ?>
 			<h2 style="margin-top:32px"><?php esc_html_e( 'Next: review and publish these pages', 'vitalstack' ); ?></h2>
 			<p><?php esc_html_e( 'They contain starter text written for VitalStack. Read each one, change anything that is not true for you, then click Publish. AdSense reviewers look at these pages.', 'vitalstack' ); ?></p>
@@ -280,7 +282,13 @@ function vitalstack_run_setup( $remove_samples = true ) {
 
 	// Settings.
 	if ( '/%postname%/' !== get_option( 'permalink_structure' ) ) {
-		update_option( 'permalink_structure', '/%postname%/' );
+		// set_permalink_structure() also refreshes the in-memory rewrite object,
+		// so the flush below builds post URLs for the new structure (update_option alone doesn't).
+		global $wp_rewrite;
+		$wp_rewrite->set_permalink_structure( '/%postname%/' );
+		// Post types only register their URL rules once pretty permalinks are on,
+		// so rebuild the rules again on the next page load as well.
+		delete_option( 'vitalstack_rewrite_version' );
 		$report[] = __( 'Permalinks set to "Post name"', 'vitalstack' );
 	}
 	$tagline = get_option( 'blogdescription' );

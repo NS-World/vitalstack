@@ -320,8 +320,9 @@
 	/** Whether a snippet can run in the editor, and as what. */
 	function runnableLang(text, hljsLang) {
 		var t = text.trim();
-		var htmlStart = /^<(!doctype|html|head|body|div|p|h[1-6]|button|form|input|label|ul|ol|table|a\s|img|span|section|header|nav|main|footer|article|script|style|select|textarea)\b/i;
-		if (htmlStart.test(t)) return 'html';
+		// Any snippet that starts with a lowercase HTML tag, a doctype or an HTML comment.
+		// (Capitalised tags like <App /> are JSX and won't run in a plain page.)
+		if (/^<!doctype\s/i.test(t) || /^<!--/.test(t) || /^<[a-z][a-z0-9-]*[\s>\/]/.test(t)) return 'html';
 		if (hljsLang === 'xml' || hljsLang === 'html' || hljsLang === 'css' || hljsLang === 'sql' || hljsLang === 'java' || hljsLang === 'python') return '';
 		if (/^\s*(SELECT|INSERT|UPDATE|DELETE|CREATE|ALTER|DROP)\b/i.test(t) || /\bpublic\s+(static\s+)?(class|void)\b/.test(t)) return '';
 		if (hljsLang === 'javascript' || /console\.log\(|document\.|=>|\bfunction\s*\w*\s*\(|\b(let|const|var)\s+\w+\s*=/.test(t)) {
