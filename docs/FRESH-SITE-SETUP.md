@@ -5,7 +5,7 @@ Total time: about 1 hour. All lessons and guides are included in the theme.
 
 ## 1. Upload the theme (5 min)
 1. WordPress admin → **Appearance → Themes → Add New → Upload Theme**.
-2. Choose `vitalstack-theme-v3.4.zip` → **Install Now** → **Activate**
+2. Choose `vitalstack-theme-v3.4.1.zip` → **Install Now** → **Activate**
    (or **Replace current with uploaded** if an older VitalStack is installed).
 
 ## 2. Click the setup button (2 min)
@@ -49,8 +49,11 @@ exercises and summaries. Choose one option and click **Import starter content**:
 - Scheduled items need WP-Cron. On Hostinger set up a real cron job
   ([THEME-V3-SETUP.md](THEME-V3-SETUP.md) §3) so they publish on time even
   when nobody visits the site.
-- Subjects appear in the dark top bar and on the homepage once their first
-  lesson is published.
+- **Drafts are not visible on the site.** Subjects (HTML, CSS…) appear in the
+  dark top bar and on the homepage only once their first lesson is
+  **published**. After importing as drafts, use the green **Publish the
+  imported items** box on the same page: "a few per day" (the first ones go
+  live immediately) or "Publish all now".
 
 **Important for AdSense:** Google rejected the old site for "low value
 content". Before publishing, read each piece, run the examples, and add
