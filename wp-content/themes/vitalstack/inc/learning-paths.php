@@ -58,11 +58,17 @@ function vitalstack_learning_paths() {
  * @return int[] Post IDs in lesson order.
  */
 function vitalstack_path_lessons( $term ) {
-	static $cache = array();
+	static $cache = null;
+	if ( null === $cache ) {
+		// Lesson lists rarely change, so they are kept between requests and
+		// rebuilt only when a lesson or a path changes (see vitalstack_flush_path_lessons).
+		$cache = get_transient( 'vs_path_lessons' );
+		$cache = is_array( $cache ) ? $cache : array();
+	}
 	if ( isset( $cache[ $term->term_id ] ) ) {
 		return $cache[ $term->term_id ];
 	}
-	$cache[ $term->term_id ] = get_posts(
+	$cache[ $term->term_id ] = array_map( 'intval', get_posts(
 		array(
 			'post_type'        => 'tutorials',
 			'posts_per_page'   => 100,
@@ -80,9 +86,35 @@ function vitalstack_path_lessons( $term ) {
 			),
 			'suppress_filters' => false,
 		)
-	);
+	) );
+	set_transient( 'vs_path_lessons', $cache, DAY_IN_SECONDS );
 	return $cache[ $term->term_id ];
 }
+
+/**
+ * Forget the cached lesson lists when lessons or paths change.
+ */
+function vitalstack_flush_path_lessons() {
+	delete_transient( 'vs_path_lessons' );
+}
+add_action( 'save_post_tutorials', 'vitalstack_flush_path_lessons' );
+add_action( 'deleted_post', 'vitalstack_flush_path_lessons' );
+add_action( 'trashed_post', 'vitalstack_flush_path_lessons' );
+add_action( 'untrashed_post', 'vitalstack_flush_path_lessons' );
+add_action( 'transition_post_status', 'vitalstack_flush_path_lessons' );
+add_action( 'created_tutorial_category', 'vitalstack_flush_path_lessons' );
+add_action( 'edited_tutorial_category', 'vitalstack_flush_path_lessons' );
+add_action( 'delete_tutorial_category', 'vitalstack_flush_path_lessons' );
+add_action(
+	'set_object_terms',
+	function ( $object_id, $terms, $tt_ids, $taxonomy ) {
+		if ( 'tutorial_category' === $taxonomy ) {
+			vitalstack_flush_path_lessons();
+		}
+	},
+	10,
+	4
+);
 
 /**
  * The learning path (top-level term) a tutorial belongs to.
@@ -154,6 +186,7 @@ function vitalstack_short_title( $post_id ) {
  */
 function vitalstack_path_block( $term, $heading_level = 2 ) {
 	$lessons = vitalstack_path_lessons( $term );
+	_prime_post_caches( $lessons, true, true ); // posts, terms and meta in three queries
 	$style   = vitalstack_term_style( $term, 'tutorials' );
 	$tag     = 'h' . (int) $heading_level;
 	?>

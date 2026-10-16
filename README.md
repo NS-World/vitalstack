@@ -19,6 +19,7 @@ wp-content/themes/vitalstack/   Custom WordPress theme (deployed to Hostinger)
 content/                        Lessons and guides (Markdown), page texts, import file, cleanup list
 tools/build_starter_content.py  Bundles content/ into the theme's starter-content file
 tools/lessons_to_wxr.py         Converts the Markdown into a WordPress import file (WXR)
+tools/build_assets.py           Minifies style.css and assets/js into assets/build/
 docs/                           Audit, roadmap, setup guides
 ```
 
@@ -28,6 +29,9 @@ emails and are git-ignored on purpose.
 
 ## Deploying the theme
 
+0. After editing `style.css` or `assets/js/*.js`, rebuild the minified copies:
+   `pip install rcssmin rjsmin && python3 tools/build_assets.py`
+   (if you forget, the theme serves the unminified file, so nothing breaks).
 1. Zip the theme folder: `cd wp-content/themes && zip -r vitalstack.zip vitalstack`
 2. WordPress admin → Appearance → Themes → Add New → Upload → replace current.
 

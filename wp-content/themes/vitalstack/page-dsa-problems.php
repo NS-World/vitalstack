@@ -12,6 +12,7 @@ get_header();
 
 $vs_term     = get_term_by( 'slug', 'dsa-problems', 'tutorial_category' );
 $vs_problems = $vs_term ? vitalstack_path_lessons( $vs_term ) : array();
+_prime_post_caches( $vs_problems, false, true );
 $vs_patterns = array();
 $vs_companies = array();
 foreach ( $vs_problems as $vs_id ) {

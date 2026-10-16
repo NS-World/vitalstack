@@ -4,7 +4,7 @@ Theme URI: https://vitalstack.co.in/
 Author: VitalStack
 Author URI: https://vitalstack.co.in/
 Description: Tutorial-site theme for VitalStack: topic bar, docs layout with lesson sidebar, Previous/Next lessons, "Try it Yourself" code editor, reader accounts with progress sync, and email notifications for new posts.
-Version: 3.7.1
+Version: 3.8.0
 Requires at least: 6.3
 Tested up to: 6.8
 Requires PHP: 8.0
@@ -267,7 +267,8 @@ button, input, textarea, select { font: inherit; color: inherit; }
 .vs-mark-page { fill: #fff; }
 .vs-mark-ink { stroke: var(--accent-deep); fill: none; }
 .logo-text span { color: var(--brand); }
-.logo-invert { color: var(--on-dark); }
+.logo-invert, .logo-invert .logo-text { color: var(--on-dark); }
+.logo-invert .logo-text span { color: var(--accent-glow); }
 
 .topbar-search {
 	flex: 1; max-width: 520px; display: flex; align-items: center; gap: 10px; height: 40px; padding: 0 12px 0 14px;
@@ -1269,3 +1270,7 @@ kbd { font-family: var(--font-mono); font-size: 12px; padding: 1px 7px; border-r
 	.editor-mock-body { grid-template-columns: minmax(0, 1fr); }
 	.editor-mock pre { border-right: 0; border-bottom: 1px solid rgba(255, 255, 255, .08); }
 }
+
+/* Space for a visualizer that hasn't been built yet (see viz.js), so the page doesn't jump. */
+.vs-viz:not(.viz) { min-height: 520px; border-radius: var(--radius-lg); background: var(--bg-soft); }
+@media (max-width: 860px) { .vs-viz:not(.viz) { min-height: 760px; } }

@@ -5,7 +5,7 @@ Total time: about 1 hour. All lessons and guides are included in the theme.
 
 ## 1. Upload the theme (5 min)
 1. WordPress admin → **Appearance → Themes → Add New → Upload Theme**.
-2. Choose `vitalstack-theme-v3.7.1.zip` → **Install Now** → **Activate**
+2. Choose `vitalstack-theme-v3.8.zip` → **Install Now** → **Activate**
    (or **Replace current with uploaded** if an older VitalStack is installed).
 
 ## 2. Click the setup button (2 min)
@@ -63,7 +63,7 @@ something of your own (a tip, a screenshot, a better example). See
 [CONTENT-GUIDE.md](CONTENT-GUIDE.md).
 
 ### Already have the site running (updating from v3.4)?
-1. Upload `vitalstack-theme-v3.7.1.zip` → **Replace current with uploaded**.
+1. Upload `vitalstack-theme-v3.8.zip` → **Replace current with uploaded**.
 2. **Appearance → VitalStack Setup → Create starter structure** again. It adds
    only what's missing: the DSA and Interview Problems paths, the Brain Games
    and Interview Problems pages, and the two new menu links.
@@ -96,6 +96,29 @@ Install only these (Plugins → Add New):
 
 You don't need Contact Form 7: the theme's contact form works on its own
 and sends to `contact@vitalstack.co.in`.
+
+### LiteSpeed Cache settings for a fast site (5 min)
+
+The theme is already light: fonts, icons and scripts come from your own
+server, CSS and JS are minified, and lesson lists are cached. Page caching
+is what turns a ~150 ms page into a ~20 ms one. In **LiteSpeed Cache**:
+
+| Setting | Value | Why |
+|---|---|---|
+| Cache → Enable Cache | **ON** | Serves ready-made pages to visitors |
+| Cache → Cache Logged-in Users | OFF | Signed-in readers see their own XP and progress |
+| Cache → TTL → Default Public Cache TTL | 604800 (1 week) | Pages are purged automatically when you publish |
+| Page Optimization → CSS Minify / Combine | **OFF** | Already minified by the theme; combining can break the theme picker |
+| Page Optimization → JS Minify / Combine / Defer | **OFF** | Already minified and deferred by the theme |
+| Page Optimization → Lazy Load Images | ON | Faster pages with screenshots |
+| Image Optimization | ON (optional) | Smaller uploaded images |
+| Browser → Browser Cache | ON | Repeat visits load instantly |
+| Object Cache (if your plan has Redis or Memcached) | ON | Faster for signed-in readers |
+
+Sign-in, sign-up and the contact form are automatically kept out of the
+cache, so they keep working. After changing settings: **LiteSpeed Cache →
+Toolbox → Purge All**. Also turn on **Hostinger → Websites → Performance →
+CDN** if your plan includes it.
 
 ## 7. Adding more lessons later
 

@@ -69,22 +69,66 @@ function vitalstack_widgets_init() {
 add_action( 'widgets_init', 'vitalstack_widgets_init' );
 
 /**
- * Front-end assets. One stylesheet, one deferred script, and a syntax
+ * URL of a theme asset, preferring its minified copy in assets/build/ while the
+ * source still matches the hash recorded by tools/build_assets.py.
+ *
+ * @param string $source Path relative to the theme, e.g. "assets/js/main.js".
+ */
+function vitalstack_asset_url( $source ) {
+	static $manifest = null;
+	if ( null === $manifest ) {
+		$file     = VITALSTACK_DIR . '/assets/build/manifest.json';
+		$manifest = file_exists( $file ) ? (array) json_decode( (string) file_get_contents( $file ), true ) : array(); // phpcs:ignore WordPress.WP.AlternativeFunctions
+	}
+	$name = 'style.css' === $source ? 'style.min.css' : preg_replace( '/\.js$/', '.min.js', basename( $source ) );
+	if ( ! ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG )
+		&& isset( $manifest[ $source ] )
+		&& file_exists( VITALSTACK_DIR . '/assets/build/' . $name )
+		&& md5_file( VITALSTACK_DIR . '/' . $source ) === $manifest[ $source ] ) {
+		return VITALSTACK_URI . '/assets/build/' . $name;
+	}
+	return VITALSTACK_URI . '/' . $source;
+}
+
+/**
+ * Inter, served from the theme (one 28 KB variable file, weights 400–800),
+ * so pages don't wait on two extra servers for fonts.
+ */
+function vitalstack_font_face() {
+	$font = VITALSTACK_URI . '/assets/fonts/inter-latin-var.woff2';
+	printf( '<link rel="preload" href="%s" as="font" type="font/woff2" crossorigin>' . "\n", esc_url( $font ) );
+	printf( "<style>@font-face{font-family:Inter;font-style:normal;font-weight:400 800;font-display:swap;src:url(%s) format('woff2')}</style>\n", esc_url( $font ) );
+}
+add_action( 'wp_head', 'vitalstack_font_face', 1 );
+
+/**
+ * Front-end assets. One stylesheet, deferred scripts, and a syntax
  * highlighter only on pages that actually contain code.
  */
 function vitalstack_assets() {
-	wp_enqueue_style(
-		'vitalstack-fonts',
-		'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Code+Pro:wght@400;600&display=swap',
-		array(),
-		null
-	);
-	wp_enqueue_style( 'vitalstack-style', get_stylesheet_uri(), array( 'vitalstack-fonts' ), VITALSTACK_VERSION );
+	wp_enqueue_style( 'vitalstack-style', vitalstack_asset_url( 'style.css' ), array(), VITALSTACK_VERSION );
+
+	// Syntax highlighting only where there is code; loaded before main.js so
+	// code blocks are coloured on first run. Colours come from style.css.
+	$main_deps = array();
+	if ( is_front_page() || ( is_singular() && vitalstack_post_has_code() ) ) {
+		wp_enqueue_script(
+			'vitalstack-hljs',
+			VITALSTACK_URI . '/assets/vendor/highlight.min.js',
+			array(),
+			'11.9.0',
+			array(
+				'in_footer' => true,
+				'strategy'  => 'defer',
+			)
+		);
+		$main_deps[] = 'vitalstack-hljs';
+	}
 
 	wp_enqueue_script(
 		'vitalstack-main',
-		VITALSTACK_URI . '/assets/js/main.js',
-		array(),
+		vitalstack_asset_url( 'assets/js/main.js' ),
+		$main_deps,
 		VITALSTACK_VERSION,
 		array(
 			'in_footer' => true,
@@ -102,20 +146,6 @@ function vitalstack_assets() {
 	}
 	wp_localize_script( 'vitalstack-main', 'vitalstackData', $data );
 
-	// Syntax highlighting only where there is code. Colours come from style.css.
-	if ( is_front_page() || ( is_singular() && vitalstack_post_has_code() ) ) {
-		wp_enqueue_script(
-			'vitalstack-hljs',
-			'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js',
-			array(),
-			null,
-			array(
-				'in_footer' => true,
-				'strategy'  => 'defer',
-			)
-		);
-	}
-
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
 	}
@@ -127,17 +157,6 @@ function vitalstack_post_has_code() {
 	return false !== strpos( $content, '<pre' ) || false !== strpos( $content, '<code' );
 }
 
-function vitalstack_resource_hints( $hints, $relation_type ) {
-	if ( 'preconnect' === $relation_type ) {
-		$hints[] = array( 'href' => 'https://fonts.googleapis.com' );
-		$hints[] = array(
-			'href'        => 'https://fonts.gstatic.com',
-			'crossorigin' => 'anonymous',
-		);
-	}
-	return $hints;
-}
-add_filter( 'wp_resource_hints', 'vitalstack_resource_hints', 10, 2 );
 
 function vitalstack_excerpt_length() {
 	return 26;

@@ -1280,6 +1280,16 @@
 	}
 
 	window.VSViz = { algorithms: A, mount: mount };
-	function init() { document.querySelectorAll('.vs-viz:not(.viz)').forEach(mount); }
+	// Build each visualizer only when it is about to scroll into view.
+	function init() {
+		var hosts = document.querySelectorAll('.vs-viz:not(.viz)');
+		if (!('IntersectionObserver' in window)) { hosts.forEach(mount); return; }
+		var io = new IntersectionObserver(function (entries) {
+			entries.forEach(function (e) {
+				if (e.isIntersecting) { io.unobserve(e.target); mount(e.target); }
+			});
+		}, { rootMargin: '600px 0px' });
+		hosts.forEach(function (h) { io.observe(h); });
+	}
 	if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();

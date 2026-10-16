@@ -363,6 +363,10 @@
 	/* ── Code blocks: label, copy, try it, highlighting ───────────────────── */
 	var langNames = { xml: 'HTML', html: 'HTML', javascript: 'JavaScript', js: 'JavaScript', css: 'CSS', sql: 'SQL', java: 'Java', python: 'Python', json: 'JSON', bash: 'Terminal', shell: 'Terminal', typescript: 'TypeScript', plaintext: 'Code' };
 	function enhanceCode() {
+		// Auto-detect only among the languages the lessons use: faster and more accurate.
+		if (window.hljs) {
+			window.hljs.configure({ languages: ['xml', 'css', 'javascript', 'python', 'sql', 'bash', 'json', 'java', 'typescript', 'plaintext'] });
+		}
 		document.querySelectorAll('.prose pre').forEach(function (pre) {
 			var code = pre.querySelector('code');
 			if (!code) {

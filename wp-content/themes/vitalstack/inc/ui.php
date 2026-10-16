@@ -64,6 +64,11 @@ function vitalstack_topic_links() {
 			$current_path = get_term( $current_path->parent, 'tutorial_category' );
 		}
 	}
+	$firsts = array();
+	foreach ( vitalstack_learning_paths() as $path ) {
+		$firsts[] = vitalstack_path_lessons( $path )[0];
+	}
+	_prime_post_caches( $firsts, false, false );
 	foreach ( vitalstack_learning_paths() as $path ) {
 		$lessons = vitalstack_path_lessons( $path );
 		$active  = $current_path && $current_path->term_id === $path->term_id;
@@ -223,7 +228,14 @@ function vitalstack_topic_sidebar() {
 function vitalstack_lessons_sidebar() {
 	$current_path = vitalstack_tutorial_path();
 	$current      = get_queried_object_id();
-	foreach ( vitalstack_learning_paths() as $path ) {
+	$paths        = vitalstack_learning_paths();
+	// Load every lesson in one query instead of one query per link.
+	$all = array();
+	foreach ( $paths as $path ) {
+		$all = array_merge( $all, vitalstack_path_lessons( $path ) );
+	}
+	_prime_post_caches( $all, false, false );
+	foreach ( $paths as $path ) {
 		$is_current = $current_path && $path->term_id === $current_path->term_id;
 		$lessons    = vitalstack_path_lessons( $path );
 		?>

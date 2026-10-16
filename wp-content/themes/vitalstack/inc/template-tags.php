@@ -439,8 +439,9 @@ function vitalstack_logo_mark( $size = 32 ) {
 }
 
 function vitalstack_logo() {
-	// custom_logo, or the logo uploaded through the v1 theme's own setting.
-	$logo_id = get_theme_mod( 'custom_logo' ) ?: get_theme_mod( 'vitalstack_header_logo' );
+	// The built-in logo is used unless the owner opts in to an uploaded image
+	// (Customize → Colours & theme), so old logos left in settings never show.
+	$logo_id = get_theme_mod( 'vitalstack_use_uploaded_logo' ) ? ( get_theme_mod( 'custom_logo' ) ?: get_theme_mod( 'vitalstack_header_logo' ) ) : 0;
 	if ( $logo_id && wp_attachment_is_image( $logo_id ) ) {
 		echo wp_get_attachment_image(
 			$logo_id,

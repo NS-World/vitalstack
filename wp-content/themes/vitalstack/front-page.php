@@ -53,6 +53,11 @@ if ( $vs_health ) {
 
 <?php
 $vs_tones = array( 'mint', 'sun', 'sky', 'stone' );
+$vs_home_ids = array();
+foreach ( $vs_paths as $vs_path ) {
+	$vs_home_ids = array_merge( $vs_home_ids, array_slice( vitalstack_path_lessons( $vs_path ), 0, 6 ) );
+}
+_prime_post_caches( $vs_home_ids, false, false );
 foreach ( $vs_paths as $vs_i => $vs_path ) :
 	$vs_lessons = vitalstack_path_lessons( $vs_path );
 	$vs_example = vitalstack_path_example( $vs_path );

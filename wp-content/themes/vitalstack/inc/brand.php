@@ -15,8 +15,27 @@ function vitalstack_brand_url( $file ) {
 	return VITALSTACK_URI . '/assets/brand/' . $file;
 }
 
+/**
+ * True when the owner opted in to their uploaded logo and Site Icon.
+ */
+function vitalstack_uses_uploaded_brand() {
+	return (bool) get_theme_mod( 'vitalstack_use_uploaded_logo' );
+}
+
+/**
+ * Keep WordPress from printing an old Site Icon unless the owner opted in.
+ */
+function vitalstack_maybe_remove_site_icon() {
+	if ( ! vitalstack_uses_uploaded_brand() ) {
+		remove_action( 'wp_head', 'wp_site_icon', 99 );
+		remove_action( 'login_head', 'wp_site_icon', 99 );
+		remove_action( 'admin_head', 'wp_site_icon' );
+	}
+}
+add_action( 'init', 'vitalstack_maybe_remove_site_icon' );
+
 function vitalstack_brand_icons() {
-	if ( ! has_site_icon() ) {
+	if ( ! vitalstack_uses_uploaded_brand() || ! has_site_icon() ) {
 		printf( '<link rel="icon" href="%s" sizes="any">' . "\n", esc_url( vitalstack_brand_url( 'favicon.ico' ) ) );
 		printf( '<link rel="icon" href="%s" type="image/svg+xml">' . "\n", esc_url( vitalstack_brand_url( 'favicon.svg' ) ) );
 		printf( '<link rel="apple-touch-icon" href="%s">' . "\n", esc_url( vitalstack_brand_url( 'apple-touch-icon.png' ) ) );

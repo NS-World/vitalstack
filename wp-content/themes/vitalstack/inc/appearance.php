@@ -94,6 +94,22 @@ function vitalstack_appearance_customize( $wp_customize ) {
 			'choices' => wp_list_pluck( vitalstack_appearance_accents(), 0 ),
 		)
 	);
+	$wp_customize->add_setting(
+		'vitalstack_use_uploaded_logo',
+		array(
+			'default'           => false,
+			'sanitize_callback' => 'wp_validate_boolean',
+		)
+	);
+	$wp_customize->add_control(
+		'vitalstack_use_uploaded_logo',
+		array(
+			'label'       => __( 'Use my uploaded logo and Site Icon instead of the built-in VitalStack logo and favicon', 'vitalstack' ),
+			'description' => __( 'Leave unticked to keep the built-in logo (adapts to dark mode and the accent colour) and favicon.', 'vitalstack' ),
+			'section'     => 'vitalstack_appearance',
+			'type'        => 'checkbox',
+		)
+	);
 }
 add_action( 'customize_register', 'vitalstack_appearance_customize' );
 

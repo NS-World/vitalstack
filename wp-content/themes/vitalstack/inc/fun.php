@@ -41,12 +41,12 @@ function vitalstack_needs_viz() {
 }
 
 function vitalstack_fun_assets() {
-	wp_enqueue_script( 'vitalstack-fun', VITALSTACK_URI . '/assets/js/fun.js', array(), VITALSTACK_VERSION, array( 'in_footer' => true, 'strategy' => 'defer' ) );
+	wp_enqueue_script( 'vitalstack-fun', vitalstack_asset_url( 'assets/js/fun.js' ), array(), VITALSTACK_VERSION, array( 'in_footer' => true, 'strategy' => 'defer' ) );
 	if ( vitalstack_needs_viz() ) {
-		wp_enqueue_script( 'vitalstack-viz', VITALSTACK_URI . '/assets/js/viz.js', array( 'vitalstack-fun' ), VITALSTACK_VERSION, array( 'in_footer' => true, 'strategy' => 'defer' ) );
+		wp_enqueue_script( 'vitalstack-viz', vitalstack_asset_url( 'assets/js/viz.js' ), array( 'vitalstack-fun' ), VITALSTACK_VERSION, array( 'in_footer' => true, 'strategy' => 'defer' ) );
 	}
 	if ( is_page_template( 'page-games.php' ) ) {
-		wp_enqueue_script( 'vitalstack-games', VITALSTACK_URI . '/assets/js/games.js', array( 'vitalstack-fun' ), VITALSTACK_VERSION, array( 'in_footer' => true, 'strategy' => 'defer' ) );
+		wp_enqueue_script( 'vitalstack-games', vitalstack_asset_url( 'assets/js/games.js' ), array( 'vitalstack-fun' ), VITALSTACK_VERSION, array( 'in_footer' => true, 'strategy' => 'defer' ) );
 	}
 
 	$fun = array(
