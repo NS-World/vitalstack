@@ -78,10 +78,12 @@ def parse_front_matter(text, path):
 
 def inline(text):
     """Escape text, then apply `code`, **bold** and [links](url)."""
-    parts = re.split(r"(`[^`]+`)", text)
+    parts = re.split(r"(``.+?``|`[^`]+`)", text)
     out = []
     for part in parts:
-        if part.startswith("`") and part.endswith("`") and len(part) > 1:
+        if part.startswith("``") and part.endswith("``") and len(part) > 4:
+            out.append("<code>" + html.escape(part[2:-2].strip(), quote=False) + "</code>")
+        elif part.startswith("`") and part.endswith("`") and len(part) > 1:
             out.append("<code>" + html.escape(part[1:-1], quote=False) + "</code>")
         else:
             escaped = html.escape(part, quote=False)
@@ -126,7 +128,9 @@ def markdown_to_blocks(body):
         if line.startswith("|"):
             rows = []
             while i < len(lines) and lines[i].startswith("|"):
-                cells = [c.strip() for c in lines[i].strip().strip("|").split("|")]
+                row = lines[i].strip()[1:]
+                row = row[:-1] if row.endswith("|") and not row.endswith("\\|") else row
+                cells = [c.strip().replace("\\|", "|") for c in re.split(r"(?<!\\)\|", row)]
                 if not all(re.fullmatch(r":?-{3,}:?", c) for c in cells):
                     rows.append(cells)
                 i += 1
