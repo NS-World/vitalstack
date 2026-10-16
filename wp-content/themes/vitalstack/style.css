@@ -1155,3 +1155,4 @@ kbd { font-family: var(--font-mono); font-size: 12px; padding: 1px 7px; border-r
 }
 .problems-note { font-size: 13px; margin-top: 12px; }
 .problem-meta { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 4px 0 18px; font-size: 14px; color: var(--muted); }
+.games-grid[hidden], .game-stage[hidden], .games-daily[hidden] { display: none !important; }

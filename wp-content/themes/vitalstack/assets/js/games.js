@@ -61,10 +61,14 @@
 				win.textContent = lo + ' – ' + hi;
 				api.stats('Guesses: ' + guesses);
 			}
+			var done = false;
 			function guess(n) {
+				if (done) return;
 				if (!n || n < 1 || n > 100) { msg.textContent = 'Type a number from 1 to 100.'; return; }
 				guesses++;
+				api.stats('Guesses: ' + guesses);
 				if (n === secret) {
+					done = true;
 					bot.innerHTML = mascot('cheer');
 					msg.textContent = 'Yes! It was ' + secret + '.';
 					var score = guesses <= 7 ? 100 : guesses === 8 ? 70 : guesses === 9 ? 50 : 30;
@@ -359,10 +363,11 @@
 		grid.hidden = true; stage.hidden = false;
 		titleEl.textContent = g.emoji + ' ' + g.name;
 		body.innerHTML = ''; statsEl.textContent = '';
+		var finished = false;
 		var api = {
 			body: body,
 			stats: setStats,
-			finish: function (score, summary) { clearTimers(); onKey(null); results(g, score, summary); }
+			finish: function (score, summary) { if (finished) return; finished = true; clearTimers(); onKey(null); results(g, score, summary); }
 		};
 		g.play(api);
 		stage.scrollIntoView({ behavior: 'smooth', block: 'start' });
