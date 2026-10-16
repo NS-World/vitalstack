@@ -4,7 +4,7 @@ Theme URI: https://vitalstack.co.in/
 Author: VitalStack
 Author URI: https://vitalstack.co.in/
 Description: Tutorial-site theme for VitalStack: topic bar, docs layout with lesson sidebar, Previous/Next lessons, "Try it Yourself" code editor, reader accounts with progress sync, and email notifications for new posts.
-Version: 3.7.0
+Version: 3.7.1
 Requires at least: 6.3
 Tested up to: 6.8
 Requires PHP: 8.0
@@ -364,6 +364,9 @@ kbd { font-family: var(--font-mono); font-size: 12px; padding: 1px 7px; border-r
 .home-hero-unlock + .home-hero-features { margin-top: 0; }
 .home-hero-features li { position: relative; padding-left: 28px; color: #fff; font-weight: 600; }
 .home-hero-features li::before { content: "✓"; position: absolute; left: 2px; top: 0; color: var(--accent-glow); font-weight: 800; }
+.home-hero-cta { margin: 24px 0 0; }
+.home-hero-cta + .home-hero-start { margin-top: 16px; }
+.home-search { margin-top: 26px; }
 .home-hero-start { margin: 24px 0 0; color: var(--on-dark-2); }
 .home-hero-start a { color: #fff; font-weight: 700; text-decoration: underline; text-underline-offset: 4px; margin-left: 6px; }
 

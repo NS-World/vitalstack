@@ -25,10 +25,9 @@ if ( $vs_health ) {
 		<div class="home-hero-text">
 			<h1><?php echo esc_html( get_theme_mod( 'vitalstack_home_title', vitalstack_default( 'home_title' ) ) ); ?></h1>
 			<p class="home-hero-sub"><?php echo esc_html( get_theme_mod( 'vitalstack_home_desc', vitalstack_default( 'home_desc' ) ) ); ?></p>
-			<p class="home-hero-free"><?php esc_html_e( 'No sign-up needed, just start learning.', 'vitalstack' ); ?></p>
 			<div class="home-search"><?php get_search_form(); ?></div>
 			<?php if ( ! is_user_logged_in() && vitalstack_accounts_enabled() ) : ?>
-				<p class="home-hero-unlock"><?php esc_html_e( 'Or sign up free to unlock:', 'vitalstack' ); ?></p>
+				<p class="home-hero-unlock"><?php esc_html_e( 'Create a free account to unlock:', 'vitalstack' ); ?></p>
 			<?php endif; ?>
 			<ul class="home-hero-features">
 				<li><?php esc_html_e( 'Progress tracking', 'vitalstack' ); ?></li>
@@ -38,6 +37,9 @@ if ( $vs_health ) {
 				<li><?php esc_html_e( 'Interview problems', 'vitalstack' ); ?></li>
 				<li><?php esc_html_e( 'Try-it code editor', 'vitalstack' ); ?></li>
 			</ul>
+			<?php if ( ! is_user_logged_in() && vitalstack_accounts_enabled() ) : ?>
+				<p class="home-hero-cta"><a class="btn btn-primary btn-lg" href="<?php echo esc_url( vitalstack_account_url( array( 'tab' => 'register' ) ) ); ?>"><?php esc_html_e( 'Create free account', 'vitalstack' ); ?></a></p>
+			<?php endif; ?>
 			<?php if ( $vs_first ) : ?>
 				<p class="home-hero-start">
 					<?php esc_html_e( 'Not sure where to begin?', 'vitalstack' ); ?>
