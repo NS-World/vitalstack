@@ -471,6 +471,8 @@
 				credentials: 'same-origin',
 				headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': data.restNonce },
 				body: JSON.stringify({ progress: progress })
+			}).then(function (r) { return r.ok ? r.json() : null; }).then(function (res) {
+				if (res && res.xp) document.dispatchEvent(new CustomEvent('vs:xp', { detail: res }));
 			}).catch(function () {});
 		}, 300);
 	}
@@ -491,7 +493,8 @@
 			var i = list.indexOf(lessonId);
 			if (i === -1) {
 				list.push(lessonId);
-				toast('Nice work! Lesson completed 🎉');
+				if (window.VS) document.dispatchEvent(new CustomEvent('vs:lesson-complete', { detail: { id: lessonId, path: lessonPath } }));
+				else toast('Nice work! Lesson completed 🎉');
 			} else {
 				list.splice(i, 1);
 			}

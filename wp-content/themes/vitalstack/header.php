@@ -33,6 +33,7 @@
 					<span class="theme-icon-light"><?php echo vitalstack_icon( 'moon' ); // phpcs:ignore ?></span>
 					<span class="theme-icon-dark"><?php echo vitalstack_icon( 'sun' ); // phpcs:ignore ?></span>
 				</button>
+				<?php vitalstack_xp_chip(); ?>
 				<?php vitalstack_account_menu(); ?>
 				<button type="button" class="icon-btn menu-toggle" data-open-drawer aria-controls="drawer" aria-expanded="false" aria-label="<?php esc_attr_e( 'Open menu', 'vitalstack' ); ?>"><?php echo vitalstack_icon( 'menu' ); // phpcs:ignore ?></button>
 			</div>

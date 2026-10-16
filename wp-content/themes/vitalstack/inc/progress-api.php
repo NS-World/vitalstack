@@ -53,9 +53,23 @@ add_action(
 					'methods'             => 'POST',
 					'permission_callback' => 'is_user_logged_in',
 					'callback'            => function ( WP_REST_Request $req ) {
+						$uid      = get_current_user_id();
 						$progress = vitalstack_clean_progress( $req->get_param( 'progress' ) );
-						update_user_meta( get_current_user_id(), 'vs_progress', $progress );
-						return array( 'progress' => (object) $progress );
+						$before   = array();
+						foreach ( vitalstack_get_user_progress( $uid ) as $ids ) {
+							$before = array_merge( $before, (array) $ids );
+						}
+						$new = array();
+						foreach ( $progress as $ids ) {
+							$new = array_merge( $new, array_diff( $ids, $before ) );
+						}
+						update_user_meta( $uid, 'vs_progress', $progress );
+						$gained = function_exists( 'vitalstack_xp_for_lessons' ) ? vitalstack_xp_for_lessons( $uid, array_unique( $new ) ) : 0;
+						return array(
+							'progress' => (object) $progress,
+							'xp'       => function_exists( 'vitalstack_xp_stats' ) ? vitalstack_xp_stats( $uid ) : null,
+							'gained'   => $gained,
+						);
 					},
 				),
 			)
