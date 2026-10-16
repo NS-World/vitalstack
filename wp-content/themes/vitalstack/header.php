@@ -29,10 +29,7 @@
 
 			<div class="topbar-actions">
 				<button type="button" class="icon-btn search-mobile" data-open-search aria-label="<?php esc_attr_e( 'Search', 'vitalstack' ); ?>"><?php echo vitalstack_icon( 'search' ); // phpcs:ignore ?></button>
-				<button type="button" class="icon-btn" data-toggle-theme aria-label="<?php esc_attr_e( 'Toggle dark mode', 'vitalstack' ); ?>">
-					<span class="theme-icon-light"><?php echo vitalstack_icon( 'moon' ); // phpcs:ignore ?></span>
-					<span class="theme-icon-dark"><?php echo vitalstack_icon( 'sun' ); // phpcs:ignore ?></span>
-				</button>
+				<?php vitalstack_appearance_button(); ?>
 				<?php vitalstack_xp_chip(); ?>
 				<?php vitalstack_account_menu(); ?>
 				<button type="button" class="icon-btn menu-toggle" data-open-drawer aria-controls="drawer" aria-expanded="false" aria-label="<?php esc_attr_e( 'Open menu', 'vitalstack' ); ?>"><?php echo vitalstack_icon( 'menu' ); // phpcs:ignore ?></button>
@@ -75,6 +72,9 @@
 			);
 			?>
 		</nav>
+		<div class="drawer-appearance">
+			<?php vitalstack_appearance_controls(); ?>
+		</div>
 	</div>
 </div>
 

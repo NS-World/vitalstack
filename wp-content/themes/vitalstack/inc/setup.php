@@ -139,18 +139,6 @@ function vitalstack_resource_hints( $hints, $relation_type ) {
 }
 add_filter( 'wp_resource_hints', 'vitalstack_resource_hints', 10, 2 );
 
-/**
- * Apply the saved colour scheme before first paint so dark mode never flashes.
- */
-function vitalstack_theme_bootstrap_script() {
-	?>
-	<script>
-	(function(){try{var t=localStorage.getItem('vs-theme');if(t==='dark'||t==='light'){document.documentElement.setAttribute('data-theme',t);}}catch(e){}})();
-	</script>
-	<?php
-}
-add_action( 'wp_head', 'vitalstack_theme_bootstrap_script', 0 );
-
 function vitalstack_excerpt_length() {
 	return 26;
 }

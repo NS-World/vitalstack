@@ -54,19 +54,46 @@
 		});
 	}
 
-	/* ── Dark mode ─────────────────────────────────────────────────────────── */
-	function currentTheme() {
-		var explicit = root.getAttribute('data-theme');
-		if (explicit) return explicit;
-		return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-	}
-	document.querySelectorAll('[data-toggle-theme]').forEach(function (btn) {
-		btn.addEventListener('click', function () {
-			var next = currentTheme() === 'dark' ? 'light' : 'dark';
-			root.setAttribute('data-theme', next);
-			try { localStorage.setItem('vs-theme', next); } catch (e) {}
+	/* ── Appearance: theme mode + accent colour ───────────────────────────── */
+	function syncAppearance() {
+		var mode = root.getAttribute('data-theme') || 'light';
+		var accent = root.getAttribute('data-accent') || 'green';
+		document.querySelectorAll('[data-set-theme]').forEach(function (b) {
+			b.setAttribute('aria-pressed', b.getAttribute('data-set-theme') === mode ? 'true' : 'false');
 		});
+		document.querySelectorAll('[data-set-accent]').forEach(function (b) {
+			b.setAttribute('aria-pressed', b.getAttribute('data-set-accent') === accent ? 'true' : 'false');
+		});
+	}
+	document.addEventListener('click', function (e) {
+		var t = e.target.closest('[data-set-theme], [data-set-accent]');
+		if (!t) return;
+		var isMode = t.hasAttribute('data-set-theme');
+		var value = t.getAttribute(isMode ? 'data-set-theme' : 'data-set-accent');
+		root.setAttribute(isMode ? 'data-theme' : 'data-accent', value);
+		try { localStorage.setItem(isMode ? 'vs-theme' : 'vs-accent', value); } catch (err) {}
+		syncAppearance();
 	});
+	syncAppearance();
+
+	var appToggle = document.querySelector('[data-appearance-toggle]');
+	var appPanel = document.getElementById('appearance-panel');
+	function closeAppearance() {
+		if (!appPanel || appPanel.hidden) return;
+		appPanel.hidden = true;
+		appToggle.setAttribute('aria-expanded', 'false');
+	}
+	if (appToggle && appPanel) {
+		appToggle.addEventListener('click', function (e) {
+			e.stopPropagation();
+			var open = appPanel.hidden;
+			appPanel.hidden = !open;
+			appToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+			if (open) { var first = appPanel.querySelector('[aria-pressed="true"]') || appPanel.querySelector('button'); if (first) first.focus(); }
+		});
+		document.addEventListener('click', function (e) { if (!e.target.closest('.appearance')) closeAppearance(); });
+		document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !appPanel.hidden) { closeAppearance(); appToggle.focus(); } });
+	}
 
 	/* ── Dialogs: drawer, search ──────────────────────────────────────────── */
 	var lastFocus = null;
@@ -380,7 +407,7 @@
 				var tryBtn = document.createElement('button');
 				tryBtn.type = 'button';
 				tryBtn.className = 'code-btn code-btn-try';
-				tryBtn.textContent = 'Try it Yourself ❯';
+				tryBtn.innerHTML = 'Try it<span class="code-btn-long"> Yourself</span> ❯';
 				tryBtn.addEventListener('click', function () { openTryit(runLang, raw); });
 				actions.appendChild(tryBtn);
 			}

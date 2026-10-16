@@ -12,13 +12,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'VITALSTACK_VERSION', '3.5.0' );
+define( 'VITALSTACK_VERSION', '3.6.0' );
 define( 'VITALSTACK_DIR', get_template_directory() );
 define( 'VITALSTACK_URI', get_template_directory_uri() );
 
 require VITALSTACK_DIR . '/inc/setup.php';
 require VITALSTACK_DIR . '/inc/post-types.php';
 require VITALSTACK_DIR . '/inc/customizer.php';
+require VITALSTACK_DIR . '/inc/appearance.php';
 require VITALSTACK_DIR . '/inc/template-tags.php';
 require VITALSTACK_DIR . '/inc/content.php';
 require VITALSTACK_DIR . '/inc/learning-paths.php';
