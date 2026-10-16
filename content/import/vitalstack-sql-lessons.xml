@@ -1,0 +1,4821 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0"
+	xmlns:excerpt="http://wordpress.org/export/1.2/excerpt/"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:wp="http://wordpress.org/export/1.2/">
+<channel>
+	<title>VitalStack lessons</title>
+	<link>https://vitalstack.co.in</link>
+	<description>Lesson import</description>
+	<pubDate>Fri, 16 Oct 2026 03:36:35 +0000</pubDate>
+	<language>en-US</language>
+	<wp:wxr_version>1.2</wp:wxr_version>
+	<wp:base_site_url>https://vitalstack.co.in</wp:base_site_url>
+	<wp:base_blog_url>https://vitalstack.co.in</wp:base_blog_url>
+	<wp:author><wp:author_id>1</wp:author_id><wp:author_login><![CDATA[admin]]></wp:author_login><wp:author_email><![CDATA[]]></wp:author_email><wp:author_display_name><![CDATA[admin]]></wp:author_display_name></wp:author>
+	<wp:term>
+		<wp:term_id>1</wp:term_id>
+		<wp:term_taxonomy><![CDATA[tutorial_category]]></wp:term_taxonomy>
+		<wp:term_slug><![CDATA[sql]]></wp:term_slug>
+		<wp:term_parent><![CDATA[]]></wp:term_parent>
+		<wp:term_name><![CDATA[SQL]]></wp:term_name>
+	</wp:term>
+	<wp:term>
+		<wp:term_id>2</wp:term_id>
+		<wp:term_taxonomy><![CDATA[tutorial_difficulty]]></wp:term_taxonomy>
+		<wp:term_slug><![CDATA[beginner]]></wp:term_slug>
+		<wp:term_parent><![CDATA[]]></wp:term_parent>
+		<wp:term_name><![CDATA[Beginner]]></wp:term_name>
+	</wp:term>
+	<wp:term>
+		<wp:term_id>3</wp:term_id>
+		<wp:term_taxonomy><![CDATA[tutorial_difficulty]]></wp:term_taxonomy>
+		<wp:term_slug><![CDATA[intermediate]]></wp:term_slug>
+		<wp:term_parent><![CDATA[]]></wp:term_parent>
+		<wp:term_name><![CDATA[Intermediate]]></wp:term_name>
+	</wp:term>
+	<item>
+		<title><![CDATA[SQL Introduction]]></title>
+		<link>https://vitalstack.co.in/tutorials/sql-introduction/</link>
+		<pubDate>Fri, 16 Oct 2026 03:36:35 +0000</pubDate>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<guid isPermaLink="false">https://vitalstack.co.in/?post_type=tutorials&amp;p=1</guid>
+		<description></description>
+		<content:encoded><![CDATA[<!-- wp:paragraph -->
+<p>Every app that remembers anything (your orders, messages, followers, progress through a course) stores that data in a <strong>database</strong>. <strong>SQL</strong> (Structured Query Language, often pronounced "sequel") is the language used to talk to most databases. It's one of the most useful and long-lasting skills in tech: developers, data analysts, product managers and marketers all use it.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">What is a database?</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>A database is an organised collection of data that a program can search and update quickly and safely. The most common kind is a <strong>relational database</strong>, which stores data in <strong>tables</strong>, like spreadsheets:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>id</th><th>name</th><th>city</th></tr></thead><tbody><tr><td>1</td><td>Asha</td><td>Pune</td></tr><tr><td>2</td><td>Rohan</td><td>Delhi</td></tr><tr><td>3</td><td>Meera</td><td>Jaipur</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Each <strong>row</strong> is one record (one customer).</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Each <strong>column</strong> is one piece of information (name, city).</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Tables can be <strong>related</strong> to each other: an <code>orders</code> table can point to the customer who placed each order. That's what "relational" means.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Why not just use a spreadsheet?</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Databases are built for things spreadsheets struggle with:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Size:</strong> millions or billions of rows, still fast.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Many users at once:</strong> thousands of people placing orders at the same moment without overwriting each other.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Rules:</strong> every order must belong to a real customer; an email must be unique.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Safety:</strong> changes are saved reliably even if the server crashes mid-way.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Questions in code:</strong> "total sales per city last month" is one SQL statement.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Your first SQL query</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT name, city
+FROM customers
+WHERE city = 'Pune';</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Read it like English: "Select the name and city from the customers table where the city is Pune." The database answers with a small table of results:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>name</th><th>city</th></tr></thead><tbody><tr><td>Asha</td><td>Pune</td></tr><tr><td>Kabir</td><td>Pune</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:paragraph -->
+<p>SQL is <strong>declarative</strong>: you describe <strong>what</strong> you want, and the database works out <strong>how</strong> to get it fast.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">What SQL can do</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>SQL statements fall into a few groups:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Query data:</strong> <code>SELECT</code> (most of what you'll write).</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Change data:</strong> <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Define structure:</strong> <code>CREATE TABLE</code>, <code>ALTER TABLE</code>, <code>DROP TABLE</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Control access:</strong> <code>GRANT</code>, <code>REVOKE</code> (for administrators).</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>This course covers the first three groups.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Popular database systems</h2>
+<!-- /wp:heading -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>Database</th><th>Where you'll meet it</th></tr></thead><tbody><tr><td><strong>MySQL / MariaDB</strong></td><td>WordPress and most shared hosting (including this site)</td></tr><tr><td><strong>PostgreSQL</strong></td><td>Modern web apps and startups; very feature-rich</td></tr><tr><td><strong>SQLite</strong></td><td>Inside phones, browsers and apps; a database in one file</td></tr><tr><td><strong>SQL Server</strong></td><td>Large companies using Microsoft tools</td></tr><tr><td><strong>Oracle</strong></td><td>Banks and big enterprises</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:paragraph -->
+<p>They all speak SQL. The core you'll learn here (SELECT, WHERE, JOIN, GROUP BY…) works the same in all of them; only small details differ, and we'll point them out.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">SQL syntax basics</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>-- This is a comment
+SELECT name FROM customers;   /* so is this */
+
+select NAME from Customers;   -- keywords aren't case-sensitive</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Statements end with a <strong>semicolon</strong>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>SQL <strong>keywords</strong> are not case-sensitive, but writing them in UPPER CASE is the common style and makes queries easier to read.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Text values go in <strong>single quotes</strong>: <code>'Pune'</code>. (Double quotes are for column or table names in standard SQL.)</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Spaces and new lines don't matter; spread long queries over several lines.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Whether <strong>table names</strong> and <strong>text comparisons</strong> are case-sensitive depends on the database system and its settings.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">How to practise (free, nothing to install)</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>You need a database to run queries. The easiest options:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li><strong>sqliteonline.com</strong> or <strong>DB Fiddle</strong> (db-fiddle.com): run SQL in your browser. Choose SQLite, MySQL or PostgreSQL.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>DB Browser for SQLite</strong>: a free desktop app; the whole database is one file.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Later, install <strong>MySQL</strong> or <strong>PostgreSQL</strong> locally, or use the database from your hosting panel (phpMyAdmin).</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>In the next lesson, you'll create the practice database used throughout this course with one copy-and-paste script.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Where SQL is used</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Web development:</strong> every login, comment and product page reads from a database.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Data analysis:</strong> answering business questions from sales, traffic or app data.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Reporting tools</strong> like Looker Studio, Power BI and Metabase are built on SQL.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>AI and data science:</strong> collecting and cleaning the data that models learn from.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Common mistakes</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Double quotes around text values</strong>: use <code>'Pune'</code>, not <code>"Pune"</code> (MySQL allows both, PostgreSQL doesn't).</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Forgetting the semicolon</strong> when running several statements.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Expecting rows in a particular order</strong> without asking for it (you'll learn <code>ORDER BY</code>).</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Exercise</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li>Open sqliteonline.com (or any tool above) and run <code>SELECT 1 + 1;</code> to check it works.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Run <code>SELECT 'Hello, SQL!' AS greeting;</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Think of an app you use daily. Write down three tables it probably has and three columns in each.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Summary</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Relational databases store data in related tables of rows and columns.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>SQL is the language for querying and changing that data; you say what you want, not how.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>MySQL, PostgreSQL and SQLite all share the same core SQL.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Practise for free in the browser with sqliteonline.com or DB Fiddle.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Next, you'll create tables and load the practice database for this course.</p>
+<!-- /wp:paragraph -->
+]]></content:encoded>
+		<excerpt:encoded><![CDATA[What databases and SQL are, why almost every app uses them, the main database systems, and how to practise SQL for free in your browser.]]></excerpt:encoded>
+		<wp:post_id>1</wp:post_id>
+		<wp:post_date><![CDATA[2026-10-16 03:36:35]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-10-16 03:36:35]]></wp:post_date_gmt>
+		<wp:comment_status><![CDATA[open]]></wp:comment_status>
+		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+		<wp:post_name><![CDATA[sql-introduction]]></wp:post_name>
+		<wp:status><![CDATA[draft]]></wp:status>
+		<wp:post_parent>0</wp:post_parent>
+		<wp:menu_order>1</wp:menu_order>
+		<wp:post_type><![CDATA[tutorials]]></wp:post_type>
+		<wp:post_password><![CDATA[]]></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+		<category domain="tutorial_category" nicename="sql"><![CDATA[SQL]]></category>
+		<category domain="tutorial_difficulty" nicename="beginner"><![CDATA[Beginner]]></category>
+	</item>
+	<item>
+		<title><![CDATA[SQL Databases and Tables]]></title>
+		<link>https://vitalstack.co.in/tutorials/sql-databases-and-tables/</link>
+		<pubDate>Fri, 16 Oct 2026 03:36:35 +0000</pubDate>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<guid isPermaLink="false">https://vitalstack.co.in/?post_type=tutorials&amp;p=2</guid>
+		<description></description>
+		<content:encoded><![CDATA[<!-- wp:paragraph -->
+<p>Before you can query data, it needs a home: a <strong>table</strong> with defined columns. In this lesson you'll learn how tables are created, choose data types, and set up the small online-shop database used for every example in the rest of the course.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Creating a table</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>CREATE TABLE customers (
+  id      INTEGER PRIMARY KEY,
+  name    VARCHAR(100) NOT NULL,
+  city    VARCHAR(50),
+  joined  DATE
+);</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><code>CREATE TABLE customers</code> creates a table named <code>customers</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Inside the brackets, each line defines a <strong>column</strong>: its name, its <strong>data type</strong>, and optional rules.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>PRIMARY KEY</code> marks the column that uniquely identifies each row.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>NOT NULL</code> means the column must always have a value.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Common data types</h2>
+<!-- /wp:heading -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>Type</th><th>Stores</th><th>Example</th></tr></thead><tbody><tr><td><code>INTEGER</code> / <code>INT</code></td><td>Whole numbers</td><td>42</td></tr><tr><td><code>DECIMAL(10,2)</code></td><td>Exact decimals, e.g. money</td><td>1499.00</td></tr><tr><td><code>VARCHAR(n)</code></td><td>Text up to n characters</td><td>'Asha'</td></tr><tr><td><code>TEXT</code></td><td>Long text</td><td>A blog post</td></tr><tr><td><code>DATE</code></td><td>A date</td><td>'2024-05-01'</td></tr><tr><td><code>TIMESTAMP</code> / <code>DATETIME</code></td><td>Date and time</td><td>'2024-05-01 14:30:00'</td></tr><tr><td><code>BOOLEAN</code></td><td>true / false</td><td>TRUE</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:paragraph -->
+<p>Pick the type that matches the data: store prices in <code>DECIMAL</code>, not text, so you can add them up; store dates as <code>DATE</code> so you can sort and compare them. (SQLite is relaxed about types; MySQL and PostgreSQL enforce them.)</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Write dates in the <strong>ISO format</strong> <code>'YYYY-MM-DD'</code>. Every database understands it, and it sorts correctly.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Primary keys</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Every table should have a <strong>primary key</strong>: a column (usually <code>id</code>) whose value is unique for every row and never empty. It's how other tables refer to a row, and how you update or delete exactly one record.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Databases can generate ids automatically:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>-- MySQL
+-- id INT AUTO_INCREMENT PRIMARY KEY
+
+-- PostgreSQL
+-- id SERIAL PRIMARY KEY      (or: id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY)
+
+-- SQLite
+-- id INTEGER PRIMARY KEY     (automatically increases)</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">NULL: the missing value</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p><code>NULL</code> means "no value / unknown". It's not zero and not an empty string. If a customer didn't tell you their city, <code>city</code> is <code>NULL</code>. You'll learn how to search for NULL in the WHERE lesson.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">The practice database</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Our shop has four related tables:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><strong>customers</strong>: who buys.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>products</strong>: what we sell.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>orders</strong>: one row per order, pointing to a customer.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>order_items</strong>: which products (and how many) are in each order.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Copy this whole script into sqliteonline.com (or DB Fiddle with SQLite/MySQL/PostgreSQL) and run it:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>CREATE TABLE customers (
+  id      INTEGER PRIMARY KEY,
+  name    VARCHAR(100) NOT NULL,
+  email   VARCHAR(100) UNIQUE,
+  city    VARCHAR(50),
+  joined  DATE
+);
+
+CREATE TABLE products (
+  id        INTEGER PRIMARY KEY,
+  name      VARCHAR(100) NOT NULL,
+  category  VARCHAR(50),
+  price     DECIMAL(10,2) NOT NULL,
+  stock     INTEGER DEFAULT 0
+);
+
+CREATE TABLE orders (
+  id           INTEGER PRIMARY KEY,
+  customer_id  INTEGER NOT NULL REFERENCES customers(id),
+  order_date   DATE NOT NULL,
+  status       VARCHAR(20) DEFAULT 'pending'
+);
+
+CREATE TABLE order_items (
+  order_id    INTEGER NOT NULL REFERENCES orders(id),
+  product_id  INTEGER NOT NULL REFERENCES products(id),
+  qty         INTEGER NOT NULL,
+  PRIMARY KEY (order_id, product_id)
+);
+
+INSERT INTO customers (id, name, email, city, joined) VALUES
+  (1, 'Asha',  'asha@example.com',  'Pune',   '2024-01-10'),
+  (2, 'Rohan', 'rohan@example.com', 'Delhi',  '2024-02-03'),
+  (3, 'Meera', 'meera@example.com', 'Jaipur', '2024-02-20'),
+  (4, 'Kabir', 'kabir@example.com', 'Pune',   '2024-03-15'),
+  (5, 'Sara',  NULL,                'Mumbai', '2024-04-01');
+
+INSERT INTO products (id, name, category, price, stock) VALUES
+  (1, 'Notebook',     'stationery',  120.00,  50),
+  (2, 'Pen set',      'stationery',  250.00,  30),
+  (3, 'Headphones',   'electronics', 1499.00, 0),
+  (4, 'USB cable',    'electronics', 299.00,  75),
+  (5, 'Backpack',     'bags',        1899.00, 12),
+  (6, 'Water bottle', 'accessories', 350.00,  40),
+  (7, 'Desk lamp',    'electronics', 899.00,  8);
+
+INSERT INTO orders (id, customer_id, order_date, status) VALUES
+  (1, 1, '2024-05-01', 'delivered'),
+  (2, 2, '2024-05-03', 'delivered'),
+  (3, 1, '2024-05-10', 'shipped'),
+  (4, 3, '2024-05-12', 'pending'),
+  (5, 4, '2024-05-15', 'delivered');
+
+INSERT INTO order_items (order_id, product_id, qty) VALUES
+  (1, 1, 3), (1, 2, 1),
+  (2, 5, 1),
+  (3, 4, 2),
+  (4, 1, 5), (4, 6, 1),
+  (5, 3, 1);</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Check it worked:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT * FROM products;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>You should see 7 products. Keep this database open; every following lesson uses it. (If you close the browser tab, just run the script again.)</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">How the tables relate</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>customers (id) ──&lt; orders (customer_id)
+orders (id)    ──&lt; order_items (order_id)
+products (id)  ──&lt; order_items (product_id)</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>One customer can have <strong>many</strong> orders; one order can have <strong>many</strong> items; one product can appear in <strong>many</strong> orders. Notice that Sara has no orders and the desk lamp has never been sold. These cases will matter when you learn JOINs.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Changing and removing tables</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>ALTER TABLE customers ADD COLUMN phone VARCHAR(20);
+-- DROP TABLE customers;   -- deletes the table and ALL its data. Be careful!</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p><code>ALTER TABLE</code> changes an existing table's structure. <code>DROP TABLE</code> deletes it permanently; there is no undo.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Naming conventions</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Use lowercase names with underscores: <code>order_items</code>, <code>customer_id</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Table names are usually plural (<code>customers</code>); column names singular.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Name foreign key columns <code>&lt;table&gt;_id</code>: <code>customer_id</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Avoid spaces and reserved words like <code>order</code>, <code>select</code> or <code>user</code> as names.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Common mistakes</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Storing numbers or dates as text</strong>, which breaks sorting and maths ("100" sorts before "20").</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>No primary key</strong>, making it impossible to target one row reliably.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Running DROP TABLE on real data</strong> without a backup.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Using reserved words</strong> like <code>order</code> as table names (that's why ours is <code>orders</code>).</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Exercise</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li>Run the practice script and check each table with <code>SELECT * FROM table_name;</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Write a <code>CREATE TABLE</code> statement for a <code>reviews</code> table with id, product_id, rating (1–5), comment and created date.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Add a <code>phone</code> column to <code>customers</code> with <code>ALTER TABLE</code>.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Summary</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><code>CREATE TABLE</code> defines columns with names, data types and rules.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Choose proper types: <code>INTEGER</code>, <code>DECIMAL</code>, <code>VARCHAR</code>, <code>DATE</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Every table needs a primary key; <code>NULL</code> means "no value".</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>The practice shop database (customers, products, orders, order_items) is used throughout the course.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Next, you'll read data from tables with SELECT.</p>
+<!-- /wp:paragraph -->
+]]></content:encoded>
+		<excerpt:encoded><![CDATA[Create tables with CREATE TABLE, choose data types, understand primary keys and NULL, and load the practice shop database used in every lesson of this course.]]></excerpt:encoded>
+		<wp:post_id>2</wp:post_id>
+		<wp:post_date><![CDATA[2026-10-16 03:36:35]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-10-16 03:36:35]]></wp:post_date_gmt>
+		<wp:comment_status><![CDATA[open]]></wp:comment_status>
+		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+		<wp:post_name><![CDATA[sql-databases-and-tables]]></wp:post_name>
+		<wp:status><![CDATA[draft]]></wp:status>
+		<wp:post_parent>0</wp:post_parent>
+		<wp:menu_order>2</wp:menu_order>
+		<wp:post_type><![CDATA[tutorials]]></wp:post_type>
+		<wp:post_password><![CDATA[]]></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+		<category domain="tutorial_category" nicename="sql"><![CDATA[SQL]]></category>
+		<category domain="tutorial_difficulty" nicename="beginner"><![CDATA[Beginner]]></category>
+	</item>
+	<item>
+		<title><![CDATA[SQL SELECT]]></title>
+		<link>https://vitalstack.co.in/tutorials/sql-select/</link>
+		<pubDate>Fri, 16 Oct 2026 03:36:35 +0000</pubDate>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<guid isPermaLink="false">https://vitalstack.co.in/?post_type=tutorials&amp;p=3</guid>
+		<description></description>
+		<content:encoded><![CDATA[<!-- wp:paragraph -->
+<p><code>SELECT</code> is the statement you'll write more than any other. It reads data from one or more tables and returns a result table. This lesson covers the core of SELECT; the next lessons add filtering, sorting and grouping.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>All examples use the practice shop database from the previous lesson.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Selecting all columns</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT * FROM customers;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p><code>*</code> means "every column". The result has all 5 customers with id, name, email, city and joined date.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p><code>SELECT *</code> is great for a quick look at a table. In application code, list the columns you need instead: it's faster, clearer, and doesn't break if someone adds a column later.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Selecting specific columns</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT name, city
+FROM customers;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>name</th><th>city</th></tr></thead><tbody><tr><td>Asha</td><td>Pune</td></tr><tr><td>Rohan</td><td>Delhi</td></tr><tr><td>Meera</td><td>Jaipur</td></tr><tr><td>Kabir</td><td>Pune</td></tr><tr><td>Sara</td><td>Mumbai</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:paragraph -->
+<p>Columns appear in the order you list them.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Column aliases with AS</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT name AS customer, city AS location
+FROM customers;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p><code>AS</code> renames a column <strong>in the result</strong> (the table itself doesn't change). Aliases make results clearer and are essential for calculated columns. Use double quotes (or backticks in MySQL) if the alias has spaces: <code>AS "Customer name"</code>.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Calculated columns</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>You can do maths and other operations right in the SELECT list:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT name,
+       price,
+       price * 1.18 AS price_with_tax,
+       stock,
+       price * stock AS stock_value
+FROM products;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>name</th><th>price</th><th>price_with_tax</th><th>stock</th><th>stock_value</th></tr></thead><tbody><tr><td>Notebook</td><td>120</td><td>141.6</td><td>50</td><td>6000</td></tr><tr><td>Pen set</td><td>250</td><td>295</td><td>30</td><td>7500</td></tr><tr><td>Headphones</td><td>1499</td><td>1768.82</td><td>0</td><td>0</td></tr><tr><td>…</td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:paragraph -->
+<p>The database calculates the new columns for every row. (How many decimals are shown depends on your database tool.)</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Joining text</h3>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>-- Standard SQL, PostgreSQL and SQLite:
+SELECT name || ' from ' || city AS label FROM customers;
+
+-- MySQL:
+-- SELECT CONCAT(name, ' from ', city) AS label FROM customers;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Result: "Asha from Pune", "Rohan from Delhi"… <code>CONCAT()</code> also works in PostgreSQL and newer SQLite versions.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Removing duplicates with DISTINCT</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT city FROM customers;           -- Pune appears twice
+SELECT DISTINCT city FROM customers;  -- each city once</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>city</th></tr></thead><tbody><tr><td>Pune</td></tr><tr><td>Delhi</td></tr><tr><td>Jaipur</td></tr><tr><td>Mumbai</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:paragraph -->
+<p><code>DISTINCT</code> applies to the whole row of selected columns: <code>SELECT DISTINCT category, stock</code> returns each unique <strong>combination</strong>.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT DISTINCT category FROM products;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>This gives the four categories: stationery, electronics, bags, accessories.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Limiting the number of rows</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>-- MySQL, PostgreSQL, SQLite:
+SELECT name, price FROM products LIMIT 3;
+
+-- Skip the first 3, then take 3 (page 2):
+SELECT name, price FROM products LIMIT 3 OFFSET 3;
+
+-- SQL Server uses: SELECT TOP 3 name, price FROM products;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p><code>LIMIT</code> is how websites show "10 results per page". Without <code>ORDER BY</code> (lesson 5), which rows you get first is <strong>not guaranteed</strong>, so always combine LIMIT with ORDER BY in real queries.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">SELECT without a table</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT 2 + 3 AS answer, 'hello' AS word, CURRENT_DATE AS today;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Handy for testing expressions and functions.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Formatting long queries</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT
+  name,
+  category,
+  price
+FROM products;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>One column per line, keywords on their own lines: easy to read and easy to comment out a single column with <code>--</code> while testing.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">How a SELECT is processed</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Although you write SELECT first, the database logically does this:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li><strong>FROM</strong>: pick the table.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>WHERE</strong>: filter rows (next lesson).</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>SELECT</strong>: choose and calculate columns.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>ORDER BY</strong>: sort.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>LIMIT</strong>: cut the result.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>This explains why, for example, you can't use a column alias inside WHERE in most databases: WHERE runs before the alias is created.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Common mistakes</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Comma after the last column</strong>: <code>SELECT name, city, FROM customers</code> is a syntax error.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Missing comma between columns</strong>: <code>SELECT name city</code> treats <code>city</code> as an alias for <code>name</code>!</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>SELECT * in application code.</strong></li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Expecting a fixed order</strong> without ORDER BY.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Exercise</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li>Select the name and price of every product.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Show each product's name and its price after a 10% discount, as <code>sale_price</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>List each distinct order status in the <code>orders</code> table.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Show the first 2 rows of <code>order_items</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Show customer names with their city in one column like "Asha (Pune)".</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Summary</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><code>SELECT columns FROM table</code> reads data; <code>*</code> means all columns.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>AS</code> renames result columns; you can calculate new columns with maths and text functions.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>DISTINCT</code> removes duplicate rows; <code>LIMIT</code>/<code>OFFSET</code> restrict and page results.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>List columns explicitly in real code.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Next, you'll filter rows with WHERE.</p>
+<!-- /wp:paragraph -->
+]]></content:encoded>
+		<excerpt:encoded><![CDATA[Read data with SELECT: choose columns, avoid SELECT * in real code, rename columns with AS, calculate new columns, remove duplicates with DISTINCT and limit results.]]></excerpt:encoded>
+		<wp:post_id>3</wp:post_id>
+		<wp:post_date><![CDATA[2026-10-16 03:36:35]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-10-16 03:36:35]]></wp:post_date_gmt>
+		<wp:comment_status><![CDATA[open]]></wp:comment_status>
+		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+		<wp:post_name><![CDATA[sql-select]]></wp:post_name>
+		<wp:status><![CDATA[draft]]></wp:status>
+		<wp:post_parent>0</wp:post_parent>
+		<wp:menu_order>3</wp:menu_order>
+		<wp:post_type><![CDATA[tutorials]]></wp:post_type>
+		<wp:post_password><![CDATA[]]></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+		<category domain="tutorial_category" nicename="sql"><![CDATA[SQL]]></category>
+		<category domain="tutorial_difficulty" nicename="beginner"><![CDATA[Beginner]]></category>
+	</item>
+	<item>
+		<title><![CDATA[SQL WHERE]]></title>
+		<link>https://vitalstack.co.in/tutorials/sql-where/</link>
+		<pubDate>Fri, 16 Oct 2026 03:36:35 +0000</pubDate>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<guid isPermaLink="false">https://vitalstack.co.in/?post_type=tutorials&amp;p=4</guid>
+		<description></description>
+		<content:encoded><![CDATA[<!-- wp:paragraph -->
+<p>Tables can have millions of rows, and you usually want only a few: orders from today, products under ₹500, customers in Pune. The <code>WHERE</code> clause filters rows so only those matching a condition are returned.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Basic WHERE</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT name, city
+FROM customers
+WHERE city = 'Pune';</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>name</th><th>city</th></tr></thead><tbody><tr><td>Asha</td><td>Pune</td></tr><tr><td>Kabir</td><td>Pune</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:paragraph -->
+<p>The condition is checked for every row; only rows where it's true are kept.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Comparison operators</h2>
+<!-- /wp:heading -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>Operator</th><th>Meaning</th></tr></thead><tbody><tr><td><code>=</code></td><td>Equal</td></tr><tr><td><code>&lt;&gt;</code> or <code>!=</code></td><td>Not equal</td></tr><tr><td><code>&gt;</code> <code>&lt;</code></td><td>Greater / less than</td></tr><tr><td><code>&gt;=</code> <code>&lt;=</code></td><td>Greater / less than or equal</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT name, price
+FROM products
+WHERE price &lt; 500;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Returns Notebook (120), Pen set (250), USB cable (299) and Water bottle (350).</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT name, stock FROM products WHERE stock = 0;            -- out of stock: Headphones
+SELECT id, status FROM orders WHERE status &lt;&gt; 'delivered';   -- orders 3 and 4
+SELECT name, joined FROM customers WHERE joined &gt;= '2024-03-01'; -- Kabir and Sara</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Dates in <code>'YYYY-MM-DD'</code> format compare correctly.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">AND, OR, NOT</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>-- Both conditions must be true
+SELECT name, category, price
+FROM products
+WHERE category = 'electronics' AND price &lt; 1000;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Returns USB cable and Desk lamp.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>-- At least one condition must be true
+SELECT name, city
+FROM customers
+WHERE city = 'Pune' OR city = 'Mumbai';</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Returns Asha, Kabir and Sara.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>-- NOT reverses a condition
+SELECT name, category FROM products WHERE NOT category = 'electronics';</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Use brackets with AND and OR</h3>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p><code>AND</code> is evaluated before <code>OR</code>, which can give surprising results:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>-- Intended: electronics or bags, but only under 1000
+SELECT name, category, price
+FROM products
+WHERE category = 'electronics' OR category = 'bags' AND price &lt; 1000;
+-- Wrong! Read as: electronics OR (bags AND under 1000) → includes Headphones at 1499
+
+SELECT name, category, price
+FROM products
+WHERE (category = 'electronics' OR category = 'bags') AND price &lt; 1000;
+-- Correct: USB cable and Desk lamp</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Whenever you mix AND and OR, add brackets.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">IN: match any value in a list</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT name, city
+FROM customers
+WHERE city IN ('Pune', 'Mumbai', 'Delhi');</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Shorter and clearer than several ORs. <code>NOT IN</code> excludes the list.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">BETWEEN: ranges</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT name, price
+FROM products
+WHERE price BETWEEN 250 AND 900;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Returns Pen set (250), USB cable (299), Water bottle (350) and Desk lamp (899). <code>BETWEEN</code> <strong>includes</strong> both ends.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT id, order_date
+FROM orders
+WHERE order_date BETWEEN '2024-05-01' AND '2024-05-10';</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Orders 1, 2 and 3. Careful with date-<strong>time</strong> columns: <code>'2024-05-10'</code> means midnight at the start of that day, so later times on the 10th are excluded. For timestamps, use <code>&gt;= '2024-05-01' AND &lt; '2024-05-11'</code>.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">LIKE: text patterns</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT name FROM products WHERE name LIKE 'Pen%';     -- starts with "Pen"
+SELECT name FROM products WHERE name LIKE '%lamp';    -- ends with "lamp"
+SELECT name FROM products WHERE name LIKE '%o%';      -- contains "o"
+SELECT name FROM customers WHERE name LIKE '_ara';    -- 4 letters ending "ara": Sara</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><code>%</code> matches any number of characters (including none).</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>_</code> matches exactly one character.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Case sensitivity of LIKE differs: MySQL and SQLite usually ignore case for English letters; PostgreSQL is case-sensitive (use <code>ILIKE</code> there to ignore case).</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p><code>LIKE '%word%'</code> can't use an index (lesson 14), so it's slow on huge tables. Large sites use full-text search instead.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">NULL needs IS NULL</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT name, email FROM customers WHERE email = NULL;   -- returns nothing!
+SELECT name, email FROM customers WHERE email IS NULL;  -- Sara
+SELECT name FROM customers WHERE email IS NOT NULL;     -- the other four</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p><code>NULL</code> means "unknown", and comparing anything with unknown gives unknown, never true, not even <code>NULL = NULL</code>. Always use <code>IS NULL</code> / <code>IS NOT NULL</code>.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>This also affects <code>&lt;&gt;</code>: <code>WHERE city &lt;&gt; 'Pune'</code> does <strong>not</strong> return rows where city is NULL. Add <code>OR city IS NULL</code> if you want them.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Filtering on calculated values</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT name, price, stock, price * stock AS stock_value
+FROM products
+WHERE price * stock &gt; 10000;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Returns Backpack (22,788), USB cable (22,425) and Water bottle (14,000). In most databases you must repeat the expression in WHERE rather than use the alias <code>stock_value</code>, because WHERE runs before SELECT.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Common mistakes</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>**<code>= NULL</code>** instead of <code>IS NULL</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Double quotes</strong> around text: <code>WHERE city = "Pune"</code> fails in PostgreSQL.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Mixing AND/OR without brackets.</strong></li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Forgetting that BETWEEN includes both ends</strong>, or that date-times on the end date are excluded.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Comparing numbers stored as text.</strong></li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Exercise</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li>Find all products in the stationery category.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Find products that cost more than ₹300 and have at least 10 in stock.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Find customers who joined in February 2024.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Find orders that are pending or shipped, using <code>IN</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Find products whose name contains the letter "e" and that cost under ₹500.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Find customers without an email address.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Summary</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><code>WHERE</code> keeps only rows that match a condition.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Use comparison operators, <code>AND</code>, <code>OR</code>, <code>NOT</code> and brackets to build conditions.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>IN</code>, <code>BETWEEN</code> and <code>LIKE</code> match lists, ranges and patterns.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Test for missing values with <code>IS NULL</code>, never <code>= NULL</code>.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Next, you'll sort results with ORDER BY.</p>
+<!-- /wp:paragraph -->
+]]></content:encoded>
+		<excerpt:encoded><![CDATA[Filter rows with WHERE using comparison operators, AND, OR and NOT, IN, BETWEEN, LIKE patterns and IS NULL, and learn why NULL needs special handling.]]></excerpt:encoded>
+		<wp:post_id>4</wp:post_id>
+		<wp:post_date><![CDATA[2026-10-16 03:36:35]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-10-16 03:36:35]]></wp:post_date_gmt>
+		<wp:comment_status><![CDATA[open]]></wp:comment_status>
+		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+		<wp:post_name><![CDATA[sql-where]]></wp:post_name>
+		<wp:status><![CDATA[draft]]></wp:status>
+		<wp:post_parent>0</wp:post_parent>
+		<wp:menu_order>4</wp:menu_order>
+		<wp:post_type><![CDATA[tutorials]]></wp:post_type>
+		<wp:post_password><![CDATA[]]></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+		<category domain="tutorial_category" nicename="sql"><![CDATA[SQL]]></category>
+		<category domain="tutorial_difficulty" nicename="beginner"><![CDATA[Beginner]]></category>
+	</item>
+	<item>
+		<title><![CDATA[SQL ORDER BY]]></title>
+		<link>https://vitalstack.co.in/tutorials/sql-order-by/</link>
+		<pubDate>Fri, 16 Oct 2026 03:36:35 +0000</pubDate>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<guid isPermaLink="false">https://vitalstack.co.in/?post_type=tutorials&amp;p=5</guid>
+		<description></description>
+		<content:encoded><![CDATA[<!-- wp:paragraph -->
+<p>Without instructions, a database returns rows in whatever order is convenient for it, and that order can change. <code>ORDER BY</code> sorts the result exactly how you want: cheapest first, newest first, alphabetical.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Sorting ascending</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT name, price
+FROM products
+ORDER BY price;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>name</th><th>price</th></tr></thead><tbody><tr><td>Notebook</td><td>120</td></tr><tr><td>Pen set</td><td>250</td></tr><tr><td>USB cable</td><td>299</td></tr><tr><td>Water bottle</td><td>350</td></tr><tr><td>Desk lamp</td><td>899</td></tr><tr><td>Headphones</td><td>1499</td></tr><tr><td>Backpack</td><td>1899</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:paragraph -->
+<p>Ascending (smallest first, A→Z, oldest date first) is the default. You can write <code>ASC</code> to be explicit.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Sorting descending</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT name, price
+FROM products
+ORDER BY price DESC;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p><code>DESC</code> reverses the order: most expensive first. Common uses: newest posts first (<code>ORDER BY created_at DESC</code>), highest scores first.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Sorting text and dates</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT name FROM customers ORDER BY name;                -- Asha, Kabir, Meera, Rohan, Sara
+SELECT name, joined FROM customers ORDER BY joined DESC; -- newest members first: Sara first</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Text is sorted alphabetically according to the database's <strong>collation</strong> (its rules for comparing text), which also decides whether uppercase and lowercase are treated the same.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Sorting by several columns</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT name, city
+FROM customers
+ORDER BY city, name;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>name</th><th>city</th></tr></thead><tbody><tr><td>Rohan</td><td>Delhi</td></tr><tr><td>Meera</td><td>Jaipur</td></tr><tr><td>Sara</td><td>Mumbai</td></tr><tr><td>Asha</td><td>Pune</td></tr><tr><td>Kabir</td><td>Pune</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:paragraph -->
+<p>The rows are sorted by city first; rows with the same city (Pune) are then sorted by name. Each column can have its own direction:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT name, category, price
+FROM products
+ORDER BY category ASC, price DESC;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Categories A→Z, and inside each category, the most expensive product first.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Sorting by a calculated value or alias</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT name, price, stock, price * stock AS stock_value
+FROM products
+ORDER BY stock_value DESC;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Unlike WHERE, ORDER BY runs <strong>after</strong> SELECT, so you can use the alias. Backpack (22,788) comes first.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>You can also sort by an expression that isn't in the SELECT list:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT name FROM products ORDER BY LENGTH(name);   -- shortest names first</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Sorting by column position (avoid)</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT name, price FROM products ORDER BY 2 DESC;  -- 2 = the second column (price)</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>This works but breaks silently if someone changes the column list. Use names.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Top-N queries with LIMIT</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Combine ORDER BY with LIMIT to get "the top N":</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>-- The 3 most expensive products
+SELECT name, price
+FROM products
+ORDER BY price DESC
+LIMIT 3;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Backpack, Headphones, Desk lamp.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>-- The most recent order
+SELECT id, order_date
+FROM orders
+ORDER BY order_date DESC
+LIMIT 1;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Order 5 (2024-05-15).</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Pagination</h3>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>-- Page 1: rows 1–3
+SELECT name, price FROM products ORDER BY name LIMIT 3 OFFSET 0;
+-- Page 2: rows 4–6
+SELECT name, price FROM products ORDER BY name LIMIT 3 OFFSET 3;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Always include ORDER BY when paging, or the same row could appear on two pages. Make the order <strong>unique</strong> too: if two rows tie, add the id as a tie-breaker, e.g. <code>ORDER BY price DESC, id</code>.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Where do NULLs go?</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT name, email FROM customers ORDER BY email;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Sara's NULL email appears <strong>first</strong> in MySQL and SQLite, but <strong>last</strong> in PostgreSQL (for ascending order). To control it:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>-- PostgreSQL and SQLite 3.30+:
+SELECT name, email FROM customers ORDER BY email NULLS LAST;
+
+-- Works everywhere: sort by "is it null?" first
+SELECT name, email
+FROM customers
+ORDER BY CASE WHEN email IS NULL THEN 1 ELSE 0 END, email;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>(<code>CASE</code> works like if/else inside SQL; you'll see it again later.)</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Full query order so far</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT name, category, price
+FROM products
+WHERE stock &gt; 0
+ORDER BY price DESC
+LIMIT 3;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>The clauses must be written in this order: <code>SELECT → FROM → WHERE → ORDER BY → LIMIT</code>. Here: in-stock products only, most expensive first, top 3 → Backpack, Desk lamp, Water bottle.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Common mistakes</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Forgetting DESC</strong> for "newest" or "highest" queries.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>LIMIT without ORDER BY</strong>, giving random-looking results.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Writing ORDER BY before WHERE.</strong></li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Ties in pagination</strong> without a unique tie-breaker.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Exercise</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li>List all products from cheapest to most expensive.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>List customers alphabetically by city, then by name in reverse.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Find the two products with the most stock.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Show the oldest order.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Show page 2 of products when sorted by name, with 2 products per page.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Summary</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><code>ORDER BY column</code> sorts ascending; add <code>DESC</code> for descending.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Sort by several columns, each with its own direction, and by aliases or expressions.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Combine ORDER BY with LIMIT for top-N lists and pagination; add a tie-breaker.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>NULL placement differs between databases; control it with <code>NULLS LAST</code> or CASE.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Next, you'll add new rows with INSERT.</p>
+<!-- /wp:paragraph -->
+]]></content:encoded>
+		<excerpt:encoded><![CDATA[Sort query results with ORDER BY, ascending and descending, by several columns and by calculated values, handle NULLs, and get top-N results with LIMIT.]]></excerpt:encoded>
+		<wp:post_id>5</wp:post_id>
+		<wp:post_date><![CDATA[2026-10-16 03:36:35]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-10-16 03:36:35]]></wp:post_date_gmt>
+		<wp:comment_status><![CDATA[open]]></wp:comment_status>
+		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+		<wp:post_name><![CDATA[sql-order-by]]></wp:post_name>
+		<wp:status><![CDATA[draft]]></wp:status>
+		<wp:post_parent>0</wp:post_parent>
+		<wp:menu_order>5</wp:menu_order>
+		<wp:post_type><![CDATA[tutorials]]></wp:post_type>
+		<wp:post_password><![CDATA[]]></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+		<category domain="tutorial_category" nicename="sql"><![CDATA[SQL]]></category>
+		<category domain="tutorial_difficulty" nicename="beginner"><![CDATA[Beginner]]></category>
+	</item>
+	<item>
+		<title><![CDATA[SQL INSERT]]></title>
+		<link>https://vitalstack.co.in/tutorials/sql-insert/</link>
+		<pubDate>Fri, 16 Oct 2026 03:36:35 +0000</pubDate>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<guid isPermaLink="false">https://vitalstack.co.in/?post_type=tutorials&amp;p=6</guid>
+		<description></description>
+		<content:encoded><![CDATA[<!-- wp:paragraph -->
+<p>So far you've read data. Now you'll add it. Every sign-up, new post or order on a website ends in an <code>INSERT</code> statement.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Basic INSERT</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>INSERT INTO customers (id, name, email, city, joined)
+VALUES (6, 'Neha', 'neha@example.com', 'Chennai', '2024-06-01');</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><code>INSERT INTO table (columns)</code> lists the columns you're filling.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>VALUES (…)</code> gives the values <strong>in the same order</strong>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Text and dates go in single quotes; numbers don't.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Check it:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT * FROM customers WHERE id = 6;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Always list the columns</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>You *can* leave out the column list:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>INSERT INTO customers VALUES (7, 'Vikram', 'vikram@example.com', 'Kochi', '2024-06-02');</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>But then you must give a value for <strong>every</strong> column in the table's exact order. If someone later adds a column, this statement breaks (or worse, puts values in the wrong columns). Always list the columns explicitly.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Leaving columns out: NULL and DEFAULT</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Columns you don't mention get their <strong>default</strong> value, or <code>NULL</code> if there's no default:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>INSERT INTO products (id, name, category, price)
+VALUES (8, 'Sticky notes', 'stationery', 60);
+
+SELECT name, stock FROM products WHERE id = 8;  -- stock is 0, the column's DEFAULT</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>INSERT INTO orders (id, customer_id, order_date)
+VALUES (6, 6, '2024-06-03');
+
+SELECT id, status FROM orders WHERE id = 6;     -- status is 'pending' (default)</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>A <code>NOT NULL</code> column without a default <strong>must</strong> be given a value, or the insert fails:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>INSERT INTO products (id, category, price) VALUES (9, 'bags', 999);
+-- Error: NOT NULL constraint failed: products.name</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Auto-generated ids</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>In real apps you don't pick ids yourself; the database generates them. Leave the id out:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>INSERT INTO customers (name, email, city, joined)
+VALUES ('Isha', 'isha@example.com', 'Goa', '2024-06-05');
+
+SELECT id, name FROM customers WHERE email = 'isha@example.com';  -- gets the next id</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>This works because <code>id</code> is an auto-incrementing primary key (<code>INTEGER PRIMARY KEY</code> in SQLite, <code>AUTO_INCREMENT</code> in MySQL, <code>SERIAL</code>/<code>IDENTITY</code> in PostgreSQL). Your application can then ask for the new id:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>MySQL: <code>SELECT LAST_INSERT_ID();</code></li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>SQLite: <code>SELECT last_insert_rowid();</code></li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>PostgreSQL: add <code>RETURNING id</code> to the INSERT.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>-- PostgreSQL (and SQLite 3.35+):
+-- INSERT INTO customers (name, city) VALUES ('Dev', 'Surat') RETURNING id;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Inserting several rows at once</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>INSERT INTO order_items (order_id, product_id, qty) VALUES
+  (6, 1, 2),
+  (6, 8, 4),
+  (6, 6, 1);</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>One statement, many rows: much faster than separate statements when loading lots of data.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Copying rows with INSERT ... SELECT</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>You can insert the result of a query:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>CREATE TABLE pune_customers (
+  id    INTEGER PRIMARY KEY,
+  name  VARCHAR(100),
+  email VARCHAR(100)
+);
+
+INSERT INTO pune_customers (id, name, email)
+SELECT id, name, email
+FROM customers
+WHERE city = 'Pune';
+
+SELECT * FROM pune_customers;  -- Asha and Kabir</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Useful for archiving old data, building report tables or copying data between tables.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Constraint errors</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>The database protects your data using the rules you set when creating the table:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>INSERT INTO customers (name, email) VALUES ('Fake Asha', 'asha@example.com');
+-- Error: UNIQUE constraint failed: customers.email
+
+INSERT INTO orders (customer_id, order_date) VALUES (999, '2024-06-10');
+-- Error in MySQL/PostgreSQL: foreign key violation (there's no customer 999)</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>These errors are good: they stop bad data from getting in. (SQLite only checks foreign keys after <code>PRAGMA foreign_keys = ON;</code>.) You'll learn more in the Constraints lesson.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Quotes inside text</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>To store a single quote, write it twice:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>INSERT INTO products (name, category, price) VALUES ('Kid''s lunchbox', 'accessories', 299);</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">SQL injection: the most important security rule</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>When your application inserts <strong>user input</strong>, never build the SQL by joining strings:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>// DANGEROUS (pseudo-code)
+sql = "INSERT INTO comments (text) VALUES ('" + userInput + "')"</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>If a user types <code>'); DROP TABLE comments; --</code>, they can run their own SQL. This attack is called <strong>SQL injection</strong>, and it's one of the most common ways websites get hacked.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Always use <strong>parameterised queries</strong> (prepared statements), where values are sent separately from the SQL:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>// Safe: the ? is filled in by the database driver
+sql = "INSERT INTO comments (text) VALUES (?)"
+db.execute(sql, [userInput])</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Every language has this: <code>?</code> placeholders in Python's sqlite3 and in Node.js libraries, <code>$1</code> in PostgreSQL drivers, PDO prepared statements in PHP, and <code>$wpdb-&gt;prepare()</code> in WordPress. You'll use this pattern in the Python course.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Common mistakes</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Values in a different order</strong> from the column list.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Missing quotes</strong> around text or dates (or quotes around numbers, which some databases reject).</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Setting ids by hand</strong> in real applications; let the database generate them.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Building SQL from user input with string concatenation.</strong></li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Exercise</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li>Add yourself as a customer without giving an id. Find your new id.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Add two new products in one INSERT statement.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Create an order for your new customer and add two items to it.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Try to insert a customer with an email that already exists and read the error.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Create a table <code>expensive_products</code> and fill it with every product over ₹1000 using INSERT ... SELECT.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Summary</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><code>INSERT INTO table (columns) VALUES (…)</code> adds a row; always list the columns.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Missing columns get their DEFAULT or NULL; let the database generate ids.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Insert many rows in one statement, or copy rows with <code>INSERT ... SELECT</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Constraints reject bad data; parameterised queries prevent SQL injection.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Next, you'll change existing rows with UPDATE.</p>
+<!-- /wp:paragraph -->
+]]></content:encoded>
+		<excerpt:encoded><![CDATA[Add rows with INSERT INTO, list columns explicitly, insert several rows at once, use defaults and auto-generated ids, copy rows with INSERT ... SELECT, and avoid SQL injection.]]></excerpt:encoded>
+		<wp:post_id>6</wp:post_id>
+		<wp:post_date><![CDATA[2026-10-16 03:36:35]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-10-16 03:36:35]]></wp:post_date_gmt>
+		<wp:comment_status><![CDATA[open]]></wp:comment_status>
+		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+		<wp:post_name><![CDATA[sql-insert]]></wp:post_name>
+		<wp:status><![CDATA[draft]]></wp:status>
+		<wp:post_parent>0</wp:post_parent>
+		<wp:menu_order>6</wp:menu_order>
+		<wp:post_type><![CDATA[tutorials]]></wp:post_type>
+		<wp:post_password><![CDATA[]]></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+		<category domain="tutorial_category" nicename="sql"><![CDATA[SQL]]></category>
+		<category domain="tutorial_difficulty" nicename="beginner"><![CDATA[Beginner]]></category>
+	</item>
+	<item>
+		<title><![CDATA[SQL UPDATE]]></title>
+		<link>https://vitalstack.co.in/tutorials/sql-update/</link>
+		<pubDate>Fri, 16 Oct 2026 03:36:35 +0000</pubDate>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<guid isPermaLink="false">https://vitalstack.co.in/?post_type=tutorials&amp;p=7</guid>
+		<description></description>
+		<content:encoded><![CDATA[<!-- wp:paragraph -->
+<p>Data changes all the time: a customer moves city, a price goes up, an order is shipped. <code>UPDATE</code> changes values in existing rows. It's simple to write, and also the statement most likely to cause an accident, so this lesson covers safety habits too.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Basic UPDATE</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>UPDATE customers
+SET city = 'Bengaluru'
+WHERE id = 2;
+
+SELECT name, city FROM customers WHERE id = 2;  -- Rohan, Bengaluru</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><code>UPDATE table</code> names the table.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>SET column = value</code> gives the new value.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>WHERE</code> chooses <strong>which rows</strong> to change.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">The golden rule: never forget WHERE</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>-- DON'T RUN THIS
+-- UPDATE customers SET city = 'Bengaluru';</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Without WHERE, <strong>every row</strong> in the table is updated. All your customers now live in Bengaluru, and there's no undo button. This mistake has hurt many real companies.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Safe habits:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Write the WHERE clause first</strong>, then the SET part.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Run a SELECT with the same WHERE</strong> before updating, to see exactly which rows will change:</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT * FROM products WHERE category = 'stationery';
+-- Looks right? Now:
+UPDATE products SET price = price * 1.10 WHERE category = 'stationery';</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Target rows by primary key</strong> (<code>WHERE id = 2</code>) when you mean one specific row; names and emails can be duplicated or mistyped.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Updating several columns</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>UPDATE products
+SET price = 1299, stock = 25
+WHERE id = 3;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Separate the assignments with commas.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Calculated updates</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>The new value can use the current values:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>-- Restock: add 10 to the headphones' stock
+UPDATE products SET stock = stock + 10 WHERE id = 3;
+
+-- 10% discount on all electronics
+UPDATE products SET price = price * 0.90 WHERE category = 'electronics';
+
+-- Text changes
+UPDATE products SET name = UPPER(name) WHERE id = 8;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p><code>stock = stock + 10</code> reads the value before the update, adds 10 and stores the result. For counters (likes, views, stock), this is safer than reading the value in your application and writing it back, because two users updating at once won't overwrite each other.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Updating many rows on purpose</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>UPDATE orders
+SET status = 'delivered'
+WHERE status = 'shipped' AND order_date &lt; '2024-05-20';</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Most tools report how many rows were changed ("1 row affected"). If that number surprises you, investigate.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Setting a value to NULL</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>UPDATE customers SET email = NULL WHERE id = 4;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Note: in SET, <code>=</code> assigns (so <code>= NULL</code> is correct here). It's only in <strong>WHERE</strong> that you need <code>IS NULL</code>.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Conditional values with CASE</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>UPDATE products
+SET category = CASE
+  WHEN price &gt;= 1000 THEN 'premium'
+  ELSE category
+END
+WHERE category = 'electronics';</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p><code>CASE WHEN … THEN … ELSE … END</code> chooses a value per row, like an if/else.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Updating using another table</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Sometimes the new value depends on another table. A portable way uses a subquery (a query inside a query):</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>-- Mark customers who have at least one order as 'active'
+ALTER TABLE customers ADD COLUMN status VARCHAR(20) DEFAULT 'new';
+
+UPDATE customers
+SET status = 'active'
+WHERE id IN (SELECT customer_id FROM orders);
+
+SELECT name, status FROM customers;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Everyone except Sara (and any customers you added without orders) becomes active. MySQL and PostgreSQL also have <code>UPDATE … JOIN</code> / <code>UPDATE … FROM</code> syntax for this.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Transactions: an undo button</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>A <strong>transaction</strong> groups statements so they either all happen or none do. Until you <code>COMMIT</code>, you can <code>ROLLBACK</code>:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>BEGIN;
+
+UPDATE products SET price = price * 2;   -- oops, forgot WHERE!
+SELECT name, price FROM products;        -- everything doubled
+
+ROLLBACK;                                -- undo everything since BEGIN
+
+SELECT name, price FROM products;        -- back to normal</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>When everything looks right, use <code>COMMIT;</code> instead of <code>ROLLBACK;</code> to save the changes permanently.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Transactions are essential for operations that must happen together, like moving money:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>BEGIN;
+-- UPDATE accounts SET balance = balance - 500 WHERE id = 1;
+-- UPDATE accounts SET balance = balance + 500 WHERE id = 2;
+COMMIT;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>If anything fails between the two updates, a rollback ensures money is never lost or created. (Some tools and settings commit automatically after each statement unless you start a transaction with <code>BEGIN</code>.)</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Common mistakes</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Forgetting WHERE.</strong> Every row changes.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>**Using <code>IS NULL</code> in SET** or <code>= NULL</code> in WHERE (the opposite of correct).</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Updating by name</strong> when names aren't unique.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Read-modify-write in application code</strong> for counters, instead of <code>SET x = x + 1</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Big updates on live data without a transaction or backup.</strong></li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Exercise</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li>Change Meera's city to "Udaipur". Check the result with SELECT first and after.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Increase the price of all stationery by 5%.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Set the stock of the out-of-stock product to 20.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Inside a transaction, set every order to 'cancelled', look at the result, then roll back.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Mark order 4 as 'shipped'.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Summary</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><code>UPDATE table SET column = value WHERE condition</code> changes existing rows.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Without WHERE, every row changes: write WHERE first and test it with SELECT.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Values can be calculated from current values (<code>stock = stock + 10</code>) or chosen with CASE.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Transactions (<code>BEGIN</code>, <code>COMMIT</code>, <code>ROLLBACK</code>) make changes all-or-nothing and undoable.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Next, you'll remove rows with DELETE.</p>
+<!-- /wp:paragraph -->
+]]></content:encoded>
+		<excerpt:encoded><![CDATA[Change existing rows with UPDATE and SET, always target rows with WHERE, update several columns and calculated values, and use transactions as a safety net.]]></excerpt:encoded>
+		<wp:post_id>7</wp:post_id>
+		<wp:post_date><![CDATA[2026-10-16 03:36:35]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-10-16 03:36:35]]></wp:post_date_gmt>
+		<wp:comment_status><![CDATA[open]]></wp:comment_status>
+		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+		<wp:post_name><![CDATA[sql-update]]></wp:post_name>
+		<wp:status><![CDATA[draft]]></wp:status>
+		<wp:post_parent>0</wp:post_parent>
+		<wp:menu_order>7</wp:menu_order>
+		<wp:post_type><![CDATA[tutorials]]></wp:post_type>
+		<wp:post_password><![CDATA[]]></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+		<category domain="tutorial_category" nicename="sql"><![CDATA[SQL]]></category>
+		<category domain="tutorial_difficulty" nicename="beginner"><![CDATA[Beginner]]></category>
+	</item>
+	<item>
+		<title><![CDATA[SQL DELETE]]></title>
+		<link>https://vitalstack.co.in/tutorials/sql-delete/</link>
+		<pubDate>Fri, 16 Oct 2026 03:36:35 +0000</pubDate>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<guid isPermaLink="false">https://vitalstack.co.in/?post_type=tutorials&amp;p=8</guid>
+		<description></description>
+		<content:encoded><![CDATA[<!-- wp:paragraph -->
+<p><code>DELETE</code> removes rows from a table. Like UPDATE, it's easy to write and easy to get badly wrong, so you'll learn the safe way to use it, and when not to delete at all.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Basic DELETE</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>DELETE FROM pune_customers
+WHERE id = 4;
+
+SELECT * FROM pune_customers;  -- only Asha is left</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>(<code>pune_customers</code> is the copy table from the INSERT lesson. If you don't have it, practise on any test table.)</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><code>DELETE FROM table</code> names the table.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>WHERE</code> chooses which rows to remove.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">The golden rule, again: WHERE</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>-- DON'T RUN THIS ON REAL DATA
+-- DELETE FROM customers;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Without WHERE, <strong>every row is deleted</strong>. The table stays, but it's empty. Use the same habits as UPDATE:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li>Write and run a <strong>SELECT</strong> with the WHERE clause first.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Check the number of rows.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Change <code>SELECT *</code> to <code>DELETE</code> and run it, ideally inside a transaction.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT * FROM order_items WHERE order_id = 6;  -- check
+BEGIN;
+DELETE FROM order_items WHERE order_id = 6;
+-- check the result, then:
+COMMIT;   -- or ROLLBACK;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Deleting several rows</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>DELETE FROM products
+WHERE stock = 0 AND category = 'electronics';</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Any condition that works in SELECT works in DELETE: <code>IN</code>, <code>BETWEEN</code>, <code>LIKE</code>, subqueries.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>-- Remove items that belong to cancelled orders
+DELETE FROM order_items
+WHERE order_id IN (SELECT id FROM orders WHERE status = 'cancelled');</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Foreign keys protect related data</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>What happens if you delete a customer who has orders?</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>PRAGMA foreign_keys = ON;   -- SQLite only: turn on foreign key checks
+
+DELETE FROM customers WHERE id = 1;
+-- Error: FOREIGN KEY constraint failed</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Asha has orders that point to her id. Deleting her would leave "orphaned" orders that belong to nobody, so the database refuses. (MySQL with InnoDB and PostgreSQL check foreign keys automatically.)</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>You decide what should happen when you create the table:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>-- customer_id INTEGER REFERENCES customers(id) ON DELETE CASCADE
+--   deleting a customer also deletes their orders
+
+-- customer_id INTEGER REFERENCES customers(id) ON DELETE SET NULL
+--   their orders stay, with customer_id set to NULL
+
+-- (default) ON DELETE RESTRICT / NO ACTION
+--   the delete is refused while related rows exist</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p><code>CASCADE</code> is convenient but powerful: one DELETE can remove thousands of related rows. Use it deliberately. You'll see more in the Constraints and Keys lesson.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">DELETE vs TRUNCATE vs DROP</h2>
+<!-- /wp:heading -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>Statement</th><th>Removes</th><th>Table remains?</th><th>Can use WHERE?</th></tr></thead><tbody><tr><td><code>DELETE FROM t WHERE …</code></td><td>Matching rows</td><td>Yes</td><td>Yes</td></tr><tr><td><code>DELETE FROM t</code></td><td>All rows, one by one</td><td>Yes</td><td>—</td></tr><tr><td><code>TRUNCATE TABLE t</code></td><td>All rows, very fast</td><td>Yes</td><td>No</td></tr><tr><td><code>DROP TABLE t</code></td><td>The whole table and its data</td><td>No</td><td>No</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:paragraph -->
+<p><code>TRUNCATE</code> (not available in SQLite) is used to empty big tables quickly, for example log or test tables. In MySQL it also resets the auto-increment counter and can't be rolled back. <code>DROP</code> removes the table completely.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Soft deletes: often better than deleting</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Many applications never really delete important data. Instead, they mark it as deleted:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>ALTER TABLE products ADD COLUMN deleted_at TIMESTAMP;
+
+-- "Delete" a product
+UPDATE products SET deleted_at = CURRENT_TIMESTAMP WHERE id = 8;
+
+-- Normal queries ignore deleted products
+SELECT name FROM products WHERE deleted_at IS NULL;
+
+-- Restore it
+UPDATE products SET deleted_at = NULL WHERE id = 8;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Benefits:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Mistakes can be undone.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Old orders still show the product they contained.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>You keep history for reports and audits.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>WordPress does this with its Trash: a trashed post has <code>post_status = 'trash'</code> until it's permanently deleted.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>The downside: every query needs <code>WHERE deleted_at IS NULL</code>, and privacy laws may require truly deleting personal data when a user asks. Many apps soft-delete first, then permanently delete after 30 days.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Backups</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>The real safety net is a <strong>backup</strong>. Before big changes on a live site, export the database (Hostinger's panel, phpMyAdmin's Export, or <code>mysqldump</code>). If something goes wrong, you can restore it.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Common mistakes</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><strong>DELETE without WHERE.</strong></li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Not checking with SELECT first.</strong></li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Surprise cascades</strong>: deleting one row removes much more than expected.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Deleting data you need for history</strong> (old orders, invoices) instead of soft-deleting.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Thinking DELETE frees disk space immediately</strong>: databases often reuse the space later rather than shrinking the file.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Exercise</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li>Create a test table, insert five rows, then delete two of them with one statement.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>With foreign keys on, try to delete a customer who has orders. Read the error.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Delete the order items of order 6 inside a transaction, check, then roll back.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Add a <code>deleted_at</code> column to a test table, soft-delete one row, and write a SELECT that hides it.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Summary</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><code>DELETE FROM table WHERE condition</code> removes rows; without WHERE it removes all of them.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Always SELECT first and use transactions for important deletes.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Foreign keys refuse, cascade or nullify deletes of related rows, depending on your rules.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>TRUNCATE</code> empties a table fast; <code>DROP</code> removes it; soft deletes keep data recoverable.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Next, you'll summarise data with aggregate functions like COUNT, SUM and AVG.</p>
+<!-- /wp:paragraph -->
+]]></content:encoded>
+		<excerpt:encoded><![CDATA[Remove rows with DELETE safely, understand how foreign keys protect related data, compare DELETE, TRUNCATE and DROP, and when to use soft deletes instead.]]></excerpt:encoded>
+		<wp:post_id>8</wp:post_id>
+		<wp:post_date><![CDATA[2026-10-16 03:36:35]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-10-16 03:36:35]]></wp:post_date_gmt>
+		<wp:comment_status><![CDATA[open]]></wp:comment_status>
+		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+		<wp:post_name><![CDATA[sql-delete]]></wp:post_name>
+		<wp:status><![CDATA[draft]]></wp:status>
+		<wp:post_parent>0</wp:post_parent>
+		<wp:menu_order>8</wp:menu_order>
+		<wp:post_type><![CDATA[tutorials]]></wp:post_type>
+		<wp:post_password><![CDATA[]]></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+		<category domain="tutorial_category" nicename="sql"><![CDATA[SQL]]></category>
+		<category domain="tutorial_difficulty" nicename="beginner"><![CDATA[Beginner]]></category>
+	</item>
+	<item>
+		<title><![CDATA[SQL Functions (COUNT, SUM, AVG)]]></title>
+		<link>https://vitalstack.co.in/tutorials/sql-functions/</link>
+		<pubDate>Fri, 16 Oct 2026 03:36:35 +0000</pubDate>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<guid isPermaLink="false">https://vitalstack.co.in/?post_type=tutorials&amp;p=9</guid>
+		<description></description>
+		<content:encoded><![CDATA[<!-- wp:paragraph -->
+<p>Often you don't want a list of rows but an answer: How many customers do we have? What's the average price? When was the last order? <strong>Aggregate functions</strong> calculate one value from many rows. SQL also has many <strong>scalar functions</strong> that work on one value at a time, for text, numbers and dates.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>The examples use the original practice data from lesson 2. If you've changed it in the last lessons, re-run the setup script for matching results.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">COUNT</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT COUNT(*) AS customers FROM customers;   -- 5</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p><code>COUNT(*)</code> counts rows. Combine it with WHERE:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT COUNT(*) AS pune_customers FROM customers WHERE city = 'Pune';  -- 2</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">COUNT(column) ignores NULL</h3>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT COUNT(*) AS all_rows,
+       COUNT(email) AS with_email
+FROM customers;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>all_rows</th><th>with_email</th></tr></thead><tbody><tr><td>5</td><td>4</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:paragraph -->
+<p><code>COUNT(column)</code> only counts rows where that column is <strong>not NULL</strong>. Sara has no email, so she isn't counted.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">COUNT(DISTINCT …)</h3>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT COUNT(DISTINCT city) AS cities FROM customers;  -- 4 (Pune counted once)
+SELECT COUNT(DISTINCT customer_id) AS buyers FROM orders;  -- 4 customers have ordered</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">SUM</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT SUM(stock) AS units_in_stock FROM products;           -- 215
+SELECT SUM(price * stock) AS inventory_value FROM products;  -- 79905</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p><code>SUM</code> adds up numbers. You can sum an expression, like price × stock for each row.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">AVG</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT AVG(price) AS average_price FROM products;   -- about 759.43
+SELECT ROUND(AVG(price), 2) AS average_price FROM products;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p><code>AVG</code> calculates the mean. <code>ROUND(value, 2)</code> keeps 2 decimals.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p><strong>NULLs are ignored</strong> by SUM and AVG too. If some products had a NULL price, AVG would divide by the number of products <strong>with</strong> a price. Usually that's what you want, but be aware of it.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">MIN and MAX</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT MIN(price) AS cheapest, MAX(price) AS most_expensive FROM products;  -- 120, 1899
+SELECT MIN(order_date) AS first_order, MAX(order_date) AS latest_order FROM orders;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>MIN and MAX work on numbers, dates and text (alphabetically first/last).</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Several aggregates at once</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT COUNT(*)              AS products,
+       SUM(stock)            AS units,
+       ROUND(AVG(price), 2)  AS avg_price,
+       MIN(price)            AS min_price,
+       MAX(price)            AS max_price
+FROM products
+WHERE category = 'electronics';</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>products</th><th>units</th><th>avg_price</th><th>min_price</th><th>max_price</th></tr></thead><tbody><tr><td>3</td><td>83</td><td>899.0</td><td>299</td><td>1499</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:paragraph -->
+<p>A one-row summary of the electronics category.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">You can't mix aggregates with normal columns (yet)</h3>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT name, MAX(price) FROM products;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>This asks for one value (MAX) and a column with 7 values at the same time. PostgreSQL and strict MySQL return an error; SQLite returns a result but it's easy to misread. To find <strong>which</strong> product is the most expensive, sort and limit:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT name, price FROM products ORDER BY price DESC LIMIT 1;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>To get aggregates <strong>per group</strong> (per category, per city), you need GROUP BY, the next lesson.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Useful text functions</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT UPPER(name)          AS upper_name,
+       LOWER(email)         AS lower_email,
+       LENGTH(name)         AS name_length,
+       SUBSTR(name, 1, 3)   AS first_three,
+       TRIM('  hi  ')       AS trimmed,
+       REPLACE(city, 'Pune', 'Poona') AS old_name
+FROM customers;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><code>SUBSTR(text, start, length)</code> (SUBSTRING in some databases) starts counting at 1.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Text joining: <code>||</code> in PostgreSQL/SQLite, <code>CONCAT()</code> in MySQL.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Number functions</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT ROUND(1499 * 1.18, 2) AS with_tax,   -- 1768.82
+       ROUND(17.5)           AS rounded,     -- 18
+       ABS(-42)              AS absolute,    -- 42
+       10 % 3                AS remainder;   -- 1 (MOD(10, 3) in some databases)</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Also <code>CEIL</code>/<code>CEILING</code> and <code>FLOOR</code> in MySQL and PostgreSQL.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Handling NULL with COALESCE</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT name, COALESCE(email, 'no email') AS contact
+FROM customers;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p><code>COALESCE(a, b, …)</code> returns the first value that isn't NULL. Perfect for display defaults, and for treating NULL as 0 in calculations: <code>COALESCE(discount, 0)</code>.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Date functions</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Date functions differ the most between databases:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>Task</th><th>MySQL</th><th>PostgreSQL</th><th>SQLite</th></tr></thead><tbody><tr><td>Today</td><td><code>CURDATE()</code></td><td><code>CURRENT_DATE</code></td><td><code>DATE('now')</code></td></tr><tr><td>Now</td><td><code>NOW()</code></td><td><code>NOW()</code></td><td><code>DATETIME('now')</code></td></tr><tr><td>Year of a date</td><td><code>YEAR(d)</code></td><td><code>EXTRACT(YEAR FROM d)</code></td><td><code>STRFTIME('%Y', d)</code></td></tr><tr><td>Add 7 days</td><td><code>d + INTERVAL 7 DAY</code></td><td><code>d + INTERVAL '7 days'</code></td><td><code>DATE(d, '+7 days')</code></td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>-- SQLite: month of each order
+SELECT id, order_date, STRFTIME('%m', order_date) AS month FROM orders;
+
+-- Customers who joined in the last 30 days (MySQL):
+-- SELECT name FROM customers WHERE joined &gt;= CURDATE() - INTERVAL 30 DAY;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p><code>CURRENT_DATE</code> and <code>CURRENT_TIMESTAMP</code> work in all three.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">CASE: if/else in a query</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT name, price,
+       CASE
+         WHEN price &lt; 300 THEN 'budget'
+         WHEN price &lt; 1000 THEN 'mid-range'
+         ELSE 'premium'
+       END AS price_band
+FROM products;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>CASE is the Swiss Army knife of SQL: labels, custom sorting, and conditional counting:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT COUNT(*) AS total,
+       SUM(CASE WHEN status = 'delivered' THEN 1 ELSE 0 END) AS delivered
+FROM orders;   -- 5 total, 3 delivered</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Common mistakes</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>**Expecting <code>COUNT(column)</code> to count NULLs.**</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Mixing aggregates and plain columns</strong> without GROUP BY.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Integer division</strong>: in PostgreSQL and SQLite, <code>7 / 2</code> is <code>3</code>. Use <code>7.0 / 2</code> or <code>CAST</code> for decimals.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Copying date functions</strong> between databases without checking.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Exercise</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li>Count how many orders have the status 'delivered'.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Find the total number of items sold (sum of <code>qty</code> in <code>order_items</code>).</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Find the average price of stationery, rounded to 2 decimals.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Find the earliest and latest customer join dates.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Show every customer's name and email, with "–" where the email is missing.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Label each product's stock as 'out', 'low' (under 20) or 'ok'.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Summary</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><code>COUNT</code>, <code>SUM</code>, <code>AVG</code>, <code>MIN</code> and <code>MAX</code> turn many rows into one value.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>COUNT(*)</code> counts rows; <code>COUNT(column)</code>, SUM and AVG ignore NULLs.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Text, number and date functions transform single values; date functions vary by database.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>COALESCE</code> replaces NULLs; <code>CASE</code> adds if/else logic.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Next, you'll calculate aggregates per group with GROUP BY.</p>
+<!-- /wp:paragraph -->
+]]></content:encoded>
+		<excerpt:encoded><![CDATA[Summarise data with aggregate functions COUNT, SUM, AVG, MIN and MAX, understand how they treat NULL, and use common text, number and date functions.]]></excerpt:encoded>
+		<wp:post_id>9</wp:post_id>
+		<wp:post_date><![CDATA[2026-10-16 03:36:35]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-10-16 03:36:35]]></wp:post_date_gmt>
+		<wp:comment_status><![CDATA[open]]></wp:comment_status>
+		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+		<wp:post_name><![CDATA[sql-functions]]></wp:post_name>
+		<wp:status><![CDATA[draft]]></wp:status>
+		<wp:post_parent>0</wp:post_parent>
+		<wp:menu_order>9</wp:menu_order>
+		<wp:post_type><![CDATA[tutorials]]></wp:post_type>
+		<wp:post_password><![CDATA[]]></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+		<category domain="tutorial_category" nicename="sql"><![CDATA[SQL]]></category>
+		<category domain="tutorial_difficulty" nicename="beginner"><![CDATA[Beginner]]></category>
+	</item>
+	<item>
+		<title><![CDATA[SQL GROUP BY]]></title>
+		<link>https://vitalstack.co.in/tutorials/sql-group-by/</link>
+		<pubDate>Fri, 16 Oct 2026 03:36:35 +0000</pubDate>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<guid isPermaLink="false">https://vitalstack.co.in/?post_type=tutorials&amp;p=10</guid>
+		<description></description>
+		<content:encoded><![CDATA[<!-- wp:paragraph -->
+<p>Aggregate functions give you one answer for the whole table. <code>GROUP BY</code> gives you one answer <strong>per group</strong>: products per category, orders per customer, sales per month. It's the heart of every report and dashboard.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Grouping by one column</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT category, COUNT(*) AS products
+FROM products
+GROUP BY category;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>category</th><th>products</th></tr></thead><tbody><tr><td>accessories</td><td>1</td></tr><tr><td>bags</td><td>1</td></tr><tr><td>electronics</td><td>3</td></tr><tr><td>stationery</td><td>2</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:paragraph -->
+<p>How it works:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li>The database puts rows with the same <code>category</code> into groups.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>It runs <code>COUNT(*)</code> separately for each group.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>It returns one row per group.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Several aggregates per group</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT category,
+       COUNT(*)             AS products,
+       SUM(stock)           AS units,
+       ROUND(AVG(price), 2) AS avg_price,
+       MAX(price)           AS top_price
+FROM products
+GROUP BY category
+ORDER BY units DESC;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>category</th><th>products</th><th>units</th><th>avg_price</th><th>top_price</th></tr></thead><tbody><tr><td>electronics</td><td>3</td><td>83</td><td>899.0</td><td>1499</td></tr><tr><td>stationery</td><td>2</td><td>80</td><td>185.0</td><td>250</td></tr><tr><td>accessories</td><td>1</td><td>40</td><td>350.0</td><td>350</td></tr><tr><td>bags</td><td>1</td><td>12</td><td>1899.0</td><td>1899</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">The rule for SELECT with GROUP BY</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Every column in SELECT must either be <strong>in the GROUP BY</strong> or <strong>inside an aggregate function</strong>.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>-- Wrong: which product name should represent the whole category?
+-- SELECT category, name, COUNT(*) FROM products GROUP BY category;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Each group has several names, so there's no single answer. PostgreSQL and strict MySQL give an error; SQLite silently picks one, which is misleading. Group by the columns you want to show.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Grouping by several columns</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT customer_id, status, COUNT(*) AS orders
+FROM orders
+GROUP BY customer_id, status
+ORDER BY customer_id;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>customer_id</th><th>status</th><th>orders</th></tr></thead><tbody><tr><td>1</td><td>delivered</td><td>1</td></tr><tr><td>1</td><td>shipped</td><td>1</td></tr><tr><td>2</td><td>delivered</td><td>1</td></tr><tr><td>3</td><td>pending</td><td>1</td></tr><tr><td>4</td><td>delivered</td><td>1</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:paragraph -->
+<p>One row per unique <strong>combination</strong> of customer and status.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Grouping order items</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT order_id,
+       COUNT(*) AS lines,
+       SUM(qty) AS units
+FROM order_items
+GROUP BY order_id;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>order_id</th><th>lines</th><th>units</th></tr></thead><tbody><tr><td>1</td><td>2</td><td>4</td></tr><tr><td>2</td><td>1</td><td>1</td></tr><tr><td>3</td><td>1</td><td>2</td></tr><tr><td>4</td><td>2</td><td>6</td></tr><tr><td>5</td><td>1</td><td>1</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:paragraph -->
+<p>To add order <strong>totals in rupees</strong>, you need prices from the products table. That's a JOIN, coming in the next lesson.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Grouping by a calculated value</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>-- SQLite: orders per month
+SELECT STRFTIME('%Y-%m', order_date) AS month, COUNT(*) AS orders
+FROM orders
+GROUP BY month;
+
+-- MySQL:      GROUP BY DATE_FORMAT(order_date, '%Y-%m')
+-- PostgreSQL: GROUP BY TO_CHAR(order_date, 'YYYY-MM')</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT CASE WHEN price &lt; 500 THEN 'under 500' ELSE '500 and up' END AS band,
+       COUNT(*) AS products
+FROM products
+GROUP BY band;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Most databases (MySQL, PostgreSQL, SQLite) let you GROUP BY a SELECT alias; in others, repeat the expression.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">WHERE vs HAVING</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><code>WHERE</code> filters <strong>rows before</strong> grouping.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>HAVING</code> filters <strong>groups after</strong> aggregating.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>-- Categories with more than one product
+SELECT category, COUNT(*) AS products
+FROM products
+GROUP BY category
+HAVING COUNT(*) &gt; 1;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>electronics (3) and stationery (2).</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>You can't use WHERE here, because the count doesn't exist until after grouping.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Both together:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>-- Among products in stock, categories whose average price is over 300
+SELECT category, ROUND(AVG(price), 2) AS avg_price
+FROM products
+WHERE stock &gt; 0                 -- rows: drop out-of-stock products first
+GROUP BY category
+HAVING AVG(price) &gt; 300         -- groups: keep expensive categories
+ORDER BY avg_price DESC;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>category</th><th>avg_price</th></tr></thead><tbody><tr><td>bags</td><td>1899.0</td></tr><tr><td>electronics</td><td>599.0</td></tr><tr><td>accessories</td><td>350.0</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:paragraph -->
+<p>Electronics averages 599 here, not 899, because the out-of-stock headphones were removed by WHERE <strong>before</strong> grouping.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Customers with more than one order</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT customer_id, COUNT(*) AS orders
+FROM orders
+GROUP BY customer_id
+HAVING COUNT(*) &gt;= 2;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Customer 1 (Asha) with 2 orders. A classic "loyal customers" query.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">The full logical order of a query</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>You write clauses in this order:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT … FROM … WHERE … GROUP BY … HAVING … ORDER BY … LIMIT …</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>The database logically processes them in this order:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li><strong>FROM</strong>: get the rows (and join tables).</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>WHERE</strong>: filter rows.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>GROUP BY</strong>: form groups.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>HAVING</strong>: filter groups.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>SELECT</strong>: calculate output columns and aliases.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>ORDER BY</strong>: sort.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>LIMIT</strong>: cut.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Knowing this order explains most "why doesn't this work?" moments, for example why WHERE can't use an aggregate.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Common mistakes</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Selecting a column that isn't grouped or aggregated.</strong></li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Using WHERE for aggregate conditions</strong> (<code>WHERE COUNT(*) &gt; 1</code>); use HAVING.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Using HAVING for row conditions</strong> that belong in WHERE; it works but is slower and less clear.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Forgetting ORDER BY</strong>: grouped results aren't guaranteed to be sorted.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Exercise</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li>Count customers per city, most customers first.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Show the total stock and number of products per category, only for categories with at least 50 units.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Count orders per status.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>In <code>order_items</code>, find products (by <code>product_id</code>) that were ordered more than once in total quantity.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Count how many products fall into 'budget' (&lt;300), 'mid' (300–999) and 'premium' (1000+) bands.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Summary</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><code>GROUP BY</code> makes one result row per group; aggregates are calculated per group.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Every selected column must be grouped or aggregated.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>WHERE</code> filters rows before grouping; <code>HAVING</code> filters groups after.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Logical order: FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Next, you'll combine tables with INNER JOIN.</p>
+<!-- /wp:paragraph -->
+]]></content:encoded>
+		<excerpt:encoded><![CDATA[Calculate totals per category, per customer and per month with GROUP BY, filter groups with HAVING, and understand the full order in which a query runs.]]></excerpt:encoded>
+		<wp:post_id>10</wp:post_id>
+		<wp:post_date><![CDATA[2026-10-16 03:36:35]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-10-16 03:36:35]]></wp:post_date_gmt>
+		<wp:comment_status><![CDATA[open]]></wp:comment_status>
+		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+		<wp:post_name><![CDATA[sql-group-by]]></wp:post_name>
+		<wp:status><![CDATA[draft]]></wp:status>
+		<wp:post_parent>0</wp:post_parent>
+		<wp:menu_order>10</wp:menu_order>
+		<wp:post_type><![CDATA[tutorials]]></wp:post_type>
+		<wp:post_password><![CDATA[]]></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+		<category domain="tutorial_category" nicename="sql"><![CDATA[SQL]]></category>
+		<category domain="tutorial_difficulty" nicename="intermediate"><![CDATA[Intermediate]]></category>
+	</item>
+	<item>
+		<title><![CDATA[SQL JOINs (INNER JOIN)]]></title>
+		<link>https://vitalstack.co.in/tutorials/sql-inner-join/</link>
+		<pubDate>Fri, 16 Oct 2026 03:36:35 +0000</pubDate>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<guid isPermaLink="false">https://vitalstack.co.in/?post_type=tutorials&amp;p=11</guid>
+		<description></description>
+		<content:encoded><![CDATA[<!-- wp:paragraph -->
+<p>Our data is split across tables: orders store a <code>customer_id</code>, not the customer's name; order items store a <code>product_id</code>, not the price. A <strong>JOIN</strong> combines rows from related tables so you can see everything together. JOINs are what make relational databases powerful.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Why data is split</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>If every order row repeated the customer's name, email and city, then changing a customer's email would mean updating every one of their orders, and a missed one would leave inconsistent data. Instead, each fact is stored <strong>once</strong>, and tables point to each other with ids. This idea is called <strong>normalisation</strong>. JOINs put the pieces back together when you query.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Your first INNER JOIN</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT orders.id, orders.order_date, customers.name
+FROM orders
+INNER JOIN customers ON orders.customer_id = customers.id;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>id</th><th>order_date</th><th>name</th></tr></thead><tbody><tr><td>1</td><td>2024-05-01</td><td>Asha</td></tr><tr><td>2</td><td>2024-05-03</td><td>Rohan</td></tr><tr><td>3</td><td>2024-05-10</td><td>Asha</td></tr><tr><td>4</td><td>2024-05-12</td><td>Meera</td></tr><tr><td>5</td><td>2024-05-15</td><td>Kabir</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><code>FROM orders</code> starts with the orders table.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>INNER JOIN customers</code> adds the customers table.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>ON orders.customer_id = customers.id</code> says how rows match: an order belongs to the customer whose id equals the order's <code>customer_id</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>table.column</code> says which table a column comes from. It's required when both tables have a column with the same name (both have <code>id</code>).</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>The word <code>INNER</code> is optional: a plain <code>JOIN</code> means INNER JOIN.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">What "inner" means</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>An INNER JOIN returns only rows that have a match <strong>in both tables</strong>. Sara has no orders, so she doesn't appear. The desk lamp has never been ordered, so it won't appear in a join with order items. To include rows without matches, you'll use LEFT JOIN in the next lesson.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Table aliases</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Writing full table names gets long. Give each table a short alias:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT o.id, o.order_date, o.status, c.name, c.city
+FROM orders AS o
+JOIN customers AS c ON o.customer_id = c.id
+WHERE c.city = 'Pune'
+ORDER BY o.order_date;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Asha's two orders and Kabir's one. (<code>AS</code> is optional for table aliases: <code>FROM orders o</code>.) Aliases like <code>o</code> and <code>c</code> are standard practice in every real codebase.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Joining three tables</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Which products are in each order? <code>order_items</code> connects orders and products:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT oi.order_id, p.name AS product, oi.qty, p.price
+FROM order_items oi
+JOIN products p ON oi.product_id = p.id
+ORDER BY oi.order_id;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>order_id</th><th>product</th><th>qty</th><th>price</th></tr></thead><tbody><tr><td>1</td><td>Notebook</td><td>3</td><td>120</td></tr><tr><td>1</td><td>Pen set</td><td>1</td><td>250</td></tr><tr><td>2</td><td>Backpack</td><td>1</td><td>1899</td></tr><tr><td>3</td><td>USB cable</td><td>2</td><td>299</td></tr><tr><td>4</td><td>Notebook</td><td>5</td><td>120</td></tr><tr><td>4</td><td>Water bottle</td><td>1</td><td>350</td></tr><tr><td>5</td><td>Headphones</td><td>1</td><td>1499</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:paragraph -->
+<p>Add the customer with a third join:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT c.name AS customer, o.id AS order_id, p.name AS product, oi.qty
+FROM orders o
+JOIN customers c    ON o.customer_id = c.id
+JOIN order_items oi ON oi.order_id = o.id
+JOIN products p     ON oi.product_id = p.id
+ORDER BY c.name, o.id;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Each JOIN adds one table and one matching rule. Read it as a chain: customers ← orders → order_items → products.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">JOIN + GROUP BY: real reports</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Now you can calculate what you couldn't before: the value of each order.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT o.id AS order_id,
+       SUM(oi.qty * p.price) AS order_total
+FROM orders o
+JOIN order_items oi ON oi.order_id = o.id
+JOIN products p     ON p.id = oi.product_id
+GROUP BY o.id
+ORDER BY order_total DESC;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>order_id</th><th>order_total</th></tr></thead><tbody><tr><td>2</td><td>1899</td></tr><tr><td>5</td><td>1499</td></tr><tr><td>4</td><td>950</td></tr><tr><td>1</td><td>610</td></tr><tr><td>3</td><td>598</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:paragraph -->
+<p>Total spent per customer:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT c.name,
+       COUNT(DISTINCT o.id)  AS orders,
+       SUM(oi.qty * p.price) AS total_spent
+FROM customers c
+JOIN orders o       ON o.customer_id = c.id
+JOIN order_items oi ON oi.order_id = o.id
+JOIN products p     ON p.id = oi.product_id
+GROUP BY c.id, c.name
+ORDER BY total_spent DESC;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>name</th><th>orders</th><th>total_spent</th></tr></thead><tbody><tr><td>Rohan</td><td>1</td><td>1899</td></tr><tr><td>Kabir</td><td>1</td><td>1499</td></tr><tr><td>Asha</td><td>2</td><td>1208</td></tr><tr><td>Meera</td><td>1</td><td>950</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:paragraph -->
+<p>Note <code>COUNT(DISTINCT o.id)</code>: after joining items, Asha's first order appears on two rows (two products), so a plain <code>COUNT(*)</code> would count 3 "orders" for her instead of 2. Watch for this <strong>row multiplication</strong> whenever you join a one-to-many relationship and then aggregate.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Best-selling products by units:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT p.name, SUM(oi.qty) AS units_sold
+FROM products p
+JOIN order_items oi ON oi.product_id = p.id
+GROUP BY p.id, p.name
+ORDER BY units_sold DESC;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>The notebook leads with 8 units.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">JOIN with extra conditions</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Filter joined results with WHERE as usual:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT c.name, o.id, o.status
+FROM customers c
+JOIN orders o ON o.customer_id = c.id
+WHERE o.status &lt;&gt; 'delivered';</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Asha (order 3, shipped) and Meera (order 4, pending).</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Ambiguous columns</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>-- SELECT id, name FROM orders JOIN customers ON customer_id = customers.id;
+-- Error: ambiguous column name: id</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Both tables have <code>id</code>, so the database doesn't know which you mean. Always prefix columns with the table alias in joins, even when not strictly required: it makes queries clearer.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Common mistakes</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Missing or wrong ON condition</strong>: joining <code>o.id = c.id</code> instead of <code>o.customer_id = c.id</code> gives nonsense that looks plausible.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Forgetting a join condition entirely</strong>, which matches every row with every row (a "Cartesian product": 5 orders × 5 customers = 25 rows).</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Counting rows after a one-to-many join</strong>; use <code>COUNT(DISTINCT …)</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Ambiguous column names</strong> without table prefixes.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Exercise</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li>List every order with the customer's name and city.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>List all products bought by Asha.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Show each order's id, date, customer name and number of items.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Find the total revenue from delivered orders only.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Find each city's total sales.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Summary</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><code>JOIN table ON condition</code> combines rows from related tables.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>INNER JOIN keeps only rows with a match in both tables.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Use short aliases and prefix every column in joins.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>JOIN + GROUP BY produces real reports; watch for row multiplication when counting.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Next, you'll keep rows without matches using LEFT JOIN.</p>
+<!-- /wp:paragraph -->
+]]></content:encoded>
+		<excerpt:encoded><![CDATA[Combine rows from related tables with INNER JOIN, use table aliases, join three or four tables, and build real reports like order totals per customer.]]></excerpt:encoded>
+		<wp:post_id>11</wp:post_id>
+		<wp:post_date><![CDATA[2026-10-16 03:36:35]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-10-16 03:36:35]]></wp:post_date_gmt>
+		<wp:comment_status><![CDATA[open]]></wp:comment_status>
+		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+		<wp:post_name><![CDATA[sql-inner-join]]></wp:post_name>
+		<wp:status><![CDATA[draft]]></wp:status>
+		<wp:post_parent>0</wp:post_parent>
+		<wp:menu_order>11</wp:menu_order>
+		<wp:post_type><![CDATA[tutorials]]></wp:post_type>
+		<wp:post_password><![CDATA[]]></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+		<category domain="tutorial_category" nicename="sql"><![CDATA[SQL]]></category>
+		<category domain="tutorial_difficulty" nicename="intermediate"><![CDATA[Intermediate]]></category>
+	</item>
+	<item>
+		<title><![CDATA[SQL LEFT JOIN]]></title>
+		<link>https://vitalstack.co.in/tutorials/sql-left-join/</link>
+		<pubDate>Fri, 16 Oct 2026 03:36:35 +0000</pubDate>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<guid isPermaLink="false">https://vitalstack.co.in/?post_type=tutorials&amp;p=12</guid>
+		<description></description>
+		<content:encoded><![CDATA[<!-- wp:paragraph -->
+<p>An INNER JOIN drops rows that have no match. Often, that's exactly the data you want: customers who have <strong>never</strong> ordered, products <strong>nobody</strong> bought, posts with <strong>zero</strong> comments. <strong>LEFT JOIN</strong> keeps every row from the first table, matched or not.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">LEFT JOIN</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT c.name, o.id AS order_id, o.order_date
+FROM customers c
+LEFT JOIN orders o ON o.customer_id = c.id
+ORDER BY c.name;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>name</th><th>order_id</th><th>order_date</th></tr></thead><tbody><tr><td>Asha</td><td>1</td><td>2024-05-01</td></tr><tr><td>Asha</td><td>3</td><td>2024-05-10</td></tr><tr><td>Kabir</td><td>5</td><td>2024-05-15</td></tr><tr><td>Meera</td><td>4</td><td>2024-05-12</td></tr><tr><td>Rohan</td><td>2</td><td>2024-05-03</td></tr><tr><td>Sara</td><td>NULL</td><td>NULL</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:paragraph -->
+<p>Every customer from the <strong>left</strong> table (the one in FROM) appears. Where there's no matching order, the order columns are filled with <code>NULL</code>. Sara is now included.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Compare with INNER JOIN, which returned the same rows <strong>except</strong> Sara.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Finding rows with no match</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>The most common use: find what's missing. Keep the LEFT JOIN, then filter on NULL in the right table:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>-- Customers who have never ordered
+SELECT c.name, c.city
+FROM customers c
+LEFT JOIN orders o ON o.customer_id = c.id
+WHERE o.id IS NULL;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Sara (Mumbai). Perfect for a "send a welcome discount" email list.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>-- Products that have never been sold
+SELECT p.name, p.stock
+FROM products p
+LEFT JOIN order_items oi ON oi.product_id = p.id
+WHERE oi.product_id IS NULL;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Only the desk lamp has never sold. Maybe it needs a better photo or a lower price.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Counting with zeros</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>INNER JOIN reports leave out the zeros. LEFT JOIN includes them:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT c.name, COUNT(o.id) AS orders
+FROM customers c
+LEFT JOIN orders o ON o.customer_id = c.id
+GROUP BY c.id, c.name
+ORDER BY orders DESC, c.name;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>name</th><th>orders</th></tr></thead><tbody><tr><td>Asha</td><td>2</td></tr><tr><td>Kabir</td><td>1</td></tr><tr><td>Meera</td><td>1</td></tr><tr><td>Rohan</td><td>1</td></tr><tr><td>Sara</td><td>0</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:paragraph -->
+<p>Important: use <code>COUNT(o.id)</code>, not <code>COUNT(*)</code>. For Sara there's still one row (with NULLs), so <code>COUNT(*)</code> would say 1. <code>COUNT(o.id)</code> counts only non-NULL order ids, giving the correct 0.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Sums with COALESCE</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT p.name,
+       COALESCE(SUM(oi.qty), 0) AS units_sold
+FROM products p
+LEFT JOIN order_items oi ON oi.product_id = p.id
+GROUP BY p.id, p.name
+ORDER BY units_sold DESC;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>The desk lamp shows 0 instead of NULL, because <code>SUM</code> of nothing is NULL and <code>COALESCE</code> turns it into 0.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">WHERE vs ON with LEFT JOIN</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>This is the trickiest part of LEFT JOIN. Compare:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>-- A: condition in WHERE
+SELECT c.name, o.id, o.status
+FROM customers c
+LEFT JOIN orders o ON o.customer_id = c.id
+WHERE o.status = 'delivered';</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>-- B: condition in ON
+SELECT c.name, o.id, o.status
+FROM customers c
+LEFT JOIN orders o ON o.customer_id = c.id AND o.status = 'delivered';</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><strong>A</strong> returns only Rohan, Asha and Kabir with their delivered orders. The WHERE runs after the join and removes rows where <code>o.status</code> is NULL, so Sara and Meera disappear: the LEFT JOIN has effectively become an INNER JOIN.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>B</strong> returns <strong>all five</strong> customers: those with a delivered order show it; Meera and Sara show NULLs.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Rule: conditions on the <strong>right</strong> table go in <code>ON</code> if you want to keep all left rows. Conditions on the <strong>left</strong> table go in <code>WHERE</code>.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Order of tables matters</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p><code>A LEFT JOIN B</code> keeps all of A. <code>B LEFT JOIN A</code> keeps all of B. Start FROM the table whose rows you want to keep completely.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">RIGHT JOIN and FULL OUTER JOIN</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>-- RIGHT JOIN keeps all rows of the right table:
+SELECT c.name, o.id
+FROM orders o
+RIGHT JOIN customers c ON o.customer_id = c.id;
+-- Same result as: customers LEFT JOIN orders</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p><code>RIGHT JOIN</code> is just a LEFT JOIN written backwards. Most developers always use LEFT JOIN and order the tables accordingly; it's easier to read. (SQLite added RIGHT JOIN in version 3.39.)</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p><code>FULL OUTER JOIN</code> keeps all rows from <strong>both</strong> tables, with NULLs on either side where there's no match. It's supported by PostgreSQL, SQL Server and SQLite 3.39+, but not MySQL. It's mostly used for comparing two lists, e.g. reconciling two systems.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Self join</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>A table can be joined to itself with two aliases. For example, customers from the same city:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT a.name AS customer, b.name AS neighbour, a.city
+FROM customers a
+JOIN customers b ON a.city = b.city AND a.id &lt; b.id;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Asha and Kabir (both Pune). <code>a.id &lt; b.id</code> avoids pairing someone with themselves and listing each pair twice. Self joins are also used for hierarchies, like an <code>employees</code> table where <code>manager_id</code> points to another employee.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Join types at a glance</h2>
+<!-- /wp:heading -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>Join</th><th>Rows returned</th></tr></thead><tbody><tr><td><code>INNER JOIN</code></td><td>Only matching pairs</td></tr><tr><td><code>LEFT JOIN</code></td><td>All left rows + matching right rows (NULL if none)</td></tr><tr><td><code>RIGHT JOIN</code></td><td>All right rows + matching left rows</td></tr><tr><td><code>FULL OUTER JOIN</code></td><td>All rows from both sides</td></tr><tr><td><code>CROSS JOIN</code></td><td>Every combination (rarely needed)</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Common mistakes</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Filtering the right table in WHERE</strong>, which silently turns a LEFT JOIN into an INNER JOIN.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>**<code>COUNT(*)</code> instead of <code>COUNT(right.id)</code>**, giving 1 instead of 0.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Forgetting COALESCE</strong>, showing NULL instead of 0 in reports.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Putting the "keep all" table on the wrong side.</strong></li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Exercise</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li>List all products with the total quantity sold, including 0 for unsold products.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Find customers who have never ordered.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Show every customer with the number of delivered orders (0 if none). Hint: put the status condition in ON.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>List every order with the number of items in it, including orders with no items. (Insert an empty order first to test.)</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Find pairs of products in the same category with a self join.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Summary</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>LEFT JOIN keeps every row from the left table and fills missing matches with NULL.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>WHERE right.id IS NULL</code> finds rows without a match.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Use <code>COUNT(right.id)</code> and <code>COALESCE(SUM(...), 0)</code> for correct zeros.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Conditions on the right table belong in ON to keep all left rows.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Next, you'll protect your data with constraints and keys.</p>
+<!-- /wp:paragraph -->
+]]></content:encoded>
+		<excerpt:encoded><![CDATA[Keep every row from the first table with LEFT JOIN, find rows without matches, count zero values correctly, and meet RIGHT, FULL and self joins.]]></excerpt:encoded>
+		<wp:post_id>12</wp:post_id>
+		<wp:post_date><![CDATA[2026-10-16 03:36:35]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-10-16 03:36:35]]></wp:post_date_gmt>
+		<wp:comment_status><![CDATA[open]]></wp:comment_status>
+		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+		<wp:post_name><![CDATA[sql-left-join]]></wp:post_name>
+		<wp:status><![CDATA[draft]]></wp:status>
+		<wp:post_parent>0</wp:post_parent>
+		<wp:menu_order>12</wp:menu_order>
+		<wp:post_type><![CDATA[tutorials]]></wp:post_type>
+		<wp:post_password><![CDATA[]]></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+		<category domain="tutorial_category" nicename="sql"><![CDATA[SQL]]></category>
+		<category domain="tutorial_difficulty" nicename="intermediate"><![CDATA[Intermediate]]></category>
+	</item>
+	<item>
+		<title><![CDATA[SQL Constraints and Keys]]></title>
+		<link>https://vitalstack.co.in/tutorials/sql-constraints-and-keys/</link>
+		<pubDate>Fri, 16 Oct 2026 03:36:35 +0000</pubDate>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<guid isPermaLink="false">https://vitalstack.co.in/?post_type=tutorials&amp;p=13</guid>
+		<description></description>
+		<content:encoded><![CDATA[<!-- wp:paragraph -->
+<p>Application code has bugs, users type strange things, and scripts get run twice. <strong>Constraints</strong> are rules the database itself enforces, so bad data can't get in no matter where it comes from. They're your last and strongest line of defence for data quality.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">The constraints</h2>
+<!-- /wp:heading -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>Constraint</th><th>Rule</th></tr></thead><tbody><tr><td><code>PRIMARY KEY</code></td><td>Uniquely identifies each row; never NULL</td></tr><tr><td><code>FOREIGN KEY</code></td><td>Value must exist in another table</td></tr><tr><td><code>UNIQUE</code></td><td>No two rows may have the same value</td></tr><tr><td><code>NOT NULL</code></td><td>A value is required</td></tr><tr><td><code>CHECK</code></td><td>Value must pass a condition</td></tr><tr><td><code>DEFAULT</code></td><td>Value used when none is given</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">A table with every constraint</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>CREATE TABLE reviews (
+  id          INTEGER PRIMARY KEY,
+  product_id  INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+  customer_id INTEGER NOT NULL REFERENCES customers(id),
+  rating      INTEGER NOT NULL CHECK (rating BETWEEN 1 AND 5),
+  comment     TEXT,
+  created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE (product_id, customer_id)
+);</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Read it rule by rule:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Every review has a unique <code>id</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>It must point to a real product and a real customer.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>The rating is required and must be 1–5.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>The comment is optional.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>created_at</code> fills itself in.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>A customer can review each product only once (the pair must be unique).</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>If a product is deleted, its reviews are deleted with it.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Testing the rules</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Turn on foreign keys if you're using SQLite, then try some inserts:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>PRAGMA foreign_keys = ON;  -- SQLite only
+
+INSERT INTO reviews (product_id, customer_id, rating, comment)
+VALUES (1, 1, 5, 'Great paper quality');           -- OK
+
+INSERT INTO reviews (product_id, customer_id, rating)
+VALUES (1, 2, 7);                                  -- CHECK fails: rating must be 1–5
+
+INSERT INTO reviews (product_id, customer_id, rating)
+VALUES (1, 1, 4);                                  -- UNIQUE fails: Asha already reviewed product 1
+
+INSERT INTO reviews (product_id, customer_id, rating)
+VALUES (99, 1, 4);                                 -- FOREIGN KEY fails: no product 99
+
+INSERT INTO reviews (product_id, customer_id)
+VALUES (2, 1);                                     -- NOT NULL fails: rating is required</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Each bad insert is rejected with an error explaining which rule failed. Your application can catch these errors and show a friendly message.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Primary keys</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Exactly one per table; values unique and never NULL.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Usually a meaningless number (<code>id</code>) generated by the database. Don't use real-world values like email or phone as primary keys: people change them.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>A <strong>composite</strong> primary key uses several columns, like <code>PRIMARY KEY (order_id, product_id)</code> in <code>order_items</code>: each product appears at most once per order.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Foreign keys</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>A foreign key links a column to the primary key of another table:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>-- customer_id INTEGER REFERENCES customers(id)
+-- or, as a separate line:
+-- FOREIGN KEY (customer_id) REFERENCES customers(id)</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>It guarantees <strong>referential integrity</strong>: every order belongs to a customer who exists. Without it, deleting customers would leave orphaned orders pointing at nothing.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">ON DELETE options</h3>
+<!-- /wp:heading -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>Option</th><th>When the parent row is deleted…</th></tr></thead><tbody><tr><td><code>RESTRICT</code> / <code>NO ACTION</code> (default)</td><td>The delete is refused while children exist</td></tr><tr><td><code>CASCADE</code></td><td>Children are deleted too</td></tr><tr><td><code>SET NULL</code></td><td>Children's foreign key becomes NULL</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:paragraph -->
+<p>Choose per relationship:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Reviews of a deleted product → <code>CASCADE</code> (they're meaningless alone).</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Orders of a deleted customer → <code>RESTRICT</code> (keep financial records; deactivate the customer instead).</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Posts by a deleted author → <code>SET NULL</code> (keep the posts, show "former author").</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>There's also <code>ON UPDATE CASCADE</code>, rarely needed when ids never change.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">UNIQUE</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>-- email VARCHAR(100) UNIQUE</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Guarantees no duplicates, e.g. one account per email. It's much safer than checking in application code ("is this email taken?") because two sign-ups at the same instant could both pass the check. The database never lets both through.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Most databases allow several NULLs in a UNIQUE column, since NULL means "unknown". That's why Sara (no email) doesn't conflict with anyone.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">CHECK</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>-- price DECIMAL(10,2) CHECK (price &gt;= 0)
+-- status VARCHAR(20) CHECK (status IN ('pending', 'shipped', 'delivered', 'cancelled'))
+-- CHECK (end_date &gt;= start_date)</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Any condition on the row's own values. (MySQL enforces CHECK from version 8.0.16; older versions ignored it.)</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Adding constraints to existing tables</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>-- MySQL / PostgreSQL:
+-- ALTER TABLE products ADD CONSTRAINT price_positive CHECK (price &gt;= 0);
+-- ALTER TABLE customers ADD CONSTRAINT email_unique UNIQUE (email);</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Adding a constraint fails if existing data already breaks it, so clean the data first. (SQLite has limited ALTER TABLE support; there you usually recreate the table.) Naming constraints makes error messages clearer.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Relationship design</h2>
+<!-- /wp:heading -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">One-to-many</h3>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>One customer → many orders. Put the foreign key on the "many" side: <code>orders.customer_id</code>.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Many-to-many</h3>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>One order has many products; one product appears in many orders. You need a <strong>junction table</strong> in between: <code>order_items(order_id, product_id, qty)</code>, with two foreign keys and a composite primary key. Other examples: students ↔ courses (<code>enrollments</code>), posts ↔ tags (<code>post_tags</code>).</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>CREATE TABLE tags (
+  id   INTEGER PRIMARY KEY,
+  name VARCHAR(50) NOT NULL UNIQUE
+);
+
+CREATE TABLE product_tags (
+  product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+  tag_id     INTEGER NOT NULL REFERENCES tags(id) ON DELETE CASCADE,
+  PRIMARY KEY (product_id, tag_id)
+);</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">One-to-one</h3>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>One user ↔ one profile. Use a foreign key that's also UNIQUE (or the primary key itself). Often it's simpler to keep the columns in one table.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Common mistakes</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><strong>No foreign keys</strong> "for speed", then years of orphaned and inconsistent data.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Natural keys</strong> (email, phone) as primary keys.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Duplicate checks only in code</strong>, instead of UNIQUE.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>CASCADE everywhere</strong>, so one mistaken delete wipes related history.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>**Forgetting <code>PRAGMA foreign_keys = ON</code>** in SQLite.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Exercise</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li>Create the <code>reviews</code> table and test each failing insert above.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Add a CHECK so product stock can never be negative (on a new test table).</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Design tables for students, courses and enrollments (with an enrollment date), including all keys.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Decide the ON DELETE behaviour for: comments when a post is deleted; invoices when a customer is deleted. Explain why.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Summary</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Constraints make the database enforce data rules: PRIMARY KEY, FOREIGN KEY, UNIQUE, NOT NULL, CHECK, DEFAULT.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Foreign keys keep relationships valid; ON DELETE decides what happens to children.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>UNIQUE is the reliable way to prevent duplicates.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>One-to-many uses a foreign key; many-to-many uses a junction table.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Next, you'll make queries fast with indexes.</p>
+<!-- /wp:paragraph -->
+]]></content:encoded>
+		<excerpt:encoded><![CDATA[Protect data quality with PRIMARY KEY, FOREIGN KEY, UNIQUE, NOT NULL, CHECK and DEFAULT constraints, choose ON DELETE behaviour, and design one-to-many and many-to-many relationships.]]></excerpt:encoded>
+		<wp:post_id>13</wp:post_id>
+		<wp:post_date><![CDATA[2026-10-16 03:36:35]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-10-16 03:36:35]]></wp:post_date_gmt>
+		<wp:comment_status><![CDATA[open]]></wp:comment_status>
+		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+		<wp:post_name><![CDATA[sql-constraints-and-keys]]></wp:post_name>
+		<wp:status><![CDATA[draft]]></wp:status>
+		<wp:post_parent>0</wp:post_parent>
+		<wp:menu_order>13</wp:menu_order>
+		<wp:post_type><![CDATA[tutorials]]></wp:post_type>
+		<wp:post_password><![CDATA[]]></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+		<category domain="tutorial_category" nicename="sql"><![CDATA[SQL]]></category>
+		<category domain="tutorial_difficulty" nicename="intermediate"><![CDATA[Intermediate]]></category>
+	</item>
+	<item>
+		<title><![CDATA[SQL Indexes]]></title>
+		<link>https://vitalstack.co.in/tutorials/sql-indexes/</link>
+		<pubDate>Fri, 16 Oct 2026 03:36:35 +0000</pubDate>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<guid isPermaLink="false">https://vitalstack.co.in/?post_type=tutorials&amp;p=14</guid>
+		<description></description>
+		<content:encoded><![CDATA[<!-- wp:paragraph -->
+<p>With 7 products, every query is instant. With 7 million, a query that scans every row can take seconds, and a busy website runs thousands of queries a minute. <strong>Indexes</strong> let the database find rows without reading the whole table. They're the single biggest tool for database performance.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">The book index analogy</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>To find "foreign keys" in a 500-page book, you don't read every page. You check the index at the back: "foreign keys … page 312". A database index works the same way: a separate, <strong>sorted</strong> structure that maps column values to the rows that contain them.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Without an index, the database does a <strong>full table scan</strong>: it checks every row. With one, it jumps almost straight to the matches, even in a table with millions of rows.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Creating an index</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>CREATE INDEX idx_orders_customer_id ON orders (customer_id);</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><code>idx_orders_customer_id</code> is the index's name (a common convention: <code>idx_table_column</code>).</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>ON orders (customer_id)</code> says which table and column.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Queries filtering, joining or sorting on <code>customer_id</code> can now use it:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT * FROM orders WHERE customer_id = 1;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>You don't change your queries; the database decides automatically when an index helps.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Indexes you already have</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Every <strong>PRIMARY KEY</strong> is indexed automatically.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Every <strong>UNIQUE</strong> constraint creates an index (that's how the database checks uniqueness quickly).</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Foreign keys</strong> are indexed automatically in MySQL (InnoDB), but <strong>not</strong> in PostgreSQL or SQLite. Index them yourself there, because joins use them constantly.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Seeing the query plan with EXPLAIN</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p><code>EXPLAIN</code> shows how the database will run a query:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>-- SQLite:
+EXPLAIN QUERY PLAN SELECT * FROM orders WHERE status = 'pending';
+-- SCAN orders                      ← full table scan
+
+CREATE INDEX idx_orders_status ON orders (status);
+
+EXPLAIN QUERY PLAN SELECT * FROM orders WHERE status = 'pending';
+-- SEARCH orders USING INDEX idx_orders_status (status=?)   ← uses the index</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>In MySQL and PostgreSQL, write <code>EXPLAIN SELECT …</code>. Look for "full scan" / "Seq Scan" / "type: ALL" on big tables: that's where indexes help. PostgreSQL's <code>EXPLAIN ANALYZE</code> also runs the query and shows real timings.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>(On tiny tables, databases often choose a scan anyway, because it's faster than using the index.)</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">What to index</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Index columns that appear often in:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><strong>WHERE</strong> filters: <code>WHERE email = ?</code>, <code>WHERE status = ?</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>JOIN</strong> conditions: foreign keys like <code>orders.customer_id</code>, <code>order_items.product_id</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>ORDER BY</strong>: <code>ORDER BY created_at DESC</code> on large tables (latest posts, newest orders).</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Start from real slow queries. Most databases can log slow queries (MySQL's slow query log, PostgreSQL's <code>pg_stat_statements</code>).</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Composite indexes and column order</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>An index can cover several columns:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>CREATE INDEX idx_orders_customer_date ON orders (customer_id, order_date);</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>It's sorted by <code>customer_id</code> first, then by <code>order_date</code> within each customer, like a phone book sorted by surname, then first name. It helps:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT * FROM orders WHERE customer_id = 1;                                -- yes (first column)
+SELECT * FROM orders WHERE customer_id = 1 AND order_date &gt;= '2024-05-05'; -- yes, both columns
+SELECT * FROM orders WHERE customer_id = 1 ORDER BY order_date DESC;       -- yes, even the sort
+SELECT * FROM orders WHERE order_date &gt;= '2024-05-05';                     -- no (not the first column)</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>This is the <strong>leftmost prefix</strong> rule: an index can be used for its first column, or first two, and so on, but not for a later column on its own. Put the column used for equality (<code>=</code>) first and range or sort columns after it.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">When indexes can't be used</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>-- Function on the column: the index on email can't be used
+SELECT * FROM customers WHERE LOWER(email) = 'asha@example.com';
+
+-- Leading wildcard: like searching a phone book for names ending in "-sharma"
+SELECT * FROM products WHERE name LIKE '%lamp';
+
+-- These CAN use an index:
+SELECT * FROM customers WHERE email = 'asha@example.com';
+SELECT * FROM products WHERE name LIKE 'Desk%';</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Store data in a consistent form (e.g. emails lower-cased on insert) so you can compare directly. PostgreSQL and MySQL 8 also support <strong>expression indexes</strong>, such as an index on <code>LOWER(email)</code>. For searching words inside text, use full-text search.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Unique indexes</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>CREATE UNIQUE INDEX idx_customers_email ON customers (email);</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>An index that also enforces uniqueness, the same as a UNIQUE constraint.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">The cost of indexes</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Indexes aren't free:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Slower writes:</strong> every INSERT, UPDATE and DELETE must also update every index on the table.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Disk space:</strong> each index is a copy of its columns, sorted.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Maintenance:</strong> unused indexes still cost on every write.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>So don't index every column. Index what your queries actually need, and remove indexes nobody uses.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>Good candidates</th><th>Poor candidates</th></tr></thead><tbody><tr><td>Foreign keys used in joins</td><td>Columns never used in WHERE / JOIN / ORDER BY</td></tr><tr><td>Columns in frequent WHERE filters</td><td>Tiny tables</td></tr><tr><td>Columns used for sorting large lists</td><td>Columns with only 2–3 values, unless combined in a composite index</td></tr><tr><td>Unique lookups like email or slug</td><td>Tables with constant heavy writes and rare reads</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Indexes in WordPress</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>WordPress's <code>wp_posts</code> table has indexes on <code>post_name</code> (slug lookups), on <code>(post_type, post_status, post_date, ID)</code> for listing posts, and on <code>post_author</code>. That's why loading a post by its URL stays fast even with thousands of posts. Plugins that search unindexed meta values (<code>wp_postmeta.meta_value</code>) are a common cause of slow WordPress sites.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Removing an index</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>DROP INDEX idx_orders_status;              -- SQLite / PostgreSQL
+-- DROP INDEX idx_orders_status ON orders; -- MySQL</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Common mistakes</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><strong>No index on foreign keys</strong> in PostgreSQL/SQLite, making joins slow.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Indexing everything</strong>, slowing down every write.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Wrong column order</strong> in composite indexes.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Wrapping indexed columns in functions</strong> in WHERE.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Guessing instead of measuring</strong> with EXPLAIN.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Exercise</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li>Run <code>EXPLAIN QUERY PLAN</code> (SQLite) or <code>EXPLAIN</code> on <code>SELECT * FROM order_items WHERE product_id = 1</code>. Then create an index and compare.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Create a composite index on <code>orders (status, order_date)</code>. Which of these could use it: filter by status; by status and date; by date only?</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>List the indexes you'd add to the shop database, and explain each one.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Rewrite <code>WHERE LOWER(city) = 'pune'</code> so it could use an index on <code>city</code>.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Summary</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Indexes are sorted lookup structures that avoid full table scans.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Primary keys and UNIQUE columns are indexed automatically; index foreign keys yourself where needed.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Composite indexes follow the leftmost prefix rule; order the columns carefully.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Indexes speed up reads but slow down writes; measure with EXPLAIN.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Next, you'll design and query a complete library database in the SQL project.</p>
+<!-- /wp:paragraph -->
+]]></content:encoded>
+		<excerpt:encoded><![CDATA[How indexes make queries fast, when to create them, composite indexes and column order, reading EXPLAIN plans, and the costs of too many indexes.]]></excerpt:encoded>
+		<wp:post_id>14</wp:post_id>
+		<wp:post_date><![CDATA[2026-10-16 03:36:35]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-10-16 03:36:35]]></wp:post_date_gmt>
+		<wp:comment_status><![CDATA[open]]></wp:comment_status>
+		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+		<wp:post_name><![CDATA[sql-indexes]]></wp:post_name>
+		<wp:status><![CDATA[draft]]></wp:status>
+		<wp:post_parent>0</wp:post_parent>
+		<wp:menu_order>14</wp:menu_order>
+		<wp:post_type><![CDATA[tutorials]]></wp:post_type>
+		<wp:post_password><![CDATA[]]></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+		<category domain="tutorial_category" nicename="sql"><![CDATA[SQL]]></category>
+		<category domain="tutorial_difficulty" nicename="intermediate"><![CDATA[Intermediate]]></category>
+	</item>
+	<item>
+		<title><![CDATA[SQL Project: Library Database]]></title>
+		<link>https://vitalstack.co.in/tutorials/sql-project-library-database/</link>
+		<pubDate>Fri, 16 Oct 2026 03:36:35 +0000</pubDate>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<guid isPermaLink="false">https://vitalstack.co.in/?post_type=tutorials&amp;p=15</guid>
+		<description></description>
+		<content:encoded><![CDATA[<!-- wp:paragraph -->
+<p>Time to put the whole course together. You'll design a database for a small library, create it with constraints, load sample data, and answer real questions a librarian would ask, from "which books are overdue?" to "who are our most active readers?".</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Run everything in sqliteonline.com, DB Browser for SQLite or any SQLite tool. (Small changes for MySQL and PostgreSQL are noted.)</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Step 1: Design</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>What does a library need to track?</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Authors</strong>: name, country.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Books</strong>: title, year, genre, number of copies. Each book has one author (we'll keep it simple).</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Members</strong>: name, email, join date.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Loans</strong>: which member borrowed which book, when, when it's due, and when it came back.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Relationships:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>authors 1 ──&lt; books 1 ──&lt; loans &gt;── 1 members</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>One author writes many books. One book can be loaned many times; one member can borrow many books. <code>loans</code> connects books and members, and also stores details about each borrowing.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Step 2: Create the tables</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>PRAGMA foreign_keys = ON;
+
+CREATE TABLE authors (
+  id       INTEGER PRIMARY KEY,
+  name     VARCHAR(100) NOT NULL,
+  country  VARCHAR(50)
+);
+
+CREATE TABLE books (
+  id         INTEGER PRIMARY KEY,
+  title      VARCHAR(200) NOT NULL,
+  author_id  INTEGER NOT NULL REFERENCES authors(id),
+  genre      VARCHAR(50),
+  year       INTEGER CHECK (year &gt; 0),
+  copies     INTEGER NOT NULL DEFAULT 1 CHECK (copies &gt;= 0)
+);
+
+CREATE TABLE members (
+  id      INTEGER PRIMARY KEY,
+  name    VARCHAR(100) NOT NULL,
+  email   VARCHAR(100) NOT NULL UNIQUE,
+  joined  DATE NOT NULL
+);
+
+CREATE TABLE loans (
+  id           INTEGER PRIMARY KEY,
+  book_id      INTEGER NOT NULL REFERENCES books(id),
+  member_id    INTEGER NOT NULL REFERENCES members(id),
+  loaned_on    DATE NOT NULL,
+  due_on       DATE NOT NULL,
+  returned_on  DATE,
+  CHECK (due_on &gt;= loaned_on)
+);
+
+CREATE INDEX idx_books_author ON books (author_id);
+CREATE INDEX idx_loans_book ON loans (book_id);
+CREATE INDEX idx_loans_member ON loans (member_id);</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Design decisions:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><code>returned_on</code> is NULL while a book is still out. That single column tells us the loan's status.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>CHECK constraints stop impossible data (negative copies, due before loaned).</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Foreign key columns are indexed for fast joins.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Step 3: Load sample data</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>INSERT INTO authors (id, name, country) VALUES
+  (1, 'R. K. Narayan', 'India'),
+  (2, 'Agatha Christie', 'UK'),
+  (3, 'Paulo Coelho', 'Brazil'),
+  (4, 'Ruskin Bond', 'India'),
+  (5, 'Yuval Noah Harari', 'Israel');
+
+INSERT INTO books (id, title, author_id, genre, year, copies) VALUES
+  (1, 'Malgudi Days', 1, 'fiction', 1943, 3),
+  (2, 'The Guide', 1, 'fiction', 1958, 2),
+  (3, 'Murder on the Orient Express', 2, 'mystery', 1934, 2),
+  (4, 'And Then There Were None', 2, 'mystery', 1939, 1),
+  (5, 'The Alchemist', 3, 'fiction', 1988, 4),
+  (6, 'The Blue Umbrella', 4, 'children', 1980, 2),
+  (7, 'Sapiens', 5, 'history', 2011, 3);
+
+INSERT INTO members (id, name, email, joined) VALUES
+  (1, 'Asha', 'asha@example.com', '2024-01-05'),
+  (2, 'Rohan', 'rohan@example.com', '2024-02-11'),
+  (3, 'Meera', 'meera@example.com', '2024-03-02'),
+  (4, 'Kabir', 'kabir@example.com', '2024-04-18');
+
+INSERT INTO loans (id, book_id, member_id, loaned_on, due_on, returned_on) VALUES
+  (1, 1, 1, '2024-05-01', '2024-05-15', '2024-05-12'),
+  (2, 3, 1, '2024-05-14', '2024-05-28', NULL),
+  (3, 5, 2, '2024-05-03', '2024-05-17', '2024-05-20'),
+  (4, 7, 2, '2024-05-21', '2024-06-04', NULL),
+  (5, 5, 3, '2024-05-10', '2024-05-24', '2024-05-22'),
+  (6, 6, 3, '2024-06-01', '2024-06-15', NULL),
+  (7, 1, 1, '2024-06-02', '2024-06-16', NULL),
+  (8, 4, 2, '2024-06-03', '2024-06-17', NULL);</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Kabir has never borrowed anything, and *The Guide* has never been loaned. Those cases matter for the LEFT JOIN questions.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Step 4: Answer real questions</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>We'll pretend <strong>today is 2024-06-10</strong>, so results don't depend on when you run them. In a real app you'd use <code>DATE('now')</code> (SQLite), <code>CURDATE()</code> (MySQL) or <code>CURRENT_DATE</code> (PostgreSQL).</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">1. Every book with its author</h3>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT b.title, a.name AS author, b.year
+FROM books b
+JOIN authors a ON a.id = b.author_id
+ORDER BY a.name, b.year;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">2. Books currently on loan, and who has them</h3>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT b.title, m.name AS member, l.due_on
+FROM loans l
+JOIN books b   ON b.id = l.book_id
+JOIN members m ON m.id = l.member_id
+WHERE l.returned_on IS NULL
+ORDER BY l.due_on;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Five books are out: Murder on the Orient Express (Asha), Sapiens (Rohan), The Blue Umbrella (Meera), Malgudi Days (Asha) and And Then There Were None (Rohan).</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">3. Overdue loans</h3>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT m.name, m.email, b.title, l.due_on
+FROM loans l
+JOIN books b   ON b.id = l.book_id
+JOIN members m ON m.id = l.member_id
+WHERE l.returned_on IS NULL
+  AND l.due_on &lt; '2024-06-10'
+ORDER BY l.due_on;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Asha's *Murder on the Orient Express* (due 28 May) and Rohan's *Sapiens* (due 4 June). This is the list for reminder emails.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">4. Copies available right now</h3>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT b.title,
+       b.copies,
+       COUNT(l.id) AS on_loan,
+       b.copies - COUNT(l.id) AS available
+FROM books b
+LEFT JOIN loans l ON l.book_id = b.id AND l.returned_on IS NULL
+GROUP BY b.id, b.title, b.copies
+ORDER BY available, b.title;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>The LEFT JOIN keeps books with no active loans, and the condition sits in <strong>ON</strong> so they aren't filtered out. *And Then There Were None* has 0 copies available.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">5. Most popular books (all-time loans)</h3>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT b.title, COUNT(l.id) AS times_borrowed
+FROM books b
+LEFT JOIN loans l ON l.book_id = b.id
+GROUP BY b.id, b.title
+ORDER BY times_borrowed DESC, b.title;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>*Malgudi Days* and *The Alchemist* lead with 2 loans each; *The Guide* shows 0.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">6. Most active members</h3>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT m.name,
+       COUNT(l.id) AS loans,
+       SUM(CASE WHEN l.id IS NOT NULL AND l.returned_on IS NULL THEN 1 ELSE 0 END) AS still_out
+FROM members m
+LEFT JOIN loans l ON l.member_id = m.id
+GROUP BY m.id, m.name
+ORDER BY loans DESC, m.name;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Asha and Rohan have 3 loans each (2 still out), Meera 2 (1 still out), Kabir 0.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Why <code>l.id IS NOT NULL</code>? Kabir has no loans, so the LEFT JOIN gives him one row where <strong>every</strong> loan column is NULL, including <code>returned_on</code>. Without the extra check, that empty row would count as "1 book still out". Whenever you test for NULL on the right side of a LEFT JOIN, ask yourself: does NULL mean "no value" or "no matching row"?</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">7. Members who returned a book late</h3>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT DISTINCT m.name
+FROM loans l
+JOIN members m ON m.id = l.member_id
+WHERE l.returned_on &gt; l.due_on;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Rohan returned *The Alchemist* three days late.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">8. Loans per genre</h3>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT b.genre, COUNT(*) AS loans
+FROM loans l
+JOIN books b ON b.id = l.book_id
+GROUP BY b.genre
+ORDER BY loans DESC;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">9. Authors whose books were never borrowed</h3>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>SELECT a.name
+FROM authors a
+JOIN books b      ON b.author_id = a.id
+LEFT JOIN loans l ON l.book_id = b.id
+GROUP BY a.id, a.name
+HAVING COUNT(l.id) = 0;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Empty: every author has at least one borrowed book. (*The Guide* was never borrowed, but its author's other book was.) Change the query to list <strong>books</strong> never borrowed instead.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Step 5: Day-to-day operations</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>-- Kabir borrows The Guide today
+INSERT INTO loans (book_id, member_id, loaned_on, due_on)
+VALUES (2, 4, '2024-06-10', '2024-06-24');
+
+-- Asha returns Murder on the Orient Express
+UPDATE loans
+SET returned_on = '2024-06-10'
+WHERE id = 2;
+
+-- The library buys another copy of And Then There Were None
+UPDATE books SET copies = copies + 1 WHERE id = 4;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Each statement targets exact rows by id. Try breaking the rules too: a loan for book 99, or a due date before the loan date. The constraints refuse them.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Ideas to extend it</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Add a <code>fines</code> table: ₹5 per day late, calculated from <code>returned_on - due_on</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Support books with several authors using a <code>book_authors</code> junction table.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Add a <code>reservations</code> table for books with no copies available.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Connect it to a program: the Python course shows how to query SQLite from Python.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">What you've learned</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>In 15 lessons you've learned to design tables, protect data with constraints, insert, update and delete safely, filter, sort, group and join, and make it all fast with indexes. That's the SQL most developers and analysts use every day.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Summary</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Good design starts with entities (authors, books, members) and relationships (loans).</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Constraints and indexes are part of the design, not an afterthought.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>JOINs, LEFT JOINs, GROUP BY and CASE answer real business questions.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Keep "today" as a parameter in practice queries; use the database's date function in real apps.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Next, continue with the <strong>Python</strong> course, where you'll write programs that work with data like this.</p>
+<!-- /wp:paragraph -->
+]]></content:encoded>
+		<excerpt:encoded><![CDATA[Design, build and query a complete library database with authors, books, members and loans, using tables, constraints, joins, grouping and indexes.]]></excerpt:encoded>
+		<wp:post_id>15</wp:post_id>
+		<wp:post_date><![CDATA[2026-10-16 03:36:35]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-10-16 03:36:35]]></wp:post_date_gmt>
+		<wp:comment_status><![CDATA[open]]></wp:comment_status>
+		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+		<wp:post_name><![CDATA[sql-project-library-database]]></wp:post_name>
+		<wp:status><![CDATA[draft]]></wp:status>
+		<wp:post_parent>0</wp:post_parent>
+		<wp:menu_order>15</wp:menu_order>
+		<wp:post_type><![CDATA[tutorials]]></wp:post_type>
+		<wp:post_password><![CDATA[]]></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+		<category domain="tutorial_category" nicename="sql"><![CDATA[SQL]]></category>
+		<category domain="tutorial_difficulty" nicename="intermediate"><![CDATA[Intermediate]]></category>
+	</item>
+</channel>
+</rss>
