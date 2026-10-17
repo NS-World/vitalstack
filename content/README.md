@@ -5,7 +5,11 @@ can be reviewed and edited in Git.
 
 ```
 content/
-  lessons/<subject>/NN-slug.md   Tutorial lessons (html 20, css 20, javascript 25, sql 15, python 20)
+  lessons/<subject>/NN-slug.md   Tutorial lessons: 282 across 17 paths (html, css, javascript, sql, python,
+                                 java, java-oop, servlet, jpa, hibernate, spring, spring-boot, jmix,
+                                 react, angular, dsa, dsa-problems)
+  quizzes/<subject>.md           End-of-lesson quizzes (3 questions per lesson)
+  site-pages/<hub>/slug.md       Cheat sheets and free-tool guide pages
   guides/<category>/slug.md      Blog guides (artificial-intelligence, ai-tools, ai-career, programming)
   pages/                         Text for About and Editorial Policy pages
   import/                        Generated WordPress import files (WXR), an alternative to the one-click import
@@ -85,5 +89,55 @@ Special lines (each on its own line):
 
 Supported Markdown: `##`/`###` headings, paragraphs, `-` and `1.` lists,
 `| tables |`, fenced code blocks, `inline code`, **bold** and `[links](/path/)`.
+
+Always put the language after the opening fence (```` ```java ````, `python`,
+`js`, `jsx`, `ts`, `html`, `css`, `sql`, `bash`, `yaml`, `properties`, `text`).
+It picks the highlighting and the label ("Java Example"), and decides whether a
+**Try it Yourself** button appears (only for HTML and plain browser JavaScript).
 Internal links use site paths: `/tutorials/<lesson-slug>/` for lessons and
 `/<guide-slug>/` for guides.
+
+## Quizzes
+
+Each learning path has one file, `content/quizzes/<subject>.md`:
+
+```
+## java-strings                     <- the lesson slug
+Q: How should you compare two Strings?
+- [ ] `a == b`
+- [x] `a.equals(b)`                 <- exactly one [x]
+- [ ] `a = b`
+> == compares references; equals compares characters.   <- explanation shown after answering
+```
+
+Write the options in any order: the build shuffles them (the same way every
+time), so the correct answer isn't always first. Then run:
+
+```
+python3 tools/build_quizzes.py --check
+```
+
+It writes `wp-content/themes/vitalstack/data/quizzes/<subject>.php`, checks that
+every slug is a real lesson, and lists lessons that still have no quiz. Quiz
+questions also feed the daily challenge.
+
+## Cheat sheets and tool pages
+
+`content/site-pages/cheat-sheets/<slug>.md` (and `tools/`) with front matter:
+
+```
+---
+title: Java Cheat Sheet
+slug: java-cheat-sheet
+parent: cheat-sheets
+template: page-cheat-sheet.php
+icon: ☕
+order: 60
+excerpt: One line for cards and search results.
+---
+```
+
+Run `python3 tools/build_pages.py`, then **Create starter structure** in
+VitalStack Setup creates any new pages. The page text comes from the theme, so
+updating the theme updates the sheets (unless you've typed your own text into
+the page in the editor).
