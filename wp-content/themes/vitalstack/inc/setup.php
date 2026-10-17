@@ -144,7 +144,7 @@ function vitalstack_assets() {
 		$data['restUrl']   = esc_url_raw( rest_url( 'vitalstack/v1/progress' ) );
 		$data['restNonce'] = wp_create_nonce( 'wp_rest' );
 	}
-	wp_localize_script( 'vitalstack-main', 'vitalstackData', $data );
+	wp_localize_script( 'vitalstack-main', 'vitalstackData', apply_filters( 'vitalstack_script_data', $data ) );
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );

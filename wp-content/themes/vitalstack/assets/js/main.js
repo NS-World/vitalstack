@@ -589,4 +589,27 @@
 	document.querySelectorAll('[data-back-to-top]').forEach(function (b) {
 		b.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
 	});
+
+	/* ── Installable app: service worker + install button ─────────────────── */
+	if ('serviceWorker' in navigator && data.sw && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+		window.addEventListener('load', function () { navigator.serviceWorker.register(data.sw).catch(function () {}); });
+	}
+	window.addEventListener('beforeinstallprompt', function (e) {
+		e.preventDefault();
+		var until = store.get('vs-install-hide', 0);
+		if (until && Date.now() < until) return;
+		var prompt = e;
+		var box = document.createElement('div');
+		box.className = 'install-app';
+		box.innerHTML = '<button type="button" class="install-app-go">📲 Install the VitalStack app</button><button type="button" class="install-app-x" aria-label="Not now">×</button>';
+		document.body.appendChild(box);
+		box.querySelector('.install-app-go').addEventListener('click', function () {
+			prompt.prompt();
+			prompt.userChoice.finally(function () { box.remove(); });
+		});
+		box.querySelector('.install-app-x').addEventListener('click', function () {
+			store.set('vs-install-hide', Date.now() + 30 * 864e5);
+			box.remove();
+		});
+	});
 })();

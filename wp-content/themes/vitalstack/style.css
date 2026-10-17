@@ -1469,3 +1469,8 @@ p.tool-err { color: #c62828; font-weight: 600; margin: 8px 0; }
 	.tool-out { min-height: 180px; }
 	.tool-frame { height: 320px; }
 }
+
+/* Install-app prompt */
+.install-app { position: fixed; left: 16px; bottom: 16px; z-index: 250; display: flex; align-items: center; gap: 4px; padding: 6px 6px 6px 8px; border-radius: 999px; background: var(--dark); box-shadow: var(--shadow-lg); animation: pop .2s ease; }
+.install-app button { border: 0; background: transparent; color: #fff; font: inherit; font-weight: 700; cursor: pointer; padding: 6px 8px; }
+.install-app-x { font-size: 20px; line-height: 1; opacity: .7; }

@@ -40,7 +40,6 @@ function vitalstack_brand_icons() {
 		printf( '<link rel="icon" href="%s" type="image/svg+xml">' . "\n", esc_url( vitalstack_brand_url( 'favicon.svg' ) ) );
 		printf( '<link rel="apple-touch-icon" href="%s">' . "\n", esc_url( vitalstack_brand_url( 'apple-touch-icon.png' ) ) );
 	}
-	printf( '<link rel="manifest" href="%s">' . "\n", esc_url( vitalstack_brand_url( 'site.webmanifest' ) ) );
 	echo '<meta name="theme-color" content="#0a7d4f">' . "\n";
 }
 add_action( 'wp_head', 'vitalstack_brand_icons', 3 );

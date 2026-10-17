@@ -35,6 +35,7 @@ require VITALSTACK_DIR . '/inc/schema.php';
 require VITALSTACK_DIR . '/inc/certificates.php';
 require VITALSTACK_DIR . '/inc/challenge.php';
 require VITALSTACK_DIR . '/inc/site-pages.php';
+require VITALSTACK_DIR . '/inc/pwa.php';
 require VITALSTACK_DIR . '/inc/mascot.php';
 require VITALSTACK_DIR . '/inc/fun.php';
 require VITALSTACK_DIR . '/inc/ui.php';
