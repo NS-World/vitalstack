@@ -361,7 +361,7 @@
 	}
 
 	/* ── Code blocks: label, copy, try it, highlighting ───────────────────── */
-	var langNames = { xml: 'HTML', html: 'HTML', javascript: 'JavaScript', js: 'JavaScript', css: 'CSS', sql: 'SQL', java: 'Java', python: 'Python', json: 'JSON', bash: 'Terminal', shell: 'Terminal', typescript: 'TypeScript', plaintext: 'Code' };
+	var langNames = { xml: 'HTML', html: 'HTML', javascript: 'JavaScript', js: 'JavaScript', css: 'CSS', sql: 'SQL', java: 'Java', python: 'Python', json: 'JSON', bash: 'Terminal', shell: 'Terminal', typescript: 'TypeScript', yaml: 'YAML', ini: 'Properties', plaintext: 'Code' };
 	function enhanceCode() {
 		// Auto-detect only among the languages the lessons use: faster and more accurate.
 		if (window.hljs) {

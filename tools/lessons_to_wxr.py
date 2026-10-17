@@ -49,9 +49,23 @@ SUBJECT_NAMES = {
     "javascript": "JavaScript",
     "sql": "SQL",
     "python": "Python",
+    "java": "Java",
+    "java-oop": "Java OOP",
+    "servlet": "Servlet & JSP",
+    "jpa": "JPA",
+    "hibernate": "Hibernate",
+    "spring": "Spring",
+    "spring-boot": "Spring Boot",
+    "jmix": "Jmix",
+    "react": "React",
+    "angular": "Angular",
     "dsa": "DSA",
     "dsa-problems": "Interview Problems",
 }
+
+# Code fence language → highlight.js language (the class on <code> skips auto-detection).
+FENCE_LANGS = {"js": "javascript", "jsx": "javascript", "tsx": "typescript", "ts": "typescript", "text": "plaintext",
+               "txt": "plaintext", "properties": "ini", "sh": "bash", "shell": "bash", "yml": "yaml"}
 
 CATEGORY_NAMES = {
     "artificial-intelligence": "Artificial Intelligence",
@@ -117,6 +131,7 @@ def markdown_to_blocks(body):
             i += 1
             continue
         if line.startswith("```"):
+            lang = FENCE_LANGS.get(line[3:].strip().lower(), line[3:].strip().lower())
             code = []
             i += 1
             while i < len(lines) and not lines[i].startswith("```"):
@@ -124,7 +139,8 @@ def markdown_to_blocks(body):
                 i += 1
             i += 1  # closing fence
             escaped = html.escape("\n".join(code), quote=False)
-            out.append(block("code", f'<pre class="wp-block-code"><code>{escaped}</code></pre>'))
+            cls = f' class="language-{lang}"' if re.fullmatch(r"[a-z0-9]+", lang or "") else ""
+            out.append(block("code", f'<pre class="wp-block-code"><code{cls}>{escaped}</code></pre>'))
             continue
         if line.startswith("::viz "):
             # ::viz binary-search {"arr": [1, 3, 5], "target": 3}

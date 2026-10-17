@@ -445,6 +445,56 @@ function vitalstack_setup_paths() {
 			'description' => 'A beginner-friendly language used for automation, data and AI.',
 		),
 		array(
+			'slug'        => 'java',
+			'name'        => 'Java',
+			'description' => 'Core Java from your first program to collections, streams and exceptions, with animations of memory and the call stack.',
+		),
+		array(
+			'slug'        => 'java-oop',
+			'name'        => 'Java OOP',
+			'description' => 'Object-oriented programming in Java: classes, objects, the four pillars and SOLID, with animated diagrams.',
+		),
+		array(
+			'slug'        => 'servlet',
+			'name'        => 'Servlet & JSP',
+			'description' => 'How Java web apps answer HTTP requests: servlets, the lifecycle, filters, sessions and JSP.',
+		),
+		array(
+			'slug'        => 'jpa',
+			'name'        => 'JPA',
+			'description' => 'The Java Persistence API: map classes to tables, relationships, JPQL and the persistence context.',
+		),
+		array(
+			'slug'        => 'hibernate',
+			'name'        => 'Hibernate',
+			'description' => 'The most popular JPA implementation: sessions, caching, lazy loading, the N+1 problem and performance.',
+		),
+		array(
+			'slug'        => 'spring',
+			'name'        => 'Spring',
+			'description' => 'The Spring Framework: IoC, dependency injection, beans, AOP, transactions and Spring MVC.',
+		),
+		array(
+			'slug'        => 'spring-boot',
+			'name'        => 'Spring Boot',
+			'description' => 'Build production-ready REST APIs fast: auto-configuration, Spring Data JPA, validation, security and testing.',
+		),
+		array(
+			'slug'        => 'jmix',
+			'name'        => 'Jmix',
+			'description' => 'Build full-stack business apps in Java with Jmix: entities, views, data access, security and deployment.',
+		),
+		array(
+			'slug'        => 'react',
+			'name'        => 'React',
+			'description' => 'Build modern user interfaces with React: components, props, state, hooks, routing and data fetching.',
+		),
+		array(
+			'slug'        => 'angular',
+			'name'        => 'Angular',
+			'description' => 'Build large web apps with Angular: components, templates, signals, services, routing, forms and RxJS.',
+		),
+		array(
 			'slug'        => 'dsa',
 			'name'        => 'DSA',
 			'description' => 'Data structures and algorithms, one pattern at a time, with live animations you can play, pause and replay.',

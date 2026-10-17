@@ -23,7 +23,7 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 LESSONS = ROOT / "content" / "lessons"
 GUIDES = ROOT / "content" / "guides"
 OUTPUT = ROOT / "wp-content" / "themes" / "vitalstack" / "starter-content" / "content.json"
-SUBJECT_ORDER = ["html", "css", "javascript", "sql", "python", "dsa", "dsa-problems"]
+SUBJECT_ORDER = ["html", "css", "javascript", "sql", "python", "java", "java-oop", "servlet", "jpa", "hibernate", "spring", "spring-boot", "jmix", "react", "angular", "dsa", "dsa-problems"]
 LESSONS_PER_GUIDE = 7
 
 
