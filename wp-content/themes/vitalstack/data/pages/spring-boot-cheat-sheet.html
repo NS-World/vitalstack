@@ -1,0 +1,184 @@
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Core annotations</h2>
+<!-- /wp:heading -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>Annotation</th><th>Purpose</th></tr></thead><tbody><tr><td><code>@SpringBootApplication</code></td><td>main class: config + auto-config + component scan</td></tr><tr><td><code>@Component</code> / <code>@Service</code> / <code>@Repository</code></td><td>beans found by scanning</td></tr><tr><td><code>@Configuration</code> + <code>@Bean</code></td><td>define beans in code</td></tr><tr><td><code>@RestController</code></td><td>controller returning JSON</td></tr><tr><td><code>@Transactional</code></td><td>wrap a method in a transaction</td></tr><tr><td><code>@Value("${x}")</code> / <code>@ConfigurationProperties</code></td><td>read configuration</td></tr><tr><td><code>@Profile("dev")</code></td><td>bean only in a profile</td></tr><tr><td><code>@Primary</code> / <code>@Qualifier("name")</code></td><td>choose between beans</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:paragraph -->
+<p>Prefer <strong>constructor injection</strong> (no <code>@Autowired</code> needed with one constructor).</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">REST controller</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-java">@RestController
+@RequestMapping("/api/courses")
+public class CourseController {
+    private final CourseService service;
+    public CourseController(CourseService service) { this.service = service; }
+
+    @GetMapping
+    public List&lt;CourseResponse&gt; list(@RequestParam(required = false) String q) { return service.search(q); }
+
+    @GetMapping("/{id}")
+    public CourseResponse get(@PathVariable long id) { return service.get(id); }
+
+    @PostMapping
+    public ResponseEntity&lt;CourseResponse&gt; create(@Valid @RequestBody CourseRequest req) {
+        CourseResponse c = service.create(req);
+        return ResponseEntity.created(URI.create("/api/courses/" + c.id())).body(c);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable long id) { service.delete(id); }
+}</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>Status</th><th>When</th></tr></thead><tbody><tr><td>200</td><td>OK</td></tr><tr><td>201</td><td>created (+ Location)</td></tr><tr><td>204</td><td>deleted / no body</td></tr><tr><td>400</td><td>invalid input</td></tr><tr><td>401 / 403</td><td>not logged in / not allowed</td></tr><tr><td>404</td><td>not found</td></tr><tr><td>409</td><td>conflict / duplicate</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Entity and repository</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-java">@Entity
+public class Course {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
+    @Column(nullable = false, length = 100) private String title;
+    @Enumerated(EnumType.STRING) private Level level;
+    @ManyToOne(fetch = FetchType.LAZY) private Teacher teacher;
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true) private List&lt;Lesson&gt; lessons = new ArrayList&lt;&gt;();
+    @Version private int version;
+    protected Course() { }
+}
+
+public interface CourseRepository extends JpaRepository&lt;Course, Long&gt; {
+    List&lt;Course&gt; findByLevelOrderByTitle(Level level);
+    boolean existsByTitleIgnoreCase(String title);
+    Page&lt;Course&gt; findByTitleContainingIgnoreCase(String q, Pageable pageable);
+    @EntityGraph(attributePaths = "lessons") Optional&lt;Course&gt; findWithLessonsById(Long id);
+    @Query("select avg(c.price) from Course c where c.level = :level") Double avgPrice(Level level);
+    @Modifying @Query("update Course c set c.price = c.price * 0.9") int discountAll();
+}</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">DTOs and validation</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-java">public record CourseRequest(@NotBlank @Size(max = 100) String title, @NotNull Level level, @Min(0) int price) { }
+public record CourseResponse(Long id, String title, Level level, int price) { }</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p><code>@NotNull</code>, <code>@NotBlank</code>, <code>@Size</code>, <code>@Min</code>, <code>@Max</code>, <code>@Email</code>, <code>@Pattern</code>, <code>@Past</code>, <code>@Positive</code>, <code>@Valid</code> (nested).</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Errors</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-java">@RestControllerAdvice
+public class ApiErrors {
+    @ExceptionHandler(NotFoundException.class)
+    public ProblemDetail notFound(NotFoundException e) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
+    }
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ProblemDetail invalid(MethodArgumentNotValidException e) {
+        ProblemDetail p = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "Invalid request");
+        p.setProperty("errors", e.getBindingResult().getFieldErrors().stream()
+            .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage, (a, b) -&gt; a)));
+        return p;
+    }
+}</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Configuration</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-yaml">spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/courses
+    username: courses
+    password: ${DB_PASSWORD}
+  jpa:
+    open-in-view: false
+    hibernate.ddl-auto: validate
+server.port: 8080
+logging.level.com.vitalstack: debug
+management.endpoints.web.exposure.include: health,info,metrics</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Run a profile: <code>--spring.profiles.active=prod</code> or <code>SPRING_PROFILES_ACTIVE=prod</code>.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Transactions</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-java">@Service @Transactional
+public class EnrollmentService {
+    @Transactional(readOnly = true) public List&lt;X&gt; list() { … }
+    @Transactional(rollbackFor = Exception.class) public void importFile() { … }
+    @Transactional(propagation = Propagation.REQUIRES_NEW) public void audit() { … }
+}</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Rolls back on unchecked exceptions by default; doesn't work on private methods or self-calls.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Security (JWT resource server)</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-java">@Bean
+SecurityFilterChain api(HttpSecurity http) throws Exception {
+    return http.csrf(c -&gt; c.disable())
+        .sessionManagement(s -&gt; s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .authorizeHttpRequests(a -&gt; a
+            .requestMatchers(HttpMethod.GET, "/api/courses/**").permitAll()
+            .requestMatchers("/api/admin/**").hasRole("ADMIN")
+            .anyRequest().authenticated())
+        .oauth2ResourceServer(o -&gt; o.jwt(Customizer.withDefaults()))
+        .build();
+}
+@Bean PasswordEncoder encoder() { return new BCryptPasswordEncoder(); }</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Testing</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-java">@WebMvcTest(CourseController.class)          // web layer + MockMvc
+@DataJpaTest                                 // JPA + embedded DB, rollback
+@SpringBootTest(webEnvironment = RANDOM_PORT) // everything
+mvc.perform(get("/api/courses/1")).andExpect(status().isOk()).andExpect(jsonPath("$.title").value("Java"));</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Commands</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-bash">./mvnw spring-boot:run
+./mvnw clean package &amp;&amp; java -jar target/app.jar
+./mvnw test
+./mvnw spring-boot:build-image</code></pre>
+<!-- /wp:code -->

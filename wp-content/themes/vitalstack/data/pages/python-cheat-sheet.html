@@ -1,0 +1,197 @@
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Basics</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-python">name = "Asha"            # str
+age = 21                 # int
+price = 499.5            # float
+is_member = True         # bool
+nothing = None
+print(f"{name} is {age}")          # f-string
+x, y = 1, 2; x, y = y, x           # swap
+type(age)                          # &lt;class 'int'&gt;
+int("42"), float("3.5"), str(10)   # conversions</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>Operator</th><th>Meaning</th></tr></thead><tbody><tr><td><code>//</code></td><td>floor division: <code>7 // 2 == 3</code></td></tr><tr><td><code>%</code></td><td>remainder: <code>7 % 2 == 1</code></td></tr><tr><td><code>**</code></td><td>power: <code>2 ** 10 == 1024</code></td></tr><tr><td><code>==</code>, <code>!=</code>, <code>is</code></td><td>equal, not equal, same object</td></tr><tr><td><code>and</code>, <code>or</code>, <code>not</code></td><td>logic</td></tr><tr><td><code>in</code></td><td>membership: <code>"a" in "java"</code></td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Strings</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-python">s = "  Learn Python  "
+s.strip()           # "Learn Python"
+s.lower(), s.upper(), s.title()
+s.replace("Python", "Java")
+"a,b,c".split(",")   # ['a', 'b', 'c']
+"-".join(["a", "b"]) # "a-b"
+s.startswith("  L"), "Py" in s
+"python"[0], "python"[-1], "python"[1:4]   # 'p', 'n', 'yth'
+f"{3.14159:.2f}", f"{1234567:,}"           # '3.14', '1,234,567'</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Lists</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-python">nums = [5, 2, 9]
+nums.append(4); nums.insert(0, 1)
+nums.pop(); nums.remove(9)
+nums.sort(); sorted(nums, reverse=True)
+len(nums), sum(nums), max(nums), min(nums)
+nums[1:3], nums[::-1]          # slice, reversed copy
+squares = [n * n for n in range(5)]
+evens = [n for n in nums if n % 2 == 0]
+copy = nums.copy()             # b = a does NOT copy</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Tuples and sets</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-python">point = (3, 4); x, y = point          # immutable
+tags = {"java", "sql"}                 # unique items
+tags.add("python"); "sql" in tags      # O(1) lookup
+a | b, a &amp; b, a - b                    # union, intersection, difference
+unique = list(set(items))</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Dictionaries</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-python">user = {"name": "Asha", "city": "Pune"}
+user["age"] = 21
+user.get("phone", "N/A")          # safe read
+del user["city"]
+for key, value in user.items(): ...
+counts = {}
+for w in words: counts[w] = counts.get(w, 0) + 1
+from collections import Counter, defaultdict
+Counter(words).most_common(3)
+{k: v for k, v in user.items() if v}</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Conditions and loops</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-python">if marks &gt;= 90:   grade = "A+"
+elif marks &gt;= 75: grade = "A"
+else:             grade = "B"
+label = "Adult" if age &gt;= 18 else "Minor"
+
+for i in range(1, 6): ...          # 1..5
+for i, item in enumerate(items): ...
+for a, b in zip(list1, list2): ...
+while n &gt; 0: n //= 10
+break, continue
+
+match command:
+    case "start": ...
+    case "stop" | "quit": ...
+    case _: ...</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Functions</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-python">def greet(name, greeting="Hello"):
+    """Return a greeting."""
+    return f"{greeting}, {name}!"
+
+greet("Ravi"); greet(name="Ravi", greeting="Hi")
+def total(*nums): return sum(nums)
+def config(**opts): return opts
+square = lambda x: x * x
+sorted(people, key=lambda p: p["age"])
+def add(item, items=None):          # never use a mutable default
+    items = items or []</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Classes</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-python">from dataclasses import dataclass
+
+class Account:
+    rate = 0.04                         # class attribute
+    def __init__(self, owner, balance=0):
+        self.owner = owner
+        self.balance = balance
+    def deposit(self, amount):
+        if amount &lt;= 0: raise ValueError("Positive only")
+        self.balance += amount
+    def __str__(self): return f"{self.owner}: ₹{self.balance}"
+
+class Savings(Account):
+    def add_interest(self): self.balance *= 1 + self.rate
+
+@dataclass
+class Point:
+    x: int
+    y: int = 0</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Files and JSON</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-python">from pathlib import Path
+import json, csv
+
+Path("notes.txt").write_text("hello")
+text = Path("notes.txt").read_text()
+with open("log.txt", "a", encoding="utf-8") as f:
+    f.write("new line\n")
+data = json.loads('{"a": 1}'); json.dumps(data, indent=2)
+with open("data.csv", newline="") as f:
+    for row in csv.DictReader(f): ...</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Errors</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-python">try:
+    n = int(input("Number: "))
+except ValueError as e:
+    print("Not a number:", e)
+else:
+    print("OK")
+finally:
+    print("done")
+raise ValueError("Invalid amount")</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Modules and packages</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-bash">python -m venv .venv &amp;&amp; source .venv/bin/activate   # Windows: .venv\Scripts\activate
+pip install requests
+pip freeze &gt; requirements.txt</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-python">import math, random
+from datetime import date, datetime, timedelta
+math.sqrt(16); random.randint(1, 6); date.today()
+if __name__ == "__main__":
+    main()</code></pre>
+<!-- /wp:code -->

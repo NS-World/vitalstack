@@ -1,0 +1,169 @@
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Page skeleton</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+  &lt;title&gt;Page title&lt;/title&gt;
+  &lt;meta name="description" content="Shown in search results"&gt;
+  &lt;link rel="stylesheet" href="style.css"&gt;
+  &lt;script src="app.js" defer&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  …
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Text</h2>
+<!-- /wp:heading -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>Tag</th><th>Use</th></tr></thead><tbody><tr><td><code>&lt;h1&gt;</code>…<code>&lt;h6&gt;</code></td><td>headings (one h1 per page)</td></tr><tr><td><code>&lt;p&gt;</code></td><td>paragraph</td></tr><tr><td><code>&lt;br&gt;</code> / <code>&lt;hr&gt;</code></td><td>line break / thematic break</td></tr><tr><td><code>&lt;strong&gt;</code> / <code>&lt;em&gt;</code></td><td>important / emphasis</td></tr><tr><td><code>&lt;mark&gt;</code>, <code>&lt;small&gt;</code>, <code>&lt;del&gt;</code>, <code>&lt;ins&gt;</code></td><td>highlight, fine print, deleted, inserted</td></tr><tr><td><code>&lt;sub&gt;</code> / <code>&lt;sup&gt;</code></td><td>H₂O / x²</td></tr><tr><td><code>&lt;code&gt;</code>, <code>&lt;pre&gt;</code>, <code>&lt;kbd&gt;</code></td><td>code, preformatted, keys</td></tr><tr><td><code>&lt;blockquote&gt;</code>, <code>&lt;q&gt;</code>, <code>&lt;cite&gt;</code></td><td>quotes</td></tr><tr><td><code>&lt;abbr title="…"&gt;</code></td><td>abbreviation</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Links and images</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-html">&lt;a href="https://example.com"&gt;External&lt;/a&gt;
+&lt;a href="/about.html"&gt;Same site&lt;/a&gt;
+&lt;a href="#faq"&gt;Jump to section&lt;/a&gt;
+&lt;a href="mailto:hi@example.com"&gt;Email&lt;/a&gt; &lt;a href="tel:+919999999999"&gt;Call&lt;/a&gt;
+&lt;a href="report.pdf" download&gt;Download&lt;/a&gt;
+&lt;a href="…" target="_blank" rel="noopener"&gt;New tab&lt;/a&gt;
+
+&lt;img src="photo.webp" alt="Describe the image" width="600" height="400" loading="lazy"&gt;
+&lt;figure&gt;&lt;img src="chart.png" alt="…"&gt;&lt;figcaption&gt;Caption&lt;/figcaption&gt;&lt;/figure&gt;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Lists</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-html">&lt;ul&gt;&lt;li&gt;Bullet&lt;/li&gt;&lt;/ul&gt;
+&lt;ol start="3"&gt;&lt;li&gt;Numbered&lt;/li&gt;&lt;/ol&gt;
+&lt;dl&gt;&lt;dt&gt;Term&lt;/dt&gt;&lt;dd&gt;Description&lt;/dd&gt;&lt;/dl&gt;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Tables</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-html">&lt;table&gt;
+  &lt;caption&gt;Marks&lt;/caption&gt;
+  &lt;thead&gt;&lt;tr&gt;&lt;th scope="col"&gt;Name&lt;/th&gt;&lt;th scope="col"&gt;Marks&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+  &lt;tbody&gt;&lt;tr&gt;&lt;td&gt;Asha&lt;/td&gt;&lt;td&gt;88&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;
+  &lt;tfoot&gt;&lt;tr&gt;&lt;td colspan="2"&gt;Average: 80&lt;/td&gt;&lt;/tr&gt;&lt;/tfoot&gt;
+&lt;/table&gt;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Forms</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-html">&lt;form action="/signup" method="post"&gt;
+  &lt;label for="email"&gt;Email&lt;/label&gt;
+  &lt;input id="email" name="email" type="email" required&gt;
+
+  &lt;fieldset&gt;
+    &lt;legend&gt;Level&lt;/legend&gt;
+    &lt;label&gt;&lt;input type="radio" name="level" value="beginner" checked&gt; Beginner&lt;/label&gt;
+    &lt;label&gt;&lt;input type="radio" name="level" value="pro"&gt; Pro&lt;/label&gt;
+  &lt;/fieldset&gt;
+
+  &lt;label&gt;&lt;input type="checkbox" name="terms" required&gt; I agree&lt;/label&gt;
+  &lt;select name="course"&gt;&lt;option value="java"&gt;Java&lt;/option&gt;&lt;/select&gt;
+  &lt;textarea name="msg" rows="4"&gt;&lt;/textarea&gt;
+  &lt;button type="submit"&gt;Send&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>Input type</th><th>For</th></tr></thead><tbody><tr><td><code>text</code>, <code>email</code>, <code>password</code>, <code>tel</code>, <code>url</code>, <code>search</code></td><td>text-like</td></tr><tr><td><code>number</code>, <code>range</code></td><td>numbers (<code>min</code>, <code>max</code>, <code>step</code>)</td></tr><tr><td><code>date</code>, <code>time</code>, <code>datetime-local</code>, <code>month</code></td><td>dates</td></tr><tr><td><code>checkbox</code>, <code>radio</code></td><td>choices</td></tr><tr><td><code>file</code></td><td>uploads (<code>accept</code>, <code>multiple</code>)</td></tr><tr><td><code>color</code>, <code>hidden</code></td><td>colour picker, hidden value</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:paragraph -->
+<p>Validation: <code>required</code>, <code>minlength</code>, <code>maxlength</code>, <code>min</code>, <code>max</code>, <code>pattern</code>, <code>type</code>.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Semantic layout</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-html">&lt;header&gt;Logo + &lt;nav&gt;menu&lt;/nav&gt;&lt;/header&gt;
+&lt;main&gt;
+  &lt;article&gt;&lt;h2&gt;Post&lt;/h2&gt;&lt;section&gt;…&lt;/section&gt;&lt;/article&gt;
+  &lt;aside&gt;Related&lt;/aside&gt;
+&lt;/main&gt;
+&lt;footer&gt;© 2026&lt;/footer&gt;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Also: <code>&lt;details&gt;&lt;summary&gt;Question&lt;/summary&gt;Answer&lt;/details&gt;</code>, <code>&lt;time datetime="2026-10-17"&gt;</code>, <code>&lt;address&gt;</code>.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Media</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-html">&lt;video controls width="640" poster="thumb.jpg"&gt;
+  &lt;source src="intro.mp4" type="video/mp4"&gt;
+  &lt;track kind="captions" src="intro.vtt" srclang="en" label="English"&gt;
+&lt;/video&gt;
+&lt;audio controls src="podcast.mp3"&gt;&lt;/audio&gt;
+&lt;iframe src="https://www.youtube.com/embed/ID" title="Video title" loading="lazy" allowfullscreen&gt;&lt;/iframe&gt;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Accessibility checklist</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Use real elements: <code>&lt;button&gt;</code> for actions, <code>&lt;a&gt;</code> for navigation.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Every image has <code>alt</code> (empty <code>alt=""</code> for decorative).</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Every input has a <code>&lt;label&gt;</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>One <code>&lt;h1&gt;</code>, headings in order.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Set <code>lang</code> on <code>&lt;html&gt;</code>; meaningful link text.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Visible focus styles; colour isn't the only signal.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>ARIA only when no HTML element fits.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Global attributes</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p><code>id</code>, <code>class</code>, <code>style</code>, <code>title</code>, <code>lang</code>, <code>hidden</code>, <code>tabindex</code>, <code>data-*</code>, <code>aria-*</code></p>
+<!-- /wp:paragraph -->

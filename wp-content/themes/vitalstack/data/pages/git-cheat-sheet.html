@@ -1,0 +1,145 @@
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Setup</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-bash">git config --global user.name "Asha Kumar"
+git config --global user.email "asha@example.com"
+git config --global init.defaultBranch main
+git init                         # new repository
+git clone https://github.com/user/repo.git</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Daily work</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-bash">git status                       # what changed
+git diff                         # unstaged changes
+git diff --staged                # staged changes
+git add file.js                  # stage a file
+git add -p                       # stage chunk by chunk
+git commit -m "Add login form validation"
+git log --oneline --graph --all  # history
+git show &lt;commit&gt;                # one commit</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Branches</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-bash">git switch -c feature/login      # create and switch
+git switch main
+git branch                       # list
+git branch -d feature/login      # delete (merged)
+git merge feature/login          # merge into current branch
+git rebase main                  # replay your commits on top of main</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Remotes</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-bash">git remote -v
+git fetch origin
+git pull                         # fetch + merge (or rebase with --rebase)
+git push -u origin feature/login # first push of a branch
+git push</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Undo</h2>
+<!-- /wp:heading -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>Situation</th><th>Command</th></tr></thead><tbody><tr><td>discard changes in a file</td><td><code>git restore file.js</code></td></tr><tr><td>unstage a file</td><td><code>git restore --staged file.js</code></td></tr><tr><td>fix the last commit message / add a forgotten file</td><td><code>git commit --amend</code> (before pushing)</td></tr><tr><td>undo a pushed commit safely</td><td><code>git revert &lt;commit&gt;</code></td></tr><tr><td>move back, keep changes</td><td><code>git reset --soft HEAD~1</code></td></tr><tr><td>throw away local commits</td><td><code>git reset --hard origin/main</code> ⚠️</td></tr><tr><td>find "lost" commits</td><td><code>git reflog</code></td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Stash</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-bash">git stash push -m "wip navbar"
+git stash list
+git stash pop</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">.gitignore</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-plaintext">node_modules/
+target/
+.env
+*.log
+.DS_Store</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Never commit secrets (<code>.env</code>, API keys, passwords). If one leaks, <strong>rotate it</strong>: removing the commit isn't enough.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Team workflow (GitHub flow)</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li><code>git switch -c feature/short-name</code> from an up-to-date <code>main</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Small commits with clear messages ("Add …", "Fix …").</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>git push -u origin feature/short-name</code>, open a <strong>pull request</strong>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Review, fix comments, CI passes.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Merge (squash or merge commit), delete the branch, <code>git switch main &amp;&amp; git pull</code>.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Merge conflicts</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-plaintext">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+your version
+=======
+their version
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature/x</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Edit the file to the correct result, remove the markers, then <code>git add file</code> and <code>git commit</code> (or <code>git rebase --continue</code>).</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Good commit messages</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Imperative, short subject: "Add course search endpoint".</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Explain <strong>why</strong> in the body when it isn't obvious.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>One logical change per commit.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->

@@ -1,0 +1,149 @@
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Selectors</h2>
+<!-- /wp:heading -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>Selector</th><th>Matches</th></tr></thead><tbody><tr><td><code>p</code></td><td>all <code>&lt;p&gt;</code></td></tr><tr><td><code>.card</code></td><td>class="card"</td></tr><tr><td><code>#menu</code></td><td>id="menu"</td></tr><tr><td><code>nav a</code></td><td>a inside nav (any depth)</td></tr><tr><td><code>ul &gt; li</code></td><td>direct children</td></tr><tr><td><code>h2 + p</code></td><td>p right after h2</td></tr><tr><td><code>[type="email"]</code></td><td>attribute</td></tr><tr><td><code>a:hover</code>, <code>:focus-visible</code>, <code>:checked</code></td><td>states</td></tr><tr><td><code>li:first-child</code>, <code>:nth-child(2n)</code>, <code>:not(.done)</code></td><td>position / negation</td></tr><tr><td><code>::before</code>, <code>::after</code>, <code>::placeholder</code></td><td>pseudo-elements</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:paragraph -->
+<p>Specificity: inline &gt; <code>#id</code> &gt; <code>.class</code>/<code>:pseudo</code>/<code>[attr]</code> &gt; <code>element</code>. Later rules win ties.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Box model</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-css">*, *::before, *::after { box-sizing: border-box; }   /* width includes padding + border */
+.box {
+  width: 100%; max-width: 640px; min-height: 200px;
+  padding: 16px 24px;          /* top/bottom left/right */
+  margin: 0 auto;              /* centre a block */
+  border: 1px solid #ddd; border-radius: 12px;
+  box-shadow: 0 4px 12px rgb(0 0 0 / .1);
+  overflow: auto;
+}</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Colours and backgrounds</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-css">color: #0a7d4f;  color: rgb(10 125 79);  color: hsl(156 85% 27%);
+background: rgb(0 0 0 / .5);
+background: linear-gradient(135deg, #0a7d4f, #34c987);
+background: url(hero.webp) center / cover no-repeat;
+opacity: .8;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Text</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-css">font-family: Inter, system-ui, sans-serif;
+font-size: 1.125rem; font-weight: 600; line-height: 1.6;
+text-align: center; text-transform: uppercase; letter-spacing: .02em;
+text-decoration: none;
+white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+font-size: clamp(1.5rem, 4vw, 2.5rem);   /* fluid */</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Units: <code>px</code> fixed, <code>rem</code> root font size, <code>em</code> element font size, <code>%</code> parent, <code>vw/vh</code> viewport, <code>fr</code> grid fraction, <code>ch</code> character width.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Flexbox</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-css">.row {
+  display: flex;
+  flex-direction: row;            /* column */
+  justify-content: space-between; /* main axis: flex-start | center | space-around | space-evenly */
+  align-items: center;            /* cross axis: stretch | flex-start | flex-end */
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.item { flex: 1; }                 /* grow to share space */
+.sidebar { flex: 0 0 240px; }      /* grow shrink basis */
+.center { display: flex; place-items: center; justify-content: center; }</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Grid</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-css">.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));   /* responsive cards */
+  gap: 20px;
+}
+.layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  grid-template-areas: "side main";
+}
+.big { grid-column: span 2; }
+.main { grid-area: main; }</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Position and display</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-css">display: block | inline | inline-block | flex | grid | none;
+position: relative;                         /* anchor for absolute children */
+.badge { position: absolute; top: 8px; right: 8px; }
+.header { position: sticky; top: 0; z-index: 10; }
+.toast { position: fixed; bottom: 16px; right: 16px; }
+visibility: hidden;                         /* keeps its space */</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Responsive</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-html">&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-css">/* mobile-first */
+.cards { grid-template-columns: 1fr; }
+@media (min-width: 768px)  { .cards { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 1100px) { .cards { grid-template-columns: repeat(3, 1fr); } }
+@media (prefers-color-scheme: dark) { :root { --bg: #10141c; } }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+img { max-width: 100%; height: auto; }</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Variables</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-css">:root { --brand: #0a7d4f; --radius: 12px; --space: 16px; }
+.btn { background: var(--brand); border-radius: var(--radius); padding: calc(var(--space) / 2) var(--space); }
+[data-theme="dark"] { --brand: #34c987; }</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Transitions and animations</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-css">.card { transition: transform .2s ease, box-shadow .2s ease; }
+.card:hover { transform: translateY(-4px); }
+@keyframes spin { to { transform: rotate(360deg); } }
+.loader { animation: spin 1s linear infinite; }</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Animate <code>transform</code> and <code>opacity</code> for smooth 60 fps.</p>
+<!-- /wp:paragraph -->

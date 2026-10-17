@@ -1,0 +1,153 @@
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Querying</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-sql">SELECT name, city FROM students;
+SELECT DISTINCT city FROM students;
+SELECT name, marks * 1.1 AS boosted FROM students;
+SELECT * FROM students ORDER BY marks DESC, name LIMIT 10;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Filtering</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-sql">WHERE marks &gt;= 40 AND city = 'Pune'
+WHERE city IN ('Pune', 'Delhi')
+WHERE marks BETWEEN 60 AND 80          -- inclusive
+WHERE name LIKE 'A%'                   -- starts with A
+WHERE email IS NULL                    -- never = NULL
+WHERE NOT (age &lt; 18)</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Aggregates and grouping</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-sql">SELECT COUNT(*), AVG(marks), MAX(marks), MIN(marks), SUM(fee) FROM students;
+
+SELECT city, COUNT(*) AS students, AVG(marks) AS avg_marks
+FROM students
+WHERE active = TRUE              -- filter rows first
+GROUP BY city
+HAVING COUNT(*) &gt; 5              -- then filter groups
+ORDER BY students DESC;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Joins</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-sql">-- only matching rows
+SELECT o.id, c.name FROM orders o
+JOIN customers c ON c.id = o.customer_id;
+
+-- all customers, even without orders
+SELECT c.name, COUNT(o.id) AS orders
+FROM customers c
+LEFT JOIN orders o ON o.customer_id = c.id
+GROUP BY c.name;
+
+-- customers with no orders
+SELECT c.* FROM customers c
+LEFT JOIN orders o ON o.customer_id = c.id
+WHERE o.id IS NULL;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>Join</th><th>Returns</th></tr></thead><tbody><tr><td><code>INNER JOIN</code></td><td>rows matching in both tables</td></tr><tr><td><code>LEFT JOIN</code></td><td>all left rows + matches (NULL if none)</td></tr><tr><td><code>RIGHT JOIN</code></td><td>all right rows + matches</td></tr><tr><td><code>FULL OUTER JOIN</code></td><td>all rows from both</td></tr><tr><td><code>CROSS JOIN</code></td><td>every combination</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Changing data</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-sql">INSERT INTO students (name, city, marks) VALUES ('Asha', 'Pune', 88), ('Ravi', 'Delhi', 72);
+UPDATE students SET marks = marks + 5 WHERE id = 7;     -- never forget WHERE
+DELETE FROM students WHERE id = 7;
+INSERT INTO archive SELECT * FROM students WHERE year &lt; 2020;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Functions</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-sql">UPPER(name), LOWER(name), LENGTH(name), TRIM(name), SUBSTRING(name, 1, 3)
+CONCAT(first, ' ', last), COALESCE(phone, 'N/A'), ROUND(price, 2)
+CURRENT_DATE, NOW(), EXTRACT(YEAR FROM joined_on)
+CASE WHEN marks &gt;= 75 THEN 'A' WHEN marks &gt;= 40 THEN 'Pass' ELSE 'Fail' END</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Tables and constraints</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-sql">CREATE TABLE students (
+  id         INT PRIMARY KEY AUTO_INCREMENT,     -- SERIAL / IDENTITY in PostgreSQL
+  name       VARCHAR(100) NOT NULL,
+  email      VARCHAR(150) UNIQUE,
+  marks      INT CHECK (marks BETWEEN 0 AND 100),
+  city_id    INT REFERENCES cities(id),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+ALTER TABLE students ADD COLUMN phone VARCHAR(15);
+DROP TABLE IF EXISTS temp;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Indexes</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-sql">CREATE INDEX idx_students_city ON students(city);
+CREATE INDEX idx_orders_cust_date ON orders(customer_id, created_at);   -- column order matters
+EXPLAIN SELECT * FROM students WHERE city = 'Pune';</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Index columns used in <code>WHERE</code>, <code>JOIN</code> and <code>ORDER BY</code>; indexes slow down writes slightly.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Subqueries, CTEs and window functions</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-sql">SELECT name FROM students WHERE marks &gt; (SELECT AVG(marks) FROM students);
+
+WITH city_avg AS (
+  SELECT city, AVG(marks) AS avg_marks FROM students GROUP BY city
+)
+SELECT * FROM city_avg WHERE avg_marks &gt; 70;
+
+SELECT name, city, marks,
+       RANK() OVER (PARTITION BY city ORDER BY marks DESC) AS rank_in_city,
+       SUM(fee) OVER (ORDER BY joined_on) AS running_total
+FROM students;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Transactions</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-sql">BEGIN;
+UPDATE accounts SET balance = balance - 500 WHERE id = 1;
+UPDATE accounts SET balance = balance + 500 WHERE id = 2;
+COMMIT;          -- or ROLLBACK;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Order of execution</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p><code>FROM</code> → <code>JOIN</code> → <code>WHERE</code> → <code>GROUP BY</code> → <code>HAVING</code> → <code>SELECT</code> → <code>DISTINCT</code> → <code>ORDER BY</code> → <code>LIMIT</code></p>
+<!-- /wp:paragraph -->

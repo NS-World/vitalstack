@@ -1,0 +1,130 @@
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Big-O from fastest to slowest</h2>
+<!-- /wp:heading -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>Big-O</th><th>Name</th><th>n = 1,000,000</th><th>Example</th></tr></thead><tbody><tr><td>O(1)</td><td>constant</td><td>1</td><td>dict lookup, array index</td></tr><tr><td>O(log n)</td><td>logarithmic</td><td>~20</td><td>binary search</td></tr><tr><td>O(n)</td><td>linear</td><td>1M</td><td>one loop</td></tr><tr><td>O(n log n)</td><td>linearithmic</td><td>~20M</td><td>good sorting</td></tr><tr><td>O(n²)</td><td>quadratic</td><td>10¹² ❌</td><td>nested loops</td></tr><tr><td>O(2ⁿ)</td><td>exponential</td><td>∞ ❌</td><td>all subsets</td></tr><tr><td>O(n!)</td><td>factorial</td><td>∞ ❌</td><td>all permutations</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:paragraph -->
+<p>Rule of thumb: about 10⁸ simple operations per second. n ≤ 10⁵ needs O(n log n) or better.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Data structure costs</h2>
+<!-- /wp:heading -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>Structure</th><th>Access</th><th>Search</th><th>Insert</th><th>Delete</th></tr></thead><tbody><tr><td>Array / list</td><td>O(1)</td><td>O(n)</td><td>O(n) (end: O(1))</td><td>O(n)</td></tr><tr><td>Hash map / set</td><td>–</td><td>O(1) avg</td><td>O(1) avg</td><td>O(1) avg</td></tr><tr><td>Linked list</td><td>O(n)</td><td>O(n)</td><td>O(1) at node</td><td>O(1) at node</td></tr><tr><td>Stack / queue (deque)</td><td>–</td><td>O(n)</td><td>O(1)</td><td>O(1)</td></tr><tr><td>Binary heap</td><td>min O(1)</td><td>O(n)</td><td>O(log n)</td><td>pop O(log n)</td></tr><tr><td>Balanced BST</td><td>O(log n)</td><td>O(log n)</td><td>O(log n)</td><td>O(log n)</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Sorting</h2>
+<!-- /wp:heading -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>Algorithm</th><th>Best</th><th>Average</th><th>Worst</th><th>Space</th><th>Stable</th></tr></thead><tbody><tr><td>Bubble / insertion</td><td>O(n)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>yes</td></tr><tr><td>Selection</td><td>O(n²)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>no</td></tr><tr><td>Merge sort</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n)</td><td>yes</td></tr><tr><td>Quick sort</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n²)</td><td>O(log n)</td><td>no</td></tr><tr><td>Heap sort</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(1)</td><td>no</td></tr><tr><td>Timsort (Python, Java objects)</td><td>O(n)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n)</td><td>yes</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Which pattern?</h2>
+<!-- /wp:heading -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>Problem says…</th><th>Try</th></tr></thead><tbody><tr><td>sorted array, find a target/boundary</td><td>binary search</td></tr><tr><td>pair/triple summing to a target</td><td>hash map, or sort + two pointers</td></tr><tr><td>longest/shortest contiguous subarray or substring</td><td>sliding window</td></tr><tr><td>range sums, subarray sum = k</td><td>prefix sum (+ hash map)</td></tr><tr><td>max subarray sum</td><td>Kadane</td></tr><tr><td>"seen before?", counting, grouping</td><td>hash set / map</td></tr><tr><td>matching brackets, undo, nearest previous</td><td>stack</td></tr><tr><td>next greater / smaller element</td><td>monotonic stack</td></tr><tr><td>top k, k-th largest, merge k lists</td><td>heap</td></tr><tr><td>linked list middle or cycle</td><td>fast &amp; slow pointers</td></tr><tr><td>tree depth, paths, subtree questions</td><td>DFS recursion</td></tr><tr><td>level by level, shortest path (unweighted)</td><td>BFS</td></tr><tr><td>islands, flood fill, mazes</td><td>grid DFS/BFS</td></tr><tr><td>dependencies, ordering</td><td>topological sort</td></tr><tr><td>weighted shortest path</td><td>Dijkstra</td></tr><tr><td>all combinations / permutations</td><td>backtracking</td></tr><tr><td>"number of ways", "min cost", overlapping subproblems</td><td>dynamic programming</td></tr><tr><td>intervals, meetings</td><td>sort + sweep / greedy</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Templates (Python)</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-python"># Binary search: first index where condition is true
+lo, hi = 0, len(a)
+while lo &lt; hi:
+    mid = (lo + hi) // 2
+    if a[mid] &gt;= target: hi = mid
+    else: lo = mid + 1</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-python"># Sliding window: longest valid window
+left = best = 0
+for right, x in enumerate(s):
+    add(x)
+    while not valid():
+        remove(s[left]); left += 1
+    best = max(best, right - left + 1)</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-python"># BFS
+from collections import deque
+q, seen = deque([start]), {start}
+while q:
+    node = q.popleft()
+    for nxt in graph[node]:
+        if nxt not in seen:
+            seen.add(nxt); q.append(nxt)</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-python"># DFS on a tree
+def depth(node):
+    if not node: return 0
+    return 1 + max(depth(node.left), depth(node.right))</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-python"># Backtracking
+def backtrack(path, choices):
+    if done(path): result.append(path[:]); return
+    for c in choices:
+        path.append(c); backtrack(path, next_choices(c)); path.pop()</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-python"># DP (bottom-up)
+dp = [0] * (n + 1); dp[0] = 1
+for i in range(1, n + 1):
+    dp[i] = dp[i - 1] + (dp[i - 2] if i &gt;= 2 else 0)</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-python"># Heap: k largest
+import heapq
+heap = []
+for x in nums:
+    heapq.heappush(heap, x)
+    if len(heap) &gt; k: heapq.heappop(heap)</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Interview checklist</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li>Clarify inputs, outputs, constraints, edge cases.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Walk through an example by hand.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Say the brute force and its Big-O.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Find the pattern; explain the better approach.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Code it cleanly, talking as you go.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Test with examples and edge cases (empty, one item, duplicates, negatives); state time and space.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->

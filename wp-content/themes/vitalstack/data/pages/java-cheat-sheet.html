@@ -1,0 +1,183 @@
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Program and types</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-java">public class Main {
+    public static void main(String[] args) {
+        int age = 21; long views = 3_000_000_000L; double price = 499.5;
+        boolean ok = true; char grade = 'A'; String name = "Asha";
+        var total = price * 2;                // type inferred
+        final double GST = 0.18;              // constant
+        System.out.printf("%s is %d%n", name, age);
+    }
+}</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>Conversion</th><th>Code</th></tr></thead><tbody><tr><td>String → int</td><td><code>Integer.parseInt("42")</code></td></tr><tr><td>int → String</td><td><code>String.valueOf(42)</code></td></tr><tr><td>double → int</td><td><code>(int) 9.99</code> → 9 (truncates)</td></tr><tr><td>rounding</td><td><code>Math.round(9.5)</code> → 10</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Strings</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-java">s.length(); s.charAt(0); s.substring(2, 5); s.indexOf("a");
+s.toUpperCase(); s.trim(); s.isBlank(); s.replace("a", "b");
+s.split(","); String.join("-", list); s.contains("x");
+a.equals(b); a.equalsIgnoreCase(b);         // never == for content
+var sb = new StringBuilder().append("a").append(1); sb.reverse();
+"Hi %s".formatted(name);
+String json = """
+    {"course": "Java"}
+    """;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Control flow</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-java">if (m &gt;= 90) { } else if (m &gt;= 75) { } else { }
+String season = switch (month) {
+    case "DEC", "JAN" -&gt; "Winter";
+    default -&gt; "Other";
+};
+for (int i = 0; i &lt; n; i++) { }
+for (String s : list) { }
+while (n &gt; 0) { n /= 10; }
+do { } while (choice != 0);</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Arrays</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-java">int[] a = {5, 2, 9}; int[] b = new int[10]; int[][] grid = new int[3][4];
+a.length; Arrays.sort(a); Arrays.toString(a); Arrays.fill(b, -1);
+int[] copy = Arrays.copyOf(a, a.length);</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Collections</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-java">List&lt;String&gt; list = new ArrayList&lt;&gt;(List.of("a", "b"));
+list.add("c"); list.get(0); list.remove("a"); list.size(); list.contains("b");
+list.sort(Comparator.naturalOrder()); list.removeIf(s -&gt; s.isEmpty());
+
+Set&lt;Integer&gt; seen = new HashSet&lt;&gt;(); seen.add(3); seen.contains(3);
+Map&lt;String, Integer&gt; count = new HashMap&lt;&gt;();
+count.merge(word, 1, Integer::sum);
+count.getOrDefault("x", 0);
+for (var e : count.entrySet()) { e.getKey(); e.getValue(); }
+
+Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;(); stack.push(1); stack.pop();
+Queue&lt;Integer&gt; queue = new ArrayDeque&lt;&gt;(); queue.offer(1); queue.poll();
+PriorityQueue&lt;Integer&gt; minHeap = new PriorityQueue&lt;&gt;();
+PriorityQueue&lt;Integer&gt; maxHeap = new PriorityQueue&lt;&gt;(Comparator.reverseOrder());</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>Need</th><th>Use</th></tr></thead><tbody><tr><td>ordered list</td><td><code>ArrayList</code></td></tr><tr><td>unique items</td><td><code>HashSet</code> (<code>LinkedHashSet</code> keeps order, <code>TreeSet</code> sorts)</td></tr><tr><td>key → value</td><td><code>HashMap</code> (<code>LinkedHashMap</code>, <code>TreeMap</code>)</td></tr><tr><td>stack / queue</td><td><code>ArrayDeque</code></td></tr><tr><td>min/max first</td><td><code>PriorityQueue</code></td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">OOP</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-java">public abstract class Account {
+    private double balance;                       // encapsulation
+    protected Account(double opening) { balance = opening; }
+    public void deposit(double amt) {
+        if (amt &lt;= 0) throw new IllegalArgumentException("Positive only");
+        balance += amt;
+    }
+    public double getBalance() { return balance; }
+    public abstract double interestRate();        // abstraction
+}
+
+public class Savings extends Account {           // inheritance
+    public Savings(double opening) { super(opening); }
+    @Override public double interestRate() { return 0.04; }   // polymorphism
+}
+
+interface Payment { double fee(double amount); default String name() { return "Payment"; } }</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>Modifier</th><th>Visible in</th></tr></thead><tbody><tr><td><code>private</code></td><td>class</td></tr><tr><td>(none)</td><td>package</td></tr><tr><td><code>protected</code></td><td>package + subclasses</td></tr><tr><td><code>public</code></td><td>everywhere</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Records, enums, sealed</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-java">record Point(int x, int y) { Point { if (x &lt; 0) throw new IllegalArgumentException(); } }
+enum Level { BEGINNER, INTERMEDIATE, ADVANCED }
+sealed interface Shape permits Circle, Square { }
+record Circle(double r) implements Shape { }
+record Square(double side) implements Shape { }
+double area = switch (shape) {
+    case Circle c -&gt; Math.PI * c.r() * c.r();
+    case Square s -&gt; s.side() * s.side();
+};
+if (obj instanceof String s) { s.length(); }</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Exceptions</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-java">try (var reader = Files.newBufferedReader(Path.of("a.txt"))) {
+    reader.readLine();
+} catch (IOException | NumberFormatException e) {
+    System.err.println(e.getMessage());
+} finally { }
+throw new IllegalStateException("Insufficient funds");
+class AppException extends RuntimeException { AppException(String m) { super(m); } }</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Lambdas and streams</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-java">List&lt;String&gt; top = students.stream()
+    .filter(s -&gt; s.marks() &gt;= 75)
+    .sorted(Comparator.comparingInt(Student::marks).reversed())
+    .map(Student::name)
+    .limit(3)
+    .toList();
+double avg = nums.stream().mapToInt(Integer::intValue).average().orElse(0);
+Map&lt;String, List&lt;Student&gt;&gt; byCity = students.stream().collect(Collectors.groupingBy(Student::city));
+Map&lt;String, Long&gt; counts = words.stream().collect(Collectors.groupingBy(w -&gt; w, Collectors.counting()));
+String csv = names.stream().collect(Collectors.joining(", "));
+Optional&lt;Student&gt; best = students.stream().max(Comparator.comparingInt(Student::marks));</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Files and dates</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-java">Files.writeString(Path.of("a.txt"), "hello");
+String text = Files.readString(Path.of("a.txt"));
+List&lt;String&gt; lines = Files.readAllLines(Path.of("a.txt"));
+LocalDate.now().plusDays(14); LocalDateTime.now(); Duration.ofMinutes(90);</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Run</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-bash">javac Main.java &amp;&amp; java Main      # or simply: java Main.java
+jshell                            # quick experiments</code></pre>
+<!-- /wp:code -->

@@ -1,0 +1,158 @@
+<!-- wp:heading -->
+<h2 class="wp-block-heading">CLI</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-bash">npm i -g @angular/cli
+ng new my-app &amp;&amp; cd my-app &amp;&amp; ng serve -o
+ng g c course-card        # component
+ng g s services/course    # service
+ng g pipe duration; ng g guard auth; ng g interface models/course
+ng build; ng test; ng update</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Component</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-typescript">@Component({
+  selector: 'app-course-card',
+  standalone: true,
+  imports: [CurrencyPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `&lt;h3&gt;{{ course().title }}&lt;/h3&gt;
+             &lt;p&gt;{{ course().price | currency:'INR' }}&lt;/p&gt;
+             &lt;button (click)="enroll.emit(course())"&gt;Enroll&lt;/button&gt;`,
+})
+export class CourseCardComponent {
+  course = input.required&lt;Course&gt;();
+  featured = input(false);
+  enroll = output&lt;Course&gt;();
+  label = computed(() =&gt; this.course().title.toUpperCase());
+}</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Template syntax</h2>
+<!-- /wp:heading -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>Syntax</th><th>Meaning</th></tr></thead><tbody><tr><td><code>{{ value }}</code></td><td>interpolation</td></tr><tr><td><code>[src]="url"</code></td><td>property binding</td></tr><tr><td><code>[attr.aria-label]="x"</code></td><td>attribute binding</td></tr><tr><td><code>[class.active]="on"</code> / <code>[style.width.%]="p"</code></td><td>class / style</td></tr><tr><td><code>(click)="save()"</code></td><td>event binding</td></tr><tr><td><code>[(ngModel)]="name"</code></td><td>two-way (FormsModule)</td></tr><tr><td><code>#box</code></td><td>template reference variable</td></tr><tr><td><code>&lt;ng-content /&gt;</code></td><td>content projection</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Control flow</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-html">@if (loading()) { &lt;p&gt;Loading…&lt;/p&gt; } @else if (error()) { &lt;p&gt;{{ error() }}&lt;/p&gt; } @else { … }
+@for (c of courses(); track c.id; let i = $index) { &lt;li&gt;{{ i + 1 }}. {{ c.title }}&lt;/li&gt; } @empty { &lt;li&gt;None&lt;/li&gt; }
+@switch (level) { @case ('Beginner') { … } @default { … } }
+@defer (on viewport) { &lt;app-reviews /&gt; } @placeholder { &lt;p&gt;Reviews&lt;/p&gt; }</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Pipes</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p><code>date:'d MMM y'</code>, <code>currency:'INR'</code>, <code>number:'1.0-2'</code>, <code>percent</code>, <code>uppercase</code>, <code>titlecase</code>, <code>slice:0:20</code>, <code>json</code>, <code>async</code></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-typescript">@Pipe({ name: 'duration', standalone: true })
+export class DurationPipe implements PipeTransform {
+  transform(min: number) { return `${Math.floor(min / 60)}h ${min % 60}m`; }
+}</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Signals</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-typescript">count = signal(0);
+count.set(5); count.update(n =&gt; n + 1); count();
+total = computed(() =&gt; this.price() * this.qty());
+constructor() { effect(() =&gt; localStorage.setItem('n', String(this.count()))); }
+items.update(list =&gt; [...list, item]);       // immutable updates
+data = toSignal(this.http.get&lt;Course[]&gt;('/api/courses'), { initialValue: [] });</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Services and DI</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-typescript">@Injectable({ providedIn: 'root' })
+export class CourseService { private http = inject(HttpClient); list() { return this.http.get&lt;Course[]&gt;('/api/courses'); } }
+
+export class Page { courses = inject(CourseService); }
+@Component({ providers: [DraftService] })   // one instance per component
+export const API_URL = new InjectionToken&lt;string&gt;('API_URL', { providedIn: 'root', factory: () =&gt; '/api' });</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">App config and routing</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-typescript">export const appConfig: ApplicationConfig = {
+  providers: [provideRouter(routes, withComponentInputBinding()), provideHttpClient(withInterceptors([authInterceptor]))],
+};
+export const routes: Routes = [
+  { path: '', component: HomeComponent },
+  { path: 'courses/:id', component: CourseDetailComponent },     // id = input.required&lt;string&gt;()
+  { path: 'admin', canActivate: [authGuard], loadComponent: () =&gt; import('./admin.component').then(m =&gt; m.AdminComponent) },
+  { path: '**', component: NotFoundComponent },
+];
+export const authGuard: CanActivateFn = () =&gt; inject(AuthService).isLoggedIn() || inject(Router).createUrlTree(['/login']);</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-html">&lt;a routerLink="/courses" routerLinkActive="active"&gt;Courses&lt;/a&gt;
+&lt;a [routerLink]="['/courses', c.id]" [queryParams]="{ tab: 'reviews' }"&gt;Open&lt;/a&gt;
+&lt;router-outlet /&gt;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Reactive forms</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-typescript">form = inject(FormBuilder).nonNullable.group({
+  email: ['', [Validators.required, Validators.email]],
+  password: ['', [Validators.required, Validators.minLength(8)]],
+  terms: [false, Validators.requiredTrue],
+});
+submit() { if (this.form.invalid) { this.form.markAllAsTouched(); return; } this.form.getRawValue(); }</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-html">&lt;form [formGroup]="form" (ngSubmit)="submit()"&gt;
+  &lt;input formControlName="email"&gt;
+  @if (form.controls.email.invalid &amp;&amp; form.controls.email.touched) { &lt;small&gt;Invalid email&lt;/small&gt; }
+&lt;/form&gt;</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">HTTP and RxJS</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-typescript">this.http.post&lt;Course&gt;('/api/courses', body);
+query.valueChanges.pipe(debounceTime(300), distinctUntilChanged(), switchMap(q =&gt; api.search(q)));
+catchError(err =&gt; throwError(() =&gt; new Error(err.error?.detail ?? 'Failed')));
+forkJoin([a$, b$]); takeUntilDestroyed();
+export const authInterceptor: HttpInterceptorFn = (req, next) =&gt;
+  next(req.clone({ setHeaders: { Authorization: `Bearer ${token}` } }));</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Lifecycle</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p><code>constructor</code> (DI) → <code>ngOnInit</code> (load data) → <code>ngAfterViewInit</code> (DOM ready) → <code>ngOnDestroy</code> (clean up)</p>
+<!-- /wp:paragraph -->
