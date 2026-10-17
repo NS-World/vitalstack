@@ -1598,6 +1598,262 @@
 		}
 	};
 
+	/* ═══ React and Angular ═════════════════════════════════════════════════ */
+
+	A['react-render'] = {
+		wide: true,
+		title: 'React re-renders: who updates when state changes?',
+		inputs: [{ key: 'memo', label: 'CourseList', type: 'choice', options: ['plain component', 'wrapped in React.memo'] }],
+		defaults: { memo: 'plain component' },
+		code: function (inp) {
+			var m = inp.memo.indexOf('memo') > -1;
+			return ['function App() {', '  const [likes, setLikes] = useState(0);', '  return (', '    <>', '      <Header />', '      <LikeButton likes={likes} onLike={() => setLikes(likes + 1)} />', '      <CourseList courses={COURSES} />', '    </>', '  );', '}', m ? 'const CourseList = React.memo(function CourseList({ courses }) {' : 'function CourseList({ courses }) {', '  return <ul>{courses.map(c => <li key={c.id}>{c.title}</li>)}</ul>;', m ? '});' : '}'];
+		},
+		run: function (inp) {
+			var m = inp.memo.indexOf('memo') > -1, r = recorder(), log = [];
+			var F = flowKit(640, 260, [
+				{ id: 'app', label: 'App', sub: 'state: likes', x: 320, y: 50 }, { id: 'h', label: 'Header', x: 120, y: 160 },
+				{ id: 'b', label: 'LikeButton', sub: 'props: likes', x: 320, y: 160 }, { id: 'l', label: 'CourseList', sub: m ? 'React.memo' : 'props: courses', x: 520, y: 160 },
+				{ id: 'li', label: '<li> × 3', x: 520, y: 235, h: 30 }
+			], [['app', 'h'], ['app', 'b'], ['app', 'l'], ['l', 'li']]);
+			function sc(on, p, e, likes) { return { flow: F(on, p, e), vars: { likes: likes }, chips: { name: 'rendered this time', items: log.slice() } }; }
+			log = ['App', 'Header', 'LikeButton', 'CourseList'];
+			r('First render: React calls every component function once and builds the page. React components are just functions that return UI.', 1, sc([['app', 'done'], ['h', 'done'], ['b', 'done'], ['l', 'done'], ['li', 'done']], null, null, 0));
+			log = [];
+			r('The user clicks Like. onLike calls setLikes(1). React schedules a re-render of the component that OWNS the state: App.', 6, sc([['b', 'active']], pk('b', 'app', 'setLikes(1)', true), null, 0));
+			log.push('App');
+			r('App runs again with likes = 1. Re-rendering a parent re-renders ALL of its children by default.', 2, sc([['app', 'active']], pk('app'), null, 1));
+			log.push('Header');
+			r('Header re-renders even though nothing about it changed. Cheap here, but it adds up in big apps.', 5, sc([['app', 'done'], ['h', 'active']], pk('app', 'h'), { 'app-h': 'active' }, 1));
+			log.push('LikeButton');
+			r('LikeButton gets the new prop likes = 1 and shows "👍 1". This one really needed to update.', 6, sc([['app', 'done'], ['h', 'done'], ['b', 'found']], pk('app', 'b', 'likes=1'), { 'app-b': 'active' }, 1));
+			if (m) {
+				r('CourseList is wrapped in React.memo. React compares old and new props: courses is the same array object → SKIP. No work done.', 11, sc([['app', 'done'], ['h', 'done'], ['b', 'found'], ['l', 'dim'], ['li', 'dim']], pk('app', 'l', 'same props'), { 'app-l': 'done' }, 1));
+				r('Result: 3 components ran instead of 4, and the list items were not touched. Use memo for heavy components whose props rarely change. Keep props stable (no new arrays or functions each render), or memo can\'t help.', 11, Object.assign(sc([['app', 'done'], ['h', 'done'], ['b', 'found'], ['l', 'dim'], ['li', 'dim']], null, null, 1), { out: 'Rendered: ' + log.join(', ') }));
+			} else {
+				log.push('CourseList');
+				r('CourseList re-renders too, and maps over all courses again, even though courses did not change.', 10, sc([['app', 'done'], ['h', 'done'], ['b', 'found'], ['l', 'active'], ['li', 'active']], pk('app', 'l'), { 'app-l': 'active', 'l-li': 'active' }, 1));
+				r('React then diffs the new UI with the old one and only touches the real DOM where something changed (the like count). Re-rendering ≠ repainting, but it still costs time. Try React.memo on CourseList.', 12, Object.assign(sc([['app', 'done'], ['h', 'done'], ['b', 'found'], ['l', 'done'], ['li', 'done']], null, null, 1), { out: 'Rendered: ' + log.join(', ') }));
+			}
+			return r.steps;
+		}
+	};
+
+	A['react-state'] = {
+		title: 'useState: why count + 1 twice gives 1',
+		inputs: [{ key: 'style', label: 'Update style', type: 'choice', options: ['setCount(count + 1)', 'setCount(c => c + 1)'] }],
+		defaults: { style: 'setCount(count + 1)' },
+		code: function (inp) {
+			var fn = inp.style.indexOf('=>') > -1;
+			return ['function Counter() {', '  const [count, setCount] = useState(0);', '  function addTwo() {', fn ? '    setCount(c => c + 1);' : '    setCount(count + 1);', fn ? '    setCount(c => c + 1);' : '    setCount(count + 1);', '    console.log(count);', '  }', '  return <button onClick={addTwo}>{count}</button>;', '}'];
+		},
+		run: function (inp) {
+			var fn = inp.style.indexOf('=>') > -1, r = recorder(), q = [];
+			function sc(vars, hl) { return { vars: vars, queue: { name: 'update queue (for next render)', items: q.slice(), hl: hl } }; }
+			r('count is 0 on screen. The user clicks the button and addTwo() runs. Inside this render, count is a plain constant: 0.', 3, sc({ 'count (this render)': 0, 'shown on screen': 0 }));
+			q.push(fn ? 'c => c + 1' : 'set to 0 + 1 = 1');
+			r(fn ? 'setCount(c => c + 1) queues a FUNCTION. React will run it later with the latest value.' : 'setCount(count + 1) reads count (0) NOW and queues "set to 1". Nothing changes immediately.', 4, sc({ 'count (this render)': 0, 'shown on screen': 0 }, 0));
+			q.push(fn ? 'c => c + 1' : 'set to 0 + 1 = 1');
+			r(fn ? 'The second call queues another function.' : 'The second call also reads count = 0 (still this render!) and queues "set to 1" again.', 5, sc({ 'count (this render)': 0, 'shown on screen': 0 }, 1));
+			r('console.log(count) prints 0. State updates are not instant: they are batched and applied on the next render.', 6, Object.assign(sc({ 'count (this render)': 0, 'shown on screen': 0 }), { out: '0' }));
+			var v = 0;
+			q.forEach(function (u, i) {
+				v = fn ? v + 1 : 1;
+				r('React processes queued update ' + (i + 1) + ': ' + (fn ? 'c = ' + (v - 1) + ' → ' + v + '.' : 'set to 1.') , 2, sc({ 'working value': v, 'shown on screen': 0 }, i));
+			});
+			q = [];
+			r('Re-render: count is now ' + v + '. ' + (fn ? 'Each function got the previous result, so both +1s counted. Use the function form when the new state depends on the old one.' : 'Both updates said "set to 1", so the click only added 1. Fix: setCount(c => c + 1).'), 8, Object.assign(sc({ 'count (this render)': v, 'shown on screen': v }), { out: 'Button shows ' + v }));
+			return r.steps;
+		}
+	};
+
+	A['use-effect'] = {
+		title: 'useEffect: when does it run and clean up?',
+		inputs: [{ key: 'deps', label: 'Dependency array', type: 'choice', options: ['[userId]', '[]', 'none'] }],
+		defaults: { deps: '[userId]' },
+		code: function (inp) {
+			var d = inp.deps === 'none' ? '' : ', ' + inp.deps;
+			return ['function Profile({ userId }) {', '  const [user, setUser] = useState(null);', '  useEffect(() => {', '    const ctrl = new AbortController();', '    fetch(`/api/users/${userId}`, { signal: ctrl.signal })', '      .then(r => r.json()).then(setUser);', '    return () => ctrl.abort();   // cleanup', '  }' + d + ');', '  return <h2>{user?.name}</h2>;', '}'];
+		},
+		run: function (inp) {
+			var d = inp.deps, r = recorder(), log = [], runs = 0;
+			var events = [['mount', 1, 'Profile appears on screen with userId = 1.'], ['render', 1, 'The parent re-renders (e.g. a timer ticks). userId is still 1.'], ['render', 2, 'The user picks another profile: userId becomes 2.'], ['unmount', 2, 'The user leaves the page: Profile is removed.']];
+			var prev = null;
+			events.forEach(function (ev) {
+				var kind = ev[0], id = ev[1];
+				r(ev[2], kind === 'unmount' ? 9 : 1, { vars: { userId: id, 'effect runs': runs }, chips: { name: 'timeline', items: log.slice() } });
+				if (kind === 'unmount') {
+					log.push('cleanup(' + prev + ')');
+					r('Unmount always runs the last cleanup: the request for user ' + prev + ' is aborted if still pending. No memory leaks, no setState on a dead component.', 7, { vars: { userId: id, 'effect runs': runs }, chips: { name: 'timeline', items: log.slice(), hl: log.length - 1 } });
+					return;
+				}
+				var should = kind === 'mount' || d === 'none' || (d === '[userId]' && id !== prev);
+				if (!should) {
+					log.push('skip');
+					r(d === '[]' ? 'Empty array [] means "only after the first render". React skips the effect.' + (id !== prev ? ' Bug alert: userId changed but we still show user ' + prev + '!' : '') : 'React compares the deps: [1] vs [1]: same, so the effect is skipped. 👍', 8, { vars: { userId: id, 'effect runs': runs }, chips: { name: 'timeline', items: log.slice(), hl: log.length - 1 } });
+					return;
+				}
+				if (prev !== null) {
+					log.push('cleanup(' + prev + ')');
+					r('Before running again, React calls the previous cleanup: abort the old request for user ' + prev + '.', 7, { vars: { userId: id, 'effect runs': runs }, chips: { name: 'timeline', items: log.slice(), hl: log.length - 1 } });
+				}
+				runs++; log.push('fetch(' + id + ')'); prev = id;
+				r(kind === 'mount' ? 'After the first paint, the effect runs: fetch user ' + id + '.' : (d === 'none' ? 'No dependency array: the effect runs after EVERY render. Here that means a wasted request for the same user.' : 'Deps changed ([1] → [2]), so the effect runs again: fetch user ' + id + '.'), 5, { vars: { userId: id, 'effect runs': runs }, chips: { name: 'timeline', items: log.slice(), hl: log.length - 1 } });
+			});
+			r(d === '[userId]' ? 'Correct: one fetch per userId, old requests cancelled. List every value from the component that the effect uses.' : d === '[]' ? 'With [] the effect never noticed userId = 2. Missing deps = stale data. Add userId to the array.' : 'Without an array the effect ran ' + runs + ' times for 2 users. Add [userId] to run only when it changes.', 8, { vars: { 'effect runs': runs }, chips: { name: 'timeline', items: log.slice() }, out: 'effect ran ' + runs + ' time(s)' });
+			return r.steps;
+		}
+	};
+
+	A['angular-change-detection'] = {
+		wide: true,
+		title: 'Angular change detection: Default vs OnPush',
+		inputs: [{ key: 'strategy', label: 'CourseListComponent', type: 'choice', options: ['Default', 'OnPush'] }],
+		defaults: { strategy: 'OnPush' },
+		code: function (inp) {
+			return ['@Component({', "  selector: 'app-course-list',", "  template: `@for (c of courses; track c.id) { <li>{{ c.title }}</li> }`,", '  changeDetection: ChangeDetectionStrategy.' + inp.strategy, '})', 'export class CourseListComponent {', '  @Input() courses: Course[] = [];', '}', '', '// In AppComponent:', 'tick()      { this.seconds++; }                          // timer', 'addCourse() { this.courses = [...this.courses, newCourse]; } // new array'];
+		},
+		run: function (inp) {
+			var push = inp.strategy === 'OnPush', r = recorder(), log = [];
+			var F = flowKit(640, 230, [
+				{ id: 'zone', label: 'Event', sub: 'click / timer / HTTP', x: 90, y: 50, shape: 'pill' }, { id: 'app', label: 'AppComponent', x: 320, y: 50 },
+				{ id: 'h', label: 'HeaderComponent', sub: 'shows seconds', x: 140, y: 170 }, { id: 'l', label: 'CourseListComponent', sub: inp.strategy, x: 340, y: 170, w: 170 },
+				{ id: 'f', label: 'FooterComponent', x: 540, y: 170 }
+			], [['zone', 'app', 'run CD'], ['app', 'h'], ['app', 'l', '@Input'], ['app', 'f']]);
+			function sc(on, p, e) { return { flow: F(on, p, e), chips: { name: 'checked', items: log.slice() } }; }
+			[['tick', 'A timer fires: tick() changes seconds. Angular then runs change detection from the ROOT, top to bottom.', 11], ['add', 'The user adds a course: addCourse() assigns a NEW array to courses.', 12]].forEach(function (ev, k) {
+				log = [];
+				r(ev[1], ev[2], sc([['zone', 'active']], pk('zone', 'app', ev[0]), { 'zone-app': 'active' }));
+				log.push('App');
+				r('AppComponent is checked: Angular re-evaluates every binding in its template and compares with the old values.', ev[2], sc([['app', 'active']], pk('app')));
+				log.push('Header');
+				r('HeaderComponent is checked' + (k ? '.' : ': seconds changed, so its text is updated.'), 1, sc([['app', 'done'], ['h', k ? 'done' : 'found']], pk('app', 'h'), { 'app-h': 'active' }));
+				var skip = push && k === 0;
+				if (skip) {
+					r('CourseListComponent uses OnPush. Its @Input courses is the SAME array reference, and no event happened inside it → Angular SKIPS it and its whole subtree.', 4, sc([['app', 'done'], ['h', 'found'], ['l', 'dim']], pk('app', 'l', 'same ref'), { 'app-l': 'done' }));
+				} else {
+					log.push('CourseList');
+					r(push ? 'OnPush, but @Input courses is a NEW array reference → this time the list IS checked and shows the new course. That is why OnPush code uses immutable updates.' : 'Default strategy: CourseListComponent is checked on every event, even when nothing in it changed' + (k ? '. This time it does show the new course.' : '.'), 7, sc([['app', 'done'], ['h', 'done'], ['l', k ? 'found' : 'active']], pk('app', 'l', k ? 'new ref' : ''), { 'app-l': 'active' }));
+				}
+				log.push('Footer');
+				r('FooterComponent (Default) is checked too. Change detection for this event is done.', 1, sc([['app', 'done'], ['h', 'done'], ['l', skip ? 'dim' : 'done'], ['f', 'done']], pk('app', 'f'), { 'app-f': 'active' }));
+			});
+			r(push ? 'OnPush saved a full check of the list on the timer tick. In big apps (or with signals) this keeps the UI fast. Rule: never mutate an @Input array with push(), create a new one.' : 'Default checked the list on every single event. Fine for small apps; switch heavy components to OnPush for speed.', 4, Object.assign(sc([]), { out: push ? 'List checked 1 of 2 times' : 'List checked 2 of 2 times' }));
+			return r.steps;
+		}
+	};
+
+	A['angular-di'] = {
+		wide: true,
+		title: 'Angular dependency injection: which instance do I get?',
+		inputs: [{ key: 'token', label: 'Inject', type: 'choice', options: ['CourseService (providedIn: root)', 'CartService (providers: [] on the component)'] }],
+		defaults: { token: 'CourseService (providedIn: root)' },
+		code: ['@Injectable({ providedIn: \'root\' })', 'export class CourseService { courses = signal<Course[]>([]); }', '', '@Injectable()', 'export class CartService { items: string[] = []; }', '', '@Component({ selector: \'app-cart\', providers: [CartService], … })', 'export class CartComponent {', '  cart = inject(CartService);', '  courses = inject(CourseService);', '}'],
+		run: function (inp) {
+			var root = inp.token.indexOf('Course') === 0, r = recorder(), inst = [];
+			var F = flowKit(640, 290, [
+				{ id: 'root', label: 'Root injector', sub: 'providedIn: root', x: 320, y: 45, w: 170 }, { id: 'app', label: 'AppComponent', sub: 'injector (empty)', x: 320, y: 140 },
+				{ id: 'a', label: 'CartComponent #1', sub: 'providers: [CartService]', x: 160, y: 245, w: 190 }, { id: 'b', label: 'CartComponent #2', sub: 'providers: [CartService]', x: 480, y: 245, w: 190 }
+			], [['root', 'app'], ['app', 'a'], ['app', 'b']]);
+			function sc(on, p, e) { return { flow: F(on, p, e), map: { name: 'instances created', entries: inst.slice() } }; }
+			r('Angular keeps a tree of injectors that mirrors the component tree. inject(X) starts at the asking component and walks UP until some injector provides X.', 9, sc([]));
+			['a', 'b'].forEach(function (c, k) {
+				var nm = 'CartComponent #' + (k + 1);
+				r(nm + ' is created and asks for ' + (root ? 'CourseService' : 'CartService') + '.', root ? 10 : 9, sc([[c, 'active']], pk(c)));
+				if (root) {
+					r('Its own injector has no CourseService, nor does AppComponent\'s… keep walking up.', 10, sc([[c, 'done'], ['app', 'active']], pk(c, 'app', '?', true), {}));
+					if (!k) { inst.push(['CourseService', '#1 (shared)']); }
+					r(k ? 'The root injector already has the instance and returns the SAME object.' : 'The root injector provides it (providedIn: root) and creates ONE instance for the whole app.', 1, sc([[c, 'found'], ['root', 'found']], pk('app', 'root', '?', true)));
+				} else {
+					inst.push(['CartService for ' + nm, 'instance #' + (k + 1)]);
+					r('Found right away: the component\'s own providers: [CartService] creates a NEW instance just for this component (and its children).', 7, sc([[c, 'found']], pk(c)));
+				}
+			});
+			r(root ? 'Both components share one CourseService: perfect for app-wide data and HTTP calls. It is also tree-shakable: dropped from the bundle if unused.' : 'Each cart got its own CartService, so their items never mix. Destroy the component and its service is destroyed too.', root ? 1 : 7, Object.assign(sc([['a', 'found'], ['b', 'found'], ['root', root ? 'found' : '']]), { out: root ? 'cart1.courses === cart2.courses → true' : 'cart1.cart === cart2.cart → false' }));
+			return r.steps;
+		}
+	};
+
+	A['rxjs-pipe'] = {
+		title: 'RxJS pipe: filter → map → take, value by value',
+		inputs: [{ key: 'arr', label: 'Values emitted', type: 'array' }, { key: 'n', label: 'take(n)', type: 'number' }],
+		defaults: { arr: [1, 2, 3, 4, 5, 6, 7, 8], n: 2 },
+		code: function (inp) { return ['import { from, filter, map, take } from \'rxjs\';', '', 'from([' + (inp.arr || []).join(', ') + '])', '  .pipe(', '    filter(x => x % 2 === 0),   // only even', '    map(x => x * 10),', '    take(' + inp.n + ')                     // then complete', '  )', '  .subscribe({ next: v => console.log(v), complete: () => console.log(\'done\') });']; },
+		run: function (inp) {
+			var src = (inp.arr || []).map(Number).filter(function (x) { return !isNaN(x); }).slice(0, 12), n = Math.max(1, Math.min(10, inp.n || 1)), r = recorder();
+			var f = [], m = [], out = [], logs = [];
+			function sc(i, stage) {
+				return { arrays: [
+					{ name: 'source', values: src, cls: clsMap([[i, stage === 'src' ? 'active' : (stage === 'drop' ? 'swap' : 'done')]].concat(range(i < 0 ? 0 : i).map(function (j) { return [j, 'dim']; }))) },
+					{ name: 'after filter', values: f.length ? f : ['–'], cls: stage === 'filter' ? clsMap([[f.length - 1, 'active']]) : {} },
+					{ name: 'after map', values: m.length ? m : ['–'], cls: stage === 'map' ? clsMap([[m.length - 1, 'active']]) : {} },
+					{ name: 'subscriber', values: out.length ? out : ['–'], cls: stage === 'out' ? clsMap([[out.length - 1, 'found']]) : {} }
+				], vars: { 'take counter': out.length + ' / ' + n } };
+			}
+			r('An Observable is a stream of values over time. pipe() chains operators; each value flows through them one at a time, like items on a conveyor belt.', 3, sc(-1, ''));
+			for (var i = 0; i < src.length; i++) {
+				var x = src[i];
+				r('Source emits ' + x + '.', 3, sc(i, 'src'));
+				if (x % 2 !== 0) { r('filter: ' + x + ' is odd → dropped. It never reaches map.', 5, sc(i, 'drop')); continue; }
+				f.push(x); r('filter: ' + x + ' is even → passes.', 5, sc(i, 'filter'));
+				m.push(x * 10); r('map: ' + x + ' × 10 = ' + x * 10 + '.', 6, sc(i, 'map'));
+				out.push(x * 10); logs.push(x * 10);
+				r('take lets it through (' + out.length + ' of ' + n + ') and the subscriber logs ' + x * 10 + '.', 9, Object.assign(sc(i, 'out'), { out: logs.join('\n') }));
+				if (out.length >= n) {
+					logs.push('done');
+					r('take(' + n + ') got enough values: it COMPLETES and unsubscribes from the source. Remaining values (' + (src.slice(i + 1).join(', ') || 'none') + ') are never processed.', 7, Object.assign(sc(i, ''), { out: logs.join('\n') }));
+					return r.steps;
+				}
+			}
+			logs.push('done');
+			r('The source ran out of values, so the stream completes.', 9, Object.assign(sc(src.length, ''), { out: logs.join('\n') }));
+			return r.steps;
+		}
+	};
+
+	A['data-binding'] = {
+		wide: true,
+		title: 'Angular data binding: 4 ways data moves',
+		inputs: [{ key: 'kind', label: 'Binding', type: 'choice', options: ['all four', '{{ interpolation }}', '[property]', '(event)', '[(ngModel)] two-way'] }],
+		defaults: { kind: 'all four' },
+		code: ['@Component({', '  template: `', '    <h2>{{ title }}</h2>', '    <img [src]="logoUrl">', '    <button (click)="like()">👍 {{ likes }}</button>', '    <input [(ngModel)]="name"> Hello {{ name }}', '  `', '})', 'export class CourseCardComponent {', "  title = 'Java Basics'; logoUrl = 'java.svg';", "  likes = 0; name = '';", '  like() { this.likes++; }', '}'],
+		run: function (inp) {
+			var r = recorder(), k = inp.kind, all = k === 'all four';
+			var st = { title: "'Java Basics'", logoUrl: "'java.svg'", likes: 0, name: "''" }, dom = [];
+			var F = flowKit(640, 200, [
+				{ id: 'ts', label: 'Component class', sub: 'TypeScript data', x: 130, y: 100, w: 170, h: 70 }, { id: 'tpl', label: 'Template / DOM', sub: 'what the user sees', x: 510, y: 100, w: 170, h: 70 }
+			], [['ts', 'tpl', 'class → view'], ['tpl', 'ts', 'view → class', 'back']]);
+			function sc(on, p, e) { return { flow: F(on, p, e), vars: clone(st), chips: { name: 'on screen', items: dom.slice() } }; }
+			r('Data binding keeps the class (data) and the template (screen) in sync. Arrows show the direction data moves.', 9, sc([]));
+			if (all || k.indexOf('interp') > -1) {
+				dom.push('<h2>Java Basics</h2>');
+				r('{{ title }} interpolation: one-way, class → view. Angular turns the value into text in the page.', 3, sc([['ts', 'active'], ['tpl', 'found']], pk('ts', 'tpl', 'title'), { 'ts-tpl': 'active' }));
+			}
+			if (all || k.indexOf('[property]') > -1) {
+				dom.push('<img src="java.svg">');
+				r('[src]="logoUrl" property binding: also class → view, but sets a DOM property (src, disabled, value…) instead of text.', 4, sc([['ts', 'active'], ['tpl', 'found']], pk('ts', 'tpl', '[src]'), { 'ts-tpl': 'active' }));
+			}
+			if (all || k.indexOf('(event)') > -1) {
+				dom.push('<button>👍 0</button>');
+				r('(click)="like()" event binding goes the other way: view → class. The user clicks…', 5, sc([['tpl', 'active']], pk('tpl', 'ts', 'click', true), { 'tpl-ts': 'active' }));
+				st.likes = 1;
+				r('…like() runs and likes becomes 1 in the class.', 12, sc([['ts', 'found']], pk('ts')));
+				dom[dom.length - 1] = '<button>👍 1</button>';
+				r('Change detection then pushes the new value back to the view via {{ likes }}.', 5, sc([['tpl', 'found']], pk('ts', 'tpl', 'likes=1'), { 'ts-tpl': 'active' }));
+			}
+			if (all || k.indexOf('ngModel') > -1) {
+				dom.push('<input value="">  Hello ');
+				r('[(ngModel)]="name" is two-way: [ ] class → view plus ( ) view → class. "Banana in a box". Needs FormsModule.', 6, sc([['ts', 'active'], ['tpl', 'active']], null, { 'ts-tpl': 'active', 'tpl-ts': 'active' }));
+				st.name = "'Asha'";
+				r('The user types "Asha": the input event updates name in the class…', 6, sc([['tpl', 'active'], ['ts', 'found']], pk('tpl', 'ts', 'Asha', true), { 'tpl-ts': 'active' }));
+				dom[dom.length - 1] = '<input value="Asha">  Hello Asha';
+				r('…and every binding that uses name updates instantly: "Hello Asha".', 6, sc([['ts', 'found'], ['tpl', 'found']], pk('ts', 'tpl', 'name'), { 'ts-tpl': 'active' }));
+			}
+			r('Remember: {{ }} and [ ] read, ( ) listens, [( )] does both.', 3, Object.assign(sc([['ts', 'done'], ['tpl', 'done']]), { out: dom.join('\n') }));
+			return r.steps;
+		}
+	};
+
 	/* ═══ Renderer ═════════════════════════════════════════════════════════ */
 
 	function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; }
