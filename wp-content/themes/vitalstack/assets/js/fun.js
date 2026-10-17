@@ -179,6 +179,25 @@
 			celebrate(title, res.stats.streak > 1 ? res.stats.streak + '-day streak! Come back tomorrow to keep it.' : 'Your streak has started. Come back tomorrow!', 'cheer', res.gained);
 		}
 	});
+	function certPopup(title, text, href, label) {
+		celebrate(title, text, 'cheer', 0);
+		var box = document.querySelector('.celebrate .celebrate-text');
+		if (!box) return;
+		var old = box.querySelector('.celebrate-link'); if (old) old.remove();
+		var a = document.createElement('a');
+		a.href = href; a.className = 'celebrate-link'; a.textContent = label;
+		box.appendChild(a);
+		clearTimeout(popTimer);
+	}
+	document.addEventListener('vs:cert', function (e) {
+		var c = e.detail || {};
+		setTimeout(function () { certPopup('Course complete! 🎓', 'You finished every ' + (c.course || '') + ' lesson. Your certificate is ready (+100 XP).', c.url, 'View my certificate ❯'); }, 1200);
+	});
+	document.addEventListener('vs:path-complete', function (e) {
+		if (cfg.loggedIn) return; // signed-in readers get vs:cert from the server
+		var d = e.detail || {};
+		setTimeout(function () { certPopup('You finished ' + (d.name || 'the course') + '! 🎓', 'Create a free account to get your certificate. Your progress on this device is kept.', (cfg.accountUrl || '/account/') + (String(cfg.accountUrl).indexOf('?') > -1 ? '&' : '?') + 'tab=register', 'Get my free certificate ❯'); }, 1200);
+	});
 	document.addEventListener('vs:xp', function (e) {
 		if (e.detail && e.detail.xp) paint(e.detail.xp);
 	});

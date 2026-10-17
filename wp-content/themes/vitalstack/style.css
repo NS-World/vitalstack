@@ -1306,3 +1306,35 @@ kbd { font-family: var(--font-mono); font-size: 12px; padding: 1px 7px; border-r
 @keyframes quiz-shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
 @media (prefers-reduced-motion: reduce) { .quiz-opt.is-picked { animation: none; } }
 @media (max-width: 600px) { .quiz { padding: 18px 14px; } .quiz-bot { display: none; } }
+
+/* ==========================================================================
+   Certificates
+   ========================================================================== */
+.cert-page { padding: 40px 0 64px; background: var(--bg-soft); }
+.cert { max-width: 980px; margin: 0 auto; aspect-ratio: 1.414 / 1; background: #fffdf7; color: #1b1f27; border-radius: 6px; padding: 18px; box-shadow: var(--shadow-lg); position: relative; }
+.cert-inner { height: 100%; border: 3px double #c9a227; border-radius: 4px; padding: 4% 6%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background: radial-gradient(600px 300px at 50% 0%, rgba(10, 125, 79, .07), transparent 70%); }
+.cert-top { display: flex; align-items: center; gap: 12px; margin-bottom: 2%; }
+.cert-mark .vs-mark-bg { fill: #0a7d4f; } .cert-mark .vs-mark-ink { stroke: #0a7d4f; }
+.cert-brand { font-size: clamp(20px, 3vw, 30px); font-weight: 800; letter-spacing: -.02em; color: #1b1f27; }
+.cert-kicker { margin: 0 0 3%; font-size: clamp(13px, 1.8vw, 18px); letter-spacing: .32em; text-transform: uppercase; color: #8a6d12; font-weight: 700; }
+.cert-presented { margin: 0; color: #5b6575; font-size: clamp(13px, 1.6vw, 17px); }
+.cert-name { margin: 1% 0 2%; font-size: clamp(30px, 6vw, 60px); font-weight: 800; color: #0a7d4f; letter-spacing: -.02em; border-bottom: 2px solid #e5dcc0; padding: 0 4% 1%; }
+.cert-text { margin: 0 0 4%; font-size: clamp(14px, 2vw, 20px); color: #333b48; max-width: 80%; }
+.cert-foot { display: flex; align-items: center; justify-content: space-between; width: 80%; gap: 12px; }
+.cert-foot > div { display: flex; flex-direction: column; font-size: clamp(12px, 1.5vw, 16px); }
+.cert-label { color: #6b7280; font-size: .8em; text-transform: uppercase; letter-spacing: .08em; }
+.cert-seal { font-size: clamp(32px, 6vw, 60px); }
+.cert-verify { margin: 3% 0 0; font-size: clamp(11px, 1.3vw, 13px); color: #6b7280; }
+.cert-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 24px 0 10px; }
+.cert-note { text-align: center; }
+.dash-certs .cert-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.cert-list li { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 10px; }
+.cert-list li.is-earned { border-color: var(--brand); background: var(--brand-soft); }
+.cert-list-name { flex: 1; font-weight: 600; }
+@media (max-width: 600px) { .cert { padding: 8px; } .cert-inner { padding: 5% 4%; } }
+@media print {
+	@page { size: A4 landscape; margin: 0; }
+	body * { visibility: hidden !important; }
+	.cert, .cert * { visibility: visible !important; }
+	.cert { position: fixed; inset: 0; max-width: none; width: 100%; height: 100%; aspect-ratio: auto; box-shadow: none; border-radius: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}

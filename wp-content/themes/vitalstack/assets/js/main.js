@@ -504,6 +504,7 @@
 				body: JSON.stringify({ progress: progress })
 			}).then(function (r) { return r.ok ? r.json() : null; }).then(function (res) {
 				if (res && res.xp) document.dispatchEvent(new CustomEvent('vs:xp', { detail: res }));
+				if (res && res.newCerts && res.newCerts.length) document.dispatchEvent(new CustomEvent('vs:cert', { detail: res.newCerts[0] }));
 			}).catch(function () {});
 		}, 300);
 	}
@@ -531,6 +532,11 @@
 			}
 			progress[lessonPath] = list;
 			store.set('vs-progress', progress);
+			var pathEl = document.querySelector('[data-path="' + lessonPath + '"][data-total]');
+			if (i === -1 && pathEl && list.length >= parseInt(pathEl.getAttribute('data-total'), 10)) {
+				var nameEl = pathEl.querySelector('summary');
+				document.dispatchEvent(new CustomEvent('vs:path-complete', { detail: { path: lessonPath, name: nameEl ? nameEl.textContent.trim() : '' } }));
+			}
 			syncButton();
 			paintProgress();
 			pushProgress();

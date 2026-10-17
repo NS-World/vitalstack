@@ -144,6 +144,7 @@ get_header();
 					</section>
 
 					<div class="dash-side">
+						<?php vitalstack_certs_panel( $vs_user->ID, $vs_progress ); ?>
 						<section class="panel">
 							<h2><?php esc_html_e( 'Email updates', 'vitalstack' ); ?></h2>
 							<?php if ( ! $vs_verified ) : ?>

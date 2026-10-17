@@ -65,7 +65,9 @@ add_action(
 						}
 						update_user_meta( $uid, 'vs_progress', $progress );
 						$gained = function_exists( 'vitalstack_xp_for_lessons' ) ? vitalstack_xp_for_lessons( $uid, array_unique( $new ) ) : 0;
+						$certs  = function_exists( 'vitalstack_certs_check' ) ? vitalstack_certs_check( $uid, $progress ) : array();
 						return array(
+							'newCerts' => $certs,
 							'progress' => (object) $progress,
 							'xp'       => function_exists( 'vitalstack_xp_stats' ) ? vitalstack_xp_stats( $uid ) : null,
 							'gained'   => $gained,
