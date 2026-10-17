@@ -253,6 +253,51 @@ function vitalstack_run_setup( $remove_samples = true ) {
 		update_option( 'wp_page_for_privacy_policy', $ids['privacy-policy'] );
 	}
 
+	// Theme-managed child pages: cheat sheets and tools (body comes from the theme while empty).
+	if ( function_exists( 'vitalstack_site_pages' ) ) {
+		foreach ( vitalstack_site_pages() as $slug => $def ) {
+			$parent = isset( $ids[ $def['parent'] ] ) ? (int) $ids[ $def['parent'] ] : 0;
+			if ( ! $parent || get_page_by_path( $def['parent'] . '/' . $slug ) ) {
+				continue;
+			}
+			$id = wp_insert_post(
+				array(
+					'post_type'     => 'page',
+					'post_title'    => $def['title'],
+					'post_name'     => $slug,
+					'post_excerpt'  => $def['excerpt'],
+					'post_content'  => '',
+					'post_status'   => 'publish',
+					'post_parent'   => $parent,
+					'post_author'   => $author,
+					'menu_order'    => (int) $def['order'],
+					'page_template' => $def['template'],
+				)
+			);
+			if ( $id && ! is_wp_error( $id ) ) {
+				/* translators: %s: page title */
+				$report[] = sprintf( __( 'Page created: %s', 'vitalstack' ), $def['title'] );
+			}
+		}
+	}
+
+	// Newer menu links, added once to the main menu the wizard created earlier.
+	$main = wp_get_nav_menu_object( 'VitalStack Main' );
+	if ( $main ) {
+		$have = array();
+		foreach ( (array) wp_get_nav_menu_items( $main->term_id ) as $item ) {
+			$have[] = (int) $item->object_id;
+		}
+		$pos = count( $have );
+		foreach ( array( array( 'page', 'daily-challenge', __( 'Daily Challenge', 'vitalstack' ) ), array( 'page', 'tools', __( 'Free Tools', 'vitalstack' ) ), array( 'page', 'cheat-sheets', __( 'Cheat Sheets', 'vitalstack' ) ) ) as $item ) {
+			if ( ! empty( $ids[ $item[1] ] ) && ! in_array( (int) $ids[ $item[1] ], $have, true ) ) {
+				vitalstack_setup_add_menu_item( $main->term_id, $item, $ids, ++$pos );
+				/* translators: %s: menu label */
+				$report[] = sprintf( __( 'Menu link added: %s', 'vitalstack' ), $item[2] );
+			}
+		}
+	}
+
 	// Menus (only created and assigned if missing).
 	$locations = get_theme_mod( 'nav_menu_locations', array() );
 	$menus     = array(
@@ -493,6 +538,24 @@ function vitalstack_setup_pages() {
 			'title'    => 'Interview Problems',
 			'status'   => 'publish',
 			'template' => 'page-dsa-problems.php',
+			'content'  => '',
+		),
+		'daily-challenge'  => array(
+			'title'    => 'Daily Challenge',
+			'status'   => 'publish',
+			'template' => 'page-daily-challenge.php',
+			'content'  => '',
+		),
+		'cheat-sheets'     => array(
+			'title'    => 'Cheat Sheets',
+			'status'   => 'publish',
+			'template' => 'page-cheat-sheets.php',
+			'content'  => '',
+		),
+		'tools'            => array(
+			'title'    => 'Free Coding Tools',
+			'status'   => 'publish',
+			'template' => 'page-tools.php',
 			'content'  => '',
 		),
 		'contact-us'       => array(

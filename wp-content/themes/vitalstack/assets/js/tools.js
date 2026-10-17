@@ -1,0 +1,403 @@
+/**
+ * VitalStack free tools. Each tool is built into <div class="tool" data-tool="slug">.
+ *
+ *   python-online-compiler  Python 3 in a Web Worker (Pyodide, loaded on first run)
+ *   sql-playground          SQLite in the browser (sql.js) with a sample database
+ *   json-formatter          format, minify, validate and sort JSON
+ *   regex-tester            live JavaScript regex matching, groups and replace
+ *   html-online-editor      HTML + CSS + JavaScript with a live preview
+ *
+ * Everything runs locally: code never leaves the reader's browser.
+ */
+(function () {
+	'use strict';
+
+	var PYODIDE = 'https://cdn.jsdelivr.net/pyodide/v0.26.4/full/';
+	var SQLJS = 'https://cdn.jsdelivr.net/npm/sql.js@1.10.3/dist/';
+
+	function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; }
+	function btn(label, cls) { var b = el('button', 'btn ' + (cls || 'btn-ghost') + ' btn-sm', label); b.type = 'button'; return b; }
+	function store(key, val) { try { if (val === undefined) return localStorage.getItem('vs-tool-' + key); localStorage.setItem('vs-tool-' + key, val); } catch (e) { return null; } }
+	function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+	function award(ref) { if (window.VS) window.VS.addXP('viz', 'tool-' + ref); }
+
+	/** A code textarea: Tab indents, Ctrl/Cmd+Enter runs. */
+	function codeArea(value, rows, onRun, label) {
+		var t = el('textarea', 'tool-code');
+		t.value = value; t.rows = rows || 12; t.spellcheck = false;
+		t.setAttribute('autocapitalize', 'off'); t.setAttribute('autocomplete', 'off');
+		if (label) t.setAttribute('aria-label', label);
+		t.addEventListener('keydown', function (e) {
+			if (e.key === 'Tab' && !e.shiftKey) {
+				e.preventDefault();
+				var s = t.selectionStart, en = t.selectionEnd;
+				t.value = t.value.slice(0, s) + '    ' + t.value.slice(en);
+				t.selectionStart = t.selectionEnd = s + 4;
+			} else if (e.key === 'Enter' && (e.ctrlKey || e.metaKey) && onRun) {
+				e.preventDefault(); onRun();
+			}
+		});
+		return t;
+	}
+	function panel(title, body, extra) {
+		var p = el('div', 'tool-panel');
+		var h = el('div', 'tool-panel-head'); h.appendChild(el('span', '', title));
+		if (extra) h.appendChild(extra);
+		p.appendChild(h); p.appendChild(body);
+		return p;
+	}
+
+	var tools = {};
+
+	/* ── Python ───────────────────────────────────────────────────────────── */
+	tools['python-online-compiler'] = function (host) {
+		var sample = '# Write Python here and press Run (or Ctrl+Enter)\nname = input("What is your name? ")\nprint(f"Hello, {name}! 👋")\n\nsquares = [n * n for n in range(1, 6)]\nprint("Squares:", squares)\nprint("Total:", sum(squares))\n';
+		var code = codeArea(store('py') || sample, 16, run, 'Python code');
+		var stdin = el('textarea', 'tool-code tool-stdin'); stdin.rows = 3; stdin.value = store('py-in') || 'Asha'; stdin.setAttribute('aria-label', 'Program input');
+		var out = el('pre', 'tool-out'); out.setAttribute('aria-live', 'polite');
+		var status = el('span', 'tool-status', 'Ready');
+		var bRun = btn('▶ Run', 'btn-primary'), bStop = btn('■ Stop'), bClear = btn('Clear'), bReset = btn('Reset');
+		bStop.disabled = true;
+		var bar = el('div', 'tool-bar'); [bRun, bStop, bClear, bReset, status].forEach(function (x) { bar.appendChild(x); });
+		var grid = el('div', 'tool-grid');
+		var left = el('div'); left.appendChild(panel('main.py', code)); left.appendChild(panel('Input (one line per input() call)', stdin));
+		grid.appendChild(left); grid.appendChild(panel('Output', out));
+		host.appendChild(bar); host.appendChild(grid);
+
+		var worker = null, ready = false, timer = null, running = false;
+		function makeWorker() {
+			var src = "importScripts('" + PYODIDE + "pyodide.js');" +
+				"var py=null;var boot=loadPyodide({indexURL:'" + PYODIDE + "'}).then(function(p){py=p;postMessage({type:'ready'});}).catch(function(e){postMessage({type:'fail',text:String(e)});});" +
+				"onmessage=function(e){boot.then(function(){var lines=e.data.stdin.split('\\n'),i=0;" +
+				"py.setStdin({stdin:function(){return i<lines.length?lines[i++]:undefined;}});" +
+				"py.setStdout({batched:function(s){postMessage({type:'out',text:s});}});" +
+				"py.setStderr({batched:function(s){postMessage({type:'err',text:s});}});" +
+				"return py.runPythonAsync(e.data.code).then(function(){postMessage({type:'done'});}).catch(function(err){postMessage({type:'err',text:String(err.message||err).replace(/^Traceback[\\s\\S]*?File \"<exec>\"/,'File \"main.py\"')});postMessage({type:'done'});});});};";
+			var w = new Worker(URL.createObjectURL(new Blob([src], { type: 'text/javascript' })));
+			w.onmessage = function (e) {
+				var m = e.data;
+				if (m.type === 'ready') { ready = true; status.textContent = 'Python ready'; if (pending) { pending = false; send(); } }
+				else if (m.type === 'fail') { status.textContent = 'Could not load Python. Check your connection.'; finish(); }
+				else if (m.type === 'out') out.appendChild(document.createTextNode(m.text + '\n'));
+				else if (m.type === 'err') out.appendChild(el('span', 'tool-err', m.text + '\n'));
+				else if (m.type === 'done') { finish(); status.textContent = 'Finished'; award('python'); }
+				out.scrollTop = out.scrollHeight;
+			};
+			return w;
+		}
+		var pending = false;
+		function send() {
+			running = true; bRun.disabled = true; bStop.disabled = false;
+			status.textContent = 'Running…';
+			clearTimeout(timer);
+			timer = setTimeout(function () { stop('Stopped: the program ran for more than 20 seconds (infinite loop?).'); }, 20000);
+			worker.postMessage({ code: code.value, stdin: stdin.value });
+		}
+		function finish() { running = false; bRun.disabled = false; bStop.disabled = true; clearTimeout(timer); }
+		function stop(msg) {
+			if (worker) worker.terminate();
+			worker = null; ready = false; finish();
+			out.appendChild(el('span', 'tool-err', (msg || 'Stopped.') + '\n'));
+			status.textContent = 'Stopped';
+		}
+		function run() {
+			if (running) return;
+			store('py', code.value); store('py-in', stdin.value);
+			out.textContent = '';
+			if (!worker) { worker = makeWorker(); status.textContent = 'Loading Python (first run takes a few seconds)…'; }
+			if (ready) send(); else { pending = true; bRun.disabled = true; }
+		}
+		bRun.addEventListener('click', run);
+		bStop.addEventListener('click', function () { stop(); });
+		bClear.addEventListener('click', function () { out.textContent = ''; });
+		bReset.addEventListener('click', function () { code.value = sample; store('py', sample); });
+	};
+
+	/* ── SQL ──────────────────────────────────────────────────────────────── */
+	var SAMPLE_DB = [
+		"CREATE TABLE students (id INTEGER PRIMARY KEY, name TEXT NOT NULL, city TEXT, age INTEGER);",
+		"CREATE TABLE courses (id INTEGER PRIMARY KEY, title TEXT NOT NULL, level TEXT, price INTEGER);",
+		"CREATE TABLE enrollments (student_id INTEGER REFERENCES students(id), course_id INTEGER REFERENCES courses(id), score INTEGER, enrolled_on TEXT);",
+		"INSERT INTO students VALUES (1,'Asha','Mumbai',21),(2,'Rohan','Delhi',23),(3,'Meera','Pune',20),(4,'Kabir','Mumbai',25),(5,'Zoya','Bengaluru',22),(6,'Arjun','Delhi',24);",
+		"INSERT INTO courses VALUES (1,'HTML Basics','Beginner',0),(2,'Python','Beginner',499),(3,'SQL','Beginner',299),(4,'Java OOP','Intermediate',799),(5,'Spring Boot','Advanced',999);",
+		"INSERT INTO enrollments VALUES (1,1,92,'2026-01-10'),(1,2,85,'2026-02-01'),(2,2,78,'2026-02-03'),(2,4,88,'2026-03-15'),(3,1,95,'2026-01-12'),(3,3,81,'2026-02-20'),(4,5,72,'2026-04-02'),(5,2,90,'2026-02-11'),(5,3,87,'2026-03-01'),(6,4,65,'2026-03-20');"
+	].join('\n');
+	var SQL_EXAMPLES = [
+		['All students', 'SELECT * FROM students;'],
+		['Filter + sort', "SELECT name, age FROM students\nWHERE city = 'Mumbai'\nORDER BY age DESC;"],
+		['Count per city', 'SELECT city, COUNT(*) AS students\nFROM students\nGROUP BY city\nORDER BY students DESC;'],
+		['JOIN', 'SELECT s.name, c.title, e.score\nFROM enrollments e\nJOIN students s ON s.id = e.student_id\nJOIN courses c ON c.id = e.course_id\nORDER BY e.score DESC;'],
+		['Average score', 'SELECT c.title, ROUND(AVG(e.score), 1) AS avg_score\nFROM courses c\nLEFT JOIN enrollments e ON e.course_id = c.id\nGROUP BY c.id;']
+	];
+	function loadScript(src) {
+		return new Promise(function (resolve, reject) {
+			var s = document.createElement('script'); s.src = src; s.onload = resolve; s.onerror = reject; document.head.appendChild(s);
+		});
+	}
+	tools['sql-playground'] = function (host) {
+		var code = codeArea(store('sql') || SQL_EXAMPLES[3][1], 9, run, 'SQL query');
+		var out = el('div', 'tool-results'); out.setAttribute('aria-live', 'polite');
+		var status = el('span', 'tool-status', 'Loading SQLite…');
+		var bRun = btn('▶ Run', 'btn-primary'), bReset = btn('Reset database');
+		bRun.disabled = true;
+		var bar = el('div', 'tool-bar'); [bRun, bReset, status].forEach(function (x) { bar.appendChild(x); });
+		var chips = el('div', 'tool-chips');
+		SQL_EXAMPLES.forEach(function (ex) {
+			var c = el('button', 'chip', ex[0]); c.type = 'button';
+			c.addEventListener('click', function () { code.value = ex[1]; run(); });
+			chips.appendChild(c);
+		});
+		var schema = el('div', 'tool-schema');
+		var grid = el('div', 'tool-grid is-sql');
+		var left = el('div'); left.appendChild(panel('query.sql', code)); left.appendChild(chips);
+		grid.appendChild(left); grid.appendChild(panel('Tables', schema));
+		host.appendChild(bar); host.appendChild(grid); host.appendChild(panel('Result', out));
+
+		var SQL = null, db = null;
+		function fresh() { if (db) db.close(); db = new SQL.Database(); db.run(SAMPLE_DB); paintSchema(); }
+		function paintSchema() {
+			schema.innerHTML = '';
+			var t = db.exec("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name");
+			(t[0] ? t[0].values : []).forEach(function (row) {
+				var cols = db.exec('PRAGMA table_info(' + row[0] + ')')[0].values.map(function (c) { return c[1]; });
+				var d = el('div', 'tool-table');
+				d.innerHTML = '<b>' + esc(row[0]) + '</b><span>' + esc(cols.join(', ')) + '</span>';
+				d.addEventListener('click', function () { code.value = 'SELECT * FROM ' + row[0] + ';'; run(); });
+				schema.appendChild(d);
+			});
+		}
+		function table(res) {
+			var t = el('table', 'tool-table-out');
+			var head = '<tr>' + res.columns.map(function (c) { return '<th>' + esc(c) + '</th>'; }).join('') + '</tr>';
+			var body = res.values.map(function (r) { return '<tr>' + r.map(function (v) { return '<td>' + (v === null ? '<i>NULL</i>' : esc(v)) + '</td>'; }).join('') + '</tr>'; }).join('');
+			t.innerHTML = '<thead>' + head + '</thead><tbody>' + body + '</tbody>';
+			var w = el('div', 'table-scroll'); w.appendChild(t); return w;
+		}
+		function run() {
+			if (!db) return;
+			store('sql', code.value);
+			out.innerHTML = '';
+			try {
+				var t0 = performance.now();
+				var results = db.exec(code.value);
+				var ms = Math.round(performance.now() - t0);
+				if (!results.length) out.appendChild(el('p', 'tool-ok', '✓ Done. ' + db.getRowsModified() + ' row(s) changed (' + ms + ' ms).'));
+				results.forEach(function (r) {
+					out.appendChild(table(r));
+					out.appendChild(el('p', 'tool-meta', r.values.length + ' row(s) · ' + ms + ' ms'));
+				});
+				paintSchema();
+				award('sql');
+			} catch (e) {
+				out.appendChild(el('p', 'tool-err', '✗ ' + e.message));
+			}
+		}
+		bRun.addEventListener('click', run);
+		bReset.addEventListener('click', function () { fresh(); out.innerHTML = ''; out.appendChild(el('p', 'tool-ok', 'Database reset to the sample data.')); });
+		loadScript(SQLJS + 'sql-wasm.js').then(function () {
+			return window.initSqlJs({ locateFile: function (f) { return SQLJS + f; } });
+		}).then(function (S) {
+			SQL = S; fresh(); bRun.disabled = false; status.textContent = 'SQLite ready'; run();
+		}).catch(function () { status.textContent = 'Could not load SQLite. Check your connection.'; });
+	};
+
+	/* ── JSON ─────────────────────────────────────────────────────────────── */
+	function sortKeys(v) {
+		if (Array.isArray(v)) return v.map(sortKeys);
+		if (v && typeof v === 'object') { var o = {}; Object.keys(v).sort().forEach(function (k) { o[k] = sortKeys(v[k]); }); return o; }
+		return v;
+	}
+	/** Position of the first syntax error, found with a tiny JSON scanner. */
+	function jsonErrorAt(t) {
+		var i = 0;
+		function ws() { while (i < t.length && ' \t\n\r'.indexOf(t[i]) > -1) i++; }
+		function fail(msg) { throw { at: i, msg: msg }; }
+		function str() {
+			i++;
+			while (i < t.length && t[i] !== '"') {
+				if (t[i] === '\\') i++;
+				else if (t[i] === '\n') fail('line break inside a string');
+				i++;
+			}
+			if (t[i] !== '"') fail('unclosed string');
+			i++;
+		}
+		function val() {
+			ws();
+			var c = t[i];
+			if (c === '{') {
+				i++; ws();
+				if (t[i] === '}') { i++; return; }
+				for (;;) {
+					ws();
+					if (t[i] !== '"') fail(t[i] === '}' ? 'trailing comma before }' : t[i] === "'" ? 'keys need double quotes "like this", not single quotes' : t[i] === undefined ? 'missing } at the end' : 'keys need double quotes "like this"');
+					str(); ws();
+					if (t[i] !== ':') fail('expected : after the key');
+					i++; val(); ws();
+					if (t[i] === ',') { i++; continue; }
+					if (t[i] === '}') { i++; return; }
+					fail(i >= t.length ? 'missing } at the end' : 'expected , or }');
+				}
+			} else if (c === '[') {
+				i++; ws();
+				if (t[i] === ']') { i++; return; }
+				for (;;) {
+					ws();
+					if (t[i] === ']') fail('trailing comma before ]');
+					val(); ws();
+					if (t[i] === ',') { i++; continue; }
+					if (t[i] === ']') { i++; return; }
+					fail(i >= t.length ? 'missing ] at the end' : 'expected , or ]');
+				}
+			} else if (c === '"') { str(); }
+			else if (c === "'") { fail('use double quotes " not single quotes'); }
+			else {
+				var m = /^-?(0|[1-9]\d*)(\.\d+)?([eE][+-]?\d+)?|^(true|false|null)/.exec(t.slice(i));
+				if (!m) fail(c === undefined ? 'unexpected end of input' : 'unexpected character ' + JSON.stringify(c));
+				i += m[0].length;
+			}
+		}
+		try { val(); ws(); if (i < t.length) fail('extra text after the JSON value'); } catch (e) { if (e && e.at !== undefined) return e; throw e; }
+		return null;
+	}
+	function jsonError(text, err) {
+		var e = jsonErrorAt(text);
+		if (!e) return err.message;
+		var before = text.slice(0, e.at), line = before.split('\n').length, col = e.at - before.lastIndexOf('\n');
+		return 'Line ' + line + ', column ' + col + ': ' + e.msg + '.';
+	}
+	tools['json-formatter'] = function (host) {
+		var sample = '{"name":"VitalStack","free":true,"courses":["HTML","Python","Java"],"stats":{"lessons":300,"quizzes":true}}';
+		var input = codeArea(store('json') || sample, 14, function () { go('format'); }, 'JSON input');
+		var output = el('textarea', 'tool-code'); output.rows = 14; output.readOnly = true; output.setAttribute('aria-label', 'Result');
+		var status = el('p', 'tool-meta', '');
+		var bar = el('div', 'tool-bar');
+		var indent = el('select', 'tool-select'); ['2', '4', 'tab'].forEach(function (v) { var o = el('option', '', v === 'tab' ? 'Tab' : v + ' spaces'); o.value = v; indent.appendChild(o); });
+		var actions = [['Format', 'format', 'btn-primary'], ['Minify', 'minify'], ['Sort keys', 'sort'], ['Validate', 'validate']];
+		actions.forEach(function (a) { var b = btn(a[0], a[2]); b.addEventListener('click', function () { go(a[1]); }); bar.appendChild(b); });
+		bar.appendChild(indent);
+		var copy = btn('Copy result'); copy.addEventListener('click', function () { if (navigator.clipboard) navigator.clipboard.writeText(output.value); copy.textContent = 'Copied ✓'; setTimeout(function () { copy.textContent = 'Copy result'; }, 1400); });
+		bar.appendChild(copy);
+		var grid = el('div', 'tool-grid'); grid.appendChild(panel('Input', input)); grid.appendChild(panel('Result', output));
+		host.appendChild(bar); host.appendChild(grid); host.appendChild(status);
+		function go(mode) {
+			store('json', input.value);
+			var data;
+			try { data = JSON.parse(input.value); } catch (e) {
+				status.className = 'tool-err'; status.textContent = '✗ Invalid JSON. ' + jsonError(input.value, e); output.value = ''; return;
+			}
+			var ind = indent.value === 'tab' ? '\t' : +indent.value;
+			if (mode === 'sort') data = sortKeys(data);
+			output.value = mode === 'minify' ? JSON.stringify(data) : JSON.stringify(data, null, ind);
+			status.className = 'tool-ok';
+			status.textContent = '✓ Valid JSON · ' + (Array.isArray(data) ? 'array of ' + data.length : typeof data === 'object' && data ? Object.keys(data).length + ' top-level keys' : typeof data) + ' · ' + output.value.length + ' characters';
+			award('json');
+		}
+		go('format');
+	};
+
+	/* ── Regex ────────────────────────────────────────────────────────────── */
+	var REGEX_PRESETS = [
+		['Email', '[\\w.+-]+@[\\w-]+\\.[\\w.]+', 'g', 'Write to asha@example.com or support@vitalstack.co.in today.'],
+		['Indian mobile', '(?:\\+91[\\s-]?)?[6-9]\\d{9}', 'g', 'Call +91 9876543210 or 8123456789, not 1234567890.'],
+		['URL', 'https?:\\/\\/[^\\s]+', 'g', 'Docs: https://developer.mozilla.org and http://example.com/page?x=1'],
+		['Date (YYYY-MM-DD)', '(\\d{4})-(\\d{2})-(\\d{2})', 'g', 'Released 2026-10-17, updated 2026-11-02.'],
+		['Hex colour', '#(?:[0-9a-fA-F]{3}){1,2}\\b', 'g', 'Brand #0a7d4f, accent #34c987, white #fff.']
+	];
+	tools['regex-tester'] = function (host) {
+		var saved = {}; try { saved = JSON.parse(store('re') || '{}'); } catch (e) {}
+		var pattern = el('input', 'tool-input'); pattern.value = saved.p || REGEX_PRESETS[0][1]; pattern.setAttribute('aria-label', 'Pattern'); pattern.spellcheck = false;
+		var flags = el('div', 'tool-flags');
+		var flagBoxes = {};
+		[['g', 'global'], ['i', 'ignore case'], ['m', 'multiline'], ['s', 'dot matches newline']].forEach(function (f) {
+			var lab = el('label', 'check'); var cb = el('input'); cb.type = 'checkbox'; cb.checked = (saved.f || 'g').indexOf(f[0]) > -1;
+			lab.appendChild(cb); lab.appendChild(document.createTextNode(' ' + f[0] + ' (' + f[1] + ')')); flags.appendChild(lab); flagBoxes[f[0]] = cb;
+		});
+		var text = codeArea(saved.t || REGEX_PRESETS[0][3], 6, null, 'Test text');
+		var replace = el('input', 'tool-input'); replace.placeholder = 'Replace with… (use $1 for group 1)'; replace.value = saved.r || ''; replace.setAttribute('aria-label', 'Replacement');
+		var view = el('div', 'tool-highlight'); var list = el('div', 'tool-matches'); var replaced = el('pre', 'tool-out is-small');
+		var chips = el('div', 'tool-chips');
+		REGEX_PRESETS.forEach(function (pr) {
+			var c = el('button', 'chip', pr[0]); c.type = 'button';
+			c.addEventListener('click', function () { pattern.value = pr[1]; text.value = pr[3]; Object.keys(flagBoxes).forEach(function (k) { flagBoxes[k].checked = pr[2].indexOf(k) > -1; }); update(); });
+			chips.appendChild(c);
+		});
+		var pwrap = el('div', 'tool-regex'); pwrap.appendChild(el('span', 'tool-slash', '/')); pwrap.appendChild(pattern); pwrap.appendChild(el('span', 'tool-slash', '/'));
+		host.appendChild(panel('Pattern', pwrap)); host.appendChild(flags); host.appendChild(chips);
+		var grid = el('div', 'tool-grid');
+		var left = el('div'); left.appendChild(panel('Test text', text)); left.appendChild(panel('Matches highlighted', view));
+		var right = el('div'); right.appendChild(panel('Match details', list)); right.appendChild(panel('Replace', replace)); right.appendChild(replaced);
+		grid.appendChild(left); grid.appendChild(right); host.appendChild(grid);
+		var awarded = false;
+		function update() {
+			var f = Object.keys(flagBoxes).filter(function (k) { return flagBoxes[k].checked; }).join('');
+			store('re', JSON.stringify({ p: pattern.value, f: f, t: text.value, r: replace.value }));
+			list.innerHTML = ''; replaced.textContent = '';
+			var re;
+			try { re = new RegExp(pattern.value, f.indexOf('g') > -1 ? f : f + 'g'); } catch (e) {
+				view.innerHTML = '<span class="tool-err">✗ ' + esc(e.message) + '</span>'; return;
+			}
+			var s = text.value, html = '', last = 0, n = 0, m;
+			if (pattern.value === '') { view.textContent = s; return; }
+			while ((m = re.exec(s)) && n < 500) {
+				if (m[0] === '') { re.lastIndex++; continue; }
+				html += esc(s.slice(last, m.index)) + '<mark>' + esc(m[0]) + '</mark>';
+				last = m.index + m[0].length; n++;
+				var row = el('div', 'tool-match');
+				row.innerHTML = '<b>#' + n + '</b> <code>' + esc(m[0]) + '</code> <span>at ' + m.index + '</span>' + (m.length > 1 ? '<span> · groups: ' + m.slice(1).map(function (g, i) { return '$' + (i + 1) + '=' + esc(g === undefined ? '∅' : g); }).join(', ') + '</span>' : '');
+				list.appendChild(row);
+				if (f.indexOf('g') === -1) break;
+			}
+			view.innerHTML = html + esc(s.slice(last));
+			if (!n) list.appendChild(el('p', 'tool-meta', 'No matches.'));
+			else list.insertBefore(el('p', 'tool-ok', n + ' match' + (n > 1 ? 'es' : '')), list.firstChild);
+			if (replace.value !== '') { try { replaced.textContent = s.replace(new RegExp(pattern.value, f), replace.value); } catch (e) {} }
+			if (n && !awarded) { awarded = true; award('regex'); }
+		}
+		[pattern, text, replace].forEach(function (x) { x.addEventListener('input', update); });
+		Object.keys(flagBoxes).forEach(function (k) { flagBoxes[k].addEventListener('change', update); });
+		update();
+	};
+
+	/* ── HTML / CSS / JS ──────────────────────────────────────────────────── */
+	tools['html-online-editor'] = function (host) {
+		var defaults = {
+			html: '<h1>Hello, VitalStack!</h1>\n<p>Edit the HTML, CSS and JavaScript and see the result instantly.</p>\n<button id="btn">Click me</button>\n<p id="out"></p>',
+			css: 'body { font-family: system-ui, sans-serif; padding: 24px; }\nh1 { color: #0a7d4f; }\nbutton { padding: 10px 18px; border: 0; border-radius: 8px; background: #0a7d4f; color: #fff; cursor: pointer; }',
+			js: 'let clicks = 0;\ndocument.getElementById("btn").addEventListener("click", () => {\n  clicks++;\n  document.getElementById("out").textContent = `Clicked ${clicks} time(s)`;\n});'
+		};
+		var saved = {}; try { saved = JSON.parse(store('web') || '{}'); } catch (e) {}
+		var areas = {}, tabs = el('div', 'tool-tabs'), stack = el('div', 'tool-stack');
+		['html', 'css', 'js'].forEach(function (k, i) {
+			var t = el('button', 'chip' + (i === 0 ? ' is-active' : ''), k.toUpperCase()); t.type = 'button';
+			var a = codeArea(saved[k] !== undefined ? saved[k] : defaults[k], 16, render, k.toUpperCase());
+			a.hidden = i !== 0;
+			t.addEventListener('click', function () {
+				tabs.querySelectorAll('.chip').forEach(function (c) { c.classList.toggle('is-active', c === t); });
+				Object.keys(areas).forEach(function (x) { areas[x].hidden = x !== k; });
+			});
+			a.addEventListener('input', function () { clearTimeout(timer); timer = setTimeout(render, 500); });
+			tabs.appendChild(t); stack.appendChild(a); areas[k] = a;
+		});
+		var frame = el('iframe', 'tool-frame'); frame.setAttribute('sandbox', 'allow-scripts allow-modals'); frame.title = 'Result';
+		var bar = el('div', 'tool-bar'); var bRun = btn('▶ Run', 'btn-primary'), bReset = btn('Reset');
+		bar.appendChild(bRun); bar.appendChild(bReset); bar.appendChild(el('span', 'tool-status', 'Updates as you type'));
+		var left = el('div'); left.appendChild(tabs); left.appendChild(stack);
+		var grid = el('div', 'tool-grid'); grid.appendChild(left); grid.appendChild(panel('Result', frame));
+		host.appendChild(bar); host.appendChild(grid);
+		var timer, awarded = false;
+		function render() {
+			store('web', JSON.stringify({ html: areas.html.value, css: areas.css.value, js: areas.js.value }));
+			frame.srcdoc = '<!doctype html><html><head><meta charset="utf-8"><style>' + areas.css.value + '</style></head><body>' + areas.html.value + '<script>' + areas.js.value.replace(/<\/script/gi, '<\\/script') + '<\/script></body></html>';
+			if (!awarded) { awarded = true; award('web'); }
+		}
+		bRun.addEventListener('click', render);
+		bReset.addEventListener('click', function () { Object.keys(defaults).forEach(function (k) { areas[k].value = defaults[k]; }); render(); });
+		render();
+	};
+
+	document.querySelectorAll('.tool[data-tool]').forEach(function (host) {
+		var make = tools[host.getAttribute('data-tool')];
+		if (make) make(host);
+	});
+})();

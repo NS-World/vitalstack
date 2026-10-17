@@ -73,7 +73,12 @@ def parse_front_matter(text, path):
             if len(value) > 1 and value[0] == value[-1] and value[0] in "\"'":
                 value = value[1:-1]
             meta[key.strip()] = value
-    required = ("title", "slug", "category") if meta.get("category") else ("title", "slug", "subject", "lesson")
+    if meta.get("parent"):
+        required = ("title", "slug")  # theme-managed site page (tools/build_pages.py)
+    elif meta.get("category"):
+        required = ("title", "slug", "category")
+    else:
+        required = ("title", "slug", "subject", "lesson")
     for key in required:
         if not meta.get(key):
             sys.exit(f"{path}: front matter needs '{key}'")

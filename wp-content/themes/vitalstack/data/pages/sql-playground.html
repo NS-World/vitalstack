@@ -1,0 +1,63 @@
+<!-- wp:heading -->
+<h2 class="wp-block-heading">How to use the SQL playground</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>The playground starts with a small sample database about an online school: <strong>students</strong>, <strong>courses</strong> and <strong>enrollments</strong>. Click a table on the right to see its rows, pick an example query, or write your own and press <strong>Run</strong> (Ctrl + Enter).</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>You can also change data with <code>INSERT</code>, <code>UPDATE</code> and <code>DELETE</code>, or create your own tables. <strong>Reset database</strong> brings back the original sample data.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">The sample database</h2>
+<!-- /wp:heading -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>Table</th><th>Columns</th></tr></thead><tbody><tr><td><code>students</code></td><td>id, name, city, age</td></tr><tr><td><code>courses</code></td><td>id, title, level, price</td></tr><tr><td><code>enrollments</code></td><td>student_id, course_id, score, enrolled_on</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Exercises to try</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li>List students from Delhi, youngest first.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Show each course with the number of students enrolled (include courses with nobody: <code>LEFT JOIN</code>).</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Find the student with the highest average score.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Add a new course and enrol two students in it.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Which city has the most students?</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Stuck? The <a href="/tutorial-category/sql/">SQL tutorials</a> explain every clause step by step.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Good to know</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>This is <strong>SQLite</strong>, running entirely in your browser. Almost everything you learn here works the same in MySQL and PostgreSQL; small differences (like <code>LIMIT</code> vs <code>TOP</code>, or date functions) are explained in the lessons.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Your last query is remembered on this device. Data changes are lost when you reload the page.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->

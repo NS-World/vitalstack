@@ -1,0 +1,59 @@
+<!-- wp:heading -->
+<h2 class="wp-block-heading">How to use the regex tester</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Type a pattern between the slashes and some text below it. Matches are highlighted as you type, and <strong>Match details</strong> lists every match with its position and capture groups. Fill <strong>Replace</strong> to preview a find-and-replace (use <code>$1</code>, <code>$2</code> for groups).</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Try the ready-made patterns for emails, Indian mobile numbers, URLs, dates and hex colours, then change them to see what happens.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Regex cheat sheet</h2>
+<!-- /wp:heading -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>Pattern</th><th>Means</th><th>Example match</th></tr></thead><tbody><tr><td><code>.</code></td><td>any character except newline</td><td><code>a</code>, <code>7</code>, <code>#</code></td></tr><tr><td><code>\d</code> / <code>\D</code></td><td>a digit / not a digit</td><td><code>5</code></td></tr><tr><td><code>\w</code> / <code>\W</code></td><td>letter, digit or <code>_</code> / anything else</td><td><code>a</code>, <code>Z</code>, <code>_</code></td></tr><tr><td><code>\s</code></td><td>whitespace</td><td>space, tab</td></tr><tr><td><code>[abc]</code> / <code>[^abc]</code></td><td>one of / none of</td><td><code>b</code></td></tr><tr><td><code>a*</code> <code>a+</code> <code>a?</code></td><td>0+, 1+, 0 or 1 times</td><td><code>aaa</code></td></tr><tr><td><code>a{3}</code> <code>a{2,4}</code></td><td>exactly 3 / between 2 and 4</td><td><code>aaa</code></td></tr><tr><td><code>^</code> <code>$</code></td><td>start / end of the text (or line with <code>m</code>)</td><td></td></tr><tr><td><code>\b</code></td><td>word boundary</td><td></td></tr><tr><td><code>(...)</code></td><td>capture group</td><td><code>$1</code> in replace</td></tr><tr><td><code>(?:...)</code></td><td>group without capturing</td><td></td></tr><tr><td>`a</td><td>b`</td><td>a or b</td><td></td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Flags</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><code>g</code> global: find every match, not just the first.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>i</code> ignore case.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>m</code> multiline: <code>^</code> and <code>$</code> match at line breaks.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>s</code> dot-all: <code>.</code> also matches newlines.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Using regex in code</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>const emails = "a@x.com, b@y.org".match(/[\w.]+@[\w.]+/g);
+console.log(emails); // ["a@x.com", "b@y.org"]</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>import re
+print(re.findall(r"\d{4}-\d{2}-\d{2}", "Due 2026-10-17 or 2026-11-01"))</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>This tester uses JavaScript's regex engine. Python's <code>re</code> module supports the same core syntax shown above.</p>
+<!-- /wp:paragraph -->

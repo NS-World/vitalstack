@@ -1,0 +1,94 @@
+<!-- wp:heading -->
+<h2 class="wp-block-heading">How to use the Python online compiler</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li>Type or paste your code in <strong>main.py</strong>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>If your program calls <code>input()</code>, put the answers in the <strong>Input</strong> box, one line per <code>input()</code> call.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Press <strong>Run</strong> (or <strong>Ctrl + Enter</strong>). The output appears on the right.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>The first run downloads Python into your browser, which takes a few seconds. After that, runs are instant, even offline in the same tab.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">What you can do here</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Practise every example from the <a href="/tutorial-category/python/">Python tutorials</a> and the <a href="/tutorial-category/dsa/">DSA course</a>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Use the standard library: <code>math</code>, <code>random</code>, <code>datetime</code>, <code>collections</code>, <code>itertools</code>, <code>json</code>, <code>re</code> and more.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Test interview solutions before you write them on a whiteboard.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">A few programs to try</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code># FizzBuzz
+for n in range(1, 16):
+    print("FizzBuzz" if n % 15 == 0 else "Fizz" if n % 3 == 0 else "Buzz" if n % 5 == 0 else n)</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code># Count words in a sentence
+from collections import Counter
+text = "the quick brown fox jumps over the lazy dog the end"
+print(Counter(text.split()).most_common(3))</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Good to know</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Private:</strong> your code runs on your own device and is never uploaded.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Time limit:</strong> a program that runs longer than 20 seconds is stopped, so an accidental infinite loop can't freeze the page. Press <strong>Stop</strong> any time.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Saved automatically:</strong> your last program stays in the editor next time you visit (on this device).</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Limits:</strong> there is no internet access from your code, and files you create disappear when you leave the page. Packages that need a server (like databases or web frameworks) won't run here.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Frequently asked questions</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p><strong>Which Python version is this?</strong> Python 3.12, compiled to WebAssembly (Pyodide).</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p><strong>Why does the first run take a few seconds?</strong> Python itself is downloaded once, then cached by your browser.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>**Can I use <code>input()</code>?** Yes. Fill the Input box before you press Run; each line answers one <code>input()</code> call.</p>
+<!-- /wp:paragraph -->

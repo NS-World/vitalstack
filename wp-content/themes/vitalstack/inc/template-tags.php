@@ -283,6 +283,10 @@ function vitalstack_breadcrumbs() {
 		}
 	} elseif ( is_tax( 'tutorial_category' ) ) {
 		$crumbs[] = array( vitalstack_tutorials_url(), __( 'Tutorials', 'vitalstack' ) );
+	} elseif ( is_page() ) {
+		foreach ( array_reverse( get_post_ancestors( get_queried_object_id() ) ) as $ancestor ) {
+			$crumbs[] = array( get_permalink( $ancestor ), get_the_title( $ancestor ) );
+		}
 	}
 	?>
 	<nav class="breadcrumbs" aria-label="<?php esc_attr_e( 'Breadcrumb', 'vitalstack' ); ?>">
