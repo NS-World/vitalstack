@@ -1532,3 +1532,7 @@ p.tool-err { color: #c62828; font-weight: 600; margin: 8px 0; }
 .vz-svg .vz-uml-link.is-active { stroke: var(--vz-active); stroke-width: 3; }
 .vz-svg .vz-uml-head { fill: var(--surface); stroke: var(--muted); stroke-width: 1.5; }
 .viz .vz-grid td { padding: 0 6px !important; white-space: nowrap; }
+/* Wide visualizers (diagrams): stage full width, code below */
+.viz-wide .viz-body { grid-template-columns: minmax(0, 1fr); }
+.viz-wide .viz-code { border-left: 0 !important; border-top: 1px solid var(--border) !important; max-height: 240px; }
+.viz-wide .vz-svg.vz-flow, .viz-wide .vz-svg.vz-uml, .viz-wide .vz-svg.vz-mem { margin: 0 auto; }

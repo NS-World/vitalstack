@@ -924,6 +924,7 @@
 	function memo(frames, heap) { return { frames: clone(frames), heap: clone(heap) }; }
 
 	A['class-object'] = {
+		wide: true,
 		title: 'Class → objects: one blueprint, many objects',
 		inputs: [{ key: 'names', label: 'Dog names', type: 'array' }],
 		defaults: { names: ['Rex', 'Bella', 'Max'] },
@@ -963,6 +964,7 @@
 	};
 
 	A['java-memory'] = {
+		wide: true,
 		title: 'Stack, heap and references',
 		inputs: [],
 		defaults: {},
@@ -995,6 +997,7 @@
 	};
 
 	A['call-stack'] = {
+		wide: true,
 		title: 'The call stack: recursion step by step',
 		inputs: [{ key: 'n', label: 'n (1-6)', type: 'number' }],
 		defaults: { n: 4 },
@@ -1042,6 +1045,7 @@
 	var ANIMAL_LINE = { Animal: { eat: 2, sleep: 3, speak: 4 }, Dog: { speak: 7, fetch: 8 }, Cat: { speak: 11 }, Puppy: { sleep: 14 } };
 
 	A['inheritance'] = {
+		wide: true,
 		title: 'Inheritance: how Java finds a method',
 		inputs: [{ key: 'type', label: 'Object', type: 'choice', options: ['Puppy', 'Dog', 'Cat', 'Animal'] }, { key: 'method', label: 'Method', type: 'choice', options: ['speak', 'sleep', 'eat', 'fetch'] }],
 		defaults: { type: 'Puppy', method: 'speak' },
@@ -1071,6 +1075,7 @@
 
 	var SOUNDS = { Dog: 'Woof!', Cat: 'Meow!', Cow: 'Moo!', Duck: 'Quack!' };
 	A['polymorphism'] = {
+		wide: true,
 		title: 'Polymorphism: same call, different behaviour',
 		inputs: [{ key: 'zoo', label: 'Animals (Dog, Cat, Cow, Duck)', type: 'array' }],
 		defaults: { zoo: ['Dog', 'Cat', 'Cow', 'Dog'] },
@@ -1098,6 +1103,7 @@
 	};
 
 	A['encapsulation'] = {
+		wide: true,
 		title: 'Encapsulation: private data, safe methods',
 		inputs: [{ key: 'ops', label: 'Operations (deposit 500, withdraw 200…)', type: 'string' }],
 		defaults: { ops: 'deposit 500, withdraw 200, withdraw 1000, deposit -50' },
@@ -1123,6 +1129,7 @@
 	};
 
 	A['interface-shapes'] = {
+		wide: true,
 		title: 'Interfaces: one contract, many classes',
 		inputs: [{ key: 'r', label: 'Circle radius', type: 'number' }, { key: 'w', label: 'Rectangle width', type: 'number' }, { key: 'h', label: 'Rectangle height', type: 'number' }],
 		defaults: { r: 2, w: 3, h: 4 },
@@ -1191,6 +1198,7 @@
 	};
 
 	A['string-pool'] = {
+		wide: true,
 		title: 'Strings: == vs equals() and the string pool',
 		inputs: [],
 		defaults: {},
@@ -1218,6 +1226,7 @@
 	};
 
 	A['exception-flow'] = {
+		wide: true,
 		title: 'try / catch / finally: where does the program go?',
 		inputs: [{ key: 'expr', label: 'Input', type: 'choice', options: ['10 / 2', '10 / 0', 'ten / 2'] }],
 		defaults: { expr: '10 / 0' },
@@ -1249,6 +1258,342 @@
 			r('finally runs in every case: success, caught exception, even a return. It is the place to close files and connections.', 11, { flow: fl([['fin', 'found']], from, 'fin', e), chips: { name: 'printed', items: outs.slice() } });
 			outs.push('Program continues');
 			r('Because the exception was handled, the program carries on normally.', 13, { flow: fl([['fin', 'done'], ['end', 'found']], 'fin', 'end', { 'fin-end': 'active' }), chips: { name: 'printed', items: outs.slice() }, out: outs.join(' | ') });
+			return r.steps;
+		}
+	};
+
+	/* ═══ Servlets, JPA / Hibernate, Spring, Jmix ══════════════════════════ */
+
+	/** Build a flow-scene factory from fixed nodes and edges. */
+	function flowKit(w, h, nodes, edges) {
+		return function (on, packet, ecls) {
+			var c = {}; (on || []).forEach(function (x) { c[x[0]] = x[1]; });
+			return { w: w, h: h, nodes: nodes, edges: edges, cls: c, ecls: ecls || {}, packet: packet || null };
+		};
+	}
+	function pk(from, to, label, back) { return { from: from, to: to || from, label: label || '', back: !!back }; }
+
+	A['servlet-lifecycle'] = {
+		wide: true,
+		title: 'Servlet lifecycle: init once, service many times',
+		inputs: [{ key: 'reqs', label: 'Requests (GET, POST…)', type: 'array' }],
+		defaults: { reqs: ['GET', 'GET', 'POST'] },
+		code: ['@WebServlet("/hello")', 'public class HelloServlet extends HttpServlet {', '    public void init() { log("init: created once"); }', '    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {', '        resp.getWriter().println("Hello from GET");', '    }', '    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {', '        resp.getWriter().println("Saved via POST");', '    }', '    public void destroy() { log("destroy: cleaning up"); }', '}'],
+		run: function (inp) {
+			var reqs = (inp.reqs || []).map(function (x) { return String(x).toUpperCase(); }).filter(function (x) { return x === 'GET' || x === 'POST'; }).slice(0, 5), r = recorder(), log = [];
+			if (!reqs.length) reqs = ['GET'];
+			var F = flowKit(640, 330, [
+				{ id: 'b', label: 'Browser', x: 90, y: 70, shape: 'pill' }, { id: 't', label: 'Tomcat', sub: 'servlet container', x: 310, y: 70 },
+				{ id: 'i', label: 'init()', sub: 'first request only', x: 540, y: 70 }, { id: 's', label: 'service()', sub: 'every request', x: 310, y: 170 },
+				{ id: 'g', label: 'doGet()', x: 180, y: 270 }, { id: 'p', label: 'doPost()', x: 440, y: 270 }, { id: 'd', label: 'destroy()', sub: 'on shutdown', x: 560, y: 175 }
+			], [['b', 't', 'request'], ['t', 'i', 'new instance'], ['t', 's'], ['s', 'g', 'GET'], ['s', 'p', 'POST'], ['t', 'b', 'response', 'back'], ['t', 'd', 'stop']]);
+			r('A servlet is a Java class that answers HTTP requests. Tomcat (the container) creates it and calls its lifecycle methods. Nothing has happened yet.', 2, { flow: F([]) });
+			var created = false;
+			reqs.forEach(function (m, k) {
+				r('Request #' + (k + 1) + ': the browser sends ' + m + ' /hello to Tomcat.', 1, { flow: F([['b', 'active'], ['t', 'active']], pk('b', 't', m), { 'b-t': 'active' }), chips: { name: 'server log', items: log.slice() } });
+				if (!created) {
+					created = true; log.push('init: created once');
+					r('First request: Tomcat creates ONE HelloServlet object and calls init(). Good place to open resources.', 3, { flow: F([['t', 'done'], ['i', 'found']], pk('t', 'i'), { 't-i': 'active' }), chips: { name: 'server log', items: log.slice() } });
+				}
+				r('service() looks at the HTTP method and calls the matching handler. ' + (k ? 'Same object as before: no new init().' : ''), 4, { flow: F([['t', 'done'], ['s', 'active']], pk('t', 's'), { 't-s': 'active' }), chips: { name: 'server log', items: log.slice() } });
+				var to = m === 'GET' ? 'g' : 'p', e = {}; e['s-' + to] = 'active';
+				r(m === 'GET' ? 'doGet() writes "Hello from GET" into the response.' : 'doPost() handles the form data and answers "Saved via POST".', m === 'GET' ? 5 : 8, { flow: F([['s', 'done'], [to, 'found']], pk('s', to), e), chips: { name: 'server log', items: log.slice() } });
+				r('The response travels back to the browser. Tomcat keeps the servlet alive for the next request, often on a different thread.', m === 'GET' ? 5 : 8, { flow: F([['b', 'found']], pk('t', 'b', '200 OK', true), { 't-b': 'active' }), chips: { name: 'server log', items: log.slice() }, out: m === 'GET' ? 'Hello from GET' : 'Saved via POST' });
+			});
+			log.push('destroy: cleaning up');
+			r('When the app stops, Tomcat calls destroy() once. ' + reqs.length + ' request(s), 1 object, 1 init(), 1 destroy(). Never store per-user data in servlet fields: many threads share it.', 10, { flow: F([['d', 'found']], pk('t', 'd'), { 't-d': 'active' }), chips: { name: 'server log', items: log.slice() } });
+			return r.steps;
+		}
+	};
+
+	A['filter-chain'] = {
+		wide: true,
+		title: 'Filters: checks before the servlet runs',
+		inputs: [{ key: 'login', label: 'User', type: 'choice', options: ['signed in', 'not signed in'] }],
+		defaults: { login: 'not signed in' },
+		code: ['public class AuthFilter implements Filter {', '    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)', '            throws IOException, ServletException {', '        HttpSession session = ((HttpServletRequest) req).getSession(false);', '        if (session == null || session.getAttribute("user") == null) {', '            ((HttpServletResponse) res).sendError(401);', '            return;                  // stop: the servlet never runs', '        }', '        chain.doFilter(req, res);    // pass to the next filter / servlet', '    }', '}'],
+		run: function (inp) {
+			var ok = inp.login === 'signed in', r = recorder(), log = [];
+			var F = flowKit(640, 230, [
+				{ id: 'b', label: 'Browser', x: 70, y: 70, shape: 'pill' }, { id: 'l', label: 'LoggingFilter', x: 220, y: 70 },
+				{ id: 'a', label: 'AuthFilter', x: 390, y: 70 }, { id: 's', label: 'DashboardServlet', x: 560, y: 70, w: 150 }, { id: 'x', label: '401 Unauthorized', x: 390, y: 180 }
+			], [['b', 'l'], ['l', 'a', 'chain.doFilter'], ['a', 's', 'chain.doFilter'], ['a', 'x', 'no user', 'dashed'], ['s', 'b', 'response', 'back']]);
+			log.push('GET /dashboard');
+			r('Filters wrap every request like checkpoints at an airport. The request first meets LoggingFilter.', 1, { flow: F([['l', 'active']], pk('b', 'l', 'GET'), { 'b-l': 'active' }), chips: { name: 'log', items: log.slice() } });
+			r('LoggingFilter records the request and passes it on with chain.doFilter().', 9, { flow: F([['l', 'done'], ['a', 'active']], pk('l', 'a'), { 'l-a': 'active' }), chips: { name: 'log', items: log.slice() } });
+			if (!ok) {
+				r('AuthFilter finds no user in the session.', 5, { flow: F([['l', 'done'], ['a', 'error']], pk('a')), chips: { name: 'log', items: log.slice() } });
+				log.push('401 for /dashboard');
+				r('It sends 401 and returns WITHOUT calling chain.doFilter(). The servlet never runs: protected pages stay protected in one place.', 7, { flow: F([['a', 'error'], ['x', 'error']], pk('a', 'x'), { 'a-x': 'error' }), chips: { name: 'log', items: log.slice() }, out: '401 Unauthorized' });
+				return r.steps;
+			}
+			r('AuthFilter finds a user in the session, so chain.doFilter() lets the request continue.', 9, { flow: F([['l', 'done'], ['a', 'done'], ['s', 'active']], pk('a', 's'), { 'a-s': 'active' }), chips: { name: 'log', items: log.slice() } });
+			log.push('200 for /dashboard');
+			r('The servlet builds the page. On the way out the response passes back through the filters (e.g. to add headers or log timing).', 9, { flow: F([['s', 'found'], ['b', 'found']], pk('s', 'b', '200 OK', true), { 's-b': 'active' }), chips: { name: 'log', items: log.slice() }, out: '200 OK: dashboard' });
+			return r.steps;
+		}
+	};
+
+	A['entity-states'] = {
+		wide: true,
+		title: 'JPA entity states: transient → managed → detached → removed',
+		inputs: [],
+		defaults: {},
+		code: ['em.getTransaction().begin();', 'Course c = new Course("Java");        // transient', 'em.persist(c);                          // managed', 'em.getTransaction().commit();           // INSERT', 'em.getTransaction().begin();', 'c.setTitle("Java Basics");              // tracked automatically', 'em.getTransaction().commit();           // UPDATE (dirty checking)', 'em.close();                             // detached', 'c.setTitle("Java 101");                 // nobody is watching', 'em2.getTransaction().begin();', 'Course m = em2.merge(c);                // SELECT, then managed copy', 'em2.getTransaction().commit();          // UPDATE', 'em2.getTransaction().begin();', 'em2.remove(m);                          // removed', 'em2.getTransaction().commit();          // DELETE'],
+		run: function () {
+			var r = recorder(), sql = [];
+			var F = flowKit(640, 300, [
+				{ id: 'n', label: 'Transient', sub: 'just new', x: 90, y: 70 }, { id: 'm', label: 'Managed', sub: 'tracked by EntityManager', x: 320, y: 70 },
+				{ id: 'd', label: 'Detached', sub: 'EntityManager closed', x: 550, y: 70 }, { id: 'x', label: 'Removed', sub: 'scheduled for delete', x: 320, y: 200 },
+				{ id: 'db', label: 'Database', x: 560, y: 230, shape: 'db', w: 110, h: 64 }
+			], [['n', 'm', 'persist()'], ['m', 'd', 'close()'], ['d', 'm', 'merge()', 'back'], ['m', 'x', 'remove()'], ['m', 'db', 'flush', 'dashed'], ['x', 'db', 'flush', 'dashed']]);
+			function sc(on, p, e, out) { return { flow: F(on, p, e), chips: { name: 'SQL sent', items: sql.slice() }, out: out }; }
+			r('new Course("Java") is a plain Java object: TRANSIENT. The database knows nothing about it.', 2, sc([['n', 'active']], pk('n')));
+			r('persist() hands it to the EntityManager: now MANAGED. Hibernate watches every change to it.', 3, sc([['m', 'active']], pk('n', 'm'), { 'n-m': 'active' }));
+			sql.push('insert into course (title) values (\'Java\')');
+			r('commit() flushes the changes: Hibernate writes the INSERT for you.', 4, sc([['m', 'found'], ['db', 'found']], pk('m', 'db', 'INSERT'), { 'm-db': 'active' }));
+			r('Change a field of a managed entity, no save() call needed…', 6, sc([['m', 'active']], pk('m')));
+			sql.push('update course set title=\'Java Basics\' where id=1');
+			r('…at commit, "dirty checking" notices the change and sends an UPDATE automatically.', 7, sc([['m', 'found'], ['db', 'found']], pk('m', 'db', 'UPDATE'), { 'm-db': 'active' }));
+			r('close() ends the persistence context. The object still exists but is DETACHED: changes are no longer tracked.', 8, sc([['d', 'active']], pk('m', 'd'), { 'm-d': 'active' }));
+			r('setTitle("Java 101") changes only the Java object. No SQL will ever be sent for it on its own.', 9, sc([['d', 'error']], pk('d')));
+			sql.push('select … from course where id=1');
+			r('merge() in a new EntityManager loads the row and copies the detached state into a MANAGED copy (returned as m).', 11, sc([['m', 'active'], ['d', 'dim']], pk('d', 'm', 'merge', true), { 'd-m': 'active' }));
+			sql.push('update course set title=\'Java 101\' where id=1');
+			r('commit → UPDATE. Use the returned object m from now on, not the old c.', 12, sc([['m', 'found'], ['db', 'found']], pk('m', 'db', 'UPDATE'), { 'm-db': 'active' }));
+			r('remove(m) marks the managed entity as REMOVED.', 14, sc([['x', 'active']], pk('m', 'x'), { 'm-x': 'active' }));
+			sql.push('delete from course where id=1');
+			r('commit → DELETE. Four states, and you wrote zero SQL: that is what an ORM like Hibernate does.', 15, sc([['x', 'found'], ['db', 'found']], pk('x', 'db', 'DELETE'), { 'x-db': 'active' }, sql.length + ' SQL statements'));
+			return r.steps;
+		}
+	};
+
+	A['persistence-context'] = {
+		wide: true,
+		title: 'First-level cache: why find() twice runs one query',
+		inputs: [],
+		defaults: {},
+		code: ['EntityManager em = emf.createEntityManager();', 'Course a = em.find(Course.class, 1L);   // SELECT', 'Course b = em.find(Course.class, 1L);   // no SQL: from the context', 'System.out.println(a == b);             // same object?', 'em.getTransaction().begin();', 'a.setPrice(499);', 'em.getTransaction().commit();           // UPDATE sent automatically', 'em.close();', '', 'EntityManager em2 = emf.createEntityManager();', 'Course c = em2.find(Course.class, 1L);  // new context: SELECT again'],
+		run: function () {
+			var r = recorder(), sql = [], ctx = [];
+			function sc(hl, extra) { return Object.assign({ map: { name: 'persistence context', entries: ctx.slice(), hl: hl }, chips: { name: 'SQL sent', items: sql.slice() } }, extra || {}); }
+			r('Every EntityManager has a persistence context: a small cache of the entities it manages. It starts empty.', 1, sc());
+			sql.push('select … from course where id=1'); ctx.push(['Course#1', '{title: Java, price: 799}']);
+			r('find(Course, 1) misses the cache, so Hibernate runs a SELECT and stores the entity under its id.', 2, sc('Course#1', { vars: { queries: 1 } }));
+			r('Same id again: found in the context. No SQL at all, and you get the very same object back.', 3, sc('Course#1', { vars: { queries: 1 } }));
+			r('a == b is true: inside one EntityManager each row is exactly one Java object.', 4, sc('Course#1', { vars: { queries: 1 }, out: 'true' }));
+			ctx[0][1] = '{title: Java, price: 499} ✎';
+			r('setPrice(499) only changes the object in memory. The context remembers the original values too.', 6, sc('Course#1', { vars: { queries: 1 } }));
+			sql.push('update course set price=499 where id=1');
+			r('At commit Hibernate compares old and new values (dirty checking) and sends just the needed UPDATE.', 7, sc('Course#1', { vars: { queries: 2 } }));
+			ctx = [];
+			r('close() throws the context away. The cache lives only as long as the EntityManager (usually one request or transaction).', 8, sc(undefined, { vars: { queries: 2 } }));
+			sql.push('select … from course where id=1'); ctx.push(['Course#1', '{title: Java, price: 499}']);
+			r('A new EntityManager has an empty context, so the next find() queries the database again.', 11, sc('Course#1', { vars: { queries: 3 }, out: '3 queries' }));
+			return r.steps;
+		}
+	};
+
+	A['n-plus-one'] = {
+		title: 'The N+1 query problem',
+		inputs: [{ key: 'n', label: 'Authors (1-8)', type: 'number' }, { key: 'mode', label: 'Query', type: 'choice', options: ['lazy loading', 'JOIN FETCH'] }],
+		defaults: { n: 5, mode: 'lazy loading' },
+		code: function (inp) {
+			var q = inp.mode === 'JOIN FETCH' ? '"SELECT DISTINCT a FROM Author a JOIN FETCH a.books"' : '"SELECT a FROM Author a"';
+			return ['List<Author> authors = em.createQuery(', '        ' + q + ', Author.class).getResultList();', '', 'for (Author a : authors) {', '    System.out.println(a.getName() + ": " + a.getBooks().size());', '}'];
+		},
+		run: function (inp) {
+			var n = Math.max(1, Math.min(8, inp.n | 0)), join = inp.mode === 'JOIN FETCH', r = recorder(), sql = [];
+			var names = ['Asha', 'Rohan', 'Meera', 'Kabir', 'Zoya', 'Arjun', 'Ira', 'Dev'].slice(0, n);
+			function sc(i, extra) { var c = {}; if (i !== undefined) c[i] = 'active'; return Object.assign({ arrays: [{ name: 'authors', values: names, cls: c }], chips: { name: 'SQL sent', items: sql.slice() }, vars: { queries: sql.length } }, extra || {}); }
+			if (join) {
+				sql.push('select a.*, b.* from author a join book b on …');
+				r('JOIN FETCH loads the authors AND their books in a single query.', 2, sc());
+				names.forEach(function (a, i) { r(a + '.getBooks() is already loaded: no extra query.', 5, sc(i)); });
+				r('Total: 1 query, however many authors. Fix N+1 with JOIN FETCH, @EntityGraph or batch fetching.', 5, sc(undefined, { out: '1 query' }));
+			} else {
+				sql.push('select * from author');
+				r('One query loads the ' + n + ' authors. Their books are LAZY: not loaded yet.', 2, sc());
+				names.forEach(function (a, i) {
+					sql.push('select * from book where author_id=' + (i + 1));
+					r(a + '.getBooks().size() touches the lazy collection → Hibernate runs another query.', 5, sc(i));
+				});
+				r('Total: 1 + ' + n + ' = ' + (n + 1) + ' queries. With 1,000 authors that is 1,001 round trips: a classic performance bug. Switch to JOIN FETCH and compare.', 5, sc(undefined, { out: (n + 1) + ' queries' }));
+			}
+			return r.steps;
+		}
+	};
+
+	A['spring-ioc'] = {
+		wide: true,
+		title: 'Spring IoC: the container builds and wires your beans',
+		inputs: [],
+		defaults: {},
+		code: ['@RestController', 'class CourseController {', '    private final CourseService service;', '    CourseController(CourseService service) { this.service = service; }', '}', '@Service', 'class CourseService {', '    CourseService(CourseRepository repo, EmailService email) { … }', '}', '@Repository', 'interface CourseRepository extends JpaRepository<Course, Long> { }', '@Component', 'class EmailService { }'],
+		run: function () {
+			var r = recorder(), beans = [];
+			var F = flowKit(640, 300, [
+				{ id: 'c', label: 'CourseController', sub: '@RestController', x: 320, y: 50 }, { id: 's', label: 'CourseService', sub: '@Service', x: 320, y: 150 },
+				{ id: 'r', label: 'CourseRepository', sub: '@Repository', x: 170, y: 250 }, { id: 'e', label: 'EmailService', sub: '@Component', x: 470, y: 250 }
+			], [['c', 's', 'needs'], ['s', 'r', 'needs'], ['s', 'e', 'needs']]);
+			function sc(on, p, e) { return { flow: F(on, p, e), map: { name: 'ApplicationContext (beans)', entries: beans.slice() } }; }
+			r('At startup Spring scans your packages for classes marked @Component, @Service, @Repository or @RestController.', 1, sc([['c', 'active'], ['s', 'active'], ['r', 'active'], ['e', 'active']]));
+			r('It reads each constructor to learn the dependencies, building a graph: who needs whom.', 8, sc([], null, { 'c-s': 'active', 's-r': 'active', 's-e': 'active' }));
+			beans.push(['courseRepository', 'proxy (Spring Data)']);
+			r('Beans with no dependencies are created first. Spring Data even writes the repository class for you.', 11, sc([['r', 'found']], pk('r')));
+			beans.push(['emailService', 'EmailService@3f2']);
+			r('EmailService has no dependencies either: created.', 13, sc([['r', 'found'], ['e', 'found']], pk('e')));
+			beans.push(['courseService', 'CourseService@5c1']);
+			r('Now CourseService can be built: Spring passes the repository and email beans into its constructor. That is dependency injection.', 8, sc([['r', 'found'], ['e', 'found'], ['s', 'found']], pk('r', 's', 'inject', true), { 's-r': 'done', 's-e': 'done' }));
+			beans.push(['courseController', 'CourseController@7a9']);
+			r('Finally the controller gets the service. You never wrote "new": the container did it (Inversion of Control).', 4, sc([['c', 'found'], ['s', 'found'], ['r', 'found'], ['e', 'found']], pk('s', 'c', 'inject', true), { 'c-s': 'done', 's-r': 'done', 's-e': 'done' }));
+			r('Every bean is a singleton by default: one shared instance per application, ready to handle requests.', 4, Object.assign(sc([['c', 'done'], ['s', 'done'], ['r', 'done'], ['e', 'done']]), { out: beans.length + ' beans ready' }));
+			return r.steps;
+		}
+	};
+
+	A['bean-scope'] = {
+		wide: true,
+		title: 'Bean scopes: singleton vs prototype',
+		inputs: [{ key: 'scope', label: 'Scope', type: 'choice', options: ['singleton', 'prototype'] }],
+		defaults: { scope: 'singleton' },
+		code: function (inp) { return ['@Component', '@Scope("' + inp.scope + '")', 'class ShoppingCart {', '    List<String> items = new ArrayList<>();', '}', '', 'ShoppingCart a = context.getBean(ShoppingCart.class);', 'ShoppingCart b = context.getBean(ShoppingCart.class);', 'a.items.add("Java course");', 'System.out.println(b.items);', 'System.out.println(a == b);']; },
+		run: function (inp) {
+			var single = inp.scope !== 'prototype', r = recorder(), f = [{ name: 'main', vars: [] }], h = [];
+			h.push({ id: 'k1', type: 'ShoppingCart', fields: [['items', '[]']], cls: 'active' });
+			f[0].vars.push({ name: 'a', ref: 'k1', cls: 'active' });
+			r(single ? 'Singleton (the default): the container creates ONE ShoppingCart and hands it out every time.' : 'Prototype: the container creates a NEW ShoppingCart for every getBean() call.', 7, { memory: memo(f, h) });
+			f[0].vars[0].cls = ''; h[0].cls = '';
+			if (single) { f[0].vars.push({ name: 'b', ref: 'k1', cls: 'active' }); r('The second getBean() returns the same object. a and b point to one cart.', 8, { memory: memo(f, h) }); }
+			else { h.push({ id: 'k2', type: 'ShoppingCart', fields: [['items', '[]']], cls: 'active' }); f[0].vars.push({ name: 'b', ref: 'k2', cls: 'active' }); r('The second getBean() builds another cart. a and b are different objects.', 8, { memory: memo(f, h) }); }
+			f[0].vars[1].cls = ''; h.forEach(function (o) { o.cls = ''; });
+			h[0].fields[0][1] = '["Java course"]'; h[0].cls = 'active';
+			r('a.items.add("Java course") changes a\'s cart.', 9, { memory: memo(f, h) });
+			r(single ? 'b sees the item too, because it is the same cart. Careful: a singleton is shared by ALL users. Never keep per-user data in one.' : 'b\'s cart is still empty: each caller got its own instance.', 10, { memory: memo(f, h), out: single ? '[Java course]' : '[]' });
+			r('a == b is ' + single + '. Use singleton for stateless services (most beans), prototype (or request/session scope) for stateful objects.', 11, { memory: memo(f, h), out: String(single) });
+			return r.steps;
+		}
+	};
+
+	A['spring-mvc-flow'] = {
+		wide: true,
+		title: 'Spring MVC: the life of a request',
+		inputs: [{ key: 'req', label: 'Request', type: 'choice', options: ['GET /api/courses/1', 'GET /api/courses/99'] }],
+		defaults: { req: 'GET /api/courses/1' },
+		code: ['@RestController', '@RequestMapping("/api/courses")', 'class CourseController {', '    private final CourseService service;', '    CourseController(CourseService service) { this.service = service; }', '', '    @GetMapping("/{id}")', '    Course get(@PathVariable Long id) {', '        return service.find(id);   // throws CourseNotFound if missing', '    }', '}', '@RestControllerAdvice', 'class ApiErrors {', '    @ExceptionHandler(CourseNotFound.class)', '    @ResponseStatus(HttpStatus.NOT_FOUND)', '    Map<String, String> notFound() { return Map.of("error", "Course not found"); }', '}'],
+		run: function (inp) {
+			var found = inp.req.indexOf('/1') === inp.req.length - 2 && inp.req.slice(-2) === '/1', r = recorder();
+			var id = inp.req.split('/').pop();
+			var F = flowKit(640, 340, [
+				{ id: 'cl', label: 'Client', x: 70, y: 50, shape: 'pill' }, { id: 'ds', label: 'DispatcherServlet', sub: 'front controller', x: 300, y: 50 },
+				{ id: 'hm', label: 'HandlerMapping', sub: 'URL → method', x: 540, y: 50 }, { id: 'co', label: 'CourseController', sub: 'get(id)', x: 300, y: 150 },
+				{ id: 'sv', label: 'CourseService', x: 300, y: 240 }, { id: 'rp', label: 'CourseRepository', x: 540, y: 240 }, { id: 'db', label: 'DB', x: 540, y: 320, shape: 'db', w: 80, h: 44 },
+				{ id: 'js', label: 'Jackson', sub: 'Java → JSON', x: 90, y: 150 }, { id: 'eh', label: '@RestControllerAdvice', sub: '404 handler', x: 100, y: 260, w: 170 }
+			], [['cl', 'ds', inp.req.split(' ')[0]], ['ds', 'hm'], ['ds', 'co'], ['co', 'sv'], ['sv', 'rp'], ['rp', 'db', 'SQL', 'dashed'], ['co', 'js', 'return'], ['js', 'cl', 'JSON'], ['co', 'eh', 'exception', 'dashed'], ['eh', 'cl', '404']]);
+			r('Every request first reaches DispatcherServlet, Spring\'s single front controller.', 1, { flow: F([['ds', 'active']], pk('cl', 'ds', 'GET'), { 'cl-ds': 'active' }) });
+			r('HandlerMapping matches /api/courses/{id} with @GetMapping("/{id}") on CourseController.get().', 7, { flow: F([['ds', 'done'], ['hm', 'found']], pk('ds', 'hm'), { 'ds-hm': 'active' }) });
+			r('Spring converts "' + id + '" from the URL into Long id = ' + id + ' (@PathVariable) and calls the method.', 8, { flow: F([['ds', 'done'], ['co', 'active']], pk('ds', 'co', 'id=' + id), { 'ds-co': 'active' }) });
+			r('The controller delegates to the service (business logic), which asks the repository.', 9, { flow: F([['co', 'done'], ['sv', 'active']], pk('co', 'sv'), { 'co-sv': 'active' }) });
+			r('Spring Data runs SELECT … WHERE id = ' + id + ' on the database.', 9, { flow: F([['sv', 'done'], ['rp', 'active'], ['db', 'active']], pk('rp', 'db', 'SELECT'), { 'sv-rp': 'active', 'rp-db': 'active' }) });
+			if (found) {
+				r('A course is found and returned to the controller as a Java object.', 9, { flow: F([['co', 'found']], pk('sv', 'co', 'Course', true)) });
+				r('Jackson turns the object into JSON automatically because of @RestController.', 8, { flow: F([['co', 'done'], ['js', 'found']], pk('co', 'js', '{…}'), { 'co-js': 'active' }) });
+				r('200 OK with the JSON body goes back to the client. You wrote one method; Spring did the plumbing.', 8, { flow: F([['cl', 'found'], ['js', 'done']], pk('js', 'cl', '200'), { 'js-cl': 'active' }), out: '200 {"id":1,"title":"Java Basics","price":499}' });
+			} else {
+				r('No row with id ' + id + ': the service throws CourseNotFound.', 9, { flow: F([['co', 'error'], ['sv', 'error']], pk('sv', 'co', '✗', true)) });
+				r('@RestControllerAdvice catches it and maps it to 404 with a JSON error, so every controller handles errors the same way.', 14, { flow: F([['co', 'error'], ['eh', 'found']], pk('co', 'eh', 'CourseNotFound'), { 'co-eh': 'active' }) });
+				r('The client receives a clean 404 instead of a stack trace.', 16, { flow: F([['eh', 'done'], ['cl', 'error']], pk('eh', 'cl', '404'), { 'eh-cl': 'active' }), out: '404 {"error":"Course not found"}' });
+			}
+			return r.steps;
+		}
+	};
+
+	A['spring-boot-startup'] = {
+		wide: true,
+		title: 'What happens when a Spring Boot app starts',
+		inputs: [{ key: 'deps', label: 'Starters', type: 'choice', options: ['web + data-jpa', 'web only', 'no web'] }],
+		defaults: { deps: 'web + data-jpa' },
+		code: ['@SpringBootApplication', 'public class ShopApplication {', '    public static void main(String[] args) {', '        SpringApplication.run(ShopApplication.class, args);', '    }', '}', '', '# application.properties', 'server.port=8080', 'spring.datasource.url=jdbc:h2:mem:shop'],
+		run: function (inp) {
+			var web = inp.deps !== 'no web', jpa = inp.deps === 'web + data-jpa', r = recorder(), log = [];
+			var F = flowKit(640, 330, [
+				{ id: 'm', label: 'main()', x: 80, y: 50, shape: 'pill' }, { id: 'run', label: 'SpringApplication.run', x: 290, y: 50, w: 190 },
+				{ id: 'p', label: 'application.properties', x: 520, y: 50, w: 180 }, { id: 'sc', label: 'Component scan', sub: 'your @Components', x: 290, y: 140 },
+				{ id: 'ac', label: 'Auto-configuration', sub: 'if X on classpath → configure X', x: 290, y: 230, w: 230 },
+				{ id: 'tc', label: 'Embedded Tomcat', sub: ':8080', x: 90, y: 300 }, { id: 'ds', label: 'DataSource + JPA', x: 290, y: 300, w: 160 }, { id: 'ok', label: 'Ready ✓', x: 510, y: 300, shape: 'pill' }
+			], [['m', 'run'], ['run', 'p', 'read'], ['run', 'sc'], ['sc', 'ac'], ['ac', 'tc', 'web?'], ['ac', 'ds', 'jpa?'], ['ac', 'ok']]);
+			function sc(on, p, e, extra) { return Object.assign({ flow: F(on, p, e), chips: { name: 'console', items: log.slice() } }, extra || {}); }
+			log.push('Starting ShopApplication using Java 21');
+			r('main() calls SpringApplication.run(): one line starts the whole application.', 4, sc([['m', 'done'], ['run', 'active']], pk('m', 'run'), { 'm-run': 'active' }));
+			r('Boot reads application.properties (and environment variables) for settings like the port and database URL.', 9, sc([['run', 'done'], ['p', 'found']], pk('run', 'p'), { 'run-p': 'active' }));
+			r('@SpringBootApplication = @Configuration + @EnableAutoConfiguration + @ComponentScan. The scan finds your controllers, services and repositories.', 1, sc([['run', 'done'], ['sc', 'found']], pk('run', 'sc'), { 'run-sc': 'active' }));
+			r('Auto-configuration checks the classpath: "is spring-web here? is a JDBC driver here?" and configures only what it finds. Starters (' + inp.deps + ') decide that.', 1, sc([['sc', 'done'], ['ac', 'active']], pk('sc', 'ac'), { 'sc-ac': 'active' }));
+			var on = [['ac', 'done']], e = {};
+			if (web) { log.push('Tomcat initialized with port 8080 (http)'); on.push(['tc', 'found']); e['ac-tc'] = 'active'; }
+			else on.push(['tc', 'dim']);
+			if (jpa) { log.push('HikariPool-1 - Start completed.'); log.push('Initialized JPA EntityManagerFactory'); on.push(['ds', 'found']); e['ac-ds'] = 'active'; }
+			else on.push(['ds', 'dim']);
+			r((web ? 'spring-boot-starter-web found → an embedded Tomcat server on port 8080. No WAR, no external server. ' : 'No web starter → no server at all (a command-line app). ') + (jpa ? 'data-jpa found → connection pool + Hibernate configured.' : 'No JPA starter → no database setup.'), 1, sc(on, null, e));
+			log.push((web ? 'Tomcat started on port 8080 (http). ' : '') + 'Started ShopApplication in 1.9 seconds');
+			on.push(['ok', 'found']); e['ac-ok'] = 'active';
+			r('Ready. Convention over configuration: sensible defaults, and you override only what you need in application.properties.', 4, sc(on, pk('ac', 'ok'), e, { out: web ? 'http://localhost:8080' : 'started (no web server)' }));
+			return r.steps;
+		}
+	};
+
+	A['transactional'] = {
+		title: '@Transactional: all or nothing',
+		inputs: [{ key: 'amount', label: 'Transfer amount (A has 1000)', type: 'number' }],
+		defaults: { amount: 1500 },
+		code: function (inp) { return ['@Service', 'class BankService {', '    @Transactional', '    public void transfer(Account from, Account to, int amount) {', '        from.withdraw(amount);', '        if (from.getBalance() < 0)', '            throw new IllegalStateException("Insufficient funds");', '        to.deposit(amount);', '    }', '}', '', 'bank.transfer(accountA, accountB, ' + (inp.amount | 0) + ');']; },
+		run: function (inp) {
+			var amt = Math.max(0, inp.amount | 0), a = 1000, b = 500, r = recorder(), log = [];
+			function bars() { return [{ label: 'Account A', value: Math.max(0, a), cls: a < 0 ? 'bad' : 'ok' }, { label: 'Account B', value: b, cls: 'ok' }]; }
+			r('Before: A has 1000, B has 500. transfer() is @Transactional, so Spring opens a database transaction first.', 12, { bars: bars(), vars: { A: a, B: b }, chips: { name: 'transaction', items: ['BEGIN'] } });
+			log.push('BEGIN');
+			a -= amt; log.push('UPDATE A: ' + a);
+			r('withdraw(' + amt + '): A becomes ' + a + ' inside the transaction (not committed yet).', 5, { bars: bars(), vars: { A: a, B: b }, chips: { name: 'transaction', items: log.slice() } });
+			if (a < 0) {
+				r('Balance is negative, so the method throws IllegalStateException halfway through.', 7, { bars: bars(), vars: { A: a, B: b }, chips: { name: 'transaction', items: log.slice() } });
+				a += amt; log.push('ROLLBACK');
+				r('Spring sees the runtime exception and ROLLS BACK: the withdrawal is undone as if it never happened. Money is never lost halfway.', 7, { bars: bars(), vars: { A: a, B: b }, chips: { name: 'transaction', items: log.slice() }, out: 'rolled back: A=1000, B=500' });
+			} else {
+				b += amt; log.push('UPDATE B: ' + b);
+				r('deposit(' + amt + '): B becomes ' + b + '.', 8, { bars: bars(), vars: { A: a, B: b }, chips: { name: 'transaction', items: log.slice() } });
+				log.push('COMMIT');
+				r('The method ends normally, so Spring COMMITS both updates together. Either both happen or neither does.', 9, { bars: bars(), vars: { A: a, B: b }, chips: { name: 'transaction', items: log.slice() }, out: 'committed: A=' + a + ', B=' + b });
+			}
+			return r.steps;
+		}
+	};
+
+	A['jmix-app'] = {
+		wide: true,
+		title: 'Jmix: from entity to working screen',
+		inputs: [{ key: 'action', label: 'Action', type: 'choice', options: ['open the customer list', 'save a new customer'] }],
+		defaults: { action: 'open the customer list' },
+		code: ['@JmixEntity', '@Table(name = "CUSTOMER")', '@Entity', 'public class Customer {', '    @JmixGeneratedValue @Id @Column(name = "ID")', '    private UUID id;', '    @InstanceName @NotNull @Column(name = "NAME")', '    private String name;', '    @Email @Column(name = "EMAIL")', '    private String email;', '}', '', '@Route(value = "customers", layout = MainView.class)', '@ViewController("Customer.list")', '@ViewDescriptor("customer-list-view.xml")', 'public class CustomerListView extends StandardListView<Customer> { }'],
+		run: function (inp) {
+			var save = inp.action.indexOf('save') > -1, r = recorder();
+			var F = flowKit(640, 320, [
+				{ id: 'ui', label: 'Browser UI', sub: 'Vaadin components', x: 90, y: 60 }, { id: 'v', label: save ? 'CustomerDetailView' : 'CustomerListView', sub: 'XML + Java controller', x: 320, y: 60, w: 190 },
+				{ id: 'dc', label: save ? 'DataContext' : 'Data loader', sub: save ? 'tracks changes' : 'fetch plan', x: 540, y: 60 }, { id: 'sec', label: 'Security', sub: 'resource + row-level roles', x: 540, y: 165, w: 180 },
+				{ id: 'dm', label: 'DataManager', sub: 'JPA under the hood', x: 320, y: 165 }, { id: 'e', label: 'Customer entity', sub: '@JmixEntity', x: 90, y: 165 }, { id: 'db', label: 'Database', x: 320, y: 270, shape: 'db', w: 110, h: 60 }
+			], [['ui', 'v'], ['v', 'dc'], ['dc', 'sec'], ['sec', 'dm'], ['dm', 'db', 'SQL'], ['e', 'dm', 'mapped', 'dashed'], ['v', 'ui', 'render', 'back']]);
+			r('In Jmix you describe the data model (the Customer entity) and Jmix Studio generates list and detail views for it. Business apps in hours, not weeks.', 4, { flow: F([['e', 'found']]) });
+			if (!save) {
+				r('The user opens /customers. Jmix routes it to CustomerListView, defined in XML (layout) + Java (logic).', 13, { flow: F([['ui', 'active'], ['v', 'active']], pk('ui', 'v', 'click'), { 'ui-v': 'active' }) });
+				r('A data loader with a fetch plan says exactly which attributes to load (name, email), avoiding N+1 problems.', 15, { flow: F([['v', 'done'], ['dc', 'active']], pk('v', 'dc'), { 'v-dc': 'active' }) });
+				r('Security checks the user\'s roles: can they read Customer? Row-level roles can hide rows (e.g. only my region).', 15, { flow: F([['dc', 'done'], ['sec', 'active']], pk('dc', 'sec'), { 'dc-sec': 'active' }) });
+				r('DataManager runs the JPA query on the database.', 16, { flow: F([['sec', 'done'], ['dm', 'active'], ['db', 'active']], pk('dm', 'db', 'SELECT'), { 'sec-dm': 'active', 'dm-db': 'active' }) });
+				r('The rows fill a data grid with sorting, filtering and paging already built in.', 16, { flow: F([['ui', 'found'], ['v', 'found']], pk('v', 'ui', 'rows', true), { 'v-ui': 'active' }), out: 'Customers: 3 rows shown' });
+			} else {
+				r('The user fills in the detail form and clicks OK. Changes are collected in the DataContext.', 13, { flow: F([['ui', 'active'], ['v', 'active']], pk('ui', 'v', 'OK'), { 'ui-v': 'active' }) });
+				r('Bean validation runs first: @NotNull name and @Email email. A bad email is shown right next to the field.', 9, { flow: F([['v', 'done'], ['dc', 'active']], pk('v', 'dc', 'validate'), { 'v-dc': 'active' }) });
+				r('Security checks the user may create Customer entities.', 15, { flow: F([['dc', 'done'], ['sec', 'active']], pk('dc', 'sec'), { 'dc-sec': 'active' }) });
+				r('DataManager saves: Jmix generates the UUID id and Hibernate sends the INSERT.', 6, { flow: F([['sec', 'done'], ['dm', 'active'], ['db', 'found']], pk('dm', 'db', 'INSERT'), { 'sec-dm': 'active', 'dm-db': 'active' }) });
+				r('The view closes and the list refreshes with the new customer. No controllers, DTOs or SQL written by hand.', 16, { flow: F([['ui', 'found']], pk('v', 'ui', 'saved', true), { 'v-ui': 'active' }), out: 'Customer saved' });
+			}
 			return r.steps;
 		}
 	};
@@ -1488,7 +1833,7 @@
 		svg.appendChild(defs);
 		var box = {};
 		f.nodes.forEach(function (n) {
-			var w = n.w || Math.max(84, String(n.label).length * 8.4 + 26, n.sub ? String(n.sub).length * 6.6 + 22 : 0), h = n.h || (n.sub ? 50 : 38);
+			var w = n.w || Math.max(84, String(n.label).length * 8.4 + 26, n.sub ? String(n.sub).length * 7 + 26 : 0), h = n.h || (n.sub ? 50 : 38);
 			box[n.id] = { x: n.x, y: n.y, w: w, h: h };
 		});
 		function edgePoint(b, tx, ty) {
@@ -1509,7 +1854,7 @@
 			return { d: 'M' + p.x + ',' + p.y + ' L' + q.x + ',' + q.y, mx: (p.x + q.x) / 2, my: (p.y + q.y) / 2 };
 		}
 		(f.edges || []).forEach(function (e) {
-			var back = e[3] === 'back', pth = pathFor(e[0], e[1], back ? 26 : 0);
+			var back = e[3] === 'back', pth = pathFor(e[0], e[1], back ? 38 : 0);
 			if (!pth) return;
 			var k = e[0] + '-' + e[1], c = f.ecls && f.ecls[k];
 			svg.appendChild(sv('path', { d: pth.d, class: 'vz-edge vz-flow-edge' + (c ? ' is-' + c : '') + (e[3] === 'dashed' ? ' is-dashed' : ''), 'marker-end': 'url(#' + id + 'arr' + (c === 'active' ? '-on' : '') + ')' }));
@@ -1532,7 +1877,7 @@
 			svg.appendChild(g);
 		});
 		if (f.packet) {
-			var pp = f.packet.from === f.packet.to ? null : pathFor(f.packet.from, f.packet.to, f.packet.back ? 26 : 0);
+			var pp = f.packet.from === f.packet.to ? null : pathFor(f.packet.from, f.packet.to, f.packet.back ? 38 : 0);
 			var dot = sv('g', { class: 'vz-packet' });
 			dot.appendChild(sv('circle', { r: 9 }));
 			if (f.packet.label) { var pl = sv('text', { y: -14, class: 'vz-packet-label' }); pl.textContent = f.packet.label; dot.appendChild(pl); }
@@ -1698,6 +2043,7 @@
 
 		host.innerHTML = '';
 		host.classList.add('viz');
+		if (algo.wide) host.classList.add('viz-wide');
 		var head = el('div', 'viz-head');
 		head.appendChild(el('span', 'viz-badge', '● LIVE'));
 		head.appendChild(el('strong', 'viz-title', title));
