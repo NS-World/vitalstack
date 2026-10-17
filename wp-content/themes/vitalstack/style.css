@@ -1474,3 +1474,10 @@ p.tool-err { color: #c62828; font-weight: 600; margin: 8px 0; }
 .install-app { position: fixed; left: 16px; bottom: 16px; z-index: 250; display: flex; align-items: center; gap: 4px; padding: 6px 6px 6px 8px; border-radius: 999px; background: var(--dark); box-shadow: var(--shadow-lg); animation: pop .2s ease; }
 .install-app button { border: 0; background: transparent; color: #fff; font: inherit; font-weight: 700; cursor: pointer; padding: 6px 8px; }
 .install-app-x { font-size: 20px; line-height: 1; opacity: .7; }
+
+/* Ad slots (only rendered when ad unit IDs are set) */
+.ad-slot { margin: 28px 0; min-height: 120px; text-align: center; }
+.ad-label { display: block; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.ad-side { margin-top: 28px; min-height: 250px; }
+@media (max-width: 1280px) { .ad-side { display: none; } }
+@media print { .ad-slot { display: none !important; } }

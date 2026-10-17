@@ -100,6 +100,7 @@ while ( have_posts() ) :
 		<aside class="doc-toc" aria-label="<?php esc_attr_e( 'On this page', 'vitalstack' ); ?>">
 			<div class="doc-toc-inner">
 				<?php vitalstack_toc(); ?>
+				<?php vitalstack_ad_sidebar(); ?>
 			</div>
 		</aside>
 	</div>

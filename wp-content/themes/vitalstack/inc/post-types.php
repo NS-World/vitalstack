@@ -73,7 +73,7 @@ function vitalstack_register_content_types() {
 			'menu_icon'     => 'dashicons-welcome-learn-more',
 			// The lesson number (menu_order) is set by the "Lesson number" box below,
 			// because the block editor no longer shows an "Order" field.
-			'supports'      => array( 'title', 'editor', 'author', 'thumbnail', 'excerpt', 'revisions', 'custom-fields' ),
+			'supports'      => array( 'title', 'editor', 'author', 'thumbnail', 'excerpt', 'revisions', 'custom-fields', 'comments' ),
 			'show_in_rest'  => true,
 			'taxonomies'    => array( 'tutorial_category', 'tutorial_difficulty', 'post_tag' ),
 		)

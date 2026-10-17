@@ -158,7 +158,7 @@ get_header();
 							<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="dash-sub">
 								<input type="hidden" name="action" value="vs_subscribe">
 								<?php wp_nonce_field( 'vs_subscribe', '_vsnonce' ); ?>
-								<p><?php echo $vs_sub ? esc_html__( 'You get an email when a new lesson or guide is published.', 'vitalstack' ) : esc_html__( 'You are not subscribed to new-lesson emails.', 'vitalstack' ); ?></p>
+								<p><?php echo $vs_sub ? ( function_exists( 'vitalstack_notify_mode' ) && 'weekly' === vitalstack_notify_mode() ? esc_html__( 'You get one email every Sunday with the week\'s new lessons and guides.', 'vitalstack' ) : esc_html__( 'You get an email when a new lesson or guide is published.', 'vitalstack' ) ) : esc_html__( 'You are not subscribed to new-lesson emails.', 'vitalstack' ); ?></p>
 								<?php if ( $vs_sub ) : ?>
 									<button type="submit" class="btn btn-ghost btn-sm"><?php esc_html_e( 'Unsubscribe', 'vitalstack' ); ?></button>
 								<?php else : ?>

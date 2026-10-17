@@ -63,7 +63,7 @@ add_action( 'customize_register', 'vitalstack_adsense_customizer' );
  */
 function vitalstack_adsense_head() {
 	$client = vitalstack_adsense_client();
-	if ( ! $client || is_admin() || vitalstack_is_account_page() || is_404() || is_search() ) {
+	if ( ! $client || is_admin() || vitalstack_is_account_page() || get_query_var( 'vs_cert' ) || is_404() || is_search() ) {
 		return;
 	}
 	printf(
@@ -94,3 +94,113 @@ function vitalstack_serve_ads_txt() {
 	exit;
 }
 add_action( 'init', 'vitalstack_serve_ads_txt', 0 );
+
+/* ── Manual ad slots ──────────────────────────────────────────────────────
+ * Optional. With only the publisher ID set, Google's Auto ads choose the
+ * places. Add ad unit IDs (AdSense → Ads → By ad unit) to also show ads in
+ * fixed, reader-friendly spots: inside articles after the 2nd heading, at
+ * the end of articles, and in the sticky sidebar next to lessons.
+ * Never on sign-in, account, certificate, quiz or game areas.
+ */
+
+function vitalstack_ads_slot_customizer( $wp_customize ) {
+	$fields = array(
+		'vitalstack_ad_slot_article' => __( 'In-article ad unit ID (optional)', 'vitalstack' ),
+		'vitalstack_ad_slot_display' => __( 'Display ad unit ID (optional)', 'vitalstack' ),
+	);
+	foreach ( $fields as $id => $label ) {
+		$wp_customize->add_setting(
+			$id,
+			array(
+				'default'           => '',
+				'sanitize_callback' => function ( $v ) {
+					return preg_match( '/^\d{6,12}$/', trim( (string) $v ) ) ? trim( (string) $v ) : '';
+				},
+			)
+		);
+		$wp_customize->add_control(
+			$id,
+			array(
+				'label'       => $label,
+				'description' => __( 'The number from data-ad-slot="…" in the ad code. Leave empty to rely on Auto ads.', 'vitalstack' ),
+				'section'     => 'vitalstack_ads',
+				'type'        => 'text',
+			)
+		);
+	}
+}
+add_action( 'customize_register', 'vitalstack_ads_slot_customizer', 20 );
+
+/**
+ * Whether manual ads may appear on the current page at all.
+ */
+function vitalstack_ads_allowed() {
+	if ( ! vitalstack_adsense_client() || is_admin() || is_404() || is_search() || is_preview() ) {
+		return false;
+	}
+	if ( vitalstack_is_account_page() || get_query_var( 'vs_cert' ) ) {
+		return false;
+	}
+	if ( is_page_template( array( 'page-games.php', 'page-daily-challenge.php' ) ) ) {
+		return false;
+	}
+	return true;
+}
+
+/**
+ * One ad unit's markup.
+ *
+ * @param string $type article|display.
+ * @param string $where Extra class for placement.
+ */
+function vitalstack_ad_unit( $type, $where = '' ) {
+	if ( ! vitalstack_ads_allowed() ) {
+		return '';
+	}
+	$slot = get_theme_mod( 'article' === $type ? 'vitalstack_ad_slot_article' : 'vitalstack_ad_slot_display', '' );
+	if ( ! $slot ) {
+		return '';
+	}
+	$attrs = 'article' === $type
+		? 'data-ad-layout="in-article" data-ad-format="fluid" style="display:block;text-align:center"'
+		: 'data-ad-format="auto" data-full-width-responsive="true" style="display:block"';
+	return '<aside class="ad-slot ad-' . esc_attr( $type ) . ( $where ? ' ad-' . esc_attr( $where ) : '' ) . '" aria-label="' . esc_attr__( 'Advertisement', 'vitalstack' ) . '">'
+		. '<span class="ad-label">' . esc_html__( 'Advertisement', 'vitalstack' ) . '</span>'
+		. '<ins class="adsbygoogle" ' . $attrs . ' data-ad-client="' . esc_attr( vitalstack_adsense_client() ) . '" data-ad-slot="' . esc_attr( $slot ) . '"></ins>'
+		. '<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>'
+		. '</aside>';
+}
+
+/**
+ * In-article ad after the 2nd heading and a display ad at the end of long
+ * lessons and guides (the main article only).
+ */
+function vitalstack_ads_in_content( $content ) {
+	if ( ! is_singular( array( 'post', 'tutorials' ) ) || ! in_the_loop() || ! is_main_query() ) {
+		return $content;
+	}
+	$article = vitalstack_ad_unit( 'article', 'inline' );
+	if ( $article ) {
+		$count   = 0;
+		$content = preg_replace_callback(
+			'/<h2\b/i',
+			function ( $m ) use ( &$count, $article ) {
+				$count++;
+				return 3 === $count ? $article . $m[0] : $m[0];
+			},
+			$content
+		);
+	}
+	if ( str_word_count( wp_strip_all_tags( $content ) ) > 700 ) {
+		$content .= vitalstack_ad_unit( 'display', 'end' );
+	}
+	return $content;
+}
+add_filter( 'the_content', 'vitalstack_ads_in_content', 30 );
+
+/**
+ * Sticky ad under the "On this page" column (wide screens only).
+ */
+function vitalstack_ad_sidebar() {
+	echo vitalstack_ad_unit( 'display', 'side' ); // phpcs:ignore WordPress.Security.EscapeOutput -- built with escaping
+}
