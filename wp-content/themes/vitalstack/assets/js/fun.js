@@ -370,4 +370,15 @@
 			if (out) { out.hidden = false; out.textContent = 'You already answered today\'s challenge. New one tomorrow!'; }
 		}
 	});
+
+	/* ── Leaderboard tabs ─────────────────────────────────────────────────── */
+	document.querySelectorAll('[data-board]').forEach(function (board) {
+		board.querySelectorAll('[data-board-tab]').forEach(function (tab) {
+			tab.addEventListener('click', function () {
+				var which = tab.getAttribute('data-board-tab');
+				board.querySelectorAll('[data-board-tab]').forEach(function (t) { var on = t === tab; t.classList.toggle('is-active', on); t.setAttribute('aria-selected', on ? 'true' : 'false'); });
+				board.querySelectorAll('[data-board-panel]').forEach(function (p) { p.hidden = p.getAttribute('data-board-panel') !== which; });
+			});
+		});
+	});
 })();

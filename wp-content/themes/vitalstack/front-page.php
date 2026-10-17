@@ -51,6 +51,31 @@ if ( $vs_health ) {
 	</div>
 </section>
 
+<?php if ( function_exists( 'vitalstack_daily_question' ) && vitalstack_daily_question() ) : ?>
+<section class="home-daily">
+	<div class="wrap home-daily-inner">
+		<div><?php vitalstack_daily_challenge( true ); ?></div>
+		<div class="home-daily-side">
+			<h2 class="home-daily-title"><?php esc_html_e( 'Top learners this week', 'vitalstack' ); ?></h2>
+			<ol class="board-list is-mini">
+				<?php
+				$vs_board = vitalstack_leaderboard( 'week', 5 );
+				foreach ( $vs_board as $vs_i => $vs_row ) :
+					?>
+					<li><span class="board-rank"><?php echo 0 === $vs_i ? '🥇' : ( 1 === $vs_i ? '🥈' : ( 2 === $vs_i ? '🥉' : (int) ( $vs_i + 1 ) ) ); ?></span><span class="board-name"><?php echo esc_html( $vs_row['name'] ); ?></span><b class="board-xp"><?php echo esc_html( number_format_i18n( $vs_row['xp'] ) ); ?> XP</b></li>
+				<?php endforeach; ?>
+				<?php if ( ! $vs_board ) : ?>
+					<li class="board-empty"><?php esc_html_e( 'The week just started. Answer today\'s challenge and be first!', 'vitalstack' ); ?></li>
+				<?php endif; ?>
+			</ol>
+			<?php if ( vitalstack_challenge_url() ) : ?>
+				<a class="home-daily-more" href="<?php echo esc_url( vitalstack_challenge_url() ); ?>"><?php esc_html_e( 'See the full leaderboard', 'vitalstack' ); ?> ❯</a>
+			<?php endif; ?>
+		</div>
+	</div>
+</section>
+<?php endif; ?>
+
 <?php
 $vs_tones = array( 'mint', 'sun', 'sky', 'stone' );
 $vs_home_ids = array();

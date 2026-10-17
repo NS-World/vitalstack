@@ -177,6 +177,7 @@ get_header();
 									<span><?php esc_html_e( 'Display name', 'vitalstack' ); ?></span>
 									<input type="text" name="display_name" value="<?php echo esc_attr( $vs_user->display_name ); ?>" maxlength="60" required>
 								</label>
+								<label class="check"><input type="checkbox" name="board_hide" value="1" <?php checked( (bool) get_user_meta( $vs_user->ID, 'vs_leaderboard_hide', true ) ); ?>> <?php esc_html_e( 'Hide my name from the leaderboard', 'vitalstack' ); ?></label>
 								<button type="submit" class="btn btn-ghost btn-sm"><?php esc_html_e( 'Save', 'vitalstack' ); ?></button>
 								<p class="muted small"><a href="<?php echo esc_url( wp_lostpassword_url( vitalstack_account_url() ) ); ?>"><?php esc_html_e( 'Change password', 'vitalstack' ); ?></a></p>
 							</form>

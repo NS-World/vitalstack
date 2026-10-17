@@ -466,6 +466,9 @@ function vitalstack_handle_profile() {
 			'first_name'   => $name,
 		)
 	);
+	update_user_meta( get_current_user_id(), 'vs_leaderboard_hide', empty( $_POST['board_hide'] ) ? 0 : 1 );
+	delete_transient( 'vs_board_week_' . vitalstack_xp_week_key() );
+	delete_transient( 'vs_board_all_all' );
 	vitalstack_account_redirect( 'saved' );
 }
 add_action( 'admin_post_vs_profile', 'vitalstack_handle_profile' );
