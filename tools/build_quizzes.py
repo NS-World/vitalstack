@@ -11,14 +11,18 @@ Format (one file per learning path, e.g. content/quizzes/python.md):
     > Python creates a variable the first time you assign to it.   <- explanation
 
 Questions are separated by a new "Q:" line. Inline `code` is allowed.
+Options are shuffled at build time (stable per question); end a question
+with "(keep order)" to keep the written order.
 
 Usage:
     python3 tools/build_quizzes.py           # writes wp-content/themes/vitalstack/data/quizzes/<subject>.php
     python3 tools/build_quizzes.py --check   # also verifies every slug matches a lesson file
 """
 import pathlib
+import random
 import re
 import sys
+import zlib
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SRC = ROOT / "content" / "quizzes"
@@ -63,7 +67,25 @@ def parse(path):
         for i, q in enumerate(qs, 1):
             if q["a"] == -1 or len(q["o"]) < 2:
                 sys.exit(f"{path}: {slug} question {i}: needs 2+ options and exactly one [x]")
+            shuffle(q, slug)
     return quizzes
+
+
+def shuffle(q, slug):
+    """Shuffle options so the answer isn't always in the same place.
+
+    Seeded by the lesson and question text, so every build gives the same
+    order (stable daily challenges and cached pages). Questions whose options
+    form a sequence (e.g. "All of the above") can opt out with "(keep order)"
+    at the end of the question line.
+    """
+    if q["q"].endswith("(keep order)"):
+        q["q"] = q["q"][: -len("(keep order)")].rstrip()
+        return
+    answer = q["o"][q["a"]]
+    rng = random.Random(zlib.crc32((slug + "|" + q["q"]).encode("utf-8")))
+    rng.shuffle(q["o"])
+    q["a"] = q["o"].index(answer)
 
 
 def lesson_slugs():
