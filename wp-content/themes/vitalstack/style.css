@@ -1481,3 +1481,54 @@ p.tool-err { color: #c62828; font-weight: 600; margin: 8px 0; }
 .ad-side { margin-top: 28px; min-height: 250px; }
 @media (max-width: 1280px) { .ad-side { display: none; } }
 @media print { .ad-slot { display: none !important; } }
+
+/* Visualizer: flow diagrams, memory (stack/heap) and class diagrams */
+.vz-svg .vz-flow-edge.is-dashed, .vz-svg .vz-uml-link.is-dashed { stroke-dasharray: 6 5; }
+.vz-svg .vz-flow-edge.is-done { stroke: var(--vz-found); }
+.vz-svg .vz-flow-edge.is-error { stroke: var(--vz-swap); stroke-width: 3; }
+.vz-svg .vz-arrowhead.is-on { fill: var(--vz-active); }
+.vz-svg .vz-edge-label { font-size: 11px; fill: var(--muted); font-weight: 600; paint-order: stroke; stroke: var(--surface); stroke-width: 4px; }
+.vz-svg .vz-edge-label.is-active { fill: var(--text); }
+.vz-svg .vz-fnode text { font-size: 13px; }
+.vz-svg .vz-sub { font-size: 10.5px; font-weight: 500; fill: var(--muted); }
+.vz-svg .vz-node.is-active .vz-sub, .vz-svg .vz-node.is-found .vz-sub, .vz-svg .vz-node.is-swap .vz-sub { fill: currentColor; opacity: .85; }
+.vz-svg .vz-node.is-error rect, .vz-svg .vz-node.is-error .vz-db, .vz-svg .vz-node.is-error .vz-db-top { fill: var(--vz-swap); stroke: var(--vz-swap); }
+.vz-svg .vz-node.is-error text { fill: #fff; }
+.vz-svg .vz-node.is-done rect, .vz-svg .vz-node.is-done .vz-db { stroke: var(--vz-found); stroke-width: 3; }
+.vz-svg .vz-db, .vz-svg .vz-db-top { fill: var(--surface); stroke: var(--border-strong); stroke-width: 2; }
+.vz-svg .vz-node.is-active .vz-db, .vz-svg .vz-node.is-active .vz-db-top { fill: var(--vz-active); stroke: var(--vz-active); }
+.vz-svg .vz-node.is-found .vz-db, .vz-svg .vz-node.is-found .vz-db-top { fill: var(--vz-found); stroke: var(--vz-found); }
+.vz-svg .vz-packet circle { fill: #f5b301; stroke: #fff; stroke-width: 3; filter: drop-shadow(0 2px 4px rgba(0,0,0,.35)); }
+.vz-svg .vz-packet-label { font-size: 11px; fill: var(--text); paint-order: stroke; stroke: var(--surface); stroke-width: 4px; }
+.vz-svg .vz-mem-title { font-size: 12px; letter-spacing: .14em; fill: var(--muted); }
+.vz-svg .vz-mem-area { font-size: 11px; fill: var(--muted); font-style: italic; }
+.vz-svg .vz-frame > rect { fill: var(--bg-soft); stroke: var(--border-strong); stroke-width: 2; }
+.vz-svg .vz-frame.is-active > rect { stroke: var(--vz-active); stroke-width: 3; }
+.vz-svg .vz-frame-name { font-size: 12px; fill: var(--brand-ink); }
+.vz-svg .vz-var-row rect { fill: var(--surface); stroke: var(--border); }
+.vz-svg .vz-var-row.is-active rect { fill: var(--vz-active); stroke: var(--vz-active); }
+.vz-svg .vz-var-row.is-active text { fill: #1b1f27; }
+.vz-svg .vz-var-row text, .vz-svg .vz-obj text { font-size: 12.5px; font-weight: 600; }
+.vz-svg .vz-val-text { fill: var(--brand-ink); }
+.vz-svg .vz-obj > rect { fill: var(--surface); stroke: var(--border-strong); stroke-width: 2; }
+.vz-svg .vz-obj.is-active > rect { stroke: var(--vz-active); stroke-width: 3; fill: color-mix(in srgb, var(--vz-active) 18%, var(--surface)); }
+.vz-svg .vz-obj.is-found > rect { stroke: var(--vz-found); stroke-width: 3; }
+.vz-svg .vz-obj.is-garbage { opacity: .4; }
+.vz-svg .vz-obj.is-garbage > rect { stroke-dasharray: 6 4; }
+.vz-svg .vz-obj-type { font-size: 12.5px; fill: var(--brand-ink); }
+.vz-svg .vz-ref { stroke: var(--vz-active); stroke-width: 2.5; fill: none; }
+.vz-svg .vz-class > rect { fill: var(--surface); }
+.vz-svg .vz-class.is-active > rect { fill: color-mix(in srgb, var(--vz-active) 22%, var(--surface)); stroke: var(--vz-active); }
+.vz-svg .vz-class.is-active text { fill: var(--text); }
+.vz-svg .vz-class.is-found > rect { fill: color-mix(in srgb, var(--vz-found) 18%, var(--surface)); stroke: var(--vz-found); }
+.vz-svg .vz-class.is-found text { fill: var(--text); }
+.vz-svg .vz-class-name { font-size: 13.5px; }
+.vz-svg .vz-class-name.is-italic { font-style: italic; }
+.vz-svg .vz-member { font-size: 12px; font-weight: 500; }
+.vz-svg .vz-member.is-on { font-weight: 800; fill: #1b1f27; }
+.vz-svg .vz-member-hl { fill: var(--vz-active); }
+.vz-svg .vz-uml-sep { stroke: var(--border-strong); stroke-width: 1.5; }
+.vz-svg .vz-uml-link { stroke: var(--muted); stroke-width: 2; fill: none; }
+.vz-svg .vz-uml-link.is-active { stroke: var(--vz-active); stroke-width: 3; }
+.vz-svg .vz-uml-head { fill: var(--surface); stroke: var(--muted); stroke-width: 1.5; }
+.viz .vz-grid td { padding: 0 6px !important; white-space: nowrap; }

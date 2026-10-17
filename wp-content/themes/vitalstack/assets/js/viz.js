@@ -19,6 +19,9 @@
  *   grid:   { rows, rowLabels, colLabels, cls: {"r,c": cls} }
  *   bars:   [{ label, value, cls }]
  *   intervals: { items: [[s, e]], cls, merged }
+ *   flow:   { w, h, nodes, edges, cls, ecls, packet }   (see renderFlow)
+ *   memory: { frames, heap }                            (see renderMemory)
+ *   uml:    { w, h, classes, links }                    (see renderUml)
  *   out:    string
  */
 (function () {
@@ -915,6 +918,341 @@
 		}
 	};
 
+	/* ═══ Java and OOP ═════════════════════════════════════════════════════ */
+
+	function jq(s) { return '"' + s + '"'; }
+	function memo(frames, heap) { return { frames: clone(frames), heap: clone(heap) }; }
+
+	A['class-object'] = {
+		title: 'Class → objects: one blueprint, many objects',
+		inputs: [{ key: 'names', label: 'Dog names', type: 'array' }],
+		defaults: { names: ['Rex', 'Bella', 'Max'] },
+		code: function (inp) {
+			var names = (inp.names || []).map(String).filter(Boolean).slice(0, 4);
+			if (!names.length) names = ['Rex'];
+			var lines = ['class Dog {', '    String name;', '    Dog(String name) {', '        this.name = name;', '    }', '    void bark() {', '        System.out.println(name + " says Woof!");', '    }', '}', ''];
+			names.forEach(function (n, i) { lines.push('Dog d' + (i + 1) + ' = new Dog(' + jq(n) + ');'); });
+			lines.push('d' + names.length + '.bark();');
+			return lines;
+		},
+		run: function (inp) {
+			var names = (inp.names || []).map(String).filter(Boolean).slice(0, 4), r = recorder();
+			if (!names.length) names = ['Rex'];
+			var uml = { w: 320, h: 150, classes: [{ name: 'Dog', fields: ['String name'], methods: ['Dog(String name)', 'void bark()'], x: 160, y: 75 }] };
+			var frames = [{ name: 'main', vars: [] }], heap = [];
+			r('A class is a blueprint. Dog says every dog has a name and can bark(), but no dog exists yet. The stack and heap are empty.', 1, { uml: uml, memory: memo(frames, heap) });
+			names.forEach(function (n, i) {
+				var id = (0x1a + i * 7).toString(16), line = 11 + i;
+				heap.push({ id: id, type: 'Dog', fields: [['name', 'null']], cls: 'active' });
+				r('new Dog(' + jq(n) + ') builds a fresh object on the heap, from the same blueprint. Its name starts empty (null).', line, { uml: clone(uml), memory: memo(frames, heap) });
+				heap[i].fields[0][1] = jq(n);
+				var u2 = clone(uml); u2.classes[0].hl = ['Dog(String name)'];
+				r('The constructor runs: this.name = name stores ' + jq(n) + ' inside this object.', 4, { uml: u2, memory: memo(frames, heap) });
+				heap[i].cls = '';
+				frames[0].vars.push({ name: 'd' + (i + 1), ref: id, cls: 'active' });
+				r('The variable d' + (i + 1) + ' lives on the stack and holds a reference (an arrow) to the object, not the object itself.', line, { uml: clone(uml), memory: memo(frames, heap) });
+				frames[0].vars[i].cls = '';
+			});
+			var last = names.length - 1;
+			heap[last].cls = 'active'; frames[0].vars[last].cls = 'active';
+			var u3 = clone(uml); u3.classes[0].hl = ['void bark()']; u3.classes[0].cls = 'active';
+			r('d' + names.length + '.bark() follows the arrow to that object and runs bark() with its own name.', 7, { uml: u3, memory: memo(frames, heap), out: names[last] + ' says Woof!' });
+			r(names.length + ' objects, 1 class. Each object has its own copy of the fields; the methods are shared through the class.', 7, { uml: uml, memory: memo(frames, heap.map(function (o) { o.cls = 'found'; return o; })), out: names[last] + ' says Woof!' });
+			return r.steps;
+		}
+	};
+
+	A['java-memory'] = {
+		title: 'Stack, heap and references',
+		inputs: [],
+		defaults: {},
+		code: ['int count = 3;', 'Car a = new Car("red");', 'Car b = a;           // copies the reference', 'b.color = "blue";    // changes the shared object', 'System.out.println(a.color);', 'a = new Car("green");', 'b = null;', '// the blue car is now unreachable → garbage'],
+		run: function () {
+			var r = recorder(), f = [{ name: 'main', vars: [] }], h = [];
+			f[0].vars.push({ name: 'count', value: 3, cls: 'active' });
+			r('Primitive values like int live right inside the stack frame. count holds the number 3 itself.', 1, { memory: memo(f, h) });
+			f[0].vars[0].cls = '';
+			h.push({ id: 'c1', type: 'Car', fields: [['color', jq('red')]], cls: 'active' });
+			f[0].vars.push({ name: 'a', ref: 'c1', cls: 'active' });
+			r('new Car("red") creates an object on the heap. a stores only a reference (an address) to it.', 2, { memory: memo(f, h) });
+			h[0].cls = ''; f[0].vars[1].cls = '';
+			f[0].vars.push({ name: 'b', ref: 'c1', cls: 'active' });
+			r('Car b = a copies the reference, not the car. Now two arrows point at the same object.', 3, { memory: memo(f, h) });
+			f[0].vars[2].cls = '';
+			h[0].fields[0][1] = jq('blue'); h[0].cls = 'active';
+			r('b.color = "blue" follows b\'s arrow and changes the object. a sees it too: it is the same car.', 4, { memory: memo(f, h) });
+			r('a.color prints "blue". This is the #1 surprise for beginners: assigning objects shares them.', 5, { memory: memo(f, h), out: 'blue' });
+			h[0].cls = '';
+			h.push({ id: 'c2', type: 'Car', fields: [['color', jq('green')]], cls: 'active' });
+			f[0].vars[1].ref = 'c2'; f[0].vars[1].cls = 'active';
+			r('a = new Car("green") points a at a brand-new object. b still points at the blue car.', 6, { memory: memo(f, h), out: 'blue' });
+			f[0].vars[1].cls = ''; h[1].cls = '';
+			f[0].vars[2].ref = null; f[0].vars[2].value = 'null'; f[0].vars[2].cls = 'active';
+			h[0].cls = 'garbage';
+			r('b = null removes the last arrow to the blue car. Nothing can reach it, so the garbage collector will free that memory.', 7, { memory: memo(f, h), out: 'blue' });
+			return r.steps;
+		}
+	};
+
+	A['call-stack'] = {
+		title: 'The call stack: recursion step by step',
+		inputs: [{ key: 'n', label: 'n (1-6)', type: 'number' }],
+		defaults: { n: 4 },
+		code: function (inp) {
+			return ['static int factorial(int n) {', '    if (n <= 1) return 1;', '    return n * factorial(n - 1);', '}', '', 'public static void main(String[] args) {', '    int result = factorial(' + Math.max(1, Math.min(6, inp.n | 0)) + ');', '    System.out.println(result);', '}'];
+		},
+		run: function (inp) {
+			var n = Math.max(1, Math.min(6, inp.n | 0)), r = recorder();
+			var frames = [{ name: 'main', vars: [{ name: 'result', value: '?' }], cls: 'active' }];
+			r('main() starts. Every method call gets its own frame on the stack with its own variables.', 7, { memory: { frames: clone(frames), heap: [] } });
+			for (var k = n; k >= 1; k--) {
+				frames.forEach(function (fr) { fr.cls = ''; });
+				frames.push({ name: 'factorial', vars: [{ name: 'n', value: k }], cls: 'active' });
+				r('Call factorial(' + k + '): a new frame is pushed on top. The frames below are paused, waiting.', k === n ? 7 : 3, { memory: { frames: clone(frames).reverse(), heap: [] }, vars: { 'stack depth': frames.length } });
+			}
+			r('n is 1: the base case returns 1 without calling again. Now the stack starts to unwind.', 2, { memory: { frames: clone(frames).reverse(), heap: [] }, vars: { 'stack depth': frames.length } });
+			var val = 1;
+			for (var j = 2; j <= n; j++) {
+				frames.pop();
+				frames[frames.length - 1].vars.push({ name: 'returned', value: val, cls: 'active' });
+				val *= j;
+				r('The top frame finishes and is popped. factorial(' + j + ') gets ' + (val / j) + ' back and returns ' + j + ' × ' + (val / j) + ' = ' + val + '.', 3, { memory: { frames: clone(frames).reverse(), heap: [] }, vars: { 'stack depth': frames.length } });
+			}
+			frames.pop();
+			frames[0].vars[0].value = val; frames[0].vars[0].cls = 'active'; frames[0].cls = 'active';
+			r('Back in main(): result = ' + val + '. Too many nested calls (no base case) would overflow the stack: StackOverflowError.', 8, { memory: { frames: clone(frames), heap: [] }, out: String(val) });
+			return r.steps;
+		}
+	};
+
+	var ANIMALS = {
+		Animal: { parent: null, methods: { eat: 'eats food', sleep: 'sleeps', speak: 'makes a sound' }, x: 320, y: 62 },
+		Dog: { parent: 'Animal', methods: { speak: 'Woof!', fetch: 'fetches the ball' }, x: 170, y: 195 },
+		Cat: { parent: 'Animal', methods: { speak: 'Meow!' }, x: 470, y: 195 },
+		Puppy: { parent: 'Dog', methods: { sleep: 'naps 18 hours a day' }, x: 170, y: 312 }
+	};
+	function animalUml(active, hl, lcls) {
+		var classes = Object.keys(ANIMALS).map(function (n) {
+			var c = ANIMALS[n];
+			return { name: n, methods: Object.keys(c.methods).map(function (m) { return 'void ' + m + '()'; }), x: c.x, y: c.y, cls: active[n] || '', hl: hl[n] ? ['void ' + hl[n] + '()'] : [] };
+		});
+		return { w: 640, h: 370, classes: classes, links: [['Dog', 'Animal', 'extends'], ['Cat', 'Animal', 'extends'], ['Puppy', 'Dog', 'extends']], lcls: lcls || {} };
+	}
+	var ANIMAL_CODE = ['class Animal {', '    void eat()   { print("eats food"); }', '    void sleep() { print("sleeps"); }', '    void speak() { print("makes a sound"); }', '}', 'class Dog extends Animal {', '    void speak() { print("Woof!"); }', '    void fetch() { print("fetches the ball"); }', '}', 'class Cat extends Animal {', '    void speak() { print("Meow!"); }', '}', 'class Puppy extends Dog {', '    void sleep() { print("naps 18 hours a day"); }', '}'];
+	var ANIMAL_LINE = { Animal: { eat: 2, sleep: 3, speak: 4 }, Dog: { speak: 7, fetch: 8 }, Cat: { speak: 11 }, Puppy: { sleep: 14 } };
+
+	A['inheritance'] = {
+		title: 'Inheritance: how Java finds a method',
+		inputs: [{ key: 'type', label: 'Object', type: 'choice', options: ['Puppy', 'Dog', 'Cat', 'Animal'] }, { key: 'method', label: 'Method', type: 'choice', options: ['speak', 'sleep', 'eat', 'fetch'] }],
+		defaults: { type: 'Puppy', method: 'speak' },
+		code: function (inp) { return ANIMAL_CODE.concat(['', inp.type + ' pet = new ' + inp.type + '();', 'pet.' + inp.method + '();']); },
+		run: function (inp) {
+			var type = ANIMALS[inp.type] ? inp.type : 'Puppy', m = inp.method, r = recorder(), call = ANIMAL_CODE.length + 3;
+			var act = {}; act[type] = 'active';
+			r('pet is a ' + type + '. When you call pet.' + m + '(), Java starts looking in the object\'s own class: ' + type + '.', call, { uml: animalUml(act, {}) });
+			var c = type, lcls = {}, trail = [];
+			while (c) {
+				var a = {}; trail.forEach(function (t) { a[t] = 'dim'; }); a[c] = 'active';
+				if (ANIMALS[c].methods[m]) {
+					var h = {}; h[c] = m; a[c] = 'found';
+					r(c + ' defines ' + m + '(). Found it! ' + (c === type ? 'The class\'s own version runs.' : type + ' inherited it from ' + c + '.'), ANIMAL_LINE[c][m], { uml: animalUml(a, h, lcls) });
+					r('It prints "' + ANIMALS[c].methods[m] + '". ' + (c === type && ANIMALS[type].parent && ANIMALS[ANIMALS[type].parent] && (function up(k) { return k && (ANIMALS[k].methods[m] ? true : up(ANIMALS[k].parent)); })(ANIMALS[type].parent) ? type + ' overrides (replaces) the parent\'s version.' : c === type ? 'Defined right in ' + type + '.' : 'Inherited: ' + type + ' reuses ' + c + '\'s code without rewriting it.'), ANIMAL_LINE[c][m], { uml: animalUml(a, h, lcls), out: ANIMALS[c].methods[m] });
+					return r.steps;
+				}
+				r(c + ' has no ' + m + '() of its own, so Java moves up to the parent class' + (ANIMALS[c].parent ? ': ' + ANIMALS[c].parent + '.' : '.'), call, { uml: animalUml(a, {}, lcls) });
+				trail.push(c);
+				if (ANIMALS[c].parent) lcls[c + '-' + ANIMALS[c].parent] = 'active';
+				c = ANIMALS[c].parent;
+			}
+			r('No class in the chain defines ' + m + '(). The compiler stops you before the program runs: "cannot find symbol". A ' + type + ' simply can\'t ' + m + '.', call, { uml: animalUml({}, {}, lcls), out: 'error: cannot find symbol ' + m + '()' });
+			return r.steps;
+		}
+	};
+
+	var SOUNDS = { Dog: 'Woof!', Cat: 'Meow!', Cow: 'Moo!', Duck: 'Quack!' };
+	A['polymorphism'] = {
+		title: 'Polymorphism: same call, different behaviour',
+		inputs: [{ key: 'zoo', label: 'Animals (Dog, Cat, Cow, Duck)', type: 'array' }],
+		defaults: { zoo: ['Dog', 'Cat', 'Cow', 'Dog'] },
+		code: function (inp) {
+			var z = (inp.zoo || []).filter(function (x) { return SOUNDS[x]; }).slice(0, 6);
+			return ['abstract class Animal { abstract String speak(); }', 'class Dog  extends Animal { String speak() { return "Woof!"; } }', 'class Cat  extends Animal { String speak() { return "Meow!"; } }', 'class Cow  extends Animal { String speak() { return "Moo!"; } }', 'class Duck extends Animal { String speak() { return "Quack!"; } }', '', 'Animal[] zoo = { ' + z.map(function (x) { return 'new ' + x + '()'; }).join(', ') + ' };', 'for (Animal a : zoo) {', '    System.out.println(a.speak());', '}'];
+		},
+		run: function (inp) {
+			var zoo = (inp.zoo || []).map(String).map(function (x) { return x.charAt(0).toUpperCase() + x.slice(1).toLowerCase(); }).filter(function (x) { return SOUNDS[x]; }).slice(0, 6), r = recorder(), outs = [];
+			if (!zoo.length) zoo = ['Dog', 'Cat'];
+			var line = { Dog: 2, Cat: 3, Cow: 4, Duck: 5 };
+			function uml(on) {
+				var xs = { Dog: 95, Cat: 245, Cow: 395, Duck: 545 };
+				return { w: 640, h: 200, classes: [{ name: 'Animal', kind: 'abstract', methods: ['String speak()'], x: 320, y: 50 }].concat(Object.keys(xs).map(function (k) { return { name: k, methods: ['String speak()'], x: xs[k], y: 150, cls: on === k ? 'found' : '', hl: on === k ? ['String speak()'] : [] }; })), links: Object.keys(xs).map(function (k) { return [k, 'Animal', 'extends']; }), lcls: {} };
+			}
+			r('Every element has the declared type Animal, but each object remembers its real class.', 7, { uml: uml(), arrays: [{ name: 'zoo (Animal[])', values: zoo }] });
+			zoo.forEach(function (t, i) {
+				var c = {}; c[i] = 'active';
+				outs.push(SOUNDS[t]);
+				r('a.speak() on zoo[' + i + ']: at run time Java checks the real object, a ' + t + ', and calls ' + t + '.speak() → "' + SOUNDS[t] + '"', line[t], { uml: uml(t), arrays: [{ name: 'zoo (Animal[])', values: zoo, cls: c, ptr: { a: i } }], chips: { name: 'printed', items: outs.slice() }, out: SOUNDS[t] });
+			});
+			r('One line of code, ' + zoo.length + ' behaviours. That is polymorphism (dynamic dispatch). Adding a new animal needs no change to the loop.', 9, { uml: uml(), arrays: [{ name: 'zoo (Animal[])', values: zoo }], chips: { name: 'printed', items: outs }, out: outs.join(' ') });
+			return r.steps;
+		}
+	};
+
+	A['encapsulation'] = {
+		title: 'Encapsulation: private data, safe methods',
+		inputs: [{ key: 'ops', label: 'Operations (deposit 500, withdraw 200…)', type: 'string' }],
+		defaults: { ops: 'deposit 500, withdraw 200, withdraw 1000, deposit -50' },
+		code: ['class BankAccount {', '    private double balance;', '', '    public void deposit(double amount) {', '        if (amount <= 0) throw new IllegalArgumentException("Amount must be positive");', '        balance += amount;', '    }', '    public void withdraw(double amount) {', '        if (amount > balance) throw new IllegalStateException("Insufficient funds");', '        balance -= amount;', '    }', '    public double getBalance() { return balance; }', '}', '', '// account.balance = 1_000_000;  ✗ does not compile: balance is private'],
+		run: function (inp) {
+			var r = recorder(), bal = 0, log = [];
+			var ops = String(inp.ops || '').split(',').map(function (s) { return s.trim().split(/\s+/); }).filter(function (p) { return p.length === 2 && /^(deposit|withdraw)$/i.test(p[0]) && !isNaN(+p[1]); }).slice(0, 8);
+			function scene(cls) { return { memory: { frames: [{ name: 'main', vars: [{ name: 'account', ref: 'acc' }] }], heap: [{ id: 'acc', type: 'BankAccount', fields: [['🔒 balance', bal]], cls: cls || '' }] }, chips: { name: 'log', items: log.slice() } }; }
+			r('balance is private: code outside the class can\'t touch it. The only way in is through public methods that check every request.', 2, scene());
+			ops.forEach(function (o) {
+				var kind = o[0].toLowerCase(), amt = +o[1];
+				if (kind === 'deposit') {
+					if (amt <= 0) { log.push('✗ deposit ' + amt); r('deposit(' + amt + ') is rejected: the method refuses amounts ≤ 0, so the balance can never be corrupted.', 5, Object.assign(scene('error'), { out: 'IllegalArgumentException: Amount must be positive' })); }
+					else { bal += amt; log.push('✓ deposit ' + amt); r('deposit(' + amt + ') passes the check. balance = ' + bal + '.', 6, scene('found')); }
+				} else {
+					if (amt > bal) { log.push('✗ withdraw ' + amt); r('withdraw(' + amt + ') is blocked: only ' + bal + ' available. The object protects its own rules.', 9, Object.assign(scene('error'), { out: 'IllegalStateException: Insufficient funds' })); }
+					else { bal -= amt; log.push('✓ withdraw ' + amt); r('withdraw(' + amt + ') is allowed. balance = ' + bal + '.', 10, scene('found')); }
+				}
+			});
+			r('Trying account.balance = 1_000_000 from outside doesn\'t even compile. Data + the rules that guard it live together: that\'s encapsulation.', 15, Object.assign(scene(), { out: 'getBalance() = ' + bal }));
+			return r.steps;
+		}
+	};
+
+	A['interface-shapes'] = {
+		title: 'Interfaces: one contract, many classes',
+		inputs: [{ key: 'r', label: 'Circle radius', type: 'number' }, { key: 'w', label: 'Rectangle width', type: 'number' }, { key: 'h', label: 'Rectangle height', type: 'number' }],
+		defaults: { r: 2, w: 3, h: 4 },
+		code: function (inp) { return ['interface Shape {', '    double area();', '}', 'class Circle implements Shape {', '    double r;', '    public double area() { return Math.PI * r * r; }', '}', 'class Rectangle implements Shape {', '    double w, h;', '    public double area() { return w * h; }', '}', '', 'Shape[] shapes = { new Circle(' + inp.r + '), new Rectangle(' + inp.w + ', ' + inp.h + ') };', 'double total = 0;', 'for (Shape s : shapes) total += s.area();']; },
+		run: function (inp) {
+			var rr = Math.max(0, inp.r), w = Math.max(0, inp.w), hh = Math.max(0, inp.h), r = recorder();
+			function uml(on) { return { w: 560, h: 210, classes: [{ name: 'Shape', kind: 'interface', methods: ['double area()'], x: 280, y: 52, cls: on ? '' : 'active' }, { name: 'Circle', fields: ['double r'], methods: ['double area()'], x: 140, y: 160, cls: on === 'Circle' ? 'found' : '', hl: on === 'Circle' ? ['double area()'] : [] }, { name: 'Rectangle', fields: ['double w, h'], methods: ['double area()'], x: 420, y: 160, cls: on === 'Rectangle' ? 'found' : '', hl: on === 'Rectangle' ? ['double area()'] : [] }], links: [['Circle', 'Shape', 'implements'], ['Rectangle', 'Shape', 'implements']] }; }
+			var a1 = Math.round(Math.PI * rr * rr * 100) / 100, a2 = w * hh;
+			r('An interface is a contract: "anything that is a Shape can tell you its area()". It says what, not how.', 1, { uml: uml() });
+			r('Circle keeps its promise its own way: π × r × r = ' + a1 + '.', 6, { uml: uml('Circle'), bars: [{ label: 'Circle', value: a1, cls: 'ok' }], vars: { total: a1 } });
+			r('Rectangle keeps the same promise differently: w × h = ' + a2 + '.', 10, { uml: uml('Rectangle'), bars: [{ label: 'Circle', value: a1 }, { label: 'Rectangle', value: a2, cls: 'ok' }], vars: { total: Math.round((a1 + a2) * 100) / 100 } });
+			r('The loop only knows "Shape". New shapes (Triangle, Hexagon…) plug in without touching it. Code to interfaces, not implementations.', 15, { uml: uml(), bars: [{ label: 'Circle', value: a1 }, { label: 'Rectangle', value: a2 }], out: 'total area = ' + Math.round((a1 + a2) * 100) / 100 });
+			return r.steps;
+		}
+	};
+
+	A['arraylist-grow'] = {
+		title: 'ArrayList: how it grows',
+		inputs: [{ key: 'n', label: 'Items to add (1-25)', type: 'number' }],
+		defaults: { n: 12 },
+		code: function (inp) { return ['List<String> list = new ArrayList<>();   // room for 10', 'for (int i = 0; i < ' + Math.max(1, Math.min(25, inp.n | 0)) + '; i++) {', '    list.add("item" + i);', '}', '// full? newCapacity = old + old / 2, then copy'] ; },
+		run: function (inp) {
+			var n = Math.max(1, Math.min(25, inp.n | 0)), cap = 10, arr = [], r = recorder(), copies = 0;
+			function cells() { var v = arr.slice(); while (v.length < cap) v.push(''); return v; }
+			r('A new ArrayList starts with an internal array of 10 empty slots. size = 0.', 1, { arrays: [{ name: 'elementData (capacity ' + cap + ')', values: cells() }], vars: { size: 0, capacity: cap } });
+			for (var i = 0; i < n; i++) {
+				if (arr.length === cap) {
+					var old = cells(), next = cap + (cap >> 1);
+					r('The array is full (' + cap + '/' + cap + '). ArrayList creates a bigger one: ' + cap + ' + ' + cap + '/2 = ' + next + ' slots.', 5, { arrays: [{ name: 'old (full)', values: old, cls: clsMap(range(cap).map(function (k) { return [k, 'wait']; })) }, { name: 'new (capacity ' + next + ')', values: range(next).map(function () { return ''; }) }], vars: { size: arr.length, capacity: cap } });
+					cap = next; copies++;
+					r('Every element is copied to the new array (O(n) work), and the old array becomes garbage.', 5, { arrays: [{ name: 'elementData (capacity ' + cap + ')', values: cells(), cls: clsMap(range(arr.length).map(function (k) { return [k, 'found']; })) }], vars: { size: arr.length, capacity: cap } });
+				}
+				arr.push('i' + i);
+				var c = {}; c[i] = 'active';
+				if (i < 3 || i === n - 1 || arr.length === cap) r('add("item' + i + '") puts it in slot ' + i + '. O(1) most of the time.', 3, { arrays: [{ name: 'elementData (capacity ' + cap + ')', values: cells(), cls: c, ptr: { size: Math.min(arr.length, cap - 1) } }], vars: { size: arr.length, capacity: cap } });
+			}
+			r('Done: ' + n + ' items, capacity ' + cap + ', ' + copies + ' resize' + (copies === 1 ? '' : 's') + '. Because it grows by 50% each time, add() is O(1) on average ("amortised").', 4, { arrays: [{ name: 'elementData (capacity ' + cap + ')', values: cells() }], vars: { size: n, capacity: cap, resizes: copies }, out: 'size=' + n + ', capacity=' + cap });
+			return r.steps;
+		}
+	};
+
+	function javaHash(s) { var h = 0; for (var i = 0; i < s.length; i++) h = (Math.imul(31, h) + s.charCodeAt(i)) | 0; return h; }
+	A['hashmap-buckets'] = {
+		title: 'HashMap: hashCode → bucket',
+		inputs: [{ key: 'keys', label: 'Keys', type: 'array' }],
+		defaults: { keys: ['apple', 'banana', 'cherry', 'mango', 'kiwi', 'grape', 'Aa', 'BB'] },
+		code: function (inp) { return ['Map<String, Integer> stock = new HashMap<>();   // 16 buckets'].concat((inp.keys || []).slice(0, 10).map(function (k, i) { return 'stock.put("' + k + '", ' + (i + 1) + ');'; })).concat(['', '// index = (h ^ (h >>> 16)) & (16 - 1)   where h = key.hashCode()']); },
+		run: function (inp) {
+			var keys = (inp.keys || []).map(String).filter(Boolean).slice(0, 10), r = recorder(), buckets = range(16).map(function () { return []; });
+			function grid(hl) {
+				var rows = range(4).map(function (rr) { return range(4).map(function (cc) { var b = buckets[rr * 4 + cc]; return b.length ? b.join(' → ') : '·'; }); });
+				var cls = {};
+				if (hl !== undefined) cls[Math.floor(hl / 4) + ',' + (hl % 4)] = buckets[hl].length > 1 ? 'found' : 'active';
+				return { rows: rows, rowLabels: ['0', '4', '8', '12'], colLabels: ['+0', '+1', '+2', '+3'], cls: cls };
+			}
+			r('A HashMap is an array of 16 "buckets". To store a key, Java turns it into a number with hashCode() and picks a bucket from it.', 1, { grid: grid() });
+			keys.forEach(function (k, i) {
+				var h = javaHash(k), spread = h ^ (h >>> 16), idx = spread & 15, col = buckets[idx].length > 0;
+				buckets[idx].push(k + '=' + (i + 1));
+				r('"' + k + '".hashCode() = ' + h + ' → bucket ' + idx + (col ? '. Collision! That bucket already has an entry, so they are chained together in a list.' : '. Stored in O(1).'), 2 + i, { grid: grid(idx), vars: { key: k, hashCode: h, bucket: idx } });
+			});
+			var used = buckets.filter(function (b) { return b.length; }).length;
+			r(keys.length + ' keys in ' + used + ' buckets. get(key) recomputes the bucket and only searches that one chain, so lookups stay O(1) on average. ("Aa" and "BB" famously share a hashCode.)', keys.length + 3, { grid: grid(), vars: { keys: keys.length, 'buckets used': used }, out: 'size=' + keys.length });
+			return r.steps;
+		}
+	};
+
+	A['string-pool'] = {
+		title: 'Strings: == vs equals() and the string pool',
+		inputs: [],
+		defaults: {},
+		code: ['String a = "hi";', 'String b = "hi";', 'String c = new String("hi");', 'System.out.println(a == b);       // same object?', 'System.out.println(a == c);', 'System.out.println(a.equals(c));  // same text?', 'String d = c.intern();', 'System.out.println(a == d);'],
+		run: function () {
+			var r = recorder(), f = [{ name: 'main', vars: [] }], h = [], outs = [];
+			h.push({ id: 'p1', type: 'String', label: 'String "hi"', area: 'string pool', fields: [['value', jq('hi')]], cls: 'active' });
+			f[0].vars.push({ name: 'a', ref: 'p1', cls: 'active' });
+			r('A string literal goes into the string pool: a shared area where each distinct literal is stored once.', 1, { memory: memo(f, h) });
+			f[0].vars[0].cls = ''; h[0].cls = '';
+			f[0].vars.push({ name: 'b', ref: 'p1', cls: 'active' });
+			r('"hi" again? Java reuses the pooled object. a and b point to the very same String.', 2, { memory: memo(f, h) });
+			f[0].vars[1].cls = '';
+			h.push({ id: 's2', type: 'String', label: 'String "hi" (new)', area: 'heap', fields: [['value', jq('hi')]], cls: 'active' });
+			f[0].vars.push({ name: 'c', ref: 's2', cls: 'active' });
+			r('new String("hi") always creates a separate object on the heap, even with the same text.', 3, { memory: memo(f, h) });
+			f[0].vars[2].cls = ''; h[1].cls = '';
+			outs.push('true'); r('a == b compares references (arrows). Same object → true.', 4, { memory: memo(f, h), chips: { name: 'printed', items: outs.slice() }, out: 'true' });
+			outs.push('false'); r('a == c: different objects → false, even though the text is identical. This is a classic interview trap.', 5, { memory: memo(f, h), chips: { name: 'printed', items: outs.slice() }, out: 'false' });
+			outs.push('true'); r('a.equals(c) compares the characters → true. Always use equals() to compare string contents.', 6, { memory: memo(f, h), chips: { name: 'printed', items: outs.slice() }, out: 'true' });
+			f[0].vars.push({ name: 'd', ref: 'p1', cls: 'active' });
+			outs.push('true'); r('c.intern() returns the pooled copy. d points at the same object as a, so a == d is true.', 8, { memory: memo(f, h), chips: { name: 'printed', items: outs.slice() }, out: 'true' });
+			return r.steps;
+		}
+	};
+
+	A['exception-flow'] = {
+		title: 'try / catch / finally: where does the program go?',
+		inputs: [{ key: 'expr', label: 'Input', type: 'choice', options: ['10 / 2', '10 / 0', 'ten / 2'] }],
+		defaults: { expr: '10 / 0' },
+		code: function (inp) { var p = String(inp.expr).split(' / '); return ['String first = "' + p[0] + '", second = "' + p[1] + '";', 'try {', '    int a = Integer.parseInt(first);', '    int b = Integer.parseInt(second);', '    System.out.println(a / b);', '} catch (NumberFormatException e) {', '    System.out.println("Not a number!");', '} catch (ArithmeticException e) {', '    System.out.println("Can\'t divide by zero!");', '} finally {', '    System.out.println("Done.");', '}', 'System.out.println("Program continues");']; },
+		run: function (inp) {
+			var p = String(inp.expr || '10 / 2').split(' / '), r = recorder(), outs = [];
+			var nodes = [{ id: 'parse', label: 'parseInt(first, second)', x: 160, y: 50 }, { id: 'div', label: 'a / b', x: 160, y: 140 }, { id: 'print', label: 'print result', x: 160, y: 230 }, { id: 'nfe', label: 'catch NumberFormat', x: 470, y: 50, sub: 'Not a number!' }, { id: 'ae', label: 'catch Arithmetic', x: 470, y: 140, sub: "Can't divide by zero!" }, { id: 'fin', label: 'finally', x: 470, y: 230, sub: 'always runs' }, { id: 'end', label: 'continue program', x: 470, y: 305, shape: 'pill' }];
+			var edges = [['parse', 'div', 'ok'], ['div', 'print', 'ok'], ['parse', 'nfe', 'throws', 'dashed'], ['div', 'ae', 'throws', 'dashed'], ['print', 'fin'], ['nfe', 'fin'], ['ae', 'fin'], ['fin', 'end']];
+			function fl(on, from, to, ecls) { var c = {}; on.forEach(function (x) { c[x[0]] = x[1]; }); return { w: 640, h: 340, nodes: nodes, edges: edges, cls: c, ecls: ecls || {}, packet: from ? { from: from, to: to || from } : null }; }
+			r('The try block runs line by line. If any line throws an exception, Java jumps straight to the matching catch.', 2, { flow: fl([['parse', 'active']], 'parse') });
+			var a = parseInt(p[0], 10), b = parseInt(p[1], 10);
+			if (isNaN(a) || isNaN(b) || String(a) !== p[0]) {
+				r('Integer.parseInt("' + p[0] + '") can\'t read "' + p[0] + '" as a number and throws NumberFormatException. The rest of try is skipped.', 3, { flow: fl([['parse', 'error'], ['nfe', 'active']], 'parse', 'nfe', { 'parse-nfe': 'active' }) });
+				outs.push('Not a number!');
+				r('The matching catch block handles it.', 7, { flow: fl([['parse', 'error'], ['nfe', 'found']], 'nfe'), chips: { name: 'printed', items: outs.slice() } });
+				var from = 'nfe';
+			} else if (b === 0) {
+				r('Both numbers parse fine. Now ' + a + ' / 0 throws ArithmeticException.', 5, { flow: fl([['parse', 'done'], ['div', 'error']], 'parse', 'div', { 'parse-div': 'done' }) });
+				r('Java skips the print and jumps to catch (ArithmeticException).', 9, { flow: fl([['parse', 'done'], ['div', 'error'], ['ae', 'active']], 'div', 'ae', { 'parse-div': 'done', 'div-ae': 'active' }) });
+				outs.push("Can't divide by zero!"); from = 'ae';
+				r('The handler prints a friendly message instead of crashing.', 9, { flow: fl([['div', 'error'], ['ae', 'found']], 'ae'), chips: { name: 'printed', items: outs.slice() } });
+			} else {
+				r('Both parse fine and ' + a + ' / ' + b + ' = ' + Math.trunc(a / b) + ' (integer division). No exception.', 5, { flow: fl([['parse', 'done'], ['div', 'active']], 'parse', 'div', { 'parse-div': 'done' }) });
+				outs.push(String(Math.trunc(a / b))); from = 'print';
+				r('The result is printed; both catch blocks are skipped.', 5, { flow: fl([['parse', 'done'], ['div', 'done'], ['print', 'found']], 'div', 'print', { 'parse-div': 'done', 'div-print': 'done' }), chips: { name: 'printed', items: outs.slice() } });
+			}
+			outs.push('Done.');
+			var e = {}; e[from + '-fin'] = 'active';
+			r('finally runs in every case: success, caught exception, even a return. It is the place to close files and connections.', 11, { flow: fl([['fin', 'found']], from, 'fin', e), chips: { name: 'printed', items: outs.slice() } });
+			outs.push('Program continues');
+			r('Because the exception was handled, the program carries on normally.', 13, { flow: fl([['fin', 'done'], ['end', 'found']], 'fin', 'end', { 'fin-end': 'active' }), chips: { name: 'printed', items: outs.slice() }, out: outs.join(' | ') });
+			return r.steps;
+		}
+	};
+
 	/* ═══ Renderer ═════════════════════════════════════════════════════════ */
 
 	function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; }
@@ -1134,6 +1472,191 @@
 		host.appendChild(wrap);
 	}
 
+	/* Flow diagram: boxes, arrows and a moving "packet".
+	 * flow: { w, h, nodes: [{id, label, sub, x, y, w, shape}], edges: [[from, to, label, 'dashed'|'back']],
+	 *         cls: {id: cls}, ecls: {'a-b': cls}, packet: {from, to, label} } */
+	var flowSeq = 0;
+	function renderFlow(host, f) {
+		var W = f.w || 640, H = f.h || 300, id = 'vzf' + (++flowSeq);
+		var svg = sv('svg', { class: 'vz-svg vz-flow', viewBox: '0 0 ' + W + ' ' + H, width: W, height: H });
+		var defs = sv('defs');
+		['', '-on'].forEach(function (k) {
+			var mk = sv('marker', { id: id + 'arr' + k, viewBox: '0 0 10 10', refX: '9', refY: '5', markerWidth: '7', markerHeight: '7', orient: 'auto-start-reverse' });
+			mk.appendChild(sv('path', { d: 'M0,0 L10,5 L0,10 z', class: 'vz-arrowhead' + (k ? ' is-on' : '') }));
+			defs.appendChild(mk);
+		});
+		svg.appendChild(defs);
+		var box = {};
+		f.nodes.forEach(function (n) {
+			var w = n.w || Math.max(84, String(n.label).length * 8.4 + 26, n.sub ? String(n.sub).length * 6.6 + 22 : 0), h = n.h || (n.sub ? 50 : 38);
+			box[n.id] = { x: n.x, y: n.y, w: w, h: h };
+		});
+		function edgePoint(b, tx, ty) {
+			var dx = tx - b.x, dy = ty - b.y;
+			if (!dx && !dy) return { x: b.x, y: b.y };
+			var sx = dx ? (b.w / 2) / Math.abs(dx) : Infinity, sy = dy ? (b.h / 2) / Math.abs(dy) : Infinity, k = Math.min(sx, sy);
+			return { x: b.x + dx * k, y: b.y + dy * k };
+		}
+		function pathFor(a, b, bend) {
+			var A = box[a], B = box[b];
+			if (!A || !B) return null;
+			var p = edgePoint(A, B.x, B.y), q = edgePoint(B, A.x, A.y);
+			if (bend) {
+				var mx = (p.x + q.x) / 2, my = (p.y + q.y) / 2, nx = -(q.y - p.y), ny = q.x - p.x, len = Math.sqrt(nx * nx + ny * ny) || 1;
+				var cx = mx + nx / len * bend, cy = my + ny / len * bend;
+				return { d: 'M' + p.x + ',' + p.y + ' Q' + cx + ',' + cy + ' ' + q.x + ',' + q.y, mx: (p.x + 2 * cx + q.x) / 4, my: (p.y + 2 * cy + q.y) / 4 };
+			}
+			return { d: 'M' + p.x + ',' + p.y + ' L' + q.x + ',' + q.y, mx: (p.x + q.x) / 2, my: (p.y + q.y) / 2 };
+		}
+		(f.edges || []).forEach(function (e) {
+			var back = e[3] === 'back', pth = pathFor(e[0], e[1], back ? 26 : 0);
+			if (!pth) return;
+			var k = e[0] + '-' + e[1], c = f.ecls && f.ecls[k];
+			svg.appendChild(sv('path', { d: pth.d, class: 'vz-edge vz-flow-edge' + (c ? ' is-' + c : '') + (e[3] === 'dashed' ? ' is-dashed' : ''), 'marker-end': 'url(#' + id + 'arr' + (c === 'active' ? '-on' : '') + ')' }));
+			if (e[2]) {
+				var lbl = sv('text', { x: pth.mx, y: pth.my - 6, class: 'vz-edge-label' + (c ? ' is-' + c : '') }); lbl.textContent = e[2]; svg.appendChild(lbl);
+			}
+		});
+		f.nodes.forEach(function (n) {
+			var b = box[n.id], c = f.cls && f.cls[n.id];
+			var g = sv('g', { class: 'vz-node vz-fnode' + (c ? ' is-' + c : '') + (n.shape ? ' is-' + n.shape : '') });
+			if (n.shape === 'db') {
+				var rx = b.w / 2, ry = 7, top = b.y - b.h / 2 + ry;
+				g.appendChild(sv('path', { d: 'M' + (b.x - rx) + ',' + top + ' v' + (b.h - 2 * ry) + ' a' + rx + ',' + ry + ' 0 0 0 ' + b.w + ',0 v-' + (b.h - 2 * ry), class: 'vz-db' }));
+				g.appendChild(sv('ellipse', { cx: b.x, cy: top, rx: rx, ry: ry, class: 'vz-db-top' }));
+			} else {
+				g.appendChild(sv('rect', { x: b.x - b.w / 2, y: b.y - b.h / 2, width: b.w, height: b.h, rx: n.shape === 'pill' ? b.h / 2 : 10 }));
+			}
+			var t = sv('text', { x: b.x, y: b.y + (n.sub ? -3 : 5) }); t.textContent = n.label; g.appendChild(t);
+			if (n.sub) { var st = sv('text', { x: b.x, y: b.y + 14, class: 'vz-sub' }); st.textContent = n.sub; g.appendChild(st); }
+			svg.appendChild(g);
+		});
+		if (f.packet) {
+			var pp = f.packet.from === f.packet.to ? null : pathFor(f.packet.from, f.packet.to, f.packet.back ? 26 : 0);
+			var dot = sv('g', { class: 'vz-packet' });
+			dot.appendChild(sv('circle', { r: 9 }));
+			if (f.packet.label) { var pl = sv('text', { y: -14, class: 'vz-packet-label' }); pl.textContent = f.packet.label; dot.appendChild(pl); }
+			if (pp) {
+				var mv = sv('animateMotion', { dur: '0.9s', fill: 'freeze', path: pp.d, calcMode: 'spline', keyTimes: '0;1', keySplines: '0.4 0 0.2 1' });
+				dot.appendChild(mv);
+			} else if (box[f.packet.from]) {
+				dot.setAttribute('transform', 'translate(' + box[f.packet.from].x + ',' + (box[f.packet.from].y - box[f.packet.from].h / 2 - 4) + ')');
+			}
+			svg.appendChild(dot);
+		}
+		var wrap = el('div', 'vz-scroll'); wrap.appendChild(svg); host.appendChild(wrap);
+	}
+
+	/* Memory: stack frames on the left, heap objects on the right, arrows for references.
+	 * memory: { frames: [{name, vars: [{name, value, ref, cls}]}], heap: [{id, type, label, fields: [[k, v, ref]], cls, area}],
+	 *           title } */
+	function renderMemory(host, m) {
+		var rowH = 26, colW = 230, gap = 120, pad = 14;
+		var frames = m.frames || [], heap = m.heap || [];
+		var leftH = 34, rightH = 34, varPos = {}, objPos = {}, fieldPos = [];
+		var items = [];
+		frames.forEach(function (fr) {
+			var h = 30 + Math.max(1, fr.vars.length) * rowH + 8;
+			items.push({ kind: 'frame', fr: fr, y: leftH, h: h });
+			fr.vars.forEach(function (v, i) { varPos[fr.name + '.' + v.name] = { y: leftH + 30 + i * rowH + rowH / 2, v: v }; });
+			leftH += h + 10;
+		});
+		var areaY = {};
+		heap.forEach(function (o) {
+			if (o.area && areaY[o.area] === undefined) { areaY[o.area] = rightH; rightH += 22; }
+			var h = 30 + Math.max(1, (o.fields || []).length) * rowH + 6;
+			objPos[o.id] = { y: rightH, h: h, o: o };
+			(o.fields || []).forEach(function (f, i) { if (f[2]) fieldPos.push({ from: o.id, y: rightH + 30 + i * rowH + rowH / 2, to: f[2] }); });
+			rightH += h + 12;
+		});
+		var W = pad * 2 + colW * 2 + gap, H = Math.max(leftH, rightH) + 6, X2 = pad + colW + gap;
+		var svg = sv('svg', { class: 'vz-svg vz-mem', viewBox: '0 0 ' + W + ' ' + H, width: W, height: H });
+		var defs = sv('defs'), mk = sv('marker', { id: 'vzmarr', viewBox: '0 0 10 10', refX: '9', refY: '5', markerWidth: '7', markerHeight: '7', orient: 'auto' });
+		mk.appendChild(sv('path', { d: 'M0,0 L10,5 L0,10 z', class: 'vz-arrowhead is-on' })); defs.appendChild(mk); svg.appendChild(defs);
+		var h1 = sv('text', { x: pad + colW / 2, y: 18, class: 'vz-mem-title' }); h1.textContent = 'STACK'; svg.appendChild(h1);
+		var h2 = sv('text', { x: X2 + colW / 2, y: 18, class: 'vz-mem-title' }); h2.textContent = 'HEAP'; svg.appendChild(h2);
+		Object.keys(areaY).forEach(function (a) { var t = sv('text', { x: X2 + 4, y: areaY[a] + 14, class: 'vz-mem-area' }); t.textContent = a; t.style.textAnchor = 'start'; svg.appendChild(t); });
+		items.forEach(function (it) {
+			var g = sv('g', { class: 'vz-frame' + (it.fr.cls ? ' is-' + it.fr.cls : '') });
+			g.appendChild(sv('rect', { x: pad, y: it.y, width: colW, height: it.h, rx: 10 }));
+			var t = sv('text', { x: pad + 12, y: it.y + 20, class: 'vz-frame-name' }); t.textContent = it.fr.name + '()'; t.style.textAnchor = 'start'; g.appendChild(t);
+			it.fr.vars.forEach(function (v, i) {
+				var y = it.y + 30 + i * rowH;
+				var r = sv('g', { class: 'vz-var-row' + (v.cls ? ' is-' + v.cls : '') });
+				r.appendChild(sv('rect', { x: pad + 8, y: y, width: colW - 16, height: rowH - 4, rx: 6 }));
+				var n = sv('text', { x: pad + 16, y: y + 16 }); n.textContent = v.name; n.style.textAnchor = 'start'; r.appendChild(n);
+				var val = sv('text', { x: pad + colW - 16, y: y + 16, class: 'vz-val-text' }); val.textContent = v.ref ? '●' : String(v.value); val.style.textAnchor = 'end'; r.appendChild(val);
+				g.appendChild(r);
+			});
+			svg.appendChild(g);
+		});
+		heap.forEach(function (o) {
+			var p = objPos[o.id];
+			var g = sv('g', { class: 'vz-obj' + (o.cls ? ' is-' + o.cls : '') });
+			g.appendChild(sv('rect', { x: X2, y: p.y, width: colW, height: p.h, rx: 10 }));
+			var t = sv('text', { x: X2 + colW / 2, y: p.y + 20, class: 'vz-obj-type' }); t.textContent = o.label || (o.type + ' @' + o.id); g.appendChild(t);
+			(o.fields || []).forEach(function (f, i) {
+				var y = p.y + 30 + i * rowH;
+				var k = sv('text', { x: X2 + 14, y: y + 15 }); k.textContent = f[0]; k.style.textAnchor = 'start'; g.appendChild(k);
+				var v = sv('text', { x: X2 + colW - 14, y: y + 15, class: 'vz-val-text' }); v.textContent = f[2] ? '●' : String(f[1]); v.style.textAnchor = 'end'; g.appendChild(v);
+			});
+			svg.appendChild(g);
+		});
+		function arrow(x1, y1, toId, cls) {
+			var p = objPos[toId]; if (!p) return;
+			var x2 = X2 - 2, y2 = p.y + 18;
+			svg.appendChild(sv('path', { d: 'M' + x1 + ',' + y1 + ' C' + (x1 + 60) + ',' + y1 + ' ' + (x2 - 60) + ',' + y2 + ' ' + x2 + ',' + y2, class: 'vz-ref' + (cls ? ' is-' + cls : ''), 'marker-end': 'url(#vzmarr)' }));
+		}
+		Object.keys(varPos).forEach(function (k) { var vp = varPos[k]; if (vp.v.ref) arrow(pad + colW - 18, vp.y, vp.v.ref, vp.v.cls); });
+		fieldPos.forEach(function (fp) {
+			var p = objPos[fp.to]; if (!p) return;
+			var x1 = X2 + colW - 18, x2 = X2 + colW, y2 = p.y + 18;
+			svg.appendChild(sv('path', { d: 'M' + x1 + ',' + fp.y + ' C' + (x1 + 70) + ',' + fp.y + ' ' + (x2 + 70) + ',' + y2 + ' ' + x2 + ',' + y2, class: 'vz-ref', 'marker-end': 'url(#vzmarr)' }));
+		});
+		var wrap = el('div', 'vz-scroll'); wrap.appendChild(svg); host.appendChild(wrap);
+	}
+
+	/* Class diagram.
+	 * uml: { w, h, classes: [{name, kind, fields: [], methods: [], x, y, cls, hl: []}], links: [[child, parent, 'extends'|'implements']] } */
+	function renderUml(host, u) {
+		var W = u.w || 640, H = u.h || 320, rowH = 19, pos = {};
+		var svg = sv('svg', { class: 'vz-svg vz-uml', viewBox: '0 0 ' + W + ' ' + H, width: W, height: H });
+		var defs = sv('defs'), mk = sv('marker', { id: 'vzuarr', viewBox: '0 0 12 12', refX: '11', refY: '6', markerWidth: '12', markerHeight: '12', orient: 'auto' });
+		mk.appendChild(sv('path', { d: 'M0,0 L12,6 L0,12 z', class: 'vz-uml-head' })); defs.appendChild(mk); svg.appendChild(defs);
+		u.classes.forEach(function (c) {
+			var lines = [c.name].concat(c.fields || [], c.methods || []);
+			var w = c.w || Math.max(120, Math.max.apply(null, lines.map(function (l) { return String(l).length; })) * 7.6 + 24);
+			var h = 30 + ((c.fields || []).length ? (c.fields.length * rowH + 8) : 0) + ((c.methods || []).length * rowH + 8) + (c.kind === 'interface' || c.kind === 'abstract' ? 12 : 0);
+			pos[c.name] = { x: c.x, y: c.y, w: w, h: h };
+		});
+		(u.links || []).forEach(function (l) {
+			var a = pos[l[0]], b = pos[l[1]]; if (!a || !b) return;
+			svg.appendChild(sv('path', { d: 'M' + a.x + ',' + (a.y - a.h / 2) + ' L' + b.x + ',' + (b.y + b.h / 2 + 1), class: 'vz-uml-link' + (l[2] === 'implements' ? ' is-dashed' : '') + (u.lcls && u.lcls[l[0] + '-' + l[1]] ? ' is-' + u.lcls[l[0] + '-' + l[1]] : ''), 'marker-end': 'url(#vzuarr)' }));
+		});
+		u.classes.forEach(function (c) {
+			var p = pos[c.name], x = p.x - p.w / 2, y = p.y - p.h / 2;
+			var g = sv('g', { class: 'vz-node vz-class' + (c.cls ? ' is-' + c.cls : '') });
+			g.appendChild(sv('rect', { x: x, y: y, width: p.w, height: p.h, rx: 8 }));
+			var ty = y + 20;
+			if (c.kind === 'interface' || c.kind === 'abstract') {
+				var st = sv('text', { x: p.x, y: y + 14, class: 'vz-sub' }); st.textContent = c.kind === 'interface' ? '«interface»' : '«abstract»'; g.appendChild(st); ty += 10;
+			}
+			var t = sv('text', { x: p.x, y: ty, class: 'vz-class-name' + (c.kind === 'abstract' ? ' is-italic' : '') }); t.textContent = c.name; g.appendChild(t);
+			var cy = ty + 10;
+			g.appendChild(sv('line', { x1: x, y1: cy, x2: x + p.w, y2: cy, class: 'vz-uml-sep' }));
+			cy += 4;
+			(c.fields || []).forEach(function (f) { var tt = sv('text', { x: x + 10, y: cy + 14, class: 'vz-member' }); tt.style.textAnchor = 'start'; tt.textContent = f; g.appendChild(tt); cy += rowH; });
+			if ((c.fields || []).length) { cy += 4; g.appendChild(sv('line', { x1: x, y1: cy, x2: x + p.w, y2: cy, class: 'vz-uml-sep' })); cy += 4; }
+			(c.methods || []).forEach(function (mth) {
+				var on = (c.hl || []).indexOf(mth) > -1;
+				if (on) g.appendChild(sv('rect', { x: x + 4, y: cy + 1, width: p.w - 8, height: rowH - 1, rx: 5, class: 'vz-member-hl' }));
+				var tt = sv('text', { x: x + 10, y: cy + 14, class: 'vz-member' + (on ? ' is-on' : '') }); tt.style.textAnchor = 'start'; tt.textContent = mth; g.appendChild(tt); cy += rowH;
+			});
+			svg.appendChild(g);
+		});
+		var wrap = el('div', 'vz-scroll'); wrap.appendChild(svg); host.appendChild(wrap);
+	}
+
 	function renderScene(stage, s) {
 		stage.innerHTML = '';
 		if (s.vars) renderVars(stage, s.vars);
@@ -1143,6 +1666,9 @@
 		if (s.list) renderList(stage, s.list);
 		if (s.grid) renderGrid(stage, s.grid);
 		if (s.intervals) renderIntervals(stage, s.intervals);
+		if (s.uml) renderUml(stage, s.uml);
+		if (s.flow) renderFlow(stage, s.flow);
+		if (s.memory) renderMemory(stage, s.memory);
 		(s.arrays || []).forEach(function (a) { renderArray(stage, a); });
 		var side = el('div', 'vz-side');
 		if (s.stack) renderBox(side, s.stack, 'stack');
@@ -1233,7 +1759,7 @@
 			try { steps = algo.run(clone(input)); } catch (err) { steps = [{ note: 'That input could not be visualized. Check the format and try again.', line: 0, scene: {} }]; }
 			if (!steps.length) steps = [{ note: 'Nothing to show.', line: 0, scene: {} }];
 			codeBox.innerHTML = '';
-			(algo.code || []).forEach(function (line, n) {
+			(typeof algo.code === 'function' ? algo.code(input) : (algo.code || [])).forEach(function (line, n) {
 				var ln = el('span', 'viz-line'); ln.setAttribute('data-n', n + 1);
 				ln.appendChild(el('span', 'viz-ln', String(n + 1)));
 				ln.appendChild(document.createTextNode(line || ' '));
