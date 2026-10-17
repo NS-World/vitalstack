@@ -74,6 +74,8 @@ while ( have_posts() ) :
 				<?php echo $vs_content; // phpcs:ignore WordPress.Security.EscapeOutput -- filtered post content ?>
 			</div>
 
+			<?php vitalstack_lesson_quiz(); ?>
+
 			<div class="lesson-end">
 				<?php vitalstack_lesson_complete_button(); ?>
 				<?php vitalstack_lesson_buttons(); ?>

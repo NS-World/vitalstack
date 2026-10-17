@@ -164,6 +164,8 @@ add_action(
 						} elseif ( 'game' === $type ) {
 							$gained = vitalstack_xp_award( $uid, vitalstack_xp_for_game( $uid, (int) $req->get_param( 'score' ) ) );
 						}
+						/** Other activities (quizzes, daily challenge) add their XP here. */
+						$gained = (int) apply_filters( 'vitalstack_xp_activity', $gained, $type, $ref, (int) $req->get_param( 'score' ), $uid );
 						return array_merge( vitalstack_xp_stats( $uid ), array( 'gained' => $gained ) );
 					},
 				),

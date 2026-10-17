@@ -11,7 +11,7 @@
 	'use strict';
 
 	var cfg = window.vitalstackFun || {};
-	var LESSON_XP = 10, VIZ_XP = 2, GAME_DAY_CAP = 60;
+	var LESSON_XP = 10, VIZ_XP = 2, GAME_DAY_CAP = 60, QUIZ_XP = 2, DAILY_XP = 15;
 
 	var store = {
 		get: function (k, f) { try { var v = localStorage.getItem(k); return v === null ? f : JSON.parse(v); } catch (e) { return f; } },
@@ -141,6 +141,8 @@
 			var amount = 0;
 			if (type === 'viz') amount = VIZ_XP;
 			else if (type === 'lesson') amount = LESSON_XP;
+			else if (type === 'quiz') amount = Math.max(0, Math.min(10, score || 0)) * QUIZ_XP;
+			else if (type === 'daily') amount = score > 0 ? DAILY_XP : 0;
 			else if (type === 'game') {
 				var g = guest();
 				var used = g.gamesDay === today() ? g.gamesXp : 0;
@@ -269,5 +271,84 @@
 		var to = parseInt(el.textContent, 10) || 0;
 		el.textContent = '0';
 		countUp(el, to);
+	});
+
+	/* ── Quizzes and the daily challenge ──────────────────────────────────── */
+	function wireQuestion(fs, onAnswer) {
+		var answer = parseInt(fs.getAttribute('data-answer'), 10);
+		fs.querySelectorAll('.quiz-opt').forEach(function (b) {
+			b.addEventListener('click', function () {
+				if (fs.classList.contains('is-answered')) return;
+				var pick = parseInt(b.getAttribute('data-i'), 10), right = pick === answer;
+				fs.classList.add('is-answered', right ? 'is-right' : 'is-wrong');
+				fs.querySelectorAll('.quiz-opt').forEach(function (o) {
+					var i = parseInt(o.getAttribute('data-i'), 10);
+					o.disabled = true;
+					if (i === answer) o.classList.add('is-correct');
+					if (i === pick && !right) o.classList.add('is-picked');
+				});
+				var ex = fs.querySelector('.quiz-explain');
+				if (ex) ex.hidden = false;
+				onAnswer(right);
+			});
+		});
+	}
+	function resetQuestion(fs) {
+		fs.classList.remove('is-answered', 'is-right', 'is-wrong');
+		fs.querySelectorAll('.quiz-opt').forEach(function (o) { o.disabled = false; o.classList.remove('is-correct', 'is-picked'); });
+		var ex = fs.querySelector('.quiz-explain');
+		if (ex) ex.hidden = true;
+	}
+
+	document.querySelectorAll('[data-quiz]').forEach(function (quiz) {
+		var slug = quiz.getAttribute('data-quiz');
+		var qs = quiz.querySelectorAll('.quiz-q');
+		var result = quiz.querySelector('.quiz-result'), scoreEl = quiz.querySelector('.quiz-score');
+		var answered = 0, correct = 0, first = true;
+		qs.forEach(function (fs) {
+			wireQuestion(fs, function (right) {
+				answered++; if (right) correct++;
+				if (answered < qs.length) return;
+				var perfect = correct === qs.length;
+				scoreEl.textContent = 'You got ' + correct + ' of ' + qs.length + ' right. ' + (perfect ? 'Perfect!' : correct >= qs.length / 2 ? 'Nice work, review the ones you missed.' : 'Re-read the lesson and try again.');
+				result.hidden = false;
+				if (first) {
+					first = false;
+					addXP('quiz', slug, correct).then(function (res) {
+						if (res.gained) scoreEl.textContent += ' +' + res.gained + ' XP';
+						if (perfect) celebrate('Perfect quiz!', 'Every answer right. Your brain is levelling up.', 'cheer', res.gained);
+					});
+				}
+			});
+		});
+		var retry = quiz.querySelector('[data-quiz-retry]');
+		if (retry) retry.addEventListener('click', function () {
+			answered = 0; correct = 0; result.hidden = true;
+			qs.forEach(resetQuestion);
+			qs[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+		});
+	});
+
+	document.querySelectorAll('[data-daily]').forEach(function (box) {
+		var date = box.getAttribute('data-daily'), key = 'vs-daily-' + date;
+		var fs = box.querySelector('.quiz-q'), out = box.querySelector('.daily-result');
+		if (!fs) return;
+		var done = store.get(key, null);
+		var saved = done !== null;
+		wireQuestion(fs, function (right) {
+			if (saved) return;
+			saved = true;
+			var picked = fs.querySelector('.quiz-opt.is-picked') || fs.querySelector('.quiz-opt.is-correct');
+			store.set(key, parseInt(picked.getAttribute('data-i'), 10));
+			if (out) { out.hidden = false; out.textContent = right ? 'Correct! Come back tomorrow for a new challenge.' : 'Not this time. The right answer is highlighted. New challenge tomorrow!'; }
+			addXP('daily', date, right ? 1 : 0).then(function (res) {
+				if (right) celebrate('Daily challenge done!', 'Keep your streak alive tomorrow too.', 'cheer', res.gained);
+			});
+		});
+		if (done !== null) {
+			var b = fs.querySelector('.quiz-opt[data-i="' + done + '"]');
+			if (b) b.click();
+			if (out) { out.hidden = false; out.textContent = 'You already answered today\'s challenge. New one tomorrow!'; }
+		}
 	});
 })();

@@ -30,6 +30,8 @@ require VITALSTACK_DIR . '/inc/notifications.php';
 require VITALSTACK_DIR . '/inc/accounts.php';
 require VITALSTACK_DIR . '/inc/progress-api.php';
 require VITALSTACK_DIR . '/inc/xp.php';
+require VITALSTACK_DIR . '/inc/quiz.php';
+require VITALSTACK_DIR . '/inc/schema.php';
 require VITALSTACK_DIR . '/inc/mascot.php';
 require VITALSTACK_DIR . '/inc/fun.php';
 require VITALSTACK_DIR . '/inc/ui.php';
