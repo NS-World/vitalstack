@@ -111,7 +111,8 @@ function vitalstack_assets() {
 	// Syntax highlighting only where there is code; loaded before main.js so
 	// code blocks are coloured on first run. Colours come from style.css.
 	$main_deps = array();
-	if ( is_front_page() || ( is_singular() && vitalstack_post_has_code() ) ) {
+	// Cheat sheets and tool guides keep their code in theme files, not post content.
+	if ( is_front_page() || is_page_template( array( 'page-cheat-sheet.php', 'page-tool.php' ) ) || ( is_singular() && vitalstack_post_has_code() ) ) {
 		wp_enqueue_script(
 			'vitalstack-hljs',
 			VITALSTACK_URI . '/assets/vendor/highlight.min.js',

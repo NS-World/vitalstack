@@ -1,5 +1,5 @@
 /**
- * VitalStack Brain Games: seven two-minute games that teach algorithm skills.
+ * VitalStack Brain Games: two-minute games that teach algorithms, Java, OOP and frameworks.
  * Each game ends with a score (0-100) that earns XP through window.VS.
  */
 (function () {
@@ -336,6 +336,133 @@
 				});
 			}
 			round();
+		}
+	});
+
+	/* ── Java, OOP and framework games ───────────────────────────────────── */
+
+	/**
+	 * Shared multiple-choice round runner.
+	 * items: [{ q, code?, a, opts: [..], e }]; seconds: optional time limit for the whole game.
+	 */
+	function choiceGame(api, items, o) {
+		var k = 0, right = 0, left = o.seconds || 0;
+		var code = h('pre', { class: 'game-code' }), q = h('p', { class: 'game-q' }), row = h('div', { class: 'game-row game-row-center game-options' }), msg = h('p', { class: 'game-msg' });
+		var card = h('div', { class: 'game-card' }, [o.bot ? h('div', { class: 'game-bot', html: mascot(o.bot) }) : null, q, code, row, msg]);
+		api.body.appendChild(card);
+		function stats() { api.stats((o.seconds ? '⏱ ' + left + 's · ' : 'Round ' + (k + 1) + ' / ' + items.length + ' · ') + '✓ ' + right); }
+		function end() {
+			var total = o.seconds ? Math.max(k, 1) : items.length;
+			var score = o.seconds ? Math.min(100, right * 10) : Math.round(right / items.length * 100);
+			api.finish(score, o.summary(right, total));
+		}
+		if (o.seconds) {
+			every(function () { left--; stats(); if (left <= 0) end(); }, 1000);
+		}
+		function round() {
+			var it = items[k];
+			q.textContent = it.q; code.hidden = !it.code; code.textContent = it.code || '';
+			msg.textContent = ''; row.innerHTML = ''; stats();
+			shuffle(it.opts.concat([it.a])).forEach(function (opt) {
+				row.appendChild(h('button', { class: 'btn btn-ghost', type: 'button', text: opt, onclick: function () {
+					if (row.dataset.locked) return; row.dataset.locked = '1';
+					var ok = opt === it.a; if (ok) right++;
+					msg.textContent = (ok ? '✓ ' : '✗ It is ' + it.a + '. ') + it.e;
+					flash(card, ok ? 'is-good' : 'is-bad');
+					row.querySelectorAll('button').forEach(function (b) { if (b.textContent === it.a) b.classList.add('is-right'); });
+					later(function () {
+						delete row.dataset.locked; k++;
+						if (k < items.length) round(); else end();
+					}, o.seconds ? (ok ? 500 : 1400) : (ok ? 1100 : 2400));
+				} }));
+			});
+		}
+		round();
+	}
+
+	var JAVA_OUT = [
+		['System.out.println(7 / 2);', '3', ['3.5', '4', '3.0'], 'int / int is integer division.'],
+		['System.out.println("1" + 2 + 3);', '123', ['6', '15', '"6"'], 'Once a String appears, + joins text left to right.'],
+		['System.out.println(1 + 2 + "3");', '33', ['123', '6', '15'], '1 + 2 is added first (3), then joined with "3".'],
+		['int a = 5;\nint b = a++;\nSystem.out.println(a + " " + b);', '6 5', ['6 6', '5 5', '5 6'], 'a++ returns the old value, then increments.'],
+		['String s = "java";\ns.toUpperCase();\nSystem.out.println(s);', 'java', ['JAVA', 'Java', 'null'], 'Strings are immutable; the result was thrown away.'],
+		['System.out.println(10 % 3);', '1', ['3', '0', '3.33'], '% gives the remainder.'],
+		['System.out.println((int) 9.99);', '9', ['10', '9.99', '9.0'], 'Casting truncates; it does not round.'],
+		['System.out.println(Math.round(2.5));', '3', ['2', '2.5', '3.0'], 'Math.round rounds half up and returns a long.'],
+		['String a = "hi";\nString b = new String("hi");\nSystem.out.println(a == b);', 'false', ['true', 'hi', 'error'], '== compares references; new String creates a new object.'],
+		['String a = "hi";\nString b = new String("hi");\nSystem.out.println(a.equals(b));', 'true', ['false', 'hi', 'error'], 'equals compares the characters.'],
+		['int[] x = {1, 2, 3};\nint[] y = x;\ny[0] = 9;\nSystem.out.println(x[0]);', '9', ['1', '0', 'error'], 'x and y point to the same array.'],
+		['System.out.println(Integer.MAX_VALUE + 1);', '-2147483648', ['2147483648', 'error', '0'], 'int overflow wraps around silently.'],
+		["char c = 'A';\nc++;\nSystem.out.println(c);", 'B', ['A', '66', 'A1'], 'char is a number underneath; ++ moves to the next letter.'],
+		["System.out.println('A' + 1);", '66', ['B', 'A1', 'error'], "'A' is 65; char + int is an int."],
+		['StringBuilder sb = new StringBuilder("abc");\nsb.reverse();\nSystem.out.println(sb);', 'cba', ['abc', 'bca', 'null'], 'StringBuilder is mutable: reverse changes it.'],
+		['List<Integer> l = new ArrayList<>(List.of(1, 2, 3));\nl.remove(1);\nSystem.out.println(l);', '[1, 3]', ['[2, 3]', '[1, 2]', 'error'], 'remove(int) removes by index, not by value.'],
+		['System.out.println(0.1 + 0.2 == 0.3);', 'false', ['true', '0.3', 'error'], 'Floating point can\'t represent these exactly.'],
+		['String s = null;\nSystem.out.println(s + "!");', 'null!', ['!', 'NullPointerException', 'error'], 'Concatenation turns null into "null".'],
+		['int x = 10;\nx += 5 * 2;\nSystem.out.println(x);', '20', ['30', '25', '15'], '5 * 2 runs first, then x = 10 + 10.'],
+		['System.out.println("Java".substring(1, 3));', 'av', ['ava', 'Ja', 'va'], 'The end index is excluded.'],
+		['System.out.println(Math.max(3, 7) + Math.min(3, 7));', '10', ['7', '37', '73'], '7 + 3.']
+	];
+
+	GAMES.push({
+		id: 'java-output', name: 'Java Output Predictor', emoji: '☕', tag: 'Java',
+		desc: 'Read the Java snippet and predict exactly what it prints. 8 tricky rounds.',
+		learn: ['Java operators', 'java-operators'],
+		play: function (api) {
+			var items = shuffle(JAVA_OUT).slice(0, 8).map(function (r) { return { q: 'What does this print?', code: r[0], a: r[1], opts: r[2], e: r[3] }; });
+			choiceGame(api, items, { bot: 'think', summary: function (r, t) { return r + ' of ' + t + ' predicted correctly. These are the exact traps interviewers use in Java MCQ rounds.'; } });
+		}
+	});
+
+	var PILLARS = ['Encapsulation', 'Inheritance', 'Polymorphism', 'Abstraction', 'Composition'];
+	var OOP_CASES = [
+		['BankAccount keeps balance private and changes it only through deposit() and withdraw().', 'Encapsulation', 'Data is protected behind methods with rules.'],
+		['SavingsAccount extends Account and reuses its withdraw() method.', 'Inheritance', 'A subclass reuses and extends a parent class.'],
+		['A loop calls shape.area() on circles and squares, and each calculates differently.', 'Polymorphism', 'One call, behaviour decided by the real object.'],
+		['You call list.add() without knowing how ArrayList grows its internal array.', 'Abstraction', 'You use what it does, not how it does it.'],
+		['A Car class has an Engine field instead of extending Engine.', 'Composition', 'Has-a relationships use composition.'],
+		['UpiPayment and CardPayment implement Payment; checkout just calls payment.pay().', 'Polymorphism', 'Code works with the interface; each class behaves its own way.'],
+		['An abstract ReportGenerator fixes the steps; subclasses only fill in body().', 'Abstraction', 'The template hides the details behind abstract methods.'],
+		['Every field is private and the setter rejects invalid emails.', 'Encapsulation', 'Validation guards the object\'s state.'],
+		['Manager extends Employee and calls super.annualPay() before adding a bonus.', 'Inheritance', 'super reuses the parent\'s logic.'],
+		['A Library object holds a List<Book> and manages loans.', 'Composition', 'The library has books; it isn\'t a book.'],
+		['You press the brake pedal without knowing how the hydraulics work.', 'Abstraction', 'A simple interface hides complex internals.'],
+		['An immutable Money class has final fields and returns new objects for changes.', 'Encapsulation', 'Nobody can change its internal state.'],
+		['Puppy extends Dog, which extends Animal, so a Puppy can eat().', 'Inheritance', 'Methods are found by walking up the hierarchy.'],
+		['print(int) and print(String) share a name; Java picks one by argument type.', 'Polymorphism', 'Overloading is compile-time polymorphism.']
+	];
+
+	GAMES.push({
+		id: 'oop-pillars', name: 'OOP Pillar Match', emoji: '🏛️', tag: 'Java OOP',
+		desc: 'Read a design scenario and name the OOP idea behind it. 8 rounds.',
+		learn: ['OOP introduction', 'java-oop-introduction'],
+		play: function (api) {
+			var items = shuffle(OOP_CASES).slice(0, 8).map(function (r) {
+				return { q: r[0], a: r[1], opts: shuffle(PILLARS.filter(function (p) { return p !== r[1]; })).slice(0, 3), e: r[2] };
+			});
+			choiceGame(api, items, { bot: 'think', summary: function (r, t) { return r + ' of ' + t + ' matched. "Explain the four pillars with examples" is asked in almost every Java interview.'; } });
+		}
+	});
+
+	var FLASH = {
+		Spring: [['Wrap a service method in a database transaction', '@Transactional'], ['A controller whose methods return JSON', '@RestController'], ['Read {id} from /courses/{id}', '@PathVariable'], ['Read ?q=java from the URL', '@RequestParam'], ['Turn the JSON body into an object', '@RequestBody'], ['Pick the default bean when there are several', '@Primary'], ['Run Bean Validation on a parameter', '@Valid'], ['Map a class to a database table', '@Entity'], ['Optimistic locking column', '@Version'], ['Handle exceptions for all controllers', '@RestControllerAdvice'], ['Mark the Spring Boot main class', '@SpringBootApplication'], ['Load a course with its lessons in one query', '@EntityGraph']],
+		React: [['Store a value that changes and re-renders', 'useState'], ['Run a side effect after rendering', 'useEffect'], ['Read a value from a provider', 'useContext'], ['Cache an expensive calculation', 'useMemo'], ['Keep the same function between renders', 'useCallback'], ['Hold a DOM node without re-rendering', 'useRef'], ['Manage state with actions and a reducer', 'useReducer'], ['Read :slug from the current URL', 'useParams']],
+		Angular: [['Repeat an element for each item', '@for'], ['Writable reactive state', 'signal()'], ['A derived, cached reactive value', 'computed()'], ['Send an event from child to parent', 'output()'], ['Receive data from the parent', 'input()'], ['Get a service instance in a component', 'inject()'], ['Cancel the previous search request', 'switchMap'], ['Two-way bind an input field', '[(ngModel)]']]
+	};
+
+	GAMES.push({
+		id: 'framework-flash', name: 'Framework Flash', emoji: '⚡', tag: 'Spring · React · Angular',
+		desc: 'Name the annotation, hook or API for each job. As many as you can in 60 seconds!',
+		learn: ['Spring Boot', 'spring-boot-introduction'],
+		play: function (api) {
+			var items = [];
+			Object.keys(FLASH).forEach(function (fw) {
+				FLASH[fw].forEach(function (r) {
+					var others = shuffle(FLASH[fw].filter(function (x) { return x[1] !== r[1]; }).map(function (x) { return x[1]; })).slice(0, 3);
+					items.push({ q: fw + ': ' + r[0], a: r[1], opts: others, e: '' });
+				});
+			});
+			choiceGame(api, shuffle(items), { seconds: 60, bot: 'happy', summary: function (r, t) { return r + ' correct out of ' + t + ' answered in 60 seconds. Each correct answer is worth 10 points.'; } });
 		}
 	});
 

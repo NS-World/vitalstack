@@ -376,12 +376,13 @@
 				pre.appendChild(code);
 			}
 			var raw = code.textContent;
-			var hl = '';
+			var declared = (code.className.match(/language-([\w+-]+)/) || [])[1] || '';   // from the lesson's code fence
+			var hl = declared === 'plaintext' ? '' : declared;
 			if (window.hljs && !code.classList.contains('hljs')) {
 				try {
 					window.hljs.highlightElement(code);
 					var m = (code.className || '').match(/language-([\w+-]+)/);
-					hl = m ? m[1] : '';
+					hl = m ? m[1] : hl;
 				} catch (e) {}
 			}
 			var runLang = runnableLang(raw, hl);

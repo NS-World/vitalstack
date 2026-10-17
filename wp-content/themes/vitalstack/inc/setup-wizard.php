@@ -156,7 +156,8 @@ function vitalstack_run_setup( $remove_samples = true ) {
 				/* translators: %s: name */
 				$report[] = sprintf( __( 'Learning path created: %s', 'vitalstack' ), $path['name'] );
 			}
-		} elseif ( '' === get_term_meta( $term->term_id, 'vs_order', true ) ) {
+		} elseif ( (int) get_term_meta( $term->term_id, 'vs_order', true ) !== $i + 1 ) {
+			// Keep the theme's order when new paths are added in an update.
 			update_term_meta( $term->term_id, 'vs_order', $i + 1 );
 		}
 	}
