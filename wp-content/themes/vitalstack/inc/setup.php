@@ -178,6 +178,25 @@ function vitalstack_body_classes( $classes ) {
 add_filter( 'body_class', 'vitalstack_body_classes' );
 
 /**
+ * Drop menu links to pages that aren't published yet (e.g. the legal pages
+ * the setup wizard creates as drafts), so visitors never land on a 404.
+ */
+function vitalstack_hide_unpublished_menu_items( $items ) {
+	$hidden = array();
+	foreach ( $items as $key => $item ) {
+		if ( 'post_type' === $item->type && 'publish' !== get_post_status( (int) $item->object_id ) ) {
+			$hidden[] = (int) $item->ID;
+			unset( $items[ $key ] );
+		} elseif ( in_array( (int) $item->menu_item_parent, $hidden, true ) ) {
+			$hidden[] = (int) $item->ID;
+			unset( $items[ $key ] );
+		}
+	}
+	return $items;
+}
+add_filter( 'wp_nav_menu_objects', 'vitalstack_hide_unpublished_menu_items' );
+
+/**
  * Include tutorials in search and in the main feed alongside posts.
  */
 function vitalstack_search_post_types( $query ) {

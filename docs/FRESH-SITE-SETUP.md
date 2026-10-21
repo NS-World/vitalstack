@@ -5,7 +5,7 @@ Total time: about 1 hour. All lessons and guides are included in the theme.
 
 ## 1. Upload the theme (5 min)
 1. WordPress admin → **Appearance → Themes → Add New → Upload Theme**.
-2. Choose `vitalstack-theme-v4.0.zip` → **Install Now** → **Activate**
+2. Choose `vitalstack-theme-v4.0.1.zip` → **Install Now** → **Activate**
    (or **Replace current with uploaded** if an older VitalStack is installed).
 
 ## 2. Click the setup button (2 min)
@@ -64,7 +64,7 @@ something of your own (a tip, a screenshot, a better example). See
 [CONTENT-GUIDE.md](CONTENT-GUIDE.md).
 
 ### Already have the site running (updating to v4.0)?
-1. Upload `vitalstack-theme-v4.0.zip` → **Replace current with uploaded**.
+1. Upload `vitalstack-theme-v4.0.1.zip` → **Replace current with uploaded**.
 2. **Appearance → VitalStack Setup → Create starter structure** again. It adds
    only what's missing: the 10 new learning paths (Java to Angular), the Daily
    Challenge, Free Tools and Cheat Sheets pages, and their menu links. It also
