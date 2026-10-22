@@ -5,7 +5,7 @@ Total time: about 1 hour. All lessons and guides are included in the theme.
 
 ## 1. Upload the theme (5 min)
 1. WordPress admin → **Appearance → Themes → Add New → Upload Theme**.
-2. Choose `vitalstack-theme-v4.0.2.zip` → **Install Now** → **Activate**
+2. Choose `vitalstack-theme-v4.0.3.zip` → **Install Now** → **Activate**
    (or **Replace current with uploaded** if an older VitalStack is installed).
 
 ## 2. Click the setup button (2 min)
@@ -47,8 +47,10 @@ live animated diagrams (play, step, try your own input) and hidden hints. Choose
 | **Publish everything now** | All 295 go live at once | Only if you've already reviewed the content |
 
 - Safe to click again: anything that already exists is skipped, never overwritten.
-- Bulk imports don't email subscribers. With "a few per day" you can tick
-  *Email subscribers as each scheduled item goes live*.
+- Subscribers are emailed when each item is published: drafts when you
+  publish them, scheduled items as each goes live (the *Email subscribers…*
+  box is ticked by default). Only **Publish everything now** stays silent, so
+  nobody gets hundreds of emails at once.
 - Scheduled items need WP-Cron. On Hostinger set up a real cron job
   ([THEME-V3-SETUP.md](THEME-V3-SETUP.md) §3) so they publish on time even
   when nobody visits the site.
@@ -64,7 +66,7 @@ something of your own (a tip, a screenshot, a better example). See
 [CONTENT-GUIDE.md](CONTENT-GUIDE.md).
 
 ### Already have the site running (updating to v4.0)?
-1. Upload `vitalstack-theme-v4.0.2.zip` → **Replace current with uploaded**.
+1. Upload `vitalstack-theme-v4.0.3.zip` → **Replace current with uploaded**.
 2. **Appearance → VitalStack Setup → Create starter structure** again. It adds
    only what's missing: the 10 new learning paths (Java to Angular), the Daily
    Challenge, Free Tools and Cheat Sheets pages, and their menu links. It also
@@ -168,7 +170,7 @@ apply and paste your `ca-pub-…` ID in **Customize → VitalStack: Google AdSen
 | Section | Setting | Recommended |
 |---|---|---|
 | Colours & theme | Default theme / accent colour | Day (light) and green; readers can switch with the 🎨 button |
-| VitalStack: Accounts & Email | Subscriber emails | **Weekly digest every Sunday** (one email instead of one per post) |
+| VitalStack: Accounts & Email | Subscriber emails | **One email for every new post or lesson** (default); choose the weekly digest if you publish many items a day |
 | VitalStack: Accounts & Email | Allow comments and questions | Off at first; turn on when you have time to moderate |
 | VitalStack: Google AdSense | AdSense publisher ID | Paste `ca-pub-…` after approval |
 | VitalStack: Google AdSense | In-article / Display ad unit ID | Optional; without them Auto ads are used |

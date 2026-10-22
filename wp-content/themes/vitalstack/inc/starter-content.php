@@ -143,9 +143,9 @@ function vitalstack_import_starter_content( $mode = 'draft', $per_day = 2, $noti
 			$postarr['post_date']     = $date;
 			$postarr['post_date_gmt'] = get_gmt_from_date( $date );
 		}
-		// Bulk-imported items never email subscribers, except scheduled ones when asked:
-		// those go out one by one, like normal new posts.
-		if ( ! ( 'schedule' === $mode && $notify ) ) {
+		// Only "publish everything now" stays silent (hundreds of emails at once);
+		// drafts email when you publish them, scheduled items as each goes live.
+		if ( 'publish' === $mode || ( 'schedule' === $mode && ! $notify ) ) {
 			$postarr['meta_input']['_vs_skip_notify'] = '1';
 		}
 
@@ -267,7 +267,7 @@ function vitalstack_starter_section() {
 					<?php esc_html_e( 'starting now, in course order', 'vitalstack' ); ?>
 				</p>
 				<p><label><input type="radio" name="mode" value="publish"> <strong><?php esc_html_e( 'Publish all now', 'vitalstack' ); ?></strong></label></p>
-				<p><label><input type="checkbox" name="notify" value="1"> <?php esc_html_e( 'Email subscribers about each item as it goes live (only for "a few per day")', 'vitalstack' ); ?></label></p>
+				<p><label><input type="checkbox" name="notify" value="1" checked> <?php esc_html_e( 'Email subscribers about each item as it goes live (only for "a few per day")', 'vitalstack' ); ?></label></p>
 				<?php submit_button( __( 'Publish imported items', 'vitalstack' ), 'primary', 'vs-publish-starter', false ); ?>
 			</form>
 		</div>
@@ -288,7 +288,7 @@ function vitalstack_starter_section() {
 				</select>
 				<?php esc_html_e( 'in course order (HTML first), with guides in between', 'vitalstack' ); ?>
 			</p>
-			<p style="margin-left:24px"><label><input type="checkbox" name="notify" value="1"> <?php esc_html_e( 'Email subscribers as each scheduled item goes live', 'vitalstack' ); ?></label></p>
+			<p style="margin-left:24px"><label><input type="checkbox" name="notify" value="1" checked> <?php esc_html_e( 'Email subscribers as each scheduled item goes live', 'vitalstack' ); ?></label></p>
 			<p><label><input type="radio" name="mode" value="publish"> <strong><?php esc_html_e( 'Publish everything now', 'vitalstack' ); ?></strong> <?php esc_html_e( '(subscribers are not emailed)', 'vitalstack' ); ?></label></p>
 		</fieldset>
 		<?php submit_button( __( 'Import starter content', 'vitalstack' ), 'secondary large', 'vs-import-starter', false ); ?>

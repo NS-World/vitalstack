@@ -64,8 +64,13 @@ function vitalstack_notify_meta_box_html( $post ) {
 	wp_nonce_field( 'vs_notify_box', 'vs_notify_nonce' );
 	$sent = get_post_meta( $post->ID, '_vs_notified', true );
 	if ( $sent ) {
-		/* translators: %s: date */
-		echo '<p>' . esc_html( sprintf( __( 'Subscribers were emailed on %s.', 'vitalstack' ), wp_date( get_option( 'date_format' ), (int) $sent ) ) ) . '</p>';
+		$count = get_post_meta( $post->ID, '_vs_notified_count', true );
+		if ( '' === $count ) {
+			echo '<p>' . esc_html__( 'Emails are queued and go out within a few minutes.', 'vitalstack' ) . '</p>';
+		} else {
+			/* translators: 1: number of subscribers, 2: date */
+			echo '<p>' . esc_html( sprintf( _n( 'Emailed to %1$d subscriber on %2$s.', 'Emailed to %1$d subscribers on %2$s.', (int) $count, 'vitalstack' ), (int) $count, wp_date( get_option( 'date_format' ), (int) $sent ) ) ) . '</p>';
+		}
 		return;
 	}
 	$skip = get_post_meta( $post->ID, '_vs_skip_notify', true );
@@ -102,6 +107,18 @@ function vitalstack_queue_notification( $new_status, $old_status, $post ) {
 		return;
 	}
 	update_post_meta( $post->ID, '_vs_notified', time() );
+	if ( 'future' === $old_status && wp_doing_cron() ) {
+		// A scheduled item going live: WP-Cron is already running, so send the
+		// first batch at the end of this request instead of waiting for the next run.
+		$post_id = $post->ID;
+		add_action(
+			'shutdown',
+			function () use ( $post_id ) {
+				vitalstack_send_notifications( $post_id, 0 );
+			}
+		);
+		return;
+	}
 	// A short delay lets the author fix a typo before emails go out.
 	wp_schedule_single_event( time() + 2 * MINUTE_IN_SECONDS, 'vitalstack_send_notifications', array( $post->ID, 0 ) );
 }
@@ -134,6 +151,9 @@ function vitalstack_send_notifications( $post_id, $after_user_id ) {
 		)
 	);
 	if ( ! $ids ) {
+		if ( ! $after_user_id ) {
+			update_post_meta( $post_id, '_vs_notified_count', 0 );
+		}
 		return;
 	}
 
@@ -145,6 +165,7 @@ function vitalstack_send_notifications( $post_id, $after_user_id ) {
 	$image   = get_the_post_thumbnail_url( $post, 'vitalstack-card' );
 	$minutes = vitalstack_read_minutes( $post->ID );
 
+	$delivered = 0;
 	foreach ( $ids as $uid ) {
 		$user = get_userdata( (int) $uid );
 		if ( ! $user ) {
@@ -161,11 +182,40 @@ function vitalstack_send_notifications( $post_id, $after_user_id ) {
 			. vitalstack_email_button( $link, $is_tut ? __( 'Start the lesson', 'vitalstack' ) : __( 'Read the guide', 'vitalstack' ) );
 
 		/* translators: 1: label, 2: title */
-		vitalstack_mail( $user->user_email, sprintf( __( '%1$s: %2$s', 'vitalstack' ), $label, $title ), $body, array( 'unsubscribe' => $unsub ) );
+		if ( vitalstack_mail( $user->user_email, sprintf( __( '%1$s: %2$s', 'vitalstack' ), $label, $title ), $body, array( 'unsubscribe' => $unsub ) ) ) {
+			++$delivered;
+		}
 	}
+	update_post_meta( $post_id, '_vs_notified_count', (int) get_post_meta( $post_id, '_vs_notified_count', true ) + $delivered );
 
 	if ( count( $ids ) === VITALSTACK_MAIL_BATCH ) {
 		wp_schedule_single_event( time() + 5 * MINUTE_IN_SECONDS, 'vitalstack_send_notifications', array( $post_id, (int) end( $ids ) ) );
 	}
 }
 add_action( 'vitalstack_send_notifications', 'vitalstack_send_notifications', 10, 2 );
+
+/**
+ * Before 4.0.3 every imported draft and scheduled item was flagged "don't
+ * email", so publishing them reached nobody. Clear that flag once on
+ * items that aren't live yet.
+ */
+function vitalstack_notify_upgrade_starter_flags() {
+	if ( get_option( 'vitalstack_notify_flags_v403' ) || ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+	$ids = get_posts(
+		array(
+			'post_type'        => array( 'post', 'tutorials' ),
+			'post_status'      => array( 'draft', 'pending', 'future' ),
+			'meta_key'         => '_vs_starter', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- one-off upgrade
+			'numberposts'      => -1,
+			'fields'           => 'ids',
+			'suppress_filters' => true,
+		)
+	);
+	foreach ( $ids as $id ) {
+		delete_post_meta( $id, '_vs_skip_notify' );
+	}
+	update_option( 'vitalstack_notify_flags_v403', 1, false );
+}
+add_action( 'admin_init', 'vitalstack_notify_upgrade_starter_flags' );

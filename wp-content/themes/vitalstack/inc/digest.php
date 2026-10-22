@@ -4,8 +4,8 @@
  * that week, instead of an email for every post.
  *
  * Customizer → VitalStack: Members → "Subscriber emails":
- *   weekly  one digest every Sunday (default)
- *   each    an email for every new post or lesson
+ *   each    an email for every new post or lesson (default)
+ *   weekly  one digest every Sunday
  *   off     no automatic emails
  *
  * @package VitalStack
@@ -17,17 +17,17 @@ function vitalstack_notify_mode() {
 	if ( ! get_theme_mod( 'vitalstack_notify_enabled', true ) ) {
 		return 'off';
 	}
-	$mode = get_theme_mod( 'vitalstack_notify_mode', 'weekly' );
-	return in_array( $mode, array( 'weekly', 'each', 'off' ), true ) ? $mode : 'weekly';
+	$mode = get_theme_mod( 'vitalstack_notify_mode', 'each' );
+	return in_array( $mode, array( 'weekly', 'each', 'off' ), true ) ? $mode : 'each';
 }
 
 function vitalstack_digest_customizer( $wp_customize ) {
 	$wp_customize->add_setting(
 		'vitalstack_notify_mode',
 		array(
-			'default'           => 'weekly',
+			'default'           => 'each',
 			'sanitize_callback' => function ( $v ) {
-				return in_array( $v, array( 'weekly', 'each', 'off' ), true ) ? $v : 'weekly';
+				return in_array( $v, array( 'weekly', 'each', 'off' ), true ) ? $v : 'each';
 			},
 		)
 	);
@@ -35,12 +35,12 @@ function vitalstack_digest_customizer( $wp_customize ) {
 		'vitalstack_notify_mode',
 		array(
 			'label'       => __( 'Subscriber emails', 'vitalstack' ),
-			'description' => __( 'A weekly digest keeps subscribers happy when you publish often.', 'vitalstack' ),
+			'description' => __( 'Every published lesson or guide is emailed to confirmed subscribers. Choose the weekly digest if you publish many items a day.', 'vitalstack' ),
 			'section'     => 'vitalstack_members',
 			'type'        => 'radio',
 			'choices'     => array(
-				'weekly' => __( 'Weekly digest every Sunday (recommended)', 'vitalstack' ),
-				'each'   => __( 'One email for every new post or lesson', 'vitalstack' ),
+				'each'   => __( 'One email for every new post or lesson (recommended)', 'vitalstack' ),
+				'weekly' => __( 'Weekly digest every Sunday', 'vitalstack' ),
 				'off'    => __( 'Off', 'vitalstack' ),
 			),
 		)
