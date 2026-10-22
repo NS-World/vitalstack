@@ -149,13 +149,16 @@ function vitalstack_subscribe_box( $variant = 'inline' ) {
 			<span class="subscribe-icon" aria-hidden="true"><?php echo vitalstack_icon( 'bell', 22 ); // phpcs:ignore ?></span>
 			<div>
 				<p class="subscribe-title"><?php esc_html_e( 'Get new lessons in your inbox', 'vitalstack' ); ?></p>
-				<p class="subscribe-desc"><?php esc_html_e( 'One email when we publish a new tutorial or guide. No spam, unsubscribe in one click.', 'vitalstack' ); ?></p>
+				<p class="subscribe-desc"><?php echo function_exists( 'vitalstack_notify_mode' ) && 'weekly' === vitalstack_notify_mode() ? esc_html__( 'One email every Sunday with the week’s new tutorials and guides. No spam, unsubscribe in one click.', 'vitalstack' ) : esc_html__( 'One email when we publish a new tutorial or guide. No spam, unsubscribe in one click.', 'vitalstack' ); ?></p>
 			</div>
 		</div>
 		<div class="subscribe-action">
 			<?php if ( ! is_user_logged_in() ) : ?>
 				<a class="btn btn-primary" href="<?php echo esc_url( vitalstack_account_url( array( 'tab' => 'register', 'subscribe' => 1, 'redirect_to' => $here ) ) ); ?>"><?php esc_html_e( 'Subscribe free', 'vitalstack' ); ?></a>
 				<a class="subscribe-alt" href="<?php echo esc_url( vitalstack_account_url( array( 'tab' => 'login', 'subscribe' => 1, 'redirect_to' => $here ) ) ); ?>"><?php esc_html_e( 'Have an account? Sign in', 'vitalstack' ); ?></a>
+			<?php elseif ( vitalstack_is_subscribed( get_current_user_id() ) && ! vitalstack_is_verified( get_current_user_id() ) ) : ?>
+				<p class="subscribe-pending"><?php esc_html_e( 'Confirm your email to start getting lessons', 'vitalstack' ); ?></p>
+				<a class="btn btn-primary btn-sm" href="<?php echo esc_url( vitalstack_account_url() ); ?>"><?php esc_html_e( 'Confirm email', 'vitalstack' ); ?></a>
 			<?php elseif ( vitalstack_is_subscribed( get_current_user_id() ) ) : ?>
 				<p class="subscribe-done"><?php echo vitalstack_icon( 'check', 18 ); // phpcs:ignore ?> <?php esc_html_e( 'You’re subscribed', 'vitalstack' ); ?></p>
 				<a class="subscribe-alt" href="<?php echo esc_url( vitalstack_account_url() ); ?>"><?php esc_html_e( 'Manage', 'vitalstack' ); ?></a>

@@ -95,7 +95,7 @@ get_header();
 		<?php else : ?>
 			<?php
 			$vs_user     = wp_get_current_user();
-			$vs_verified = vitalstack_is_verified( $vs_user->ID ) || $vs_user->has_cap( 'edit_posts' );
+			$vs_verified = vitalstack_is_verified( $vs_user->ID );
 			$vs_sub      = vitalstack_is_subscribed( $vs_user->ID );
 			$vs_progress = vitalstack_get_user_progress( $vs_user->ID );
 			?>

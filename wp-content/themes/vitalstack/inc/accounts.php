@@ -235,15 +235,41 @@ function vitalstack_is_subscribed( $user_id ) {
 }
 
 function vitalstack_is_verified( $user_id ) {
-	return (bool) get_user_meta( $user_id, 'vs_email_verified', true );
+	// Site staff (the admin set their address up themselves) don't need the confirmation link.
+	return (bool) get_user_meta( $user_id, 'vs_email_verified', true ) || user_can( $user_id, 'edit_posts' );
 }
 
 function vitalstack_set_subscribed( $user_id, $on ) {
 	update_user_meta( $user_id, 'vs_subscribed', $on ? 1 : 0 );
 	if ( $on ) {
 		update_user_meta( $user_id, 'vs_subscribed_at', time() );
+		vitalstack_sync_staff_verified( $user_id );
 	}
 }
+
+/**
+ * The mailing queries read the vs_email_verified flag directly, so staff
+ * accounts get it stored too; otherwise a subscribed admin is never emailed.
+ */
+function vitalstack_sync_staff_verified( $user_id ) {
+	if ( user_can( $user_id, 'edit_posts' ) && ! get_user_meta( $user_id, 'vs_email_verified', true ) ) {
+		update_user_meta( $user_id, 'vs_email_verified', 1 );
+	}
+}
+add_action(
+	'admin_init',
+	function () {
+		vitalstack_sync_staff_verified( get_current_user_id() );
+	}
+);
+add_action(
+	'wp_login',
+	function ( $login, $user ) {
+		vitalstack_sync_staff_verified( $user->ID );
+	},
+	10,
+	2
+);
 
 /**
  * HMAC signature for one-click unsubscribe links (no login needed).

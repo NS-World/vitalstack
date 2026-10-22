@@ -4,7 +4,7 @@ Theme URI: https://vitalstack.co.in/
 Author: VitalStack
 Author URI: https://vitalstack.co.in/
 Description: Tutorial-site theme for VitalStack: 17 learning paths (web, Python, Java, Spring Boot, React, Angular, DSA), live animated visualizers, quizzes, certificates, daily challenge and leaderboard, brain games, cheat sheets, free coding tools, reader accounts with XP and progress sync, PWA, and AdSense-ready ad slots.
-Version: 4.0.1
+Version: 4.0.2
 Requires at least: 6.3
 Tested up to: 6.8
 Requires PHP: 8.0
@@ -754,6 +754,7 @@ kbd { font-family: var(--font-mono); font-size: 12px; padding: 1px 7px; border-r
 .subscribe-action { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
 .subscribe-alt { font-size: 14px; font-weight: 600; }
 .subscribe-done { display: inline-flex; align-items: center; gap: 6px; margin: 0; font-weight: 700; color: var(--brand-ink); }
+.subscribe-pending { margin: 0; font-weight: 700; color: var(--text); }
 .subscribe-band { background: var(--bg-soft); border-top: 1px solid var(--border); padding: 36px 0; }
 
 .byline { display: flex; align-items: center; gap: 12px; }
