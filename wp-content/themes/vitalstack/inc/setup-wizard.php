@@ -50,7 +50,7 @@ function vitalstack_setup_page() {
 				<tr><td><strong><?php esc_html_e( 'Learning paths', 'vitalstack' ); ?></strong></td><td><?php echo esc_html( implode( ', ', wp_list_pluck( vitalstack_setup_paths(), 'name' ) ) ); ?></td></tr>
 				<tr><td><strong><?php esc_html_e( 'Blog categories', 'vitalstack' ); ?></strong></td><td><?php echo esc_html( implode( ', ', wp_list_pluck( vitalstack_setup_categories(), 'name' ) ) ); ?></td></tr>
 				<tr><td><strong><?php esc_html_e( 'Difficulty levels', 'vitalstack' ); ?></strong></td><td>Beginner, Intermediate, Advanced</td></tr>
-				<tr><td><strong><?php esc_html_e( 'Pages (published)', 'vitalstack' ); ?></strong></td><td>Tutorials, Blog, Brain Games, Interview Problems, Contact Us</td></tr>
+				<tr><td><strong><?php esc_html_e( 'Pages (published)', 'vitalstack' ); ?></strong></td><td>Tutorials, Blog, Brain Games, Interview Problems, Daily Challenge, Free Tools, Cheat Sheets, Mock Tests, Career Roadmaps, Contact Us</td></tr>
 				<tr><td><strong><?php esc_html_e( 'Pages (drafts to review)', 'vitalstack' ); ?></strong></td><td>About Us, Editorial Policy, Privacy Policy, Terms of Service, Disclaimer, Cookie Policy</td></tr>
 				<tr><td><strong><?php esc_html_e( 'Menus', 'vitalstack' ); ?></strong></td><td><?php esc_html_e( 'Main menu, footer Company and Legal menus, assigned to their locations', 'vitalstack' ); ?></td></tr>
 				<tr><td><strong><?php esc_html_e( 'Settings', 'vitalstack' ); ?></strong></td><td><?php esc_html_e( 'Post-name permalinks, site tagline, privacy page', 'vitalstack' ); ?></td></tr>
@@ -254,7 +254,7 @@ function vitalstack_run_setup( $remove_samples = true ) {
 		update_option( 'wp_page_for_privacy_policy', $ids['privacy-policy'] );
 	}
 
-	// Theme-managed child pages: cheat sheets and tools (body comes from the theme while empty).
+	// Theme-managed child pages: cheat sheets, tools, mock tests and roadmaps (body comes from the theme while empty).
 	if ( function_exists( 'vitalstack_site_pages' ) ) {
 		foreach ( vitalstack_site_pages() as $slug => $def ) {
 			$parent = isset( $ids[ $def['parent'] ] ) ? (int) $ids[ $def['parent'] ] : 0;
@@ -290,7 +290,7 @@ function vitalstack_run_setup( $remove_samples = true ) {
 			$have[] = (int) $item->object_id;
 		}
 		$pos = count( $have );
-		foreach ( array( array( 'page', 'daily-challenge', __( 'Daily Challenge', 'vitalstack' ) ), array( 'page', 'tools', __( 'Free Tools', 'vitalstack' ) ), array( 'page', 'cheat-sheets', __( 'Cheat Sheets', 'vitalstack' ) ) ) as $item ) {
+		foreach ( array( array( 'page', 'daily-challenge', __( 'Daily Challenge', 'vitalstack' ) ), array( 'page', 'tools', __( 'Free Tools', 'vitalstack' ) ), array( 'page', 'cheat-sheets', __( 'Cheat Sheets', 'vitalstack' ) ), array( 'page', 'mock-tests', __( 'Mock Tests', 'vitalstack' ) ), array( 'page', 'roadmaps', __( 'Roadmaps', 'vitalstack' ) ) ) as $item ) {
 			if ( ! empty( $ids[ $item[1] ] ) && ! in_array( (int) $ids[ $item[1] ], $have, true ) ) {
 				vitalstack_setup_add_menu_item( $main->term_id, $item, $ids, ++$pos );
 				/* translators: %s: menu label */
@@ -607,6 +607,18 @@ function vitalstack_setup_pages() {
 			'title'    => 'Free Coding Tools',
 			'status'   => 'publish',
 			'template' => 'page-tools.php',
+			'content'  => '',
+		),
+		'mock-tests'       => array(
+			'title'    => 'Mock Tests',
+			'status'   => 'publish',
+			'template' => 'page-mock-tests.php',
+			'content'  => '',
+		),
+		'roadmaps'         => array(
+			'title'    => 'Career Roadmaps',
+			'status'   => 'publish',
+			'template' => 'page-roadmaps.php',
 			'content'  => '',
 		),
 		'contact-us'       => array(

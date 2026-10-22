@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
-"""Build the theme-managed pages (cheat sheets and free tools) into theme data.
+"""Build the theme-managed pages (cheat sheets, free tools, mock tests and roadmaps) into theme data.
 
 Sources: content/site-pages/<group>/<slug>.md with front matter:
 
     ---
     title: Python Cheat Sheet
     slug: python-cheat-sheet
-    parent: cheat-sheets          # hub page slug (cheat-sheets or tools)
+    parent: cheat-sheets          # hub page slug (cheat-sheets, tools, mock-tests or roadmaps)
     template: page-cheat-sheet.php
+    path: java                    # mock tests only: learning path whose quiz questions it uses
     icon: 🐍
     order: 10
     excerpt: One-line description for cards and search results.
@@ -52,7 +53,7 @@ def main():
     for m in pages:
         lines.append(
             "\t" + php_str(m["slug"]) + " => array( "
-            + ", ".join(f"{php_str(k)} => {php_str(m.get(k, ''))}" for k in ("title", "parent", "template", "icon", "excerpt", "order"))
+            + ", ".join(f"{php_str(k)} => {php_str(m.get(k, ''))}" for k in ("title", "parent", "template", "icon", "excerpt", "order", "path"))
             + " ),"
         )
     lines.append(");")

@@ -141,7 +141,7 @@ function vitalstack_ads_allowed() {
 	if ( vitalstack_is_account_page() || get_query_var( 'vs_cert' ) ) {
 		return false;
 	}
-	if ( is_page_template( array( 'page-games.php', 'page-daily-challenge.php' ) ) ) {
+	if ( is_page_template( array( 'page-games.php', 'page-daily-challenge.php', 'page-mock-test.php' ) ) ) {
 		return false;
 	}
 	return true;

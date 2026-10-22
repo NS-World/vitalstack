@@ -1,6 +1,6 @@
 <?php
 /**
- * Theme-managed pages: cheat sheets and free coding tools.
+ * Theme-managed pages: cheat sheets, free coding tools, mock tests and roadmaps.
  *
  * The setup wizard creates real WordPress pages (good for SEO and menus)
  * from data/pages/index.php. While a page's own content is empty, its body
@@ -25,7 +25,7 @@ function vitalstack_site_pages() {
 }
 
 /**
- * Child pages of a hub ("cheat-sheets" or "tools").
+ * Child pages of a hub ("cheat-sheets", "tools", "mock-tests" or "roadmaps").
  */
 function vitalstack_site_pages_in( $parent ) {
 	return array_filter(
@@ -65,6 +65,18 @@ function vitalstack_site_page_url( $slug ) {
 }
 
 /**
+ * Call to action on a hub's cards.
+ */
+function vitalstack_site_page_card_label( $parent ) {
+	$labels = array(
+		'tools'      => __( 'Open tool', 'vitalstack' ),
+		'mock-tests' => __( 'Start test', 'vitalstack' ),
+		'roadmaps'   => __( 'View roadmap', 'vitalstack' ),
+	);
+	return isset( $labels[ $parent ] ) ? $labels[ $parent ] : __( 'Open cheat sheet', 'vitalstack' );
+}
+
+/**
  * Card grid of a hub's pages.
  */
 function vitalstack_site_page_cards( $parent ) {
@@ -81,7 +93,16 @@ function vitalstack_site_page_cards( $parent ) {
 				<span class="sp-icon" aria-hidden="true"><?php echo esc_html( $p['icon'] ); ?></span>
 				<b class="sp-title"><?php echo esc_html( $p['title'] ); ?></b>
 				<span class="sp-excerpt"><?php echo esc_html( $p['excerpt'] ); ?></span>
-				<span class="sp-go"><?php echo 'tools' === $parent ? esc_html__( 'Open tool', 'vitalstack' ) : esc_html__( 'Open cheat sheet', 'vitalstack' ); ?> ❯</span>
+				<?php if ( 'mock-tests' === $parent && ! empty( $p['path'] ) && function_exists( 'vitalstack_mock_questions' ) ) : ?>
+					<span class="sp-meta">
+						<?php
+						$vs_n = min( VITALSTACK_MOCK_QUESTIONS, count( vitalstack_mock_questions( $p['path'] ) ) );
+						/* translators: 1: number of questions, 2: minutes */
+						echo esc_html( sprintf( __( '%1$d questions · %2$d min', 'vitalstack' ), $vs_n, $vs_n ) );
+						?>
+					</span>
+				<?php endif; ?>
+				<span class="sp-go"><?php echo esc_html( vitalstack_site_page_card_label( $parent ) ); ?> ❯</span>
 			</a>
 		<?php endforeach; ?>
 	</div>

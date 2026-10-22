@@ -15,6 +15,7 @@ wp-content/themes/vitalstack/   Custom WordPress theme (deployed to Hostinger)
   assets/js/tools.js            Free tools: Python compiler, SQL playground, JSON formatter, regex tester, HTML editor
   assets/js/fun.js              XP, streaks, mascot, celebrations
   page-games.php                Brain Games template; page-dsa-problems.php: Interview Problems list
+  inc/mock-tests.php            Mock tests (assets/js/mocktest.js) and career roadmaps
   style.css                     Whole design system (light + dark)
   starter-content/content.json  282 lessons + 13 guides, imported in one click from VitalStack Setup
   data/quizzes, data/pages      Generated quiz data and cheat-sheet/tool page bodies
@@ -23,7 +24,7 @@ tools/build_starter_content.py  Bundles content/ into the theme's starter-conten
 tools/lessons_to_wxr.py         Converts the Markdown into a WordPress import file (WXR)
 tools/build_assets.py           Minifies style.css and assets/js into assets/build/
 tools/build_quizzes.py          content/quizzes → theme quiz data (--check validates slugs)
-tools/build_pages.py            content/site-pages → cheat sheets and tool pages
+tools/build_pages.py            content/site-pages → cheat sheets, tools, mock tests and roadmaps
 docs/                           Audit, roadmap, setup guides
 ```
 
@@ -36,7 +37,7 @@ emails and are git-ignored on purpose.
 0. After editing `style.css` or `assets/js/*.js`, rebuild the minified copies:
    `pip install rcssmin rjsmin && python3 tools/build_assets.py`
    (if you forget, the theme serves the unminified file, so nothing breaks).
-1. Zip the theme folder: `cd wp-content/themes && zip -r vitalstack-theme-v4.0.3.zip vitalstack`
+1. Zip the theme folder: `cd wp-content/themes && zip -r vitalstack-theme-v4.1.zip vitalstack`
 2. WordPress admin → Appearance → Themes → Add New → Upload → replace current.
 
 (Later: Hostinger Git deployment can pull this repo automatically.)

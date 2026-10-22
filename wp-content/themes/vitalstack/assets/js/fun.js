@@ -143,6 +143,7 @@
 			else if (type === 'lesson') amount = LESSON_XP;
 			else if (type === 'quiz') amount = Math.max(0, Math.min(10, score || 0)) * QUIZ_XP;
 			else if (type === 'daily') amount = score > 0 ? DAILY_XP : 0;
+			else if (type === 'mock') { amount = Math.max(0, Math.min(20, score || 0)) * QUIZ_XP; ref = ref + ':' + today(); }
 			else if (type === 'game') {
 				var g = guest();
 				var used = g.gamesDay === today() ? g.gamesXp : 0;

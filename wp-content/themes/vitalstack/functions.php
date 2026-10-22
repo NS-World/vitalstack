@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'VITALSTACK_VERSION', '4.0.3' );
+define( 'VITALSTACK_VERSION', '4.1.0' );
 define( 'VITALSTACK_DIR', get_template_directory() );
 define( 'VITALSTACK_URI', get_template_directory_uri() );
 
@@ -35,6 +35,7 @@ require VITALSTACK_DIR . '/inc/schema.php';
 require VITALSTACK_DIR . '/inc/certificates.php';
 require VITALSTACK_DIR . '/inc/challenge.php';
 require VITALSTACK_DIR . '/inc/site-pages.php';
+require VITALSTACK_DIR . '/inc/mock-tests.php';
 require VITALSTACK_DIR . '/inc/pwa.php';
 require VITALSTACK_DIR . '/inc/digest.php';
 require VITALSTACK_DIR . '/inc/mascot.php';
