@@ -18,6 +18,7 @@ function vitalstack_schema_org() {
 		'name'  => get_bloginfo( 'name' ),
 		'url'   => home_url( '/' ),
 		'logo'  => $logo,
+		'sameAs' => array_values( function_exists( 'vitalstack_social_urls' ) ? vitalstack_social_urls() : array() ),
 	);
 }
 

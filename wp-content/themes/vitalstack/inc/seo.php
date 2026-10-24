@@ -80,3 +80,42 @@ function vitalstack_fallback_meta_description() {
 	}
 }
 add_action( 'wp_head', 'vitalstack_fallback_meta_description', 2 );
+
+/**
+ * Old social posts link to vitalstack.co.in/news/<slug>/ from the previous
+ * site. When that page no longer exists, send the visitor somewhere useful
+ * instead of a 404: a guide or lesson with the same slug if there is one,
+ * otherwise the guides page.
+ */
+function vitalstack_redirect_old_news() {
+	if ( ! is_404() ) {
+		return;
+	}
+	$path = trim( (string) wp_parse_url( isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '', PHP_URL_PATH ), '/' ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput -- only compared and sanitized below
+	if ( ! preg_match( '#^news(?:-category)?(?:/|$)#', $path ) ) {
+		return;
+	}
+	$slug   = sanitize_title( basename( $path ) );
+	$target = '';
+	if ( $slug && ! in_array( $slug, array( 'news', 'news-category' ), true ) ) {
+		$match = get_posts(
+			array(
+				'name'             => $slug,
+				'post_type'        => array( 'post', 'tutorials' ),
+				'post_status'      => 'publish',
+				'numberposts'      => 1,
+				'suppress_filters' => true,
+			)
+		);
+		if ( $match ) {
+			$target = get_permalink( $match[0] );
+		}
+	}
+	if ( ! $target ) {
+		$blog   = get_page_by_path( 'blog' );
+		$target = $blog && 'publish' === $blog->post_status ? get_permalink( $blog ) : home_url( '/' );
+	}
+	wp_safe_redirect( $target, 301 );
+	exit;
+}
+add_action( 'template_redirect', 'vitalstack_redirect_old_news', 1 );

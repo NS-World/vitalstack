@@ -149,7 +149,7 @@ function vitalstack_customize_register( $wp_customize ) {
 		$wp_customize->add_setting(
 			'vitalstack_social_' . $id,
 			array(
-				'default'           => '',
+				'default'           => isset( vitalstack_social_defaults()[ $id ] ) ? vitalstack_social_defaults()[ $id ] : '',
 				'sanitize_callback' => 'esc_url_raw',
 			)
 		);
@@ -203,8 +203,37 @@ function vitalstack_social_networks() {
 		'linkedin'  => 'LinkedIn',
 		'facebook'  => 'Facebook',
 		'x'         => 'X (Twitter)',
+		'threads'   => 'Threads',
 		'github'    => 'GitHub',
 	);
+}
+
+/**
+ * VitalStack's own accounts, used until a URL is set in the Customizer.
+ */
+function vitalstack_social_defaults() {
+	return array(
+		'instagram' => 'https://www.instagram.com/vitalstack.ai/',
+		'linkedin'  => 'https://www.linkedin.com/company/vitalstack-ai/',
+		'facebook'  => 'https://www.facebook.com/share/1F6PcE9iiH/',
+		'x'         => 'https://x.com/Vital_Stack',
+		'threads'   => 'https://www.threads.com/@vitalstack.ai',
+	);
+}
+
+/**
+ * Social profile URLs that are set: network => URL.
+ */
+function vitalstack_social_urls() {
+	$defaults = vitalstack_social_defaults();
+	$out      = array();
+	foreach ( vitalstack_social_networks() as $id => $label ) {
+		$url = get_theme_mod( 'vitalstack_social_' . $id, isset( $defaults[ $id ] ) ? $defaults[ $id ] : '' );
+		if ( $url && '#' !== $url ) {
+			$out[ $id ] = $url;
+		}
+	}
+	return $out;
 }
 
 /**
