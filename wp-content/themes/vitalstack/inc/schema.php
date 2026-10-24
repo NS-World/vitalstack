@@ -101,7 +101,7 @@ function vitalstack_schema() {
 			'inLanguage'          => 'en',
 			'isAccessibleForFree' => true,
 			'datePublished'       => get_the_date( 'c', $post ),
-			'dateModified'        => get_the_modified_date( 'c', $post ),
+			'dateModified'        => vitalstack_updated_date( 'c', $post ),
 			'author'              => array(
 				'@type' => 'Person',
 				'name'  => get_the_author_meta( 'display_name', $post->post_author ),
@@ -177,7 +177,7 @@ function vitalstack_schema() {
 			'description'      => wp_strip_all_tags( get_the_excerpt( $post ) ),
 			'mainEntityOfPage' => get_permalink( $post ),
 			'datePublished'    => get_the_date( 'c', $post ),
-			'dateModified'     => get_the_modified_date( 'c', $post ),
+			'dateModified'     => vitalstack_updated_date( 'c', $post ),
 			'author'           => array(
 				'@type' => 'Person',
 				'name'  => get_the_author_meta( 'display_name', $post->post_author ),

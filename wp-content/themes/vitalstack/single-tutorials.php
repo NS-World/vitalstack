@@ -37,7 +37,11 @@ while ( have_posts() ) :
 					<span class="pill pill-slate"><?php echo esc_html( $vs_level ); ?></span>
 				<?php endif; ?>
 				<span class="muted"><?php echo vitalstack_icon( 'clock', 14 ); // phpcs:ignore ?> <?php echo esc_html( sprintf( /* translators: %d minutes */ __( '%d min read', 'vitalstack' ), vitalstack_read_minutes() ) ); ?></span>
-				<span class="muted"><?php esc_html_e( 'Updated', 'vitalstack' ); ?> <time datetime="<?php echo esc_attr( get_the_modified_date( 'c' ) ); ?>"><?php echo esc_html( get_the_modified_date() ); ?></time></span>
+				<?php if ( vitalstack_was_updated() ) : ?>
+					<span class="muted"><?php esc_html_e( 'Updated', 'vitalstack' ); ?> <time datetime="<?php echo esc_attr( vitalstack_updated_date( 'c' ) ); ?>"><?php echo esc_html( vitalstack_updated_date() ); ?></time></span>
+				<?php else : ?>
+					<span class="muted"><?php esc_html_e( 'Published', 'vitalstack' ); ?> <time datetime="<?php echo esc_attr( get_the_date( 'c' ) ); ?>"><?php echo esc_html( get_the_date() ); ?></time></span>
+				<?php endif; ?>
 			</div>
 
 			<?php

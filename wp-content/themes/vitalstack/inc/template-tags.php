@@ -211,7 +211,7 @@ function vitalstack_card( $post_id = null, $args = array() ) {
 			<?php endif; ?>
 			<div class="card-foot">
 				<span><?php echo vitalstack_icon( 'clock', 14 ); // phpcs:ignore ?> <?php echo esc_html( sprintf( /* translators: %d minutes */ __( '%d min read', 'vitalstack' ), vitalstack_read_minutes( $post_id ) ) ); ?></span>
-				<time datetime="<?php echo esc_attr( get_the_modified_date( 'c', $post_id ) ); ?>"><?php echo esc_html( get_the_modified_date( 'M j, Y', $post_id ) ); ?></time>
+				<time datetime="<?php echo esc_attr( vitalstack_updated_date( 'c', $post_id ) ); ?>"><?php echo esc_html( vitalstack_updated_date( 'M j, Y', $post_id ) ); ?></time>
 			</div>
 		</div>
 	</article>
@@ -230,13 +230,55 @@ function vitalstack_monogram( $author_id, $size = 'md' ) {
 }
 
 /**
+ * When a post last changed: its modified date, but never earlier than its
+ * publish date. A scheduled post keeps the modified date of the day it was
+ * scheduled, so without this it would look "updated" before it went live.
+ *
+ * @param string           $format Date format ('c' for ISO 8601); empty for the site's format.
+ * @param int|WP_Post|null $post   Post.
+ */
+function vitalstack_updated_date( $format = '', $post = null ) {
+	$published = get_post_timestamp( $post, 'date' );
+	$modified  = get_post_timestamp( $post, 'modified' );
+	return wp_date( $format ? $format : get_option( 'date_format' ), max( (int) $published, (int) $modified ) );
+}
+
+/**
+ * True when a post was edited more than a day after it was published.
+ */
+function vitalstack_was_updated( $post = null ) {
+	return ( (int) get_post_timestamp( $post, 'modified' ) - (int) get_post_timestamp( $post, 'date' ) ) > DAY_IN_SECONDS;
+}
+
+/**
+ * A scheduled post going live counts as its latest change, so its modified
+ * date is set to the publish date (WordPress leaves it at the scheduling day).
+ */
+function vitalstack_touch_on_schedule_publish( $new_status, $old_status, $post ) {
+	if ( 'publish' !== $new_status || 'future' !== $old_status ) {
+		return;
+	}
+	global $wpdb;
+	$wpdb->update( // phpcs:ignore WordPress.DB.DirectDatabaseQuery -- one row, no hooks wanted
+		$wpdb->posts,
+		array(
+			'post_modified'     => $post->post_date,
+			'post_modified_gmt' => $post->post_date_gmt,
+		),
+		array( 'ID' => $post->ID )
+	);
+	clean_post_cache( $post->ID );
+}
+add_action( 'transition_post_status', 'vitalstack_touch_on_schedule_publish', 5, 3 );
+
+/**
  * Byline under an article title.
  */
 function vitalstack_byline() {
 	$author_id = (int) get_post_field( 'post_author', get_the_ID() );
 	$published = get_the_date( 'c' );
-	$modified  = get_the_modified_date( 'c' );
-	$updated   = ( strtotime( $modified ) - strtotime( $published ) ) > DAY_IN_SECONDS;
+	$modified  = vitalstack_updated_date( 'c' );
+	$updated   = vitalstack_was_updated();
 	?>
 	<div class="byline">
 		<?php echo vitalstack_monogram( $author_id ); // phpcs:ignore ?>
@@ -244,7 +286,7 @@ function vitalstack_byline() {
 			<a class="byline-author" href="<?php echo esc_url( get_author_posts_url( $author_id ) ); ?>"><?php echo esc_html( get_the_author_meta( 'display_name', $author_id ) ); ?></a>
 			<span class="byline-meta">
 				<?php if ( $updated ) : ?>
-					<?php esc_html_e( 'Updated', 'vitalstack' ); ?> <time datetime="<?php echo esc_attr( $modified ); ?>"><?php echo esc_html( get_the_modified_date() ); ?></time>
+					<?php esc_html_e( 'Updated', 'vitalstack' ); ?> <time datetime="<?php echo esc_attr( $modified ); ?>"><?php echo esc_html( vitalstack_updated_date() ); ?></time>
 				<?php else : ?>
 					<time datetime="<?php echo esc_attr( $published ); ?>"><?php echo esc_html( get_the_date() ); ?></time>
 				<?php endif; ?>
