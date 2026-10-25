@@ -23,6 +23,8 @@ get_header();
 					<p class="eyebrow"><?php esc_html_e( 'Free account', 'vitalstack' ); ?></p>
 					<h1><?php esc_html_e( 'Learn at your own pace, and never lose your place.', 'vitalstack' ); ?></h1>
 					<ul class="auth-benefits">
+						<li class="auth-gift"><span class="auth-gift-icon" aria-hidden="true">🎁</span> <span><strong><?php esc_html_e( 'Free gift: 30-Day Java Interview Plan', 'vitalstack' ); ?></strong> <?php esc_html_e( '(PDF), yours as soon as you sign up.', 'vitalstack' ); ?></span></li>
+						<li><?php echo vitalstack_icon( 'check', 20 ); // phpcs:ignore ?> <span><strong><?php esc_html_e( 'Full mock test reviews', 'vitalstack' ); ?></strong> <?php esc_html_e( 'with every answer explained, plus cheat sheet PDFs and certificates.', 'vitalstack' ); ?></span></li>
 						<li><?php echo vitalstack_icon( 'trophy', 20 ); // phpcs:ignore ?> <span><strong><?php esc_html_e( 'Track your progress', 'vitalstack' ); ?></strong> <?php esc_html_e( 'across every learning path, on any device.', 'vitalstack' ); ?></span></li>
 						<li><?php echo vitalstack_icon( 'bell', 20 ); // phpcs:ignore ?> <span><strong><?php esc_html_e( 'Get new lessons by email', 'vitalstack' ); ?></strong> <?php esc_html_e( 'as soon as they are published.', 'vitalstack' ); ?></span></li>
 						<li><?php echo vitalstack_icon( 'lock', 20 ); // phpcs:ignore ?> <span><strong><?php esc_html_e( 'Private and free.', 'vitalstack' ); ?></strong> <?php esc_html_e( 'We never sell or share your email.', 'vitalstack' ); ?></span></li>
@@ -144,6 +146,7 @@ get_header();
 					</section>
 
 					<div class="dash-side">
+						<?php vitalstack_gift_panel(); ?>
 						<?php vitalstack_certs_panel( $vs_user->ID, $vs_progress ); ?>
 						<section class="panel">
 							<h2><?php esc_html_e( 'Email updates', 'vitalstack' ); ?></h2>

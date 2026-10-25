@@ -307,6 +307,7 @@ function vitalstack_send_verification( $user_id ) {
 	$body = '<p>' . sprintf( /* translators: %s: name */ esc_html__( 'Hi %s,', 'vitalstack' ), esc_html( $user->display_name ) ) . '</p>'
 		. '<p>' . esc_html__( 'Thanks for creating a VitalStack account. Please confirm your email address so we can send you new lessons and guides.', 'vitalstack' ) . '</p>'
 		. vitalstack_email_button( $link, __( 'Confirm my email', 'vitalstack' ) )
+		. ( function_exists( 'vitalstack_gift_url' ) ? '<p>🎁 ' . esc_html__( 'Your free 30-Day Java Interview Plan is ready:', 'vitalstack' ) . ' <a href="' . esc_url( vitalstack_gift_url() ) . '" style="color:#0a7d4f;font-weight:700">' . esc_html__( 'download the PDF', 'vitalstack' ) . '</a>.</p>' : '' )
 		. '<p style="color:#6b7280;font-size:13px">' . esc_html__( 'If you did not create this account, you can ignore this email.', 'vitalstack' ) . '</p>';
 
 	return vitalstack_mail( $user->user_email, __( 'Confirm your email for VitalStack', 'vitalstack' ), $body );

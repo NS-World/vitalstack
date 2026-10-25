@@ -25,6 +25,7 @@ tools/lessons_to_wxr.py         Converts the Markdown into a WordPress import fi
 tools/build_assets.py           Minifies style.css and assets/js into assets/build/
 tools/build_quizzes.py          content/quizzes → theme quiz data (--check validates slugs)
 tools/build_pages.py            content/site-pages → cheat sheets, tools, mock tests and roadmaps
+tools/build_gift.py             Sign-up gift (30-Day Java Interview Plan) → HTML; tools/render_pdf.js makes the PDF
 docs/                           Audit, roadmap, setup guides
 ```
 
@@ -37,7 +38,7 @@ emails and are git-ignored on purpose.
 0. After editing `style.css` or `assets/js/*.js`, rebuild the minified copies:
    `pip install rcssmin rjsmin && python3 tools/build_assets.py`
    (if you forget, the theme serves the unminified file, so nothing breaks).
-1. Zip the theme folder: `cd wp-content/themes && zip -r vitalstack-theme-v4.1.2.zip vitalstack`
+1. Zip the theme folder: `cd wp-content/themes && zip -r vitalstack-theme-v4.2.zip vitalstack`
 2. WordPress admin → Appearance → Themes → Add New → Upload → replace current.
 
 (Later: Hostinger Git deployment can pull this repo automatically.)

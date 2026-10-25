@@ -5,7 +5,7 @@ Total time: about 1 hour. All lessons and guides are included in the theme.
 
 ## 1. Upload the theme (5 min)
 1. WordPress admin → **Appearance → Themes → Add New → Upload Theme**.
-2. Choose `vitalstack-theme-v4.1.2.zip` → **Install Now** → **Activate**
+2. Choose `vitalstack-theme-v4.2.zip` → **Install Now** → **Activate**
    (or **Replace current with uploaded** if an older VitalStack is installed).
 
 ## 2. Click the setup button (2 min)
@@ -65,8 +65,24 @@ content". Before publishing, read each piece, run the examples, and add
 something of your own (a tip, a screenshot, a better example). See
 [CONTENT-GUIDE.md](CONTENT-GUIDE.md).
 
+### Updating to v4.2 (free account extras and sign-up gift)
+Upload the new zip → **Replace current with uploaded** → **LiteSpeed Cache → Purge All**.
+Nothing else to set up. What changes for visitors:
+
+| Free, no account | Free account needed |
+|---|---|
+| Every lesson, animation, quiz, roadmap, game, tool and cheat sheet page | Mock test answer review and "Revise these lessons" |
+| Taking a mock test and seeing the score | Cheat sheet PDF download |
+| | Progress on every device, certificates, leaderboard |
+
+- After a visitor's third lesson a small card suggests a free account. It never
+  covers the lesson, and "Not now" hides it for 3 days.
+- Sign-up gift: the **30-Day Java Interview Plan** (PDF) on the reader
+  dashboard and in the confirmation email. It's served only to signed-in
+  readers from `data/gifts/` (rebuild it with `tools/build_gift.py`).
+
 ### Updating to v4.1 (Mock Tests and Career Roadmaps)
-1. Upload `vitalstack-theme-v4.1.2.zip` → **Replace current with uploaded**.
+1. Upload `vitalstack-theme-v4.2.zip` → **Replace current with uploaded**.
 2. **Appearance → VitalStack Setup → Create starter structure**. It adds the
    Mock Tests page with 17 tests, the Career Roadmaps page with 4 roadmaps,
    and their links in the main menu. Nothing else changes.
@@ -79,7 +95,7 @@ intro text of each test and roadmap can be replaced from the page editor; leave
 the page empty to keep the theme's text.
 
 ### Already have the site running (updating to v4.0)?
-1. Upload `vitalstack-theme-v4.1.2.zip` → **Replace current with uploaded**.
+1. Upload `vitalstack-theme-v4.2.zip` → **Replace current with uploaded**.
 2. **Appearance → VitalStack Setup → Create starter structure** again. It adds
    only what's missing: the 10 new learning paths (Java to Angular), the Daily
    Challenge, Free Tools and Cheat Sheets pages, and their menu links. It also

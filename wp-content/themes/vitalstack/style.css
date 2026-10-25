@@ -4,7 +4,7 @@ Theme URI: https://vitalstack.co.in/
 Author: VitalStack
 Author URI: https://vitalstack.co.in/
 Description: Tutorial-site theme for VitalStack: 17 learning paths (web, Python, Java, Spring Boot, React, Angular, DSA), live animated visualizers, quizzes, certificates, daily challenge and leaderboard, brain games, cheat sheets, free coding tools, reader accounts with XP and progress sync, PWA, and AdSense-ready ad slots.
-Version: 4.1.2
+Version: 4.2.0
 Requires at least: 6.3
 Tested up to: 6.8
 Requires PHP: 8.0
@@ -1461,6 +1461,30 @@ kbd { font-family: var(--font-mono); font-size: 12px; padding: 1px 7px; border-r
 .mock-sample-o { margin: 0 0 6px; }
 .mock-sample summary { cursor: pointer; color: var(--brand-ink); font-weight: 600; }
 @media (max-width: 800px) { .mock-about { grid-template-columns: 1fr; } .mock-side { position: static; } .mock { padding: 16px; } .mock-ring { width: 110px; height: 110px; } .mock-ring b { width: 86px; height: 86px; font-size: 24px; } }
+
+.mock-lock { display: flex; gap: 16px; align-items: flex-start; margin: 22px 0 0; padding: 18px 20px; border-radius: var(--radius-lg); background: var(--brand-soft); border: 1px solid color-mix(in srgb, var(--brand) 30%, transparent); }
+.mock-lock-icon { font-size: 30px; line-height: 1; }
+.mock-lock h3 { margin: 0 0 6px; font-size: 18px; }
+.mock-lock p { margin: 0 0 12px; }
+.mock-lock-alt { margin-left: 8px; font-weight: 600; font-size: 14px; }
+.mock-restored { margin: 0 0 16px; padding: 10px 14px; border-radius: var(--radius); background: var(--brand-soft); color: var(--brand-ink); font-weight: 700; }
+
+/* Sign-up gift and reminder */
+.gift-panel { border-color: color-mix(in srgb, var(--brand) 40%, var(--border)); background: linear-gradient(135deg, var(--brand-soft), var(--surface) 70%); }
+.gift-tag { margin: 0 0 4px; font-size: 13px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; color: var(--brand-ink); }
+.gift-panel h2 { margin-top: 0; }
+.auth-benefits .auth-gift { padding: 10px 12px; border-radius: var(--radius); background: var(--brand-soft); }
+.auth-gift-icon { font-size: 20px; line-height: 1; }
+.rm-sync { margin: 0 0 18px; padding: 10px 14px; border-radius: var(--radius); background: var(--bg-soft); font-size: 15px; }
+.nudge { position: fixed; right: 20px; bottom: 20px; z-index: 900; width: 340px; max-width: calc(100vw - 24px); padding: 18px 18px 16px; border-radius: var(--radius-lg); background: var(--surface); border: 1px solid var(--border); border-top: 4px solid var(--brand); box-shadow: var(--shadow-lg); opacity: 0; transform: translateY(16px); transition: opacity .25s ease, transform .25s ease; }
+.nudge.is-visible { opacity: 1; transform: none; }
+.nudge-close { position: absolute; top: 6px; right: 8px; border: 0; background: none; color: var(--muted); font-size: 22px; line-height: 1; cursor: pointer; padding: 4px; }
+.nudge-title { margin: 0 24px 6px 0; font-weight: 800; }
+.nudge-text { margin: 0 0 12px; font-size: 14.5px; color: var(--text-2); }
+.nudge-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+@media (max-width: 600px) { .nudge { left: 12px; right: 12px; bottom: 12px; width: auto; } }
+@media (prefers-reduced-motion: reduce) { .nudge { transition: none; } }
+@media print { .nudge { display: none !important; } }
 
 /* Roadmaps */
 .roadmap { counter-reset: rm; max-width: 820px; }

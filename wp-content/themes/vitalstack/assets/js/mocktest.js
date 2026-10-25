@@ -4,6 +4,8 @@
  * Reads its data from <script id="mock-data"> (see page-mock-test.php):
  * { path, name, count, minutes, questions: [{q,o,a,e,l}], lessons: {slug: {t,u}}, url, title }
  * Awards XP through window.VS (fun.js) and keeps the best score in this browser.
+ * Guests see their score; the answer review and the lessons to revise need a
+ * free account. The attempt is kept for a day so it opens again after sign-up.
  */
 (function () {
 	'use strict';
@@ -16,6 +18,9 @@
 	if (!data.questions || !data.questions.length) return;
 
 	var bestKey = 'vs-mock-best-' + data.path;
+	var lastKey = 'vs-mock-last-' + data.path;
+	var site = window.vitalstackData || {};
+	var loggedIn = !!site.loggedIn;
 	var store = {
 		get: function (k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } },
 		set: function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
@@ -44,8 +49,16 @@
 		}
 	}
 
+	function signupUrl() {
+		var u = new URL(site.accountUrl || '/account/', location.href);
+		u.searchParams.set('tab', 'register');
+		u.searchParams.set('subscribe', '1');
+		u.searchParams.set('redirect_to', data.url.split('#')[0] + '#mock-test');
+		return u.toString();
+	}
+
 	function start() {
-		qs = shuffle(data.questions).slice(0, data.count);
+		qs = shuffle(data.questions.map(function (q, i) { q.i = i; return q; })).slice(0, data.count);
 		answers = qs.map(function () { return -1; });
 		current = 0;
 		left = data.minutes * 60;
@@ -157,28 +170,45 @@
 			if (answers[i] === q.a) correct++;
 			else wrong[q.l] = (wrong[q.l] || 0) + 1;
 		});
-		var total = qs.length, pct = Math.round(correct / total * 100);
+		var total = qs.length;
 		var secs = Math.min(data.minutes * 60, Math.round((Date.now() - startedAt) / 1000));
 		var best = store.get(bestKey);
 		var isBest = !best || correct > best.score;
 		if (isBest) store.set(bestKey, { score: correct, of: total });
+		if (!loggedIn) store.set(lastKey, { q: qs.map(function (q) { return q.i; }), a: answers, s: secs, t: !!timeUp, at: Date.now() });
+		showResult({ correct: correct, wrong: wrong, secs: secs, timeUp: timeUp, isBest: isBest && !!best, fresh: true });
+	}
+
+	function showResult(r) {
+		var correct = r.correct, wrong = r.wrong, secs = r.secs, timeUp = r.timeUp;
+		var total = qs.length, pct = Math.round(correct / total * 100);
+		var locked = !loggedIn;
 
 		var verdict = pct >= 90 ? 'Outstanding! You are interview-ready on this topic.'
+			: locked ? (pct >= 70 ? 'Great work!' : pct >= 50 ? 'Good start.' : 'Keep going.') + ' Unlock the answer review below to see exactly what to fix.'
 			: pct >= 70 ? 'Great work! Revise the topics below to reach 90%.'
 			: pct >= 50 ? 'Good start. Revise the topics below and try again.'
 			: 'Keep going: work through the lessons below, then retake the test.';
 
-		var html = '<div class="mock-result">' +
+		var html = (r.restored ? '<p class="mock-restored">✅ Welcome! Here is the full review of your last attempt.</p>' : '') + '<div class="mock-result">' +
 			'<div class="mock-ring" style="--pct:' + pct + '"><b>' + pct + '%</b></div>' +
 			'<div class="mock-result-text">' +
 				(timeUp ? '<p class="mock-timeup">⏰ Time is up!</p>' : '') +
 				'<h2>' + correct + ' / ' + total + ' correct</h2>' +
 				'<p class="mock-verdict">' + esc(verdict) + '</p>' +
-				'<p class="mock-stats">Time: ' + mmss(secs) + (isBest && best ? ' · 🏅 New best score!' : '') + '<span class="mock-xp"></span></p>' +
+				'<p class="mock-stats">Time: ' + mmss(secs) + (r.isBest ? ' · 🏅 New best score!' : '') + '<span class="mock-xp"></span></p>' +
 			'</div></div>';
 
 		var slugs = Object.keys(wrong).sort(function (a, b) { return wrong[b] - wrong[a]; });
-		if (slugs.length) {
+		if (locked) {
+			var missed = total - correct;
+			html += '<div class="mock-lock"><span class="mock-lock-icon" aria-hidden="true">🔒</span><div>' +
+				'<h3>' + (missed ? 'See the right answers to the ' + missed + ' you missed' : 'See every answer explained') + '</h3>' +
+				'<p>Create a free account to unlock the full answer review with explanations, the lessons to revise, and your free <b>30-Day Java Interview Plan</b> (PDF).</p>' +
+				'<a class="btn btn-primary" href="' + esc(signupUrl()) + '">Sign up free to see answers</a> ' +
+				'<a class="mock-lock-alt" href="' + esc(signupUrl().replace('tab=register', 'tab=login')) + '">I have an account</a>' +
+				'</div></div>';
+		} else if (slugs.length) {
 			html += '<div class="mock-revise"><h3>Revise these lessons</h3><ul>';
 			slugs.forEach(function (s) {
 				var l = data.lessons[s];
@@ -197,21 +227,21 @@
 			'<a class="btn btn-ghost" target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?text=' + t + '&url=' + u + '">X</a>' +
 			'</div>';
 
-		html += '<details class="mock-review" open><summary>Review all answers</summary><ol>';
-		qs.forEach(function (q, i) {
+		if (!locked) html += '<details class="mock-review" open><summary>Review all answers</summary><ol>';
+		if (!locked) qs.forEach(function (q, i) {
 			var mine = answers[i], ok = mine === q.a;
 			html += '<li class="' + (ok ? 'is-right' : 'is-wrong') + '"><p class="mock-q-text">' + fmt(q.q) + '</p>' +
 				'<p>' + (ok ? '✅' : '❌') + ' Your answer: ' + (mine === -1 ? '<i>not answered</i>' : '<b>' + String.fromCharCode(65 + mine) + '.</b> ' + fmt(q.o[mine])) + '</p>' +
 				(ok ? '' : '<p>✔️ Correct: <b>' + String.fromCharCode(65 + q.a) + '.</b> ' + fmt(q.o[q.a]) + '</p>') +
 				(q.e ? '<p class="mock-explain">' + fmt(q.e) + '</p>' : '') + '</li>';
 		});
-		html += '</ol></details>';
+		if (!locked) html += '</ol></details>';
 
 		root.innerHTML = html;
 		root.querySelector('[data-retake]').addEventListener('click', start);
 		root.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-		if (window.VS && window.VS.addXP) {
+		if (r.fresh && window.VS && window.VS.addXP) {
 			window.VS.addXP('mock', data.path, correct).then(function (res) {
 				var xpEl = root.querySelector('.mock-xp');
 				if (res && res.gained && xpEl) xpEl.textContent = ' · +' + res.gained + ' XP';
@@ -225,5 +255,19 @@
 		if (btn) btn.addEventListener('click', start);
 		showBest();
 	}
-	wireStart();
+
+	// Signed in after a guest attempt: show that attempt's full review.
+	function restore() {
+		var last = loggedIn && store.get(lastKey);
+		if (!last || !last.q || Date.now() - last.at > 864e5) return false;
+		try { localStorage.removeItem(lastKey); } catch (e) {}
+		qs = last.q.map(function (i) { return data.questions[i]; }).filter(Boolean);
+		if (qs.length !== last.q.length) return false;
+		answers = last.a;
+		var correct = 0, wrong = {};
+		qs.forEach(function (q, i) { if (answers[i] === q.a) correct++; else wrong[q.l] = (wrong[q.l] || 0) + 1; });
+		showResult({ correct: correct, wrong: wrong, secs: last.s, timeUp: last.t, isBest: false, fresh: false, restored: true });
+		return true;
+	}
+	if (!restore()) wireStart();
 })();

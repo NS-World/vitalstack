@@ -31,6 +31,9 @@ while ( have_posts() ) :
 				<div class="sheet-actions"><a class="btn btn-ghost btn-sm" href="<?php echo esc_url( $vs_hub ); ?>"><?php esc_html_e( 'All roadmaps', 'vitalstack' ); ?></a></div>
 			<?php endif; ?>
 		</header>
+		<?php if ( ! is_user_logged_in() ) : ?>
+			<p class="rm-sync"><?php esc_html_e( 'Your progress below is saved in this browser.', 'vitalstack' ); ?> <a href="<?php echo esc_url( vitalstack_account_url( array( 'tab' => 'register', 'subscribe' => 1, 'redirect_to' => rawurlencode( get_permalink() ) ) ) ); ?>"><?php esc_html_e( 'Sign up free to keep it on every device', 'vitalstack' ); ?></a>.</p>
+		<?php endif; ?>
 		<div class="prose roadmap"><?php echo vitalstack_roadmap_render( vitalstack_site_page_content() ); // phpcs:ignore WordPress.Security.EscapeOutput -- filtered content ?></div>
 		<?php vitalstack_subscribe_box( 'inline' ); ?>
 	</div>

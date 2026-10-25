@@ -28,7 +28,11 @@ while ( have_posts() ) :
 				<?php endif; ?>
 			</div>
 			<div class="sheet-actions">
-				<button type="button" class="btn btn-primary btn-sm" onclick="window.print()"><?php esc_html_e( 'Download PDF', 'vitalstack' ); ?></button>
+				<?php if ( is_user_logged_in() ) : ?>
+					<button type="button" class="btn btn-primary btn-sm" data-print-sheet><?php esc_html_e( 'Download PDF', 'vitalstack' ); ?></button>
+				<?php else : ?>
+					<a class="btn btn-primary btn-sm" href="<?php echo esc_url( vitalstack_account_url( array( 'tab' => 'register', 'subscribe' => 1, 'redirect_to' => rawurlencode( add_query_arg( 'pdf', '1', get_permalink() ) ) ) ) ); ?>" title="<?php esc_attr_e( 'Free account needed', 'vitalstack' ); ?>">🔒 <?php esc_html_e( 'Download PDF (free sign-up)', 'vitalstack' ); ?></a>
+				<?php endif; ?>
 				<?php if ( $vs_hub ) : ?>
 					<a class="btn btn-ghost btn-sm" href="<?php echo esc_url( $vs_hub ); ?>"><?php esc_html_e( 'All cheat sheets', 'vitalstack' ); ?></a>
 				<?php endif; ?>

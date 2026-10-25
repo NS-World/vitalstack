@@ -586,6 +586,59 @@
 		});
 	}
 
+	/* ── Cheat sheet PDF (signed-in readers; ?pdf=1 after signing up) ─────── */
+	var printBtn = document.querySelector('[data-print-sheet]');
+	if (printBtn) {
+		printBtn.addEventListener('click', function () { window.print(); });
+		if (/[?&]pdf=1(&|$)/.test(location.search)) {
+			history.replaceState(null, '', location.pathname + location.hash);
+			window.addEventListener('load', function () { setTimeout(function () { window.print(); }, 400); });
+		}
+	}
+
+	/* ── Gentle sign-up reminder after a guest's third lesson ─────────────── */
+	// Never blocks the lesson: a small dismissible card, at most once every 3 days.
+	if (!data.loggedIn && completeBtn && data.accountUrl) {
+		var nudgeSeen = store.get('vs-guest-lessons', []);
+		var nudgeId = completeBtn.getAttribute('data-complete');
+		if (nudgeSeen.indexOf(nudgeId) === -1) { nudgeSeen.push(nudgeId); store.set('vs-guest-lessons', nudgeSeen.slice(-50)); }
+		var nudgeSnooze = store.get('vs-nudge-hide', 0);
+		if (nudgeSeen.length >= 3 && Date.now() > nudgeSnooze) {
+			var showNudge = function () {
+				if (document.querySelector('.nudge') || !store.get('vs-cookie-ok', false)) return;
+				var nudgeUrl = new URL(data.accountUrl, location.href);
+				nudgeUrl.searchParams.set('tab', 'register');
+				nudgeUrl.searchParams.set('subscribe', '1');
+				nudgeUrl.searchParams.set('redirect_to', location.href.split('#')[0]);
+				var nudgeBox = document.createElement('aside');
+				nudgeBox.className = 'nudge';
+				nudgeBox.setAttribute('aria-label', 'Create a free account');
+				nudgeBox.innerHTML = '<button type="button" class="nudge-close" aria-label="Not now">×</button>' +
+					'<p class="nudge-title">🎉 ' + nudgeSeen.length + ' lessons done! Save your progress</p>' +
+					'<p class="nudge-text">Create a free account to keep your progress on every device, earn certificates, and get the free <b>30-Day Java Interview Plan</b> (PDF).</p>' +
+					'<div class="nudge-actions"><a class="btn btn-primary btn-sm" href="' + nudgeUrl.toString().replace(/"/g, '&quot;') + '">Sign up free</a>' +
+					'<button type="button" class="btn btn-ghost btn-sm" data-nudge-later>Not now</button></div>';
+				var hideNudge = function () {
+					store.set('vs-nudge-hide', Date.now() + 3 * 864e5);
+					nudgeBox.classList.remove('is-visible');
+					setTimeout(function () { nudgeBox.remove(); }, 300);
+				};
+				nudgeBox.querySelector('.nudge-close').addEventListener('click', hideNudge);
+				nudgeBox.querySelector('[data-nudge-later]').addEventListener('click', hideNudge);
+				document.body.appendChild(nudgeBox);
+				requestAnimationFrame(function () { nudgeBox.classList.add('is-visible'); });
+			};
+			// Show it once the reader is into the lesson, not on arrival.
+			var nudgeOnScroll = function () {
+				if (window.scrollY > document.documentElement.scrollHeight * 0.35) {
+					window.removeEventListener('scroll', nudgeOnScroll);
+					showNudge();
+				}
+			};
+			window.addEventListener('scroll', nudgeOnScroll, { passive: true });
+		}
+	}
+
 	/* ── Back to top ──────────────────────────────────────────────────────── */
 	document.querySelectorAll('[data-back-to-top]').forEach(function (b) {
 		b.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
