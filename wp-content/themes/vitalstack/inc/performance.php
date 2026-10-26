@@ -106,3 +106,44 @@ add_filter(
 	},
 	20
 );
+
+/**
+ * After a theme update, cached pages still carry the old header and footer.
+ * The first admin request on a new theme version clears every page cache we
+ * know how to reach (LiteSpeed Cache, WP Super Cache, W3 Total Cache, WP
+ * Rocket, plus WordPress's object cache), so visitors get the new pages.
+ */
+function vitalstack_purge_caches_on_update() {
+	if ( VITALSTACK_VERSION === get_option( 'vitalstack_cache_version' ) || ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+	update_option( 'vitalstack_cache_version', VITALSTACK_VERSION, false );
+	do_action( 'litespeed_purge_all' );
+	if ( function_exists( 'wp_cache_clear_cache' ) ) {
+		wp_cache_clear_cache();
+	}
+	if ( function_exists( 'w3tc_flush_all' ) ) {
+		w3tc_flush_all();
+	}
+	if ( function_exists( 'rocket_clean_domain' ) ) {
+		rocket_clean_domain();
+	}
+	wp_cache_flush();
+	delete_transient( 'vs_path_lessons' );
+	set_transient( 'vitalstack_cache_purged_' . get_current_user_id(), VITALSTACK_VERSION, HOUR_IN_SECONDS );
+}
+add_action( 'admin_init', 'vitalstack_purge_caches_on_update' );
+
+/**
+ * Tell the admin once that the cache was cleared after the update.
+ */
+function vitalstack_cache_purged_notice() {
+	$version = get_transient( 'vitalstack_cache_purged_' . get_current_user_id() );
+	if ( ! $version ) {
+		return;
+	}
+	delete_transient( 'vitalstack_cache_purged_' . get_current_user_id() );
+	/* translators: %s: theme version */
+	echo '<div class="notice notice-success is-dismissible"><p>' . esc_html( sprintf( __( 'VitalStack %s is active and the page cache was cleared, so visitors see the new version. If you use the Hostinger CDN, also purge it once (hPanel → Performance → CDN).', 'vitalstack' ), $version ) ) . '</p></div>';
+}
+add_action( 'admin_notices', 'vitalstack_cache_purged_notice' );

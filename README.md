@@ -38,7 +38,7 @@ emails and are git-ignored on purpose.
 0. After editing `style.css` or `assets/js/*.js`, rebuild the minified copies:
    `pip install rcssmin rjsmin && python3 tools/build_assets.py`
    (if you forget, the theme serves the unminified file, so nothing breaks).
-1. Zip the theme folder: `cd wp-content/themes && zip -r vitalstack-theme-v4.2.3.zip vitalstack`
+1. Zip the theme folder: `cd wp-content/themes && zip -r vitalstack-theme-v4.2.4.zip vitalstack`
 2. WordPress admin → Appearance → Themes → Add New → Upload → replace current.
 
 (Later: Hostinger Git deployment can pull this repo automatically.)

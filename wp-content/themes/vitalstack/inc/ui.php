@@ -82,6 +82,44 @@ function vitalstack_header_nav() {
 }
 
 /**
+ * Practice links at the top of the phone menu, as tiles.
+ */
+function vitalstack_drawer_practice() {
+	$links = vitalstack_practice_links();
+	if ( ! $links ) {
+		return;
+	}
+	echo '<nav class="drawer-practice" aria-label="' . esc_attr__( 'Practice', 'vitalstack' ) . '">';
+	foreach ( $links as $l ) {
+		echo '<a href="' . esc_url( $l[0] ) . '"' . ( $l[3] ? ' class="is-active" aria-current="page"' : '' ) . '><span aria-hidden="true">' . esc_html( $l[2] ) . '</span>' . esc_html( $l[1] ) . '</a>';
+	}
+	echo '</nav>';
+}
+
+/**
+ * The phone menu shows the practice pages as tiles, so menu items pointing to
+ * them are dropped from the list below to avoid showing them twice.
+ */
+function vitalstack_drawer_skip_practice_items( $items, $args ) {
+	if ( empty( $args->theme_location ) || 'primary' !== $args->theme_location ) {
+		return $items;
+	}
+	$urls = array_map(
+		function ( $l ) {
+			return untrailingslashit( $l[0] );
+		},
+		vitalstack_practice_links()
+	);
+	return array_filter(
+		$items,
+		function ( $item ) use ( $urls ) {
+			return ! in_array( untrailingslashit( $item->url ), $urls, true );
+		}
+	);
+}
+add_filter( 'wp_nav_menu_objects', 'vitalstack_drawer_skip_practice_items', 20, 2 );
+
+/**
  * Links in the dark topic bar. Uses the "Topic Bar" menu when assigned,
  * otherwise one link per learning path (subject), pointing at its first
  * lesson, followed by the main guide topics.

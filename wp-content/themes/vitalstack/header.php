@@ -61,6 +61,7 @@
 				<a class="btn btn-ghost" href="<?php echo esc_url( vitalstack_account_url() ); ?>"><?php esc_html_e( 'Sign in', 'vitalstack' ); ?></a>
 			</div>
 		<?php endif; ?>
+		<?php vitalstack_drawer_practice(); ?>
 		<nav aria-label="<?php esc_attr_e( 'Mobile', 'vitalstack' ); ?>">
 			<?php
 			wp_nav_menu(
