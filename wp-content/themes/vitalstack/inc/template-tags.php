@@ -551,6 +551,92 @@ function vitalstack_footer_company_fallback() {
 	);
 }
 
+/**
+ * The site's trust pages, shown in fixed footer columns so a stray menu
+ * edit can't drop or break them: slug => label.
+ */
+function vitalstack_footer_page_sets() {
+	return array(
+		'company' => array(
+			'about-us'         => __( 'About Us', 'vitalstack' ),
+			'editorial-policy' => __( 'Editorial Policy', 'vitalstack' ),
+			'contact-us'       => __( 'Contact Us', 'vitalstack' ),
+		),
+		'legal'   => array(
+			'privacy-policy'   => __( 'Privacy Policy', 'vitalstack' ),
+			'terms-of-service' => __( 'Terms of Service', 'vitalstack' ),
+			'disclaimer'       => __( 'Disclaimer', 'vitalstack' ),
+			'cookie-policy'    => __( 'Cookie Policy', 'vitalstack' ),
+		),
+	);
+}
+
+/**
+ * A published page by slug, or by its exact title if the slug was changed.
+ */
+function vitalstack_find_published_page( $slug, $title ) {
+	$page = get_page_by_path( $slug );
+	if ( $page && 'publish' === $page->post_status ) {
+		return $page;
+	}
+	$found = get_posts(
+		array(
+			'post_type'        => 'page',
+			'post_status'      => 'publish',
+			'title'            => $title,
+			'numberposts'      => 1,
+			'orderby'          => 'ID',
+			'order'            => 'ASC',
+			'suppress_filters' => true,
+		)
+	);
+	return $found ? $found[0] : null;
+}
+
+/**
+ * Footer column of trust pages; pages that aren't published are skipped.
+ *
+ * @param string $set "company" or "legal".
+ */
+function vitalstack_footer_pages( $set ) {
+	$items = array();
+	foreach ( vitalstack_footer_page_sets()[ $set ] as $slug => $label ) {
+		$page = vitalstack_find_published_page( $slug, $label );
+		if ( $page ) {
+			$items[] = array( get_permalink( $page ), $label );
+		}
+	}
+	vitalstack_menu_list( $items );
+}
+
+/**
+ * Once per theme version: a published trust page with an empty slug (its link
+ * then looks like ?page_id=12) gets its proper slug back.
+ */
+function vitalstack_repair_trust_page_slugs() {
+	if ( VITALSTACK_VERSION === get_option( 'vitalstack_slug_repair' ) || ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+	foreach ( vitalstack_footer_page_sets() as $pages ) {
+		foreach ( $pages as $slug => $label ) {
+			if ( get_page_by_path( $slug ) ) {
+				continue;
+			}
+			$page = vitalstack_find_published_page( $slug, $label );
+			if ( $page && '' === $page->post_name ) {
+				wp_update_post(
+					array(
+						'ID'        => $page->ID,
+						'post_name' => $slug,
+					)
+				);
+			}
+		}
+	}
+	update_option( 'vitalstack_slug_repair', VITALSTACK_VERSION, false );
+}
+add_action( 'admin_init', 'vitalstack_repair_trust_page_slugs' );
+
 function vitalstack_footer_legal_fallback() {
 	vitalstack_menu_list(
 		array(

@@ -32,30 +32,12 @@
 
 		<div class="footer-col">
 			<h2 class="footer-title"><?php esc_html_e( 'VitalStack', 'vitalstack' ); ?></h2>
-			<?php
-			wp_nav_menu(
-				array(
-					'theme_location' => 'footer-company',
-					'container'      => false,
-					'depth'          => 1,
-					'fallback_cb'    => 'vitalstack_footer_company_fallback',
-				)
-			);
-			?>
+			<?php vitalstack_footer_pages( 'company' ); ?>
 		</div>
 
 		<div class="footer-col">
 			<h2 class="footer-title"><?php esc_html_e( 'Legal', 'vitalstack' ); ?></h2>
-			<?php
-			wp_nav_menu(
-				array(
-					'theme_location' => 'footer-legal',
-					'container'      => false,
-					'depth'          => 1,
-					'fallback_cb'    => 'vitalstack_footer_legal_fallback',
-				)
-			);
-			?>
+			<?php vitalstack_footer_pages( 'legal' ); ?>
 		</div>
 	</div>
 
@@ -68,7 +50,10 @@
 <div class="cookie-note" id="cookie-note" hidden>
 	<p>
 		<?php esc_html_e( 'We use cookies for sign-in, basic analytics and to show ads that keep this site free.', 'vitalstack' ); ?>
-		<a href="<?php echo esc_url( vitalstack_page_url( 'cookie-policy' ) ); ?>"><?php esc_html_e( 'Learn more', 'vitalstack' ); ?></a>
+		<?php $vs_cookie_page = vitalstack_find_published_page( 'cookie-policy', __( 'Cookie Policy', 'vitalstack' ) ); ?>
+		<?php if ( $vs_cookie_page ) : ?>
+			<a href="<?php echo esc_url( get_permalink( $vs_cookie_page ) ); ?>"><?php esc_html_e( 'Learn more', 'vitalstack' ); ?></a>
+		<?php endif; ?>
 	</p>
 	<button type="button" class="btn btn-primary btn-sm" data-dismiss-cookie><?php esc_html_e( 'Got it', 'vitalstack' ); ?></button>
 </div>
