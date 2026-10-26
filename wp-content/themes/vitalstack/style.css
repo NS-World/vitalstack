@@ -4,7 +4,7 @@ Theme URI: https://vitalstack.co.in/
 Author: VitalStack
 Author URI: https://vitalstack.co.in/
 Description: Tutorial-site theme for VitalStack: 17 learning paths (web, Python, Java, Spring Boot, React, Angular, DSA), live animated visualizers, quizzes, certificates, daily challenge and leaderboard, brain games, cheat sheets, free coding tools, reader accounts with XP and progress sync, PWA, and AdSense-ready ad slots.
-Version: 4.2.1
+Version: 4.2.2
 Requires at least: 6.3
 Tested up to: 6.8
 Requires PHP: 8.0
@@ -1308,6 +1308,12 @@ kbd { font-family: var(--font-mono); font-size: 12px; padding: 1px 7px; border-r
 .quiz-opt:hover:not(:disabled) { border-color: var(--brand); transform: translateX(2px); }
 .quiz-opt:disabled { cursor: default; }
 .quiz-letter { flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 7px; background: var(--bg-soft); border: 1px solid var(--border); font-weight: 700; font-size: 13px; }
+/* Long inline code in questions must wrap on phones. */
+.prose :not(pre) > code, .prose p, .prose li, .prose td { overflow-wrap: anywhere; }
+.lesson-timeline-body { min-width: 0; overflow-wrap: anywhere; }
+.doc-title, .sheet-title, .card-title, .prose h2, .prose h3, .mock-sample-q { overflow-wrap: break-word; }
+.board-join .btn { max-width: 100%; white-space: normal; text-align: center; }
+.quiz-q legend, .quiz-opt span, .quiz-explain, .mock-q-text, .mock-sample-q, .mock-review li p { overflow-wrap: anywhere; }
 .quiz-opt.is-correct { border-color: #16a34a; background: #e9f9ef; }
 .quiz-opt.is-correct .quiz-letter { background: #16a34a; border-color: #16a34a; color: #fff; }
 .quiz-opt.is-picked { border-color: #dc2626; background: #fdecec; animation: quiz-shake .35s; }
