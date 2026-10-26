@@ -39,6 +39,49 @@ function vitalstack_subject_label( $post_id ) {
 }
 
 /**
+ * Practice pages (mock tests, roadmaps, cheat sheets, tools) that exist and
+ * are published: list of array( url, label, icon, active ).
+ */
+function vitalstack_practice_links() {
+	static $links = null;
+	if ( null !== $links ) {
+		return $links;
+	}
+	$links = array();
+	$pages = array(
+		'mock-tests'   => array( __( 'Mock Tests', 'vitalstack' ), '📝' ),
+		'roadmaps'     => array( __( 'Roadmaps', 'vitalstack' ), '🗺️' ),
+		'cheat-sheets' => array( __( 'Cheat Sheets', 'vitalstack' ), '📄' ),
+		'tools'        => array( __( 'Free Tools', 'vitalstack' ), '🛠️' ),
+	);
+	$current = is_page() ? get_queried_object() : null;
+	foreach ( $pages as $slug => $meta ) {
+		$page = get_page_by_path( $slug );
+		if ( ! $page || 'publish' !== $page->post_status ) {
+			continue;
+		}
+		$active  = $current && ( (int) $current->ID === (int) $page->ID || in_array( (int) $page->ID, array_map( 'intval', get_post_ancestors( $current ) ), true ) );
+		$links[] = array( get_permalink( $page ), $meta[0], $meta[1], $active );
+	}
+	return $links;
+}
+
+/**
+ * Practice links in the header (wide screens; the topic bar has them on smaller ones).
+ */
+function vitalstack_header_nav() {
+	$links = vitalstack_practice_links();
+	if ( ! $links ) {
+		return;
+	}
+	echo '<nav class="topbar-nav" aria-label="' . esc_attr__( 'Practice', 'vitalstack' ) . '">';
+	foreach ( $links as $l ) {
+		echo '<a href="' . esc_url( $l[0] ) . '"' . ( $l[3] ? ' class="is-active" aria-current="page"' : '' ) . '>' . esc_html( $l[1] ) . '</a>';
+	}
+	echo '</nav>';
+}
+
+/**
  * Links in the dark topic bar. Uses the "Topic Bar" menu when assigned,
  * otherwise one link per learning path (subject), pointing at its first
  * lesson, followed by the main guide topics.
@@ -82,6 +125,9 @@ function vitalstack_topic_links() {
 	}
 	if ( vitalstack_games_url() ) {
 		echo '<a class="topic-games' . ( is_page( 'games' ) ? ' is-active' : '' ) . '" href="' . esc_url( vitalstack_games_url() ) . '">🎮 ' . esc_html__( 'Games', 'vitalstack' ) . '</a>';
+	}
+	foreach ( vitalstack_practice_links() as $l ) {
+		echo '<a class="topic-practice' . ( $l[3] ? ' is-active' : '' ) . '" href="' . esc_url( $l[0] ) . '">' . esc_html( $l[2] . ' ' . $l[1] ) . '</a>';
 	}
 	$extra = array(
 		'artificial-intelligence' => __( 'AI Guides', 'vitalstack' ),

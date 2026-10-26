@@ -27,6 +27,8 @@
 				<kbd aria-hidden="true">/</kbd>
 			</button>
 
+			<?php vitalstack_header_nav(); ?>
+
 			<div class="topbar-actions">
 				<button type="button" class="icon-btn search-mobile" data-open-search aria-label="<?php esc_attr_e( 'Search', 'vitalstack' ); ?>"><?php echo vitalstack_icon( 'search' ); // phpcs:ignore ?></button>
 				<?php vitalstack_appearance_button(); ?>

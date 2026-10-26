@@ -4,7 +4,7 @@ Theme URI: https://vitalstack.co.in/
 Author: VitalStack
 Author URI: https://vitalstack.co.in/
 Description: Tutorial-site theme for VitalStack: 17 learning paths (web, Python, Java, Spring Boot, React, Angular, DSA), live animated visualizers, quizzes, certificates, daily challenge and leaderboard, brain games, cheat sheets, free coding tools, reader accounts with XP and progress sync, PWA, and AdSense-ready ad slots.
-Version: 4.2.0
+Version: 4.2.1
 Requires at least: 6.3
 Tested up to: 6.8
 Requires PHP: 8.0
@@ -310,6 +310,22 @@ kbd { font-family: var(--font-mono); font-size: 12px; padding: 1px 7px; border-r
 .topicbar a.is-active { background: var(--brand); color: var(--on-brand); }
 .topic-home { padding: 0 14px !important; }
 .topic-sep { width: 1px; margin: 10px 8px; background: rgba(255, 255, 255, .18); flex-shrink: 0; }
+.topbar-nav { display: none; align-items: center; gap: 2px; flex-shrink: 0; }
+.topbar-nav a { padding: 8px 11px; border-radius: 8px; color: var(--text-2); font-size: 15px; font-weight: 600; white-space: nowrap; }
+.topbar-nav a:hover { background: var(--bg-soft); color: var(--text); text-decoration: none; }
+.topbar-nav a.is-active { color: var(--brand-ink); background: var(--brand-soft); }
+@media (min-width: 960px) {
+	.topbar-nav { display: flex; }
+	.topbar-search { max-width: 380px; min-width: 180px; }
+	.topicbar .topic-practice { display: none; }
+}
+@media (min-width: 960px) and (max-width: 1179px) {
+	.topbar-inner { gap: 12px; }
+	.topbar-nav a { padding: 8px 7px; font-size: 14px; }
+	.topbar-search kbd { display: none; }
+	.account-name { display: none; }
+	.account-btn { padding: 3px; }
+}
 
 @media (max-width: 900px) {
 	.topbar-search { display: none; }
