@@ -14,7 +14,7 @@ get_header();
 			<h1><?php the_title(); ?></h1>
 			<p class="games-hero-sub"><?php esc_html_e( 'Run Python, practise SQL, format JSON and test regular expressions right here. Your code never leaves your browser.', 'vitalstack' ); ?></p>
 		</div>
-		<div class="games-hero-bot" aria-hidden="true"><?php echo vitalstack_mascot( 'wow', 150 ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></div>
+		<div class="games-hero-bot" aria-hidden="true"><?php echo vitalstack_mascot( 'wow', 150, '', 'chip' ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></div>
 	</div>
 </section>
 <div class="wrap sp-wrap">

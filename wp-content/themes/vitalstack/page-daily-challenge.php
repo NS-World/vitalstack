@@ -20,7 +20,7 @@ get_header();
 				<span>⚡ <b data-xp="week">0</b> <?php esc_html_e( 'XP this week', 'vitalstack' ); ?></span>
 			</div>
 		</div>
-		<div class="games-hero-bot" aria-hidden="true"><?php echo vitalstack_mascot( 'wow', 150 ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></div>
+		<div class="games-hero-bot" aria-hidden="true"><?php echo vitalstack_mascot( 'wow', 150, '', 'byte' ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></div>
 	</div>
 </section>
 

@@ -28,7 +28,7 @@
 	}
 	function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
 	function rand(n) { return Math.floor(Math.random() * n); }
-	function mascot(m) { return window.VS ? window.VS.mascot(m) : ''; }
+	function mascot(m) { return window.VS ? window.VS.mascot(m, 'byte') : ''; }
 
 	var timers = [];
 	function every(fn, ms) { var t = setInterval(fn, ms); timers.push(t); return t; }

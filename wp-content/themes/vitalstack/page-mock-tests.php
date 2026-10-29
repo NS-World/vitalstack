@@ -15,7 +15,7 @@ $vs_roadmaps = vitalstack_site_page_url( 'roadmaps' );
 			<h1><?php the_title(); ?></h1>
 			<p class="games-hero-sub"><?php esc_html_e( 'Practise like the real exam: 20 random questions, a timer, your score and the topics to revise. Every question has an explanation, and you get new questions every time.', 'vitalstack' ); ?></p>
 		</div>
-		<div class="games-hero-bot" aria-hidden="true"><?php echo vitalstack_mascot( 'think', 150 ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></div>
+		<div class="games-hero-bot" aria-hidden="true"><?php echo vitalstack_mascot( 'think', 150, '', 'bugsy' ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></div>
 	</div>
 </section>
 <div class="wrap sp-wrap">

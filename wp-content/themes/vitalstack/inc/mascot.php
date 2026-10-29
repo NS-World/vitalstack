@@ -19,8 +19,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param string $mood  happy | wow | think | cheer | sleepy.
  * @param int    $size  Width in pixels.
  * @param string $class Extra classes.
+ * @param string $who   Crew member for this spot (see inc/crew.php); Chip by default.
  */
-function vitalstack_mascot( $mood = 'happy', $size = 120, $class = '' ) {
+function vitalstack_mascot( $mood = 'happy', $size = 120, $class = '', $who = 'chip' ) {
+	if ( 'classic' !== get_theme_mod( 'vitalstack_mascot_style', 'crew' ) && function_exists( 'vitalstack_character' ) ) {
+		return vitalstack_character( $who, $mood, $size, $class );
+	}
 	$mood  = in_array( $mood, array( 'happy', 'wow', 'think', 'cheer', 'sleepy' ), true ) ? $mood : 'happy';
 	$mouth = array(
 		'happy'  => '<path class="m-mouth" d="M48 60 Q60 70 72 60" />',

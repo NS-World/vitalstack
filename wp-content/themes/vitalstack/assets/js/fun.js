@@ -94,7 +94,10 @@
 	}
 
 	/* ── Mascot and celebrations ──────────────────────────────────────────── */
-	function mascot(mood) { return (cfg.mascot && (cfg.mascot[mood] || cfg.mascot.happy)) || ''; }
+	function mascot(mood, who) {
+		var set = (who && cfg.crew && cfg.crew[who]) || cfg.mascot;
+		return (set && (set[mood] || set.happy)) || '';
+	}
 
 	function confetti(host) {
 		var colours = ['#34c987', '#f5b301', '#4f8cff', '#ff6b8b', '#a970ff'];

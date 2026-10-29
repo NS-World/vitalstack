@@ -4,7 +4,7 @@ Theme URI: https://vitalstack.co.in/
 Author: VitalStack
 Author URI: https://vitalstack.co.in/
 Description: Tutorial-site theme for VitalStack: 17 learning paths (web, Python, Java, Spring Boot, React, Angular, DSA), live animated visualizers, quizzes, certificates, daily challenge and leaderboard, brain games, cheat sheets, free coding tools, reader accounts with XP and progress sync, PWA, and AdSense-ready ad slots.
-Version: 4.3.4
+Version: 4.4.0
 Requires at least: 6.3
 Tested up to: 6.8
 Requires PHP: 8.0
@@ -451,6 +451,12 @@ kbd { font-family: var(--font-mono); font-size: 12px; padding: 1px 7px; border-r
 .mascot .m-sparks path { stroke: #f5b301; stroke-width: 2.5; stroke-linecap: round; animation: vs-glow 1.2s ease-in-out infinite; }
 .mascot .m-body-wrap { animation: vs-float 3.2s ease-in-out infinite; }
 .mascot-cheer .m-body-wrap { animation: vs-hop .9s ease-in-out infinite; }
+.mascot-crew { image-rendering: pixelated; }
+.mascot-crew .vs-eyes { transform-box: fill-box; transform-origin: center; animation: vs-blink 4.5s infinite; }
+.mascot-crew .vs-crew-shadow { fill: #000; opacity: .14; }
+.mascot-crew .vs-fx-spark { fill: #f5b301; animation: vs-glow 1.2s ease-in-out infinite; }
+.mascot-crew .vs-fx-alert { fill: #e5484d; animation: vs-glow 1.4s ease-in-out infinite; }
+.mascot-crew .vs-fx-soft { fill: var(--muted); animation: vs-float 2.4s ease-in-out infinite; }
 @keyframes vs-blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
 @keyframes vs-bob { 0%, 100% { transform: rotate(-6deg); } 50% { transform: rotate(6deg); } }
 @keyframes vs-glow { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
@@ -1397,6 +1403,8 @@ kbd { font-family: var(--font-mono); font-size: 12px; padding: 1px 7px; border-r
 .home-certs { padding: 56px 0; background: linear-gradient(180deg, var(--bg), rgba(201, 162, 39, .08)); border-top: 1px solid var(--border); }
 .home-certs-inner { display: grid; gap: 36px; align-items: center; }
 @media (min-width: 900px) { .home-certs-inner { grid-template-columns: 1.05fr 1fr; } }
+.home-certs-bot { margin-bottom: 6px; }
+.home-certs-bot .mascot { width: 64px; height: auto; display: block; }
 .home-certs-text h2 { font-size: clamp(26px, 3.4vw, 36px); line-height: 1.15; margin: 4px 0 12px; letter-spacing: -.02em; }
 .home-certs-text > p { color: var(--text-2); }
 .home-certs-steps { list-style: none; padding: 0; margin: 18px 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }

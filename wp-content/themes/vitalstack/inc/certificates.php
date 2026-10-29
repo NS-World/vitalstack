@@ -422,6 +422,7 @@ function vitalstack_home_certs() {
 	<section class="home-certs">
 		<div class="wrap home-certs-inner">
 			<div class="home-certs-text">
+				<div class="home-certs-bot" aria-hidden="true"><?php echo vitalstack_mascot( 'cheer', 72, '', 'dev' ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></div>
 				<p class="eyebrow">🎓 <?php esc_html_e( 'Free certificates', 'vitalstack' ); ?></p>
 				<h2><?php esc_html_e( 'Finish a course, earn a certificate', 'vitalstack' ); ?></h2>
 				<p><?php esc_html_e( 'Every learning path ends with a free certificate of completion with your name, a public verify link, and one click to add it to LinkedIn.', 'vitalstack' ); ?></p>

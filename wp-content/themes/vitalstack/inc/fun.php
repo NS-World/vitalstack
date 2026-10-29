@@ -62,6 +62,13 @@ function vitalstack_fun_assets() {
 			'wow'   => vitalstack_mascot( 'wow', 90 ),
 		),
 	);
+	// Games are Byte's corner of the site.
+	if ( is_page_template( 'page-games.php' ) ) {
+		$fun['crew'] = array( 'byte' => array() );
+		foreach ( array( 'happy', 'cheer', 'think', 'wow' ) as $vs_mood ) {
+			$fun['crew']['byte'][ $vs_mood ] = vitalstack_mascot( $vs_mood, 90, '', 'byte' );
+		}
+	}
 	if ( is_user_logged_in() ) {
 		$fun['xpUrl'] = esc_url_raw( rest_url( 'vitalstack/v1/xp' ) );
 		$fun['nonce'] = wp_create_nonce( 'wp_rest' );
@@ -101,7 +108,7 @@ function vitalstack_hero_card() {
 	$dsa   = $dsa && $dsa->count ? get_term_link( $dsa ) : '';
 	?>
 	<div class="hero-card" data-hero-card>
-		<div class="hero-card-mascot"><?php echo vitalstack_mascot( 'happy', 86 ); // phpcs:ignore WordPress.Security.EscapeOutput -- built from fixed markup ?></div>
+		<div class="hero-card-mascot"><?php echo vitalstack_mascot( 'happy', 96, '', 'dev' ); // phpcs:ignore WordPress.Security.EscapeOutput -- built from fixed markup ?></div>
 		<?php if ( ! is_user_logged_in() ) : ?>
 			<span class="hero-card-lock" title="<?php esc_attr_e( 'Sign in to save your progress', 'vitalstack' ); ?>"><?php echo vitalstack_icon( 'lock', 14 ); // phpcs:ignore ?></span>
 		<?php endif; ?>

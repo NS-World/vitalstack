@@ -14,7 +14,7 @@ get_header();
 			<h1><?php the_title(); ?></h1>
 			<p class="games-hero-sub"><?php esc_html_e( 'Everything you need on one page: syntax, examples and the gotchas people forget. Keep them open while you code, or save them as PDF.', 'vitalstack' ); ?></p>
 		</div>
-		<div class="games-hero-bot" aria-hidden="true"><?php echo vitalstack_mascot( 'happy', 150 ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></div>
+		<div class="games-hero-bot" aria-hidden="true"><?php echo vitalstack_mascot( 'happy', 150, '', 'dev' ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></div>
 	</div>
 </section>
 <div class="wrap sp-wrap">

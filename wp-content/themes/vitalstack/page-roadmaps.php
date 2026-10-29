@@ -15,7 +15,7 @@ $vs_tests = vitalstack_site_page_url( 'mock-tests' );
 			<h1><?php the_title(); ?></h1>
 			<p class="games-hero-sub"><?php esc_html_e( 'What to learn, in what order, and how long it takes. Each stage links to free lessons, a mock test and a cheat sheet, and fills in as you complete lessons.', 'vitalstack' ); ?></p>
 		</div>
-		<div class="games-hero-bot" aria-hidden="true"><?php echo vitalstack_mascot( 'happy', 150 ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></div>
+		<div class="games-hero-bot" aria-hidden="true"><?php echo vitalstack_mascot( 'happy', 150, '', 'dev' ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></div>
 	</div>
 </section>
 <div class="wrap sp-wrap">

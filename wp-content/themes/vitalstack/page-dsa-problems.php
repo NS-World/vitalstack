@@ -44,7 +44,7 @@ $vs_dsa = get_term_by( 'slug', 'dsa', 'tutorial_category' );
 				<p class="problems-new"><?php esc_html_e( 'New to DSA?', 'vitalstack' ); ?> <a href="<?php echo esc_url( get_term_link( $vs_dsa ) ); ?>"><?php esc_html_e( 'Learn the patterns first', 'vitalstack' ); ?> ❯</a></p>
 			<?php endif; ?>
 		</div>
-		<div class="problems-hero-bot"><?php echo vitalstack_mascot( 'think', 140 ); // phpcs:ignore WordPress.Security.EscapeOutput -- fixed markup ?></div>
+		<div class="problems-hero-bot"><?php echo vitalstack_mascot( 'think', 140, '', 'bugsy' ); // phpcs:ignore WordPress.Security.EscapeOutput -- fixed markup ?></div>
 	</div>
 </section>
 

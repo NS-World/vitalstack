@@ -23,7 +23,7 @@ get_header();
 				<button type="button" class="btn btn-primary btn-sm" data-daily-play><?php esc_html_e( 'Play now', 'vitalstack' ); ?></button>
 			</div>
 		</div>
-		<div class="games-hero-bot"><?php echo vitalstack_mascot( 'cheer', 150 ); // phpcs:ignore WordPress.Security.EscapeOutput -- fixed markup ?></div>
+		<div class="games-hero-bot"><?php echo vitalstack_mascot( 'cheer', 150, '', 'byte' ); // phpcs:ignore WordPress.Security.EscapeOutput -- fixed markup ?></div>
 	</div>
 </section>
 

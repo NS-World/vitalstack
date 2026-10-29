@@ -144,6 +144,28 @@ function vitalstack_customize_register( $wp_customize ) {
 		);
 	}
 
+	$wp_customize->add_setting(
+		'vitalstack_mascot_style',
+		array(
+			'default'           => 'crew',
+			'sanitize_callback' => function ( $v ) {
+				return 'classic' === $v ? 'classic' : 'crew';
+			},
+		)
+	);
+	$wp_customize->add_control(
+		'vitalstack_mascot_style',
+		array(
+			'label'   => __( 'Characters', 'vitalstack' ),
+			'section' => 'vitalstack_layout',
+			'type'    => 'radio',
+			'choices' => array(
+				'crew'    => __( 'The crew: Dev, Chip, Bugsy and Byte', 'vitalstack' ),
+				'classic' => __( 'Stacky, the original robot, everywhere', 'vitalstack' ),
+			),
+		)
+	);
+
 	/* ── Social links (keys unchanged from v1) ── */
 	foreach ( vitalstack_social_networks() as $id => $label ) {
 		$wp_customize->add_setting(

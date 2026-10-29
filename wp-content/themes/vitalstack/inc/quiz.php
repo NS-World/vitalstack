@@ -84,7 +84,7 @@ function vitalstack_lesson_quiz() {
 	?>
 	<section class="quiz" data-quiz="<?php echo esc_attr( $slug ); ?>" aria-labelledby="quiz-title">
 		<div class="quiz-head">
-			<div class="quiz-bot" aria-hidden="true"><?php echo vitalstack_mascot( 'think', 64 ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></div>
+			<div class="quiz-bot" aria-hidden="true"><?php echo vitalstack_mascot( 'think', 64, '', 'bugsy' ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></div>
 			<div>
 				<h2 id="quiz-title" class="quiz-title"><?php esc_html_e( 'Quick quiz', 'vitalstack' ); ?></h2>
 				<p class="quiz-sub">

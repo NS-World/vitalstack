@@ -37,7 +37,7 @@ while ( have_posts() ) :
 		<?php if ( $vs_data['count'] ) : ?>
 			<section class="mock" id="mock-test" aria-label="<?php esc_attr_e( 'Mock test', 'vitalstack' ); ?>">
 				<div class="mock-start">
-					<div class="mock-start-bot" aria-hidden="true"><?php echo vitalstack_mascot( 'think', 96 ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></div>
+					<div class="mock-start-bot" aria-hidden="true"><?php echo vitalstack_mascot( 'think', 96, '', 'bugsy' ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></div>
 					<ul class="mock-facts">
 						<li><b><?php echo (int) $vs_data['count']; ?></b> <?php esc_html_e( 'random questions', 'vitalstack' ); ?></li>
 						<li><b><?php echo (int) $vs_data['minutes']; ?></b> <?php esc_html_e( 'minutes', 'vitalstack' ); ?></li>
