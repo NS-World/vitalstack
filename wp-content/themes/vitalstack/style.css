@@ -4,7 +4,7 @@ Theme URI: https://vitalstack.co.in/
 Author: VitalStack
 Author URI: https://vitalstack.co.in/
 Description: Tutorial-site theme for VitalStack: 17 learning paths (web, Python, Java, Spring Boot, React, Angular, DSA), live animated visualizers, quizzes, certificates, daily challenge and leaderboard, brain games, cheat sheets, free coding tools, reader accounts with XP and progress sync, PWA, and AdSense-ready ad slots.
-Version: 4.3.3
+Version: 4.3.4
 Requires at least: 6.3
 Tested up to: 6.8
 Requires PHP: 8.0
@@ -451,29 +451,6 @@ kbd { font-family: var(--font-mono); font-size: 12px; padding: 1px 7px; border-r
 .mascot .m-sparks path { stroke: #f5b301; stroke-width: 2.5; stroke-linecap: round; animation: vs-glow 1.2s ease-in-out infinite; }
 .mascot .m-body-wrap { animation: vs-float 3.2s ease-in-out infinite; }
 .mascot-cheer .m-body-wrap { animation: vs-hop .9s ease-in-out infinite; }
-.mascot-pixel .px-k { fill: #062a1c; }
-.mascot-pixel .px-g { fill: var(--accent-deep); }
-.mascot-pixel .px-l { fill: var(--accent-glow); }
-.mascot-pixel .px-d { fill: #075c3a; fill: color-mix(in srgb, var(--accent-deep) 72%, #000); }
-.mascot-pixel .px-s { fill: #0d1f17; }
-.mascot-pixel .px-x { fill: #24493a; }
-.mascot-pixel .px-e { fill: #7cf0bd; transform-box: fill-box; transform-origin: center; animation: vs-blink 4.5s infinite; }
-.mascot-pixel .px-w { fill: #fff; }
-.mascot-pixel .px-m { fill: #7cf0bd; }
-.mascot-pixel .px-p { fill: #ff8fab; }
-.mascot-pixel .px-t { fill: var(--accent-glow); }
-.mascot-pixel .px-u { fill: #2aa874; fill: color-mix(in srgb, var(--accent-glow) 60%, var(--accent-deep)); }
-.mascot-pixel .px-c { fill: var(--accent-glow-ink); }
-.mascot-pixel .px-f { fill: #0d1f17; }
-.mascot-pixel .px-y { fill: #f5b301; }
-.mascot-pixel .px-z { fill: #c98a00; }
-.mascot-pixel .px-b { fill: #c5ccd8; }
-.mascot-pixel .px-shadow { fill: #000; opacity: .14; }
-.mascot-pixel .px-bubbles { animation: vs-float 2.4s ease-in-out infinite; }
-.mascot-pixel .m-sparks path { stroke: none; }
-.mascot-pixel .px-sparks { animation: vs-glow 1.2s ease-in-out infinite; }
-.mascot-pixel .px-wave-l { transform-origin: 100% 100%; animation-name: vs-wave-l; }
-@keyframes vs-wave-l { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(18deg); } }
 @keyframes vs-blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
 @keyframes vs-bob { 0%, 100% { transform: rotate(-6deg); } 50% { transform: rotate(6deg); } }
 @keyframes vs-glow { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
@@ -1674,6 +1651,28 @@ p.tool-err { color: #c62828; font-weight: 600; margin: 8px 0; }
 .install-app { position: fixed; left: 16px; bottom: 16px; z-index: 250; display: flex; align-items: center; gap: 4px; padding: 6px 6px 6px 8px; border-radius: 999px; background: var(--dark); box-shadow: var(--shadow-lg); animation: pop .2s ease; }
 .install-app button { border: 0; background: transparent; color: #fff; font: inherit; font-weight: 700; cursor: pointer; padding: 6px 8px; }
 .install-app-x { font-size: 20px; line-height: 1; opacity: .7; }
+
+/* Popups and notifications: keep a 12–16px gap from every screen edge and
+   clear the phone's home bar, from small phones to large monitors. */
+.celebrate { right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); max-width: min(380px, calc(100vw - 32px)); box-sizing: border-box; }
+.celebrate-text { min-width: 0; }
+.mascot-nudge { left: max(16px, env(safe-area-inset-left, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); max-width: min(340px, calc(100vw - 32px)); box-sizing: border-box; }
+.nudge { bottom: calc(16px + env(safe-area-inset-bottom, 0px)); box-sizing: border-box; }
+.toast { width: max-content; max-width: min(520px, calc(100vw - 32px)); box-sizing: border-box; text-align: center; border-radius: 20px; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); }
+.cookie-note { bottom: calc(16px + env(safe-area-inset-bottom, 0px)); }
+.install-app { bottom: calc(16px + env(safe-area-inset-bottom, 0px)); max-width: calc(100vw - 32px); box-sizing: border-box; }
+@media (max-width: 600px) {
+	.celebrate { left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); max-width: none; gap: 10px; padding: 12px 36px 12px 10px; }
+	.celebrate-mascot, .celebrate-mascot .mascot { width: 56px; }
+	.celebrate-text strong { font-size: 16px; }
+	.celebrate-text span { font-size: 13.5px; }
+	.mascot-nudge { left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); max-width: none; }
+	.mascot-nudge-bot .mascot { width: 48px; }
+	.mascot-nudge p { font-size: 14px; }
+	.nudge { bottom: calc(12px + env(safe-area-inset-bottom, 0px)); }
+	.cookie-note { left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); flex-wrap: wrap; gap: 10px; padding: 12px 14px; }
+	.install-app { left: 12px; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); }
+}
 
 /* Ad slots (only rendered when ad unit IDs are set) */
 .ad-slot { margin: 28px 0; min-height: 120px; text-align: center; }

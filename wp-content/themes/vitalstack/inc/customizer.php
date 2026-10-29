@@ -144,28 +144,6 @@ function vitalstack_customize_register( $wp_customize ) {
 		);
 	}
 
-	$wp_customize->add_setting(
-		'vitalstack_mascot_style',
-		array(
-			'default'           => 'pixel',
-			'sanitize_callback' => function ( $v ) {
-				return 'classic' === $v ? 'classic' : 'pixel';
-			},
-		)
-	);
-	$wp_customize->add_control(
-		'vitalstack_mascot_style',
-		array(
-			'label'   => __( 'Mascot', 'vitalstack' ),
-			'section' => 'vitalstack_layout',
-			'type'    => 'radio',
-			'choices' => array(
-				'pixel'   => __( 'Bit: pixel-art robot', 'vitalstack' ),
-				'classic' => __( 'Stacky: classic round robot', 'vitalstack' ),
-			),
-		)
-	);
-
 	/* ── Social links (keys unchanged from v1) ── */
 	foreach ( vitalstack_social_networks() as $id => $label ) {
 		$wp_customize->add_setting(
