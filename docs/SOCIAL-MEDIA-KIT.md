@@ -192,3 +192,157 @@ End with "Free on vitalstack.co.in". One reel a week is enough to start.
 
 Post the puzzle answer the next day, reply to every comment in the first
 hour, and share each post in your WhatsApp / Telegram study groups.
+
+## Posts 6–15: show what the site can do (1080 × 1350)
+Images are in `vitalstack-posts-6-15.zip` (not in git). One post a day, same
+image on every platform. Use the long caption on Instagram, Facebook and
+LinkedIn, and the short one on X and Threads.
+
+### 6 · `post-06-certificate.png`
+```
+Finish a course. Get a certificate. 🎓
+
+Every VitalStack course ends with a free certificate:
+✅ your name on it
+✅ a public link anyone can use to verify it
+✅ one click to add it to your LinkedIn profile
+
+How: sign up free → subscribe to lesson emails → finish every lesson.
+
+Start any course 👉 vitalstack.co.in
+#certificate #learntocode #java #python #webdevelopment #freecourses
+```
+Short: `Finish a VitalStack course, get a free certificate with a verify link and one-click LinkedIn add 🎓 vitalstack.co.in`
+
+### 7 · `post-07-crew.png`
+```
+Meet your new study buddies 👋
+
+💚 Dev learns with you
+🤖 Chip cheers every lesson you finish
+🐞 Bugsy helps you debug in quizzes and mock tests
+🐱 Byte plays the coding games with you
+
+Studying alone is boring. Studying with a crew isn't.
+Say hi 👉 vitalstack.co.in
+#coding #studymotivation #learntocode #pixelart
+```
+Short: `Say hi to the VitalStack crew: Dev, Chip, Bugsy and Byte 👋 Your new study buddies at vitalstack.co.in`
+
+### 8 · `post-08-python-compiler.png`
+```
+Run Python in your browser 🐍
+
+No install. No sign-up. Works on your phone too.
+Type code, press Run, see the output. input() works as well.
+
+Perfect for practising lessons, homework and interview questions.
+Try it 👉 vitalstack.co.in/tools/python-online-compiler/
+#python #pythonprogramming #coding #students
+```
+Short: `Free Python compiler in your browser. No install, no sign-up, works on phones 🐍 vitalstack.co.in/tools/python-online-compiler/`
+
+### 9 · `post-09-daily-challenge.png`
+```
+One coding question a day 🔥
+
+Answer today's question, keep your streak alive and climb the weekly leaderboard.
+It takes one minute.
+
+Today's question is waiting 👉 vitalstack.co.in/daily-challenge/
+What's your streak? Comment below 👇
+#dailychallenge #java #codingchallenge #placementpreparation
+```
+Short: `1 coding question a day. Keep your streak 🔥 and climb the weekly leaderboard: vitalstack.co.in/daily-challenge/`
+
+### 10 · `post-10-sql-playground.png`
+```
+Practise SQL. Nothing to install 🗃️
+
+A real SQL database runs right in your browser, with sample tables ready to query.
+SELECT, JOIN, GROUP BY: try anything, break anything, reset in one click.
+
+Practise now 👉 vitalstack.co.in/tools/sql-playground/
+#sql #database #dataanalytics #coding
+```
+Short: `SQL playground in your browser: sample tables ready, nothing to install 🗃️ vitalstack.co.in/tools/sql-playground/`
+
+### 11 · `post-11-games.png`
+```
+Bored of notes? Play 10 coding games 🎮
+
+🎯 Binary Hunt · ⚡ Bracket Blitz · ⏱️ Big-O Snap · 📊 Sort Sprint · 🃏 Memory Match
+🗼 Tower of Hanoi · 🕵️ Pattern Detective · ☕ Java Output · 🏛️ OOP Pillar Match · ⚡ Framework Flash
+
+Two minutes each. Earn XP while you play.
+Play 👉 vitalstack.co.in/games/
+Which one did you beat first? 👇
+#codinggames #dsa #java #learntocode
+```
+Short: `Bored of notes? 10 two-minute coding games: search, sort, Big-O, Java, OOP 🎮 vitalstack.co.in/games/`
+
+### 12 · `post-12-python-puzzle.png`
+```
+Python puzzle 🧩 What does this print?
+
+Comment A, B, C or D 👇 Answer tomorrow.
+#python #pythonprogramming #codingchallenge
+```
+**Answer (post the next day as a comment):**
+```
+✅ B) [1, 2, 3, 4] 5
+
+b = a doesn't copy the list: a and b are the same list, so b += [4] changes a too → a is [1, 2, 3, 4].
+a[:] makes a real copy, so c.append(5) changes only c → c has 5 items.
+
+Rule: to copy a list use a[:], list(a) or a.copy().
+Learn more 👉 vitalstack.co.in/tutorials/
+```
+
+### 13 · `post-13-cheat-sheets.png`
+```
+11 free cheat sheets 📄 Save this post!
+
+☕ Java · 🐍 Python · 🟨 JavaScript · 🗃️ SQL · 🧱 HTML · 🎨 CSS
+🍃 Spring Boot · ⚛️ React · 🅰️ Angular · 🧮 DSA & Big-O · 🌿 Git
+
+Everything on one page, with examples. Made for last-minute revision before exams and interviews.
+👉 vitalstack.co.in/cheat-sheets/
+#cheatsheet #java #python #webdevelopment #interviewprep
+```
+Short: `11 free one-page cheat sheets: Java, Python, JS, SQL, HTML, CSS, Spring Boot, React, Angular, DSA, Git 📄 vitalstack.co.in/cheat-sheets/`
+
+### 14 · `post-14-gift.png`
+```
+Free: 30-Day Java Interview Plan 🎁
+
+A day-by-day plan for placements:
+Core Java → OOP → SQL → Spring Boot → DSA
+Each day: one lesson, practice and a mock test.
+
+Sign up free on VitalStack and download the PDF instantly.
+👉 vitalstack.co.in
+#java #placementpreparation #interviewprep #freshers
+```
+Short: `Free PDF: 30-Day Java Interview Plan 🎁 One lesson, practice and a mock test every day. Sign up at vitalstack.co.in`
+
+### 15 · `post-15-how-to-study.png`
+```
+Study smart in 4 steps 📚
+
+1️⃣ Read a lesson with live code animations
+2️⃣ Take the quick quiz and mark it complete (+XP)
+3️⃣ Try a timed mock test, every answer explained
+4️⃣ Finish the course and get your certificate 🎓
+
+All free 👉 vitalstack.co.in
+#studytips #learntocode #coding #students
+```
+Short: `Read → quiz → mock test → certificate 🎓 Study smart, free, at vitalstack.co.in`
+
+### Tips for these 10 posts
+- **Reply** to every comment in the first hour; ask a question at the end of each caption.
+- **Stories:** share every post to your story with a link sticker to the page in the caption.
+- **Reels:** turn posts 8, 10 and 11 into 15-second screen recordings (open the tool or game on your phone and record).
+- **Groups:** share posts 12 (puzzle) and 13 (cheat sheets) in WhatsApp/Telegram study groups; these get shared the most.
+- Check **Site Kit → Search Console / Analytics** once a week to see which post brought visitors, and make more like it.
