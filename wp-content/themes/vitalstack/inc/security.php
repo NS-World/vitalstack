@@ -86,6 +86,9 @@ function vitalstack_security_headers() {
 	header( 'Cross-Origin-Opener-Policy: same-origin-allow-popups' );
 	if ( is_ssl() ) {
 		header( 'Strict-Transport-Security: max-age=31536000' );
+		// Never load a script or image over plain http on an https page, and
+		// never let another site show this one inside a frame.
+		header( "Content-Security-Policy: upgrade-insecure-requests; frame-ancestors 'self'" );
 	}
 }
 add_action( 'send_headers', 'vitalstack_security_headers' );
@@ -245,3 +248,46 @@ add_filter(
 // Don't advertise the WordPress version in feeds either.
 add_filter( 'the_generator', '__return_empty_string' );
 
+
+/* ── Accounts ─────────────────────────────────────────────────────────── */
+
+/**
+ * Passwords that are among the first tried in any attack, or that are just
+ * the email name. Used when readers sign up.
+ */
+function vitalstack_password_is_common( $password, $email = '' ) {
+	$p = strtolower( trim( (string) $password ) );
+	if ( $email && strtolower( strstr( $email, '@', true ) ) === $p ) {
+		return true;
+	}
+	if ( 1 === count( array_unique( str_split( $p ) ) ) ) {
+		return true; // "aaaaaaaa", "11111111"
+	}
+	$common = array( '12345678', '123456789', '1234567890', '87654321', 'password', 'password1', 'password123', 'passw0rd', 'qwerty123', 'qwertyuiop', 'iloveyou', 'abc12345', 'abcd1234', '11223344', '12341234', 'admin123', 'welcome1', 'letmein1', 'india123', 'sunshine', 'princess', 'football', 'baseball', 'superman', 'whatever', 'trustno1', 'vitalstack', 'vitalstack123' );
+	return in_array( $p, $common, true );
+}
+
+/**
+ * Application passwords let scripts sign in with a long-lived key that skips
+ * the login form (and any two-factor plugin). This site doesn't use them.
+ */
+add_filter( 'wp_is_application_passwords_available', '__return_false' );
+
+/**
+ * "Lost your password?" can be used to flood someone's inbox: at most three
+ * reset emails per account per hour.
+ */
+function vitalstack_limit_password_resets( $errors, $user ) {
+	if ( ! $user instanceof WP_User ) {
+		return $errors;
+	}
+	$key   = 'vs_lp_' . $user->ID;
+	$count = (int) get_transient( $key );
+	if ( $count >= 3 ) {
+		$errors->add( 'vs_reset_limit', __( '<strong>Error:</strong> A reset link was already sent several times. Please check your inbox (and spam folder) or try again in an hour.', 'vitalstack' ) );
+		return $errors;
+	}
+	set_transient( $key, $count + 1, HOUR_IN_SECONDS );
+	return $errors;
+}
+add_filter( 'lostpassword_errors', 'vitalstack_limit_password_resets', 10, 2 );

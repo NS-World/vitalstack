@@ -1,6 +1,6 @@
 # VitalStack security checklist
 
-## Already handled by the theme (v4.3.0+)
+## Already handled by the theme (v4.3.3+)
 
 | Protection | What it does |
 |---|---|
@@ -12,6 +12,24 @@
 | Security headers | `X-Content-Type-Options`, `X-Frame-Options` (no clickjacking), `Referrer-Policy`, `Permissions-Policy`, `Cross-Origin-Opener-Policy`, and HSTS on HTTPS. |
 | Spoof-proof rate limits | Sign-up and contact-form limits also count the real connecting IP, so a faked `X-Forwarded-For` header can't bypass them. Cloudflare is detected properly. |
 | Forms | Every form has a nonce, every database query is prepared, unsubscribe links are signed. |
+| Strong sign-up passwords | At least 8 characters; common passwords (12345678, password123…) and the email name are refused. |
+| Password-reset flood limit | At most 3 reset emails per account per hour. |
+| No application passwords | Scripts can't sign in with long-lived keys that skip the login form. |
+| HTTPS-only content | `Content-Security-Policy: upgrade-insecure-requests` and no framing by other sites. |
+| Readers kept out of wp-admin | Reader accounts are sent to /account/ and never see the admin bar. |
+| XP can't be farmed | Visualizer/tool XP has a daily cap, so the leaderboard stays fair. |
+
+## Encryption: what protects what
+
+| Data | How it is protected |
+|---|---|
+| Everything between visitor and site | HTTPS (TLS) from Hostinger's SSL, plus HSTS so browsers never fall back to http. |
+| Passwords | Never stored. WordPress keeps only a one-way bcrypt hash (WordPress 6.8+). |
+| Email-confirmation links | Random 32-character token; only its SHA-256 hash is stored, expires after 7 days. |
+| Unsubscribe links | HMAC-SHA256 signature with the site's secret keys. |
+| Login cookies | Signed with the secret keys in wp-config.php, HttpOnly, Secure on HTTPS. |
+
+To make every existing login cookie invalid (for example after a suspected break-in), change the secret keys: hPanel → WordPress → Security, or paste new keys from https://api.wordpress.org/secret-key/1.1/salt/ into wp-config.php. Everyone just signs in again.
 
 ## Do these once in Hostinger / WordPress (10 minutes)
 

@@ -25,6 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 const VITALSTACK_XP_LESSON    = 10;
 const VITALSTACK_XP_VIZ       = 2;
 const VITALSTACK_XP_GAME_DAY  = 60;
+const VITALSTACK_XP_VIZ_DAY   = 40; // visualizers and tools, so made-up refs can't farm XP
 
 /**
  * Level from total XP: level n needs 50·(n-1)² XP (0, 50, 200, 450, 800…).
@@ -160,7 +161,13 @@ add_action(
 						$ref    = substr( preg_replace( '/[^a-z0-9:_-]/', '', strtolower( (string) $req->get_param( 'ref' ) ) ), 0, 80 );
 						$gained = 0;
 						if ( 'viz' === $type && $ref ) {
-							$gained = vitalstack_xp_award( $uid, VITALSTACK_XP_VIZ, 'viz:' . $ref );
+							$today = vitalstack_xp_today();
+							$used  = get_user_meta( $uid, 'vs_viz_day', true ) === $today ? (int) get_user_meta( $uid, 'vs_viz_xp', true ) : 0;
+							if ( $used + VITALSTACK_XP_VIZ <= VITALSTACK_XP_VIZ_DAY ) {
+								$gained = vitalstack_xp_award( $uid, VITALSTACK_XP_VIZ, 'viz:' . $ref );
+								update_user_meta( $uid, 'vs_viz_day', $today );
+								update_user_meta( $uid, 'vs_viz_xp', $used + $gained );
+							}
 						} elseif ( 'game' === $type ) {
 							$gained = vitalstack_xp_award( $uid, vitalstack_xp_for_game( $uid, (int) $req->get_param( 'score' ) ) );
 						}

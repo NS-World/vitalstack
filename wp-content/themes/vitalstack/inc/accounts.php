@@ -211,7 +211,7 @@ function vitalstack_account_messages() {
 		'missing'        => array( 'error', __( 'Please fill in all fields.', 'vitalstack' ) ),
 		'bad_email'      => array( 'error', __( 'Please enter a valid email address.', 'vitalstack' ) ),
 		'email_exists'   => array( 'error', __( 'An account with this email already exists. Sign in instead.', 'vitalstack' ) ),
-		'weak_password'  => array( 'error', __( 'Use a password with at least 8 characters.', 'vitalstack' ) ),
+		'weak_password'  => array( 'error', __( 'Use a password with at least 8 characters that is not a common one like 12345678 or password123.', 'vitalstack' ) ),
 		'closed'         => array( 'error', __( 'New sign-ups are closed right now.', 'vitalstack' ) ),
 		'failed'         => array( 'error', __( 'Something went wrong. Please try again.', 'vitalstack' ) ),
 		'registered'     => array( 'success', __( 'Welcome to VitalStack! We sent you an email: click the link in it to confirm your address.', 'vitalstack' ) ),
@@ -411,7 +411,7 @@ function vitalstack_handle_register() {
 			)
 		);
 	}
-	if ( mb_strlen( $password ) < 8 ) {
+	if ( mb_strlen( $password ) < 8 || vitalstack_password_is_common( $password, $email ) ) {
 		vitalstack_account_redirect( 'weak_password', $back );
 	}
 
