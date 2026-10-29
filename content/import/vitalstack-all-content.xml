@@ -57015,7 +57015,7 @@ print("Comments explain why the code does something.")  # comments can go here t
 <!-- /wp:list-item -->
 
 <!-- wp:list-item -->
-<li>In the browser, with free tools like <strong>Google Colab</strong>, <strong>Replit</strong> or <strong>Programiz Online Compiler</strong>. Great for practising right now.</li>
+<li>In the browser, with our free <a href="/tools/python-online-compiler/">Python Online Compiler</a> or <strong>Google Colab</strong>. Great for practising right now.</li>
 <!-- /wp:list-item -->
 
 <!-- wp:list-item -->

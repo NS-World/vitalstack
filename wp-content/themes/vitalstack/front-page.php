@@ -172,6 +172,8 @@ if ( $vs_ai ) :
 	</section>
 <?php endif; ?>
 
+<?php vitalstack_home_certs(); ?>
+
 <section class="home-editor">
 	<div class="wrap home-editor-inner">
 		<div>

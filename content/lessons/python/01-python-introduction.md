@@ -90,7 +90,7 @@ print("Comments explain why the code does something.")  # comments can go here t
 ## Where Python runs
 
 - On your computer, after installing it (next lesson).
-- In the browser, with free tools like **Google Colab**, **Replit** or **Programiz Online Compiler**. Great for practising right now.
+- In the browser, with our free [Python Online Compiler](/tools/python-online-compiler/) or **Google Colab**. Great for practising right now.
 - On servers, in the cloud, even on small devices like the Raspberry Pi.
 
 **Note:** Python examples on VitalStack don't have a Try it Yourself button (that runs only HTML and JavaScript). Copy them into an online Python editor or your own computer.

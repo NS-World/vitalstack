@@ -194,10 +194,16 @@
 		var c = e.detail || {};
 		setTimeout(function () { certPopup('Course complete! 🎓', 'You finished every ' + (c.course || '') + ' lesson. Your certificate is ready (+100 XP).', c.url, 'View my certificate ❯'); }, 1200);
 	});
+	document.addEventListener('vs:cert-locked', function (e) {
+		var c = e.detail || {}, st = c.steps || {}, left = [];
+		if (!st.verified) left.push('confirm your email');
+		if (!st.subscribed) left.push('subscribe to lesson emails');
+		setTimeout(function () { certPopup('You finished ' + (c.course || 'the course') + '! 🔒🎓', 'Your certificate is waiting. To unlock it, ' + (left.join(' and ') || 'open your account') + '. It is issued instantly after that.', c.url || cfg.accountUrl || '/account/', 'Unlock my certificate ❯'); }, 1200);
+	});
 	document.addEventListener('vs:path-complete', function (e) {
 		if (cfg.loggedIn) return; // signed-in readers get vs:cert from the server
 		var d = e.detail || {};
-		setTimeout(function () { certPopup('You finished ' + (d.name || 'the course') + '! 🎓', 'Create a free account to get your certificate. Your progress on this device is kept.', (cfg.accountUrl || '/account/') + (String(cfg.accountUrl).indexOf('?') > -1 ? '&' : '?') + 'tab=register', 'Get my free certificate ❯'); }, 1200);
+		setTimeout(function () { certPopup('You finished ' + (d.name || 'the course') + '! 🎓', 'Create a free account and subscribe to unlock your certificate. Your progress on this device is kept.', (cfg.accountUrl || '/account/') + (String(cfg.accountUrl).indexOf('?') > -1 ? '&' : '?') + 'tab=register&subscribe=1', 'Unlock my free certificate ❯'); }, 1200);
 	});
 	document.addEventListener('vs:xp', function (e) {
 		if (e.detail && e.detail.xp) paint(e.detail.xp);

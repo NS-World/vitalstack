@@ -12,10 +12,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'VITALSTACK_VERSION', '4.2.4' );
+define( 'VITALSTACK_VERSION', '4.3.0' );
 define( 'VITALSTACK_DIR', get_template_directory() );
 define( 'VITALSTACK_URI', get_template_directory_uri() );
 
+require VITALSTACK_DIR . '/inc/security.php';
 require VITALSTACK_DIR . '/inc/setup.php';
 require VITALSTACK_DIR . '/inc/post-types.php';
 require VITALSTACK_DIR . '/inc/customizer.php';

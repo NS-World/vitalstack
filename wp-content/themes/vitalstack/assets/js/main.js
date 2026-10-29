@@ -455,6 +455,14 @@
 	}
 
 	function paintProgress() {
+		// Certificate cards: lessons step, count and bar.
+		document.querySelectorAll('[data-cert-path]').forEach(function (el) {
+			var total = parseInt(el.getAttribute('data-cert-total'), 10) || 0;
+			var done = Math.min(doneIn(el.getAttribute('data-cert-path')).length, total);
+			el.querySelectorAll('.cert-card-count').forEach(function (c) { c.textContent = done + ' / ' + total; });
+			el.querySelectorAll('.cert-card-bar').forEach(function (b) { b.style.width = (total ? Math.round(done / total * 100) : 0) + '%'; });
+			el.querySelectorAll('[data-cert-step="lessons"]').forEach(function (li) { li.classList.toggle('is-done', total > 0 && done >= total); });
+		});
 		document.querySelectorAll('[data-lesson]').forEach(function (li) {
 			li.classList.toggle('is-done', isDone(li.getAttribute('data-lesson')));
 		});
@@ -506,6 +514,7 @@
 			}).then(function (r) { return r.ok ? r.json() : null; }).then(function (res) {
 				if (res && res.xp) document.dispatchEvent(new CustomEvent('vs:xp', { detail: res }));
 				if (res && res.newCerts && res.newCerts.length) document.dispatchEvent(new CustomEvent('vs:cert', { detail: res.newCerts[0] }));
+				else if (res && res.lockedCerts && res.lockedCerts.length) document.dispatchEvent(new CustomEvent('vs:cert-locked', { detail: res.lockedCerts[0] }));
 			}).catch(function () {});
 		}, 300);
 	}
@@ -559,9 +568,24 @@
 				paintProgress();
 				syncButton();
 				if (changed) pushProgress();
+				if (res.newCerts && res.newCerts.length) document.dispatchEvent(new CustomEvent('vs:cert', { detail: res.newCerts[0] }));
 			})
 			.catch(function () {});
 	}
+
+	/* ── Copying lesson text keeps a link back to the source ─────────────── */
+	// Code is left untouched so it still pastes and runs cleanly.
+	document.addEventListener('copy', function (e) {
+		var sel = window.getSelection ? window.getSelection() : null;
+		if (!sel || sel.isCollapsed || !e.clipboardData) return;
+		var node = sel.anchorNode && (sel.anchorNode.nodeType === 1 ? sel.anchorNode : sel.anchorNode.parentElement);
+		if (!node || !node.closest || !node.closest('.prose') || node.closest('pre, code, textarea, input, .tryit')) return;
+		var text = sel.toString();
+		if (text.length < 140) return;
+		var url = window.location.href.split('#')[0];
+		e.clipboardData.setData('text/plain', text + '\n\nSource: ' + document.title + ' – ' + url);
+		e.preventDefault();
+	});
 
 	/* ── YouTube: load the player only when asked ─────────────────────────── */
 	document.querySelectorAll('.yt-facade').forEach(function (f) {

@@ -4,7 +4,7 @@ Theme URI: https://vitalstack.co.in/
 Author: VitalStack
 Author URI: https://vitalstack.co.in/
 Description: Tutorial-site theme for VitalStack: 17 learning paths (web, Python, Java, Spring Boot, React, Angular, DSA), live animated visualizers, quizzes, certificates, daily challenge and leaderboard, brain games, cheat sheets, free coding tools, reader accounts with XP and progress sync, PWA, and AdSense-ready ad slots.
-Version: 4.2.4
+Version: 4.3.0
 Requires at least: 6.3
 Tested up to: 6.8
 Requires PHP: 8.0
@@ -451,6 +451,27 @@ kbd { font-family: var(--font-mono); font-size: 12px; padding: 1px 7px; border-r
 .mascot .m-sparks path { stroke: #f5b301; stroke-width: 2.5; stroke-linecap: round; animation: vs-glow 1.2s ease-in-out infinite; }
 .mascot .m-body-wrap { animation: vs-float 3.2s ease-in-out infinite; }
 .mascot-cheer .m-body-wrap { animation: vs-hop .9s ease-in-out infinite; }
+.mascot-pixel .px-rim, .mascot-pixel .px-leg { fill: #06472d; }
+.mascot-pixel .px-rim { fill: color-mix(in srgb, var(--accent-deep) 70%, #000); }
+.mascot-pixel .px-body, .mascot-pixel .px-stem, .mascot-pixel .px-arm { fill: var(--accent-deep); }
+.mascot-pixel .px-light { fill: var(--accent-glow); opacity: .7; }
+.mascot-pixel .px-screen { fill: #0d1f17; }
+.mascot-pixel .px-eye { fill: #7cf0bd; }
+.mascot-pixel .px-shine { fill: #fff; }
+.mascot-pixel .px-eye-closed, .mascot-pixel .px-mouth { fill: #7cf0bd; }
+.mascot-pixel .px-tongue { fill: #ff8fab; }
+.mascot-pixel .px-cheek { fill: #ff8fab; opacity: .6; }
+.mascot-pixel .px-bulb { fill: #f5b301; }
+.mascot-pixel .px-torso { fill: var(--accent-glow); }
+.mascot-pixel .px-code { fill: var(--accent-glow-ink); }
+.mascot-pixel .px-leg { fill: color-mix(in srgb, var(--accent-deep) 70%, #000); }
+.mascot-pixel .px-hand { fill: var(--accent-glow); }
+.mascot-pixel .px-shadow { fill: #000; opacity: .12; }
+.mascot-pixel .px-think rect, .mascot-pixel .px-zzz rect { fill: #c5ccd8; }
+.mascot-pixel .px-think, .mascot-pixel .px-zzz { animation: vs-float 2.4s ease-in-out infinite; }
+.mascot-pixel .px-sparks rect { fill: #f5b301; }
+.mascot-pixel .px-sparks { animation: vs-glow 1.2s ease-in-out infinite; }
+.error-bot { display: flex; justify-content: center; margin-bottom: 4px; }
 @keyframes vs-blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
 @keyframes vs-bob { 0%, 100% { transform: rotate(-6deg); } 50% { transform: rotate(6deg); } }
 @keyframes vs-glow { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
@@ -1359,6 +1380,65 @@ kbd { font-family: var(--font-mono); font-size: 12px; padding: 1px 7px; border-r
 .cert-list li { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 10px; }
 .cert-list li.is-earned { border-color: var(--brand); background: var(--brand-soft); }
 .cert-list-name { flex: 1; font-weight: 600; }
+.cert-list li.is-ready { border-color: #c9a227; background: rgba(201, 162, 39, .1); }
+.cert-list-ready { color: #8a6d12; font-weight: 700; }
+:root[data-theme="dark"] .cert-list-ready { color: #f0cf6a; }
+.dash-certs .cert-steps { margin-bottom: 12px; }
+.dash-cert-unlock { margin: 0 0 14px; }
+
+/* Certificate cards (course page, end of lesson) and homepage band */
+.cert-steps { list-style: none; margin: 0 0 12px; padding: 0; display: grid; gap: 6px; counter-reset: cstep; }
+.cert-steps li { position: relative; padding-left: 30px; font-size: 15px; line-height: 1.5; counter-increment: cstep; }
+.cert-steps li::before { content: counter(cstep); position: absolute; left: 0; top: 1px; width: 21px; height: 21px; border-radius: 50%; border: 2px solid var(--border-strong); color: var(--muted); font-size: 12px; font-weight: 800; display: grid; place-items: center; box-sizing: border-box; }
+.cert-steps li.is-done { color: var(--muted); }
+.cert-steps li.is-done::before { content: "✓"; background: var(--brand); border-color: var(--brand); color: var(--on-brand, #fff); }
+.cert-card { display: flex; gap: 20px; align-items: center; padding: 20px; margin: 0 0 28px; border-radius: var(--radius-lg); border: 1px solid rgba(201, 162, 39, .55); background: linear-gradient(135deg, rgba(201, 162, 39, .1), var(--brand-soft) 70%); }
+.cert-card-lesson { margin: 28px 0; }
+.cert-card.is-earned { border-color: var(--brand); }
+.cert-card-body { flex: 1; min-width: 0; }
+.cert-card-kicker { margin: 0 0 2px; font-size: 13px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #8a6d12; }
+:root[data-theme="dark"] .cert-card-kicker { color: #f0cf6a; }
+.cert-card-title { margin: 0 0 12px; font-size: 20px; line-height: 1.3; }
+.cert-card-count { margin-left: 6px; padding: 1px 8px; border-radius: 999px; background: var(--surface); border: 1px solid var(--border); font-size: 12px; font-weight: 700; white-space: nowrap; }
+.cert-card .path-progress { margin: 0 0 14px; max-width: 420px; }
+.cert-card-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.cert-card-cta form { margin: 0; }
+.cert-card-alt { font-size: 14px; font-weight: 600; }
+.cert-card-ready { margin: 0; font-weight: 700; color: var(--brand-ink); }
+.cert-mini { flex: 0 0 auto; width: 150px; aspect-ratio: 1.414 / 1; padding: 10px; box-sizing: border-box; background: #fffdf7; color: #1b1f27; border: 3px double #c9a227; border-radius: 6px; box-shadow: var(--shadow-md); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; text-align: center; transform: rotate(-3deg); }
+.cert-mini-kicker { font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: #8a6d12; font-weight: 800; }
+.cert-mini-course { font-size: 13px; font-weight: 800; color: #0a7d4f; line-height: 1.2; overflow-wrap: anywhere; }
+.cert-mini-line { width: 60%; height: 2px; background: #e5dcc0; }
+.cert-mini-seal { font-size: 18px; line-height: 1; }
+.cert-card:not(.is-earned) .cert-mini { filter: grayscale(.35); }
+@media (max-width: 560px) {
+	.cert-card { flex-direction: column; align-items: flex-start; padding: 16px; }
+	.cert-mini { width: 130px; }
+	.cert-card-title { font-size: 18px; }
+}
+
+.home-certs { padding: 56px 0; background: linear-gradient(180deg, var(--bg), rgba(201, 162, 39, .08)); border-top: 1px solid var(--border); }
+.home-certs-inner { display: grid; gap: 36px; align-items: center; }
+@media (min-width: 900px) { .home-certs-inner { grid-template-columns: 1.05fr 1fr; } }
+.home-certs-text h2 { font-size: clamp(26px, 3.4vw, 36px); line-height: 1.15; margin: 4px 0 12px; letter-spacing: -.02em; }
+.home-certs-text > p { color: var(--text-2); }
+.home-certs-steps { list-style: none; padding: 0; margin: 18px 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.home-certs-steps li { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--border); font-weight: 600; font-size: 15px; }
+.home-certs-steps b { flex: 0 0 auto; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--brand-soft); color: var(--brand-ink); font-size: 14px; }
+.home-certs-steps li:last-child { border-color: #c9a227; }
+.home-certs-art { display: grid; gap: 18px; justify-items: center; }
+.cert-preview { width: min(100%, 440px); aspect-ratio: 1.414 / 1; box-sizing: border-box; padding: 6%; background: #fffdf7 radial-gradient(400px 200px at 50% 0%, rgba(10, 125, 79, .08), transparent 70%); color: #1b1f27; border: 4px double #c9a227; border-radius: 8px; box-shadow: var(--shadow-lg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4%; text-align: center; transform: rotate(-2deg); position: relative; overflow: hidden; }
+.cert-preview::after { content: ""; position: absolute; inset: 0; background: linear-gradient(110deg, transparent 35%, rgba(255, 255, 255, .55) 50%, transparent 65%); transform: translateX(-100%); animation: cert-shine 5s ease-in-out infinite; }
+@keyframes cert-shine { 0%, 60% { transform: translateX(-100%); } 85%, 100% { transform: translateX(100%); } }
+.cert-preview-brand { font-weight: 800; font-size: clamp(15px, 2vw, 20px); }
+.cert-preview-kicker { font-size: clamp(9px, 1.2vw, 12px); letter-spacing: .28em; text-transform: uppercase; color: #8a6d12; font-weight: 800; }
+.cert-preview-name { font-size: clamp(24px, 4vw, 38px); font-weight: 800; color: #0a7d4f; border-bottom: 2px solid #e5dcc0; padding: 0 6% 2px; font-style: italic; }
+.cert-preview-course { font-size: clamp(12px, 1.5vw, 15px); color: #333b48; font-weight: 600; }
+.cert-preview-seal { font-size: clamp(26px, 4vw, 38px); line-height: 1; }
+.home-certs-paths { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.home-certs-paths a { display: inline-block; padding: 5px 12px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); font-size: 13px; font-weight: 600; color: var(--text); text-decoration: none; }
+.home-certs-paths a:hover { border-color: var(--brand); color: var(--brand-ink); }
+@media (max-width: 480px) { .home-certs { padding: 40px 0; } .home-certs-steps { grid-template-columns: 1fr; } }
 @media (max-width: 600px) { .cert { padding: 8px; } .cert-inner { padding: 5% 4%; } }
 @media print {
 	@page { size: A4 landscape; margin: 0; }

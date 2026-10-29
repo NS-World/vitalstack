@@ -46,7 +46,11 @@ add_action(
 					'methods'             => 'GET',
 					'permission_callback' => 'is_user_logged_in',
 					'callback'            => function () {
-						return array( 'progress' => (object) vitalstack_get_user_progress( get_current_user_id() ) );
+						$uid = get_current_user_id();
+						return array(
+							'progress' => (object) vitalstack_get_user_progress( $uid ),
+							'newCerts' => function_exists( 'vitalstack_certs_take_pending' ) ? vitalstack_certs_take_pending( $uid ) : array(),
+						);
 					},
 				),
 				array(
@@ -67,7 +71,8 @@ add_action(
 						$gained = function_exists( 'vitalstack_xp_for_lessons' ) ? vitalstack_xp_for_lessons( $uid, array_unique( $new ) ) : 0;
 						$certs  = function_exists( 'vitalstack_certs_check' ) ? vitalstack_certs_check( $uid, $progress ) : array();
 						return array(
-							'newCerts' => $certs,
+							'newCerts'    => $certs,
+							'lockedCerts' => function_exists( 'vitalstack_certs_locked' ) ? vitalstack_certs_locked( $uid, $progress ) : array(),
 							'progress' => (object) $progress,
 							'xp'       => function_exists( 'vitalstack_xp_stats' ) ? vitalstack_xp_stats( $uid ) : null,
 							'gained'   => $gained,

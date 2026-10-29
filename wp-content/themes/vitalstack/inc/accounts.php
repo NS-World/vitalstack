@@ -346,6 +346,9 @@ function vitalstack_handle_login() {
 		is_ssl()
 	);
 	if ( is_wp_error( $user ) ) {
+		if ( 'vs_locked' === $user->get_error_code() ) {
+			vitalstack_account_redirect( 'rate', array( 'tab' => 'login' ) );
+		}
 		vitalstack_rate_limited( $bucket, 8, 15 * MINUTE_IN_SECONDS );
 		vitalstack_account_redirect(
 			'login_failed',
@@ -382,7 +385,10 @@ function vitalstack_handle_register() {
 	if ( ! empty( $_POST['website'] ) ) {
 		vitalstack_account_redirect( 'failed', $back );
 	}
-	if ( vitalstack_rate_limited( 'register|' . vitalstack_client_ip(), 10, HOUR_IN_SECONDS ) ) {
+	// The second bucket uses the connecting address, which can't be faked
+	// with a forwarded header; it is wide enough for a CDN that shares one.
+	if ( vitalstack_rate_limited( 'register|' . vitalstack_client_ip(), 10, HOUR_IN_SECONDS )
+		|| vitalstack_rate_limited( 'register_edge|' . vitalstack_remote_ip(), 60, HOUR_IN_SECONDS ) ) {
 		vitalstack_account_redirect( 'rate', $back );
 	}
 

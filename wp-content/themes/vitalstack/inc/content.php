@@ -100,3 +100,28 @@ function vitalstack_get_rendered_content() {
 	$content = apply_filters( 'the_content', get_the_content() ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals
 	return str_replace( ']]>', ']]&gt;', $content );
 }
+
+/**
+ * One-time wording fix for lessons imported before 4.3.0: the Python
+ * introduction pointed readers to another site's compiler instead of ours.
+ * Writes the row directly so no "updated" email or revision is triggered.
+ */
+function vitalstack_fix_lesson_wording() {
+	if ( get_option( 'vitalstack_wording_fix' ) || ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+	update_option( 'vitalstack_wording_fix', 1, false );
+
+	global $wpdb;
+	$old = 'with free tools like <strong>Google Colab</strong>, <strong>Replit</strong> or <strong>Programiz Online Compiler</strong>.';
+	$new = 'with our free <a href="' . esc_url( home_url( '/tools/python-online-compiler/' ) ) . '">Python Online Compiler</a> or <strong>Google Colab</strong>.';
+	$ids = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_type = 'tutorials' AND post_content LIKE %s", '%' . $wpdb->esc_like( 'Programiz Online Compiler' ) . '%' ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+	foreach ( $ids as $id ) {
+		$content = get_post_field( 'post_content', $id, 'raw' );
+		if ( false !== strpos( $content, $old ) ) {
+			$wpdb->update( $wpdb->posts, array( 'post_content' => str_replace( $old, $new, $content ) ), array( 'ID' => $id ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+			clean_post_cache( $id );
+		}
+	}
+}
+add_action( 'admin_init', 'vitalstack_fix_lesson_wording' );

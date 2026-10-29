@@ -122,7 +122,8 @@ function vitalstack_handle_contact() {
 	if ( ! empty( $_POST['website'] ) ) {
 		$fail( 'contact_sent' ); // Bot: pretend it worked.
 	}
-	if ( vitalstack_rate_limited( 'contact|' . vitalstack_client_ip(), 5, HOUR_IN_SECONDS ) ) {
+	if ( vitalstack_rate_limited( 'contact|' . vitalstack_client_ip(), 5, HOUR_IN_SECONDS )
+		|| vitalstack_rate_limited( 'contact_edge|' . vitalstack_remote_ip(), 30, HOUR_IN_SECONDS ) ) {
 		$fail( 'rate' );
 	}
 

@@ -85,6 +85,8 @@ while ( have_posts() ) :
 				<?php vitalstack_lesson_buttons(); ?>
 			</div>
 
+			<?php vitalstack_cert_card( $vs_path, 'lesson' ); ?>
+
 			<?php vitalstack_subscribe_box( 'inline' ); ?>
 
 			<div class="doc-foot">
