@@ -107,6 +107,95 @@ add_filter(
 	}
 );
 
+/* ── Signed-in readers must never see a page cached for guests ────────────── */
+
+/**
+ * A page cache (LiteSpeed Cache, a CDN) keeps one copy of each page for
+ * guests. If it doesn't notice that a reader just signed in, it keeps handing
+ * them that guest copy, which looks exactly like being signed out.
+ *
+ * WordPress's own login cookie can't be read by JavaScript, so a second,
+ * readable cookie ("vs_auth") says "this browser is signed in". A guest copy
+ * that finds it reloads once with a fresh URL (see vitalstack_stale_page_check),
+ * which reaches WordPress, so the cache learns the reader is signed in.
+ */
+function vitalstack_auth_marker_set( $logged_in_cookie, $expire ) {
+	setcookie(
+		'vs_auth',
+		'1',
+		array(
+			'expires'  => (int) $expire,
+			'path'     => COOKIEPATH,
+			'domain'   => (string) COOKIE_DOMAIN,
+			'secure'   => is_ssl(),
+			'httponly' => false,
+			'samesite' => 'Lax',
+		)
+	);
+}
+add_action( 'set_logged_in_cookie', 'vitalstack_auth_marker_set', 10, 2 );
+
+function vitalstack_auth_marker_clear() {
+	setcookie(
+		'vs_auth',
+		'',
+		array(
+			'expires'  => time() - YEAR_IN_SECONDS,
+			'path'     => COOKIEPATH,
+			'domain'   => (string) COOKIE_DOMAIN,
+			'secure'   => is_ssl(),
+			'httponly' => false,
+			'samesite' => 'Lax',
+		)
+	);
+}
+add_action( 'clear_auth_cookie', 'vitalstack_auth_marker_clear' );
+
+// Readers who signed in before this existed get the marker on their next uncached page.
+add_action(
+	'template_redirect',
+	function () {
+		if ( is_user_logged_in() && empty( $_COOKIE['vs_auth'] ) && ! headers_sent() ) {
+			vitalstack_auth_marker_set( '', 0 );
+		}
+	}
+);
+
+/**
+ * Runs first in <head>, before anything is drawn. The page says whether it was
+ * built for a signed-in reader; a guest copy shown to a signed-in browser
+ * reloads once with ?vs_fresh=…, and the fresh copy removes that from the URL.
+ * If even the fresh copy is a guest page, the sign-in has really ended (expired
+ * or signed out elsewhere), so the marker is removed and nothing reloads again.
+ */
+function vitalstack_stale_page_check() {
+	if ( is_admin() ) {
+		return;
+	}
+	$signed = is_user_logged_in() ? 1 : 0;
+	echo "<script>(function(){try{var s=" . $signed . ",u=new URL(location.href),f=u.searchParams.has('vs_fresh');"
+		. "if(s){if(f){u.searchParams.delete('vs_fresh');history.replaceState(history.state,'',u.toString());}return;}"
+		. "if(!/(?:^|; )vs_auth=1(?:;|$)/.test(document.cookie))return;"
+		. "if(f){document.cookie='vs_auth=; Max-Age=0; path=" . esc_js( COOKIEPATH ) . "';return;}"
+		. "u.searchParams.set('vs_fresh',Date.now());location.replace(u.toString());}catch(e){}})();</script>\n";
+}
+add_action( 'wp_head', 'vitalstack_stale_page_check', 0 );
+
+// A ?vs_fresh= copy is only ever for one signed-in reader: never cache or index it.
+add_action(
+	'template_redirect',
+	function () {
+		if ( isset( $_GET['vs_fresh'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification -- read-only flag
+			if ( ! defined( 'DONOTCACHEPAGE' ) ) {
+				define( 'DONOTCACHEPAGE', true );
+			}
+			nocache_headers();
+			header( 'X-LiteSpeed-Cache-Control: no-cache' );
+		}
+	},
+	0
+);
+
 /* ── Keep readers out of wp-admin ─────────────────────────────────────────── */
 
 function vitalstack_block_admin_for_readers() {
