@@ -311,10 +311,7 @@ function vitalstack_cert_markup( $a ) {
 		<div class="cert-frame">
 			<span class="cert-corner is-tl" aria-hidden="true"></span><span class="cert-corner is-tr" aria-hidden="true"></span><span class="cert-corner is-bl" aria-hidden="true"></span><span class="cert-corner is-br" aria-hidden="true"></span>
 			<div class="cert-body">
-				<div class="cert-head">
-					<span class="cert-mark"><?php echo vitalstack_logo_mark( 48 ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></span>
-					<span class="cert-brand"><?php echo esc_html( $site ); ?></span>
-				</div>
+				<div class="cert-head cert-logo"><?php vitalstack_logo(); // Same logo as the site header (built-in mark or the uploaded logo). ?></div>
 				<p class="cert-title"><?php esc_html_e( 'Certificate', 'vitalstack' ); ?></p>
 				<p class="cert-sub"><span><?php esc_html_e( 'of Completion', 'vitalstack' ); ?></span></p>
 				<p class="cert-presented"><?php esc_html_e( 'This is proudly presented to', 'vitalstack' ); ?></p>

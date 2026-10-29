@@ -4,7 +4,7 @@ Theme URI: https://vitalstack.co.in/
 Author: VitalStack
 Author URI: https://vitalstack.co.in/
 Description: Tutorial-site theme for VitalStack: 17 learning paths (web, Python, Java, Spring Boot, React, Angular, DSA), live animated visualizers, quizzes, certificates, daily challenge and leaderboard, brain games, cheat sheets, free coding tools, reader accounts with XP and progress sync, PWA, and AdSense-ready ad slots.
-Version: 4.3.1
+Version: 4.3.2
 Requires at least: 6.3
 Tested up to: 6.8
 Requires PHP: 8.0
@@ -1372,10 +1372,14 @@ kbd { font-family: var(--font-mono); font-size: 12px; padding: 1px 7px; border-r
 .cert-corner.is-bl { bottom: 18px; left: 18px; border-right: 0; border-top: 0; }
 .cert-corner.is-br { bottom: 18px; right: 18px; border-left: 0; border-top: 0; }
 .cert-body { position: relative; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-between; text-align: center; }
-.cert-head { display: flex; align-items: center; gap: 1.2cqw; }
-.cert-mark .vs-mark { width: 4.4cqw; height: 4.4cqw; }
-.cert-mark .vs-mark-bg { fill: var(--green); } .cert-mark .vs-mark-ink { stroke: var(--green); }
-.cert-brand { font-family: var(--font-sans); font-size: 18px; font-size: 2.4cqw; font-weight: 800; letter-spacing: -.01em; color: var(--ink); }
+.cert-head { display: flex; align-items: center; justify-content: center; gap: 1.2cqw; }
+.cert-logo .logo-mark { width: 40px; height: 40px; width: 5.2cqw; height: 5.2cqw; }
+.cert-logo .vs-mark-bg { fill: var(--green); }
+.cert-logo .vs-mark-page { fill: #fff; }
+.cert-logo .vs-mark-ink { stroke: var(--green); }
+.cert-logo .logo-text { font-family: var(--font-sans); font-size: 22px; font-size: 3cqw; font-weight: 800; letter-spacing: -.02em; color: var(--ink); }
+.cert-logo .logo-text span { color: var(--green); }
+.cert-logo .logo-img { max-height: 44px; max-height: 6cqw; width: auto; }
 .cert-title { margin: 0; font-size: 52px; font-size: 7cqw; line-height: 1; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; color: var(--green); }
 .cert-sub { margin: -.6cqw 0 0; display: flex; align-items: center; gap: 1.6cqw; width: 52%; font-size: 15px; font-size: 1.9cqw; letter-spacing: .38em; text-transform: uppercase; color: var(--gold-deep); font-weight: 700; }
 .cert-sub::before, .cert-sub::after { content: ""; flex: 1; height: 1px; background: var(--gold); }
