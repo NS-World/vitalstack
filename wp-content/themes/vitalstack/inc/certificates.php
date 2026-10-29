@@ -255,29 +255,18 @@ function vitalstack_cert_template() {
 	?>
 	<section class="cert-page">
 		<div class="wrap">
-			<div class="cert" id="certificate">
-				<div class="cert-inner">
-					<div class="cert-top">
-						<span class="cert-mark"><?php echo vitalstack_logo_mark( 56 ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></span>
-						<span class="cert-brand"><?php echo esc_html( get_bloginfo( 'name' ) ); ?></span>
-					</div>
-					<p class="cert-kicker"><?php esc_html_e( 'Certificate of Completion', 'vitalstack' ); ?></p>
-					<p class="cert-presented"><?php esc_html_e( 'This certifies that', 'vitalstack' ); ?></p>
-					<h1 class="cert-name"><?php echo esc_html( $cert['name'] ); ?></h1>
-					<p class="cert-text">
-						<?php
-						/* translators: 1: course, 2: number of lessons */
-						echo esc_html( sprintf( _n( 'has successfully completed all %2$d lesson of the %1$s course.', 'has successfully completed all %2$d lessons of the %1$s course.', $count, 'vitalstack' ), $course, $count ) );
-						?>
-					</p>
-					<div class="cert-foot">
-						<div><span class="cert-label"><?php esc_html_e( 'Date', 'vitalstack' ); ?></span><b><?php echo esc_html( wp_date( get_option( 'date_format' ), strtotime( $cert['date'] ) ) ); ?></b></div>
-						<div class="cert-seal" aria-hidden="true">🎓</div>
-						<div><span class="cert-label"><?php esc_html_e( 'Certificate ID', 'vitalstack' ); ?></span><b><?php echo esc_html( strtoupper( $cert['id'] ) ); ?></b></div>
-					</div>
-					<p class="cert-verify"><?php esc_html_e( 'Verify at', 'vitalstack' ); ?> <?php echo esc_html( preg_replace( '#^https?://#', '', $url ) ); ?></p>
-				</div>
-			</div>
+			<?php
+			vitalstack_cert_markup(
+				array(
+					'name'    => $cert['name'],
+					'course'  => $course,
+					'lessons' => $count,
+					'date'    => wp_date( get_option( 'date_format' ), strtotime( $cert['date'] ) ),
+					'id'      => $cert['id'],
+					'url'     => $url,
+				)
+			);
+			?>
 
 			<div class="cert-actions">
 				<button type="button" class="btn btn-primary" onclick="window.print()"><?php esc_html_e( 'Download PDF / Print', 'vitalstack' ); ?></button>
@@ -307,97 +296,112 @@ function vitalstack_cert_template() {
 add_action( 'template_redirect', 'vitalstack_cert_template', 5 );
 
 /**
- * The small certificate preview drawn on cards (no image file needed).
+ * The certificate itself: used on /certificate/<id>/ and, as a sample, on
+ * the homepage. Pure HTML/CSS/SVG so it prints sharp as a PDF.
+ *
+ * @param array $a name, course, lessons, date, id, url, sample (bool).
  */
-function vitalstack_cert_mini( $course ) {
+function vitalstack_cert_markup( $a ) {
+	$a      = wp_parse_args( $a, array( 'name' => '', 'course' => '', 'lessons' => 0, 'date' => '', 'id' => '', 'url' => '', 'sample' => false ) );
+	$sample = ! empty( $a['sample'] );
+	$site   = get_bloginfo( 'name' );
 	?>
-	<div class="cert-mini" aria-hidden="true">
-		<span class="cert-mini-kicker"><?php esc_html_e( 'Certificate', 'vitalstack' ); ?></span>
-		<span class="cert-mini-course"><?php echo esc_html( $course ); ?></span>
-		<span class="cert-mini-line"></span>
-		<span class="cert-mini-seal">🎓</span>
+	<div class="cert<?php echo $sample ? ' is-sample' : ''; ?>"<?php echo $sample ? ' aria-label="' . esc_attr__( 'Sample certificate', 'vitalstack' ) . '"' : ' id="certificate"'; ?>>
+		<?php echo vitalstack_cert_guilloche(); // phpcs:ignore WordPress.Security.EscapeOutput -- generated SVG ?>
+		<div class="cert-frame">
+			<span class="cert-corner is-tl" aria-hidden="true"></span><span class="cert-corner is-tr" aria-hidden="true"></span><span class="cert-corner is-bl" aria-hidden="true"></span><span class="cert-corner is-br" aria-hidden="true"></span>
+			<div class="cert-body">
+				<div class="cert-head">
+					<span class="cert-mark"><?php echo vitalstack_logo_mark( 48 ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></span>
+					<span class="cert-brand"><?php echo esc_html( $site ); ?></span>
+				</div>
+				<p class="cert-title"><?php esc_html_e( 'Certificate', 'vitalstack' ); ?></p>
+				<p class="cert-sub"><span><?php esc_html_e( 'of Completion', 'vitalstack' ); ?></span></p>
+				<p class="cert-presented"><?php esc_html_e( 'This is proudly presented to', 'vitalstack' ); ?></p>
+				<?php if ( $sample ) : ?>
+					<p class="cert-name"><?php echo esc_html( $a['name'] ); ?></p>
+				<?php else : ?>
+					<h1 class="cert-name"><?php echo esc_html( $a['name'] ); ?></h1>
+				<?php endif; ?>
+				<p class="cert-text">
+					<?php
+					printf(
+						/* translators: 1: course, 2: site name, 3: number of lessons */
+						esc_html( _n( 'for successfully completing the %1$s course on %2$s, including its %3$d lesson.', 'for successfully completing the %1$s course on %2$s, including all %3$d lessons.', (int) $a['lessons'], 'vitalstack' ) ),
+						'<b>' . esc_html( $a['course'] ) . '</b>',
+						esc_html( $site ),
+						(int) $a['lessons']
+					);
+					?>
+				</p>
+				<div class="cert-foot">
+					<div class="cert-sign">
+						<span class="cert-sign-val"><?php echo esc_html( $a['date'] ); ?></span>
+						<span class="cert-label"><?php esc_html_e( 'Date of issue', 'vitalstack' ); ?></span>
+					</div>
+					<div class="cert-seal" aria-hidden="true"><?php echo vitalstack_cert_seal(); // phpcs:ignore WordPress.Security.EscapeOutput -- generated SVG ?></div>
+					<div class="cert-sign">
+						<span class="cert-sign-val cert-script"><?php echo esc_html( $site ); ?></span>
+						<span class="cert-label"><?php esc_html_e( 'Issued by', 'vitalstack' ); ?> <?php echo esc_html( preg_replace( '#^https?://#', '', untrailingslashit( home_url( '/' ) ) ) ); ?></span>
+					</div>
+				</div>
+				<p class="cert-verify">
+					<?php esc_html_e( 'Certificate ID', 'vitalstack' ); ?> <b><?php echo esc_html( strtoupper( $a['id'] ) ); ?></b>
+					<?php if ( $a['url'] ) : ?>
+						· <?php esc_html_e( 'Verify at', 'vitalstack' ); ?> <?php echo esc_html( preg_replace( '#^https?://#', '', $a['url'] ) ); ?>
+					<?php endif; ?>
+				</p>
+			</div>
+		</div>
+		<?php if ( $sample ) : ?>
+			<span class="cert-sample-tag" aria-hidden="true"><?php esc_html_e( 'Sample', 'vitalstack' ); ?></span>
+		<?php endif; ?>
 	</div>
 	<?php
 }
 
 /**
- * "Earn your certificate" card for a course: what unlocks it, with the
- * reader's own progress ticked off (lessons are ticked by main.js).
- *
- * @param WP_Term $path    Learning path.
- * @param string  $variant "course" (course page) or "lesson" (end of a lesson).
+ * Fine wavy lines behind the text, like the security print on real certificates.
  */
-function vitalstack_cert_card( $path, $variant = 'course' ) {
-	if ( ! $path || ! function_exists( 'vitalstack_accounts_enabled' ) || ! vitalstack_accounts_enabled() ) {
-		return;
+function vitalstack_cert_guilloche() {
+	$paths = '';
+	for ( $k = 0; $k < 14; $k++ ) {
+		$y   = 40 + $k * 48;
+		$amp = 10 + ( $k % 3 ) * 4;
+		$off = ( $k % 2 ) ? 25 : 0;
+		$d   = 'M' . ( -$off ) . ' ' . $y . 'q25 ' . ( -$amp ) . ' 50 0';
+		for ( $x = 50 - $off; $x < 1050; $x += 50 ) {
+			$d .= 't50 0';
+		}
+		$paths .= '<path d="' . $d . '"/>';
 	}
-	$lessons = vitalstack_path_lessons( $path );
-	if ( ! $lessons ) {
-		return;
-	}
-	$uid   = get_current_user_id();
-	$certs = $uid ? vitalstack_user_certs( $uid ) : array();
-	$here  = is_singular() ? get_permalink() : get_term_link( $path );
-	$here  = is_wp_error( $here ) ? home_url( '/' ) : $here;
-	$total = count( $lessons );
+	return '<svg class="cert-guilloche" viewBox="0 0 1000 707" preserveAspectRatio="none" aria-hidden="true" focusable="false">' . $paths . '</svg>';
+}
 
-	if ( isset( $certs[ $path->slug ] ) ) {
-		?>
-		<aside class="cert-card cert-card-<?php echo esc_attr( $variant ); ?> is-earned">
-			<?php vitalstack_cert_mini( $path->name ); ?>
-			<div class="cert-card-body">
-				<p class="cert-card-kicker"><?php esc_html_e( 'Certificate earned', 'vitalstack' ); ?></p>
-				<h2 class="cert-card-title"><?php echo esc_html( sprintf( /* translators: %s: course */ __( 'You completed %s 🎉', 'vitalstack' ), $path->name ) ); ?></h2>
-				<a class="btn btn-primary btn-sm" href="<?php echo esc_url( vitalstack_cert_url( $certs[ $path->slug ]['id'] ) ); ?>"><?php esc_html_e( 'View my certificate', 'vitalstack' ); ?> ❯</a>
-			</div>
-		</aside>
-		<?php
-		return;
+/**
+ * Gold rosette seal with ribbons.
+ */
+function vitalstack_cert_seal() {
+	static $n = 0;
+	++$n;
+	$id  = 'vsseal' . $n;
+	$pts = array();
+	for ( $i = 0; $i < 48; $i++ ) {
+		$r     = ( $i % 2 ) ? 44 : 50;
+		$t     = M_PI * 2 * $i / 48;
+		$pts[] = round( 60 + $r * sin( $t ), 1 ) . ',' . round( 58 - $r * cos( $t ), 1 );
 	}
-
-	$steps  = vitalstack_cert_steps( $uid );
-	$labels = array(
-		'account'    => __( 'Create a free account', 'vitalstack' ),
-		'verified'   => __( 'Confirm your email', 'vitalstack' ),
-		'subscribed' => __( 'Subscribe to lesson emails', 'vitalstack' ),
-	);
-	?>
-	<aside class="cert-card cert-card-<?php echo esc_attr( $variant ); ?>" data-cert-path="<?php echo esc_attr( $path->slug ); ?>" data-cert-total="<?php echo (int) $total; ?>">
-		<?php vitalstack_cert_mini( $path->name ); ?>
-		<div class="cert-card-body">
-			<p class="cert-card-kicker">🔒 <?php esc_html_e( 'Free certificate', 'vitalstack' ); ?></p>
-			<h2 class="cert-card-title"><?php echo esc_html( sprintf( /* translators: %s: course */ __( 'Earn your %s certificate', 'vitalstack' ), $path->name ) ); ?></h2>
-			<ol class="cert-steps">
-				<?php foreach ( $labels as $key => $label ) : ?>
-					<li class="<?php echo $steps[ $key ] ? 'is-done' : ''; ?>"><?php echo esc_html( $label ); ?></li>
-				<?php endforeach; ?>
-				<li data-cert-step="lessons">
-					<?php echo esc_html( sprintf( /* translators: %d: number of lessons */ _n( 'Finish the %d lesson', 'Finish all %d lessons', $total, 'vitalstack' ), $total ) ); ?>
-					<span class="cert-card-count">0 / <?php echo (int) $total; ?></span>
-				</li>
-			</ol>
-			<div class="path-progress" aria-hidden="true"><span class="path-progress-bar cert-card-bar"></span></div>
-			<div class="cert-card-cta">
-				<?php if ( ! $uid ) : ?>
-					<a class="btn btn-primary btn-sm" href="<?php echo esc_url( vitalstack_account_url( array( 'tab' => 'register', 'subscribe' => 1, 'redirect_to' => $here ) ) ); ?>"><?php esc_html_e( 'Sign up free and unlock', 'vitalstack' ); ?></a>
-					<a class="cert-card-alt" href="<?php echo esc_url( vitalstack_account_url( array( 'tab' => 'login', 'subscribe' => 1, 'redirect_to' => $here ) ) ); ?>"><?php esc_html_e( 'I have an account', 'vitalstack' ); ?></a>
-				<?php elseif ( ! $steps['subscribed'] ) : ?>
-					<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
-						<input type="hidden" name="action" value="vs_subscribe">
-						<input type="hidden" name="subscribe" value="1">
-						<input type="hidden" name="redirect_to" value="<?php echo esc_url( $here ); ?>">
-						<?php wp_nonce_field( 'vs_subscribe', '_vsnonce' ); ?>
-						<button type="submit" class="btn btn-primary btn-sm"><?php esc_html_e( 'Subscribe and unlock', 'vitalstack' ); ?></button>
-					</form>
-				<?php elseif ( ! $steps['verified'] ) : ?>
-					<a class="btn btn-primary btn-sm" href="<?php echo esc_url( vitalstack_account_url() . '#certs' ); ?>"><?php esc_html_e( 'Confirm my email', 'vitalstack' ); ?></a>
-				<?php else : ?>
-					<p class="cert-card-ready"><?php esc_html_e( 'Unlocked! Your certificate is issued the moment you finish the last lesson.', 'vitalstack' ); ?></p>
-				<?php endif; ?>
-			</div>
-		</div>
-	</aside>
-	<?php
+	$ring = strtoupper( get_bloginfo( 'name' ) ) . ' • ' . __( 'VERIFIED', 'vitalstack' ) . ' • ' . strtoupper( get_bloginfo( 'name' ) ) . ' • ' . __( 'VERIFIED', 'vitalstack' ) . ' •';
+	return '<svg viewBox="0 0 120 150" focusable="false">'
+		. '<defs><linearGradient id="' . $id . 'g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7dc7a"/><stop offset=".5" stop-color="#c9a227"/><stop offset="1" stop-color="#8a6d12"/></linearGradient>'
+		. '<path id="' . $id . 'p" d="M60 58m-31 0a31 31 0 1 1 62 0a31 31 0 1 1 -62 0"/></defs>'
+		. '<path d="M40 92 26 146l16-9 10 15 12-52Z" fill="#0a7d4f"/><path d="M80 92l14 54-16-9-10 15-12-52Z" fill="#075c3a"/>'
+		. '<polygon points="' . implode( ' ', $pts ) . '" fill="url(#' . $id . 'g)"/>'
+		. '<circle cx="60" cy="58" r="39" fill="none" stroke="#fff6d5" stroke-width="1.2"/>'
+		. '<circle cx="60" cy="58" r="23" fill="#0a7d4f" stroke="#fff6d5" stroke-width="1.5"/>'
+		. '<text font-size="7.4" font-weight="700" letter-spacing="1.1" fill="#5a4508" font-family="Georgia, serif"><textPath href="#' . $id . 'p">' . esc_html( $ring ) . '</textPath></text>'
+		. '<path d="M49 59l7 7 15-16" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>'
+		. '</svg>';
 }
 
 /**
@@ -439,13 +443,18 @@ function vitalstack_home_certs() {
 				</p>
 			</div>
 			<div class="home-certs-art">
-				<div class="cert-preview" aria-hidden="true">
-					<span class="cert-preview-brand"><?php echo esc_html( get_bloginfo( 'name' ) ); ?></span>
-					<span class="cert-preview-kicker"><?php esc_html_e( 'Certificate of Completion', 'vitalstack' ); ?></span>
-					<span class="cert-preview-name"><?php esc_html_e( 'Your Name', 'vitalstack' ); ?></span>
-					<span class="cert-preview-course"><?php echo esc_html( $first->name ); ?></span>
-					<span class="cert-preview-seal">🎓</span>
-				</div>
+				<?php
+				vitalstack_cert_markup(
+					array(
+						'name'    => __( 'Your Name', 'vitalstack' ),
+						'course'  => $first->name,
+						'lessons' => count( vitalstack_path_lessons( $first ) ),
+						'date'    => wp_date( get_option( 'date_format' ) ),
+						'id'      => 'SAMPLE',
+						'sample'  => true,
+					)
+				);
+				?>
 				<ul class="home-certs-paths">
 					<?php foreach ( array_slice( $paths, 0, 10 ) as $path ) : ?>
 						<li><a href="<?php echo esc_url( get_term_link( $path ) ); ?>"><?php echo esc_html( $path->name ); ?></a></li>

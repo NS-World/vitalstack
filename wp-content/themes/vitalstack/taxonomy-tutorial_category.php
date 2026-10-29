@@ -47,7 +47,6 @@ $vs_style   = vitalstack_term_style( $vs_path, 'tutorials' );
 
 <section class="section section-tight">
 	<div class="container">
-		<?php vitalstack_cert_card( $vs_path, 'course' ); ?>
 		<?php if ( $vs_lessons ) : ?>
 			<ol class="lesson-timeline" data-path="<?php echo esc_attr( $vs_path->slug ); ?>">
 				<?php foreach ( $vs_lessons as $vs_i => $vs_lesson ) : ?>

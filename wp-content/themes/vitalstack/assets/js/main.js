@@ -455,14 +455,6 @@
 	}
 
 	function paintProgress() {
-		// Certificate cards: lessons step, count and bar.
-		document.querySelectorAll('[data-cert-path]').forEach(function (el) {
-			var total = parseInt(el.getAttribute('data-cert-total'), 10) || 0;
-			var done = Math.min(doneIn(el.getAttribute('data-cert-path')).length, total);
-			el.querySelectorAll('.cert-card-count').forEach(function (c) { c.textContent = done + ' / ' + total; });
-			el.querySelectorAll('.cert-card-bar').forEach(function (b) { b.style.width = (total ? Math.round(done / total * 100) : 0) + '%'; });
-			el.querySelectorAll('[data-cert-step="lessons"]').forEach(function (li) { li.classList.toggle('is-done', total > 0 && done >= total); });
-		});
 		document.querySelectorAll('[data-lesson]').forEach(function (li) {
 			li.classList.toggle('is-done', isDone(li.getAttribute('data-lesson')));
 		});

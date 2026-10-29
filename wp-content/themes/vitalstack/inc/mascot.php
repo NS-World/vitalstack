@@ -62,63 +62,238 @@ function vitalstack_mascot( $mood = 'happy', $size = 120, $class = '' ) {
 
 /**
  * Bit: the pixel-art look. Same moods, size and outer classes as Stacky so
- * every place that shows the mascot works unchanged. Drawn on an 8px grid
- * (4px for small details) with crisp edges.
+ * every place that shows the mascot works unchanged.
+ *
+ * Drawn on a 30 × 34 pixel grid. Each part is painted into a grid, given a
+ * one-pixel dark outline, and written out as one <path> per colour, so the
+ * whole sprite stays around 3 KB.
  */
 function vitalstack_mascot_pixel( $mood, $size, $class ) {
-	$r = function ( $x, $y, $w, $h, $cls = '' ) {
-		return '<rect' . ( $cls ? ' class="' . $cls . '"' : '' ) . ' x="' . $x . '" y="' . $y . '" width="' . $w . '" height="' . $h . '" />';
+	static $cache = array();
+	if ( ! isset( $cache[ $mood ] ) ) {
+		$cache[ $mood ] = vitalstack_mascot_pixel_body( $mood );
+	}
+	return '<svg class="mascot mascot-pixel mascot-' . esc_attr( $mood ) . ( $class ? ' ' . esc_attr( $class ) : '' ) . '" width="' . (int) $size . '" height="' . (int) round( $size * 1.12 ) . '" viewBox="0 0 30 34" shape-rendering="crispEdges" role="img" aria-label="' . esc_attr__( 'Bit the pixel robot', 'vitalstack' ) . '">'
+		. $cache[ $mood ] . '</svg>';
+}
+
+/**
+ * Paint helper for the sprite: a grid of colour codes.
+ */
+class VitalStack_Pixel_Grid {
+	public $cells = array();
+
+	public function rect( $x, $y, $w, $h, $c ) {
+		for ( $j = $y; $j < $y + $h; $j++ ) {
+			for ( $i = $x; $i < $x + $w; $i++ ) {
+				$this->cells[ $j ][ $i ] = $c;
+			}
+		}
+		return $this;
+	}
+
+	public function dots( $points, $c ) {
+		foreach ( $points as $p ) {
+			$this->cells[ $p[1] ][ $p[0] ] = $c;
+		}
+		return $this;
+	}
+
+	/** Rectangle with its corner pixels cut, for a rounded pixel look. */
+	public function round( $x, $y, $w, $h, $c, $cut = 1 ) {
+		for ( $j = 0; $j < $h; $j++ ) {
+			$in = 0;
+			if ( $j < $cut ) {
+				$in = $cut - $j;
+			} elseif ( $j >= $h - $cut ) {
+				$in = $j - ( $h - $cut ) + 1;
+			}
+			$this->rect( $x + $in, $y + $j, $w - 2 * $in, 1, $c );
+		}
+		return $this;
+	}
+
+	public function filled( $x, $y ) {
+		return isset( $this->cells[ $y ][ $x ] );
+	}
+
+	/** Dark outline on every empty cell next to a filled one, unless $under is filled there. */
+	public function outline( $c = 'k', $under = null ) {
+		$add = array();
+		foreach ( $this->cells as $y => $row ) {
+			foreach ( $row as $x => $v ) {
+				foreach ( array( array( 1, 0 ), array( -1, 0 ), array( 0, 1 ), array( 0, -1 ) ) as $d ) {
+					$nx = $x + $d[0];
+					$ny = $y + $d[1];
+					if ( $nx < 0 || $ny < 0 || $nx > 29 || $ny > 33 || $this->filled( $nx, $ny ) || ( $under && $under->filled( $nx, $ny ) ) ) {
+						continue;
+					}
+					$add[ $ny ][ $nx ] = $c;
+				}
+			}
+		}
+		foreach ( $add as $y => $row ) {
+			foreach ( $row as $x => $v ) {
+				$this->cells[ $y ][ $x ] = $v;
+			}
+		}
+		return $this;
+	}
+
+	/** One path per colour; equal runs on following rows are merged into rectangles. */
+	public function svg() {
+		$runs = array();
+		ksort( $this->cells );
+		foreach ( $this->cells as $y => $row ) {
+			ksort( $row );
+			$start = null;
+			$prev  = null;
+			$last  = null;
+			foreach ( $row as $x => $c ) {
+				if ( null !== $start && ( $c !== $prev || $x !== $last + 1 ) ) {
+					$runs[ $prev ][] = array( $start, $y, $last - $start + 1 );
+					$start           = null;
+				}
+				if ( null === $start ) {
+					$start = $x;
+				}
+				$prev = $c;
+				$last = $x;
+			}
+			if ( null !== $start ) {
+				$runs[ $prev ][] = array( $start, $y, $last - $start + 1 );
+			}
+		}
+		$out = '';
+		foreach ( $runs as $c => $list ) {
+			$rects = array();
+			foreach ( $list as $r ) {
+				$key = $r[0] . ':' . $r[2];
+				if ( isset( $rects[ $key ] ) && $rects[ $key ][1] + $rects[ $key ][3] === $r[1] ) {
+					++$rects[ $key ][3];
+					continue;
+				}
+				if ( isset( $rects[ $key ] ) ) {
+					$done[] = $rects[ $key ];
+				}
+				$rects[ $key ] = array( $r[0], $r[1], $r[2], 1 );
+			}
+			$all = array_merge( isset( $done ) ? $done : array(), array_values( $rects ) );
+			unset( $done );
+			$d = '';
+			foreach ( $all as $r ) {
+				$d .= 'M' . $r[0] . ' ' . $r[1] . 'h' . $r[2] . 'v' . $r[3] . 'h-' . $r[2] . 'z';
+			}
+			$out .= '<path class="px-' . $c . '" d="' . $d . '"/>';
+		}
+		return $out;
+	}
+}
+
+function vitalstack_mascot_pixel_body( $mood ) {
+	$g = function () {
+		return new VitalStack_Pixel_Grid();
 	};
 
-	$eyes = 'sleepy' === $mood
-		? $r( 42, 56, 12, 4, 'px-eye-closed' ) . $r( 66, 56, 12, 4, 'px-eye-closed' )
-		: '<g class="m-eyes">' . $r( 44, 46, 8, 12, 'm-eye px-eye' ) . $r( 68, 46, 8, 12, 'm-eye px-eye' ) . $r( 44, 46, 4, 4, 'px-shine' ) . $r( 68, 46, 4, 4, 'px-shine' ) . '</g>';
+	// Body: head, ear bolts, neck, torso, legs.
+	$body = $g();
+	$body->round( 3, 6, 24, 17, 'g', 3 )
+		->rect( 1, 12, 2, 5, 'd' )->rect( 27, 12, 2, 5, 'd' )->dots( array( array( 1, 12 ), array( 27, 12 ) ), 'l' )
+		->rect( 5, 7, 8, 1, 'l' )->rect( 4, 9, 1, 5, 'l' )->rect( 5, 8, 2, 1, 'l' )
+		->rect( 6, 21, 18, 1, 'd' )->rect( 25, 10, 1, 10, 'd' )->rect( 24, 20, 1, 1, 'd' )
+		->round( 6, 9, 18, 11, 'k', 2 )->round( 7, 10, 16, 9, 's', 2 )
+		->dots( array( array( 8, 11 ), array( 9, 11 ), array( 8, 12 ) ), 'x' )
+		->rect( 12, 23, 6, 1, 'd' )
+		->round( 8, 24, 14, 7, 't', 1 )->rect( 9, 30, 12, 1, 'u' )
+		->dots( array( array( 11, 26 ), array( 10, 27 ), array( 11, 28 ), array( 16, 26 ), array( 15, 27 ), array( 14, 28 ), array( 18, 26 ), array( 19, 27 ), array( 18, 28 ) ), 'c' )
+		->rect( 10, 31, 3, 1, 'f' )->rect( 17, 31, 3, 1, 'f' );
+	$body->outline( 'k' );
 
-	$mouths = array(
-		'happy'  => $r( 48, 62, 4, 4, 'px-mouth' ) . $r( 52, 66, 16, 4, 'px-mouth' ) . $r( 68, 62, 4, 4, 'px-mouth' ),
-		'cheer'  => $r( 48, 62, 24, 4, 'px-mouth' ) . $r( 52, 66, 16, 4, 'px-mouth' ) . $r( 56, 70, 8, 2, 'px-tongue' ),
-		'wow'    => $r( 56, 62, 8, 8, 'px-mouth' ),
-		'think'  => $r( 52, 66, 8, 4, 'px-mouth' ) . $r( 60, 64, 8, 4, 'px-mouth' ),
-		'sleepy' => $r( 54, 66, 12, 4, 'px-mouth' ),
+	// Antenna on its own so it can sway.
+	$ant = $g();
+	$ant->rect( 14, 4, 2, 2, 'd' )->round( 13, 1, 4, 3, 'y', 1 )->dots( array( array( 14, 1 ) ), 'w' )->dots( array( array( 15, 3 ) ), 'z' );
+	$ant->outline( 'k', $body );
+
+	// Face.
+	$eyes = array(
+		'happy'  => array( array( 10, 12, 3, 4 ), array( 18, 12, 3, 4 ) ),
+		'think'  => array( array( 11, 11, 3, 4 ), array( 19, 11, 3, 4 ) ),
+		'wow'    => array( array( 9, 11, 4, 5 ), array( 18, 11, 4, 5 ) ),
 	);
+	$face = $g();
+	if ( isset( $eyes[ $mood ] ) ) {
+		foreach ( $eyes[ $mood ] as $e ) {
+			$face->rect( $e[0], $e[1], $e[2], $e[3], 'e' )->dots( array( array( $e[0], $e[1] ) ), 'w' );
+		}
+	} elseif ( 'cheer' === $mood ) {
+		$face->dots( array( array( 10, 14 ), array( 11, 13 ), array( 12, 14 ), array( 18, 14 ), array( 19, 13 ), array( 20, 14 ) ), 'e' );
+	} else {
+		$face->rect( 10, 14, 3, 1, 'e' )->rect( 18, 14, 3, 1, 'e' );
+	}
+	$mouths = array(
+		'happy'  => array( array( 13, 17 ), array( 14, 18 ), array( 15, 18 ), array( 16, 17 ) ),
+		'cheer'  => array( array( 13, 17 ), array( 14, 17 ), array( 15, 17 ), array( 16, 17 ), array( 14, 18 ), array( 15, 18 ) ),
+		'wow'    => array( array( 14, 17 ), array( 15, 17 ), array( 14, 18 ), array( 15, 18 ) ),
+		'think'  => array( array( 13, 18 ), array( 14, 18 ), array( 15, 17 ), array( 16, 17 ) ),
+		'sleepy' => array( array( 14, 17 ), array( 15, 17 ) ),
+	);
+	$face->dots( $mouths[ $mood ], 'm' );
+	if ( 'cheer' === $mood ) {
+		$face->dots( array( array( 14, 18 ), array( 15, 18 ) ), 'p' );
+	}
+	$face->dots( array( array( 8, 16 ), array( 9, 16 ), array( 21, 16 ), array( 22, 16 ) ), 'p' );
 
-	$arms = array(
-		'happy'  => $r( 16, 92, 12, 8, 'px-arm' ) . $r( 12, 100, 8, 12, 'px-arm' )
-			. '<g class="m-wave">' . $r( 92, 92, 12, 8, 'px-arm' ) . $r( 100, 72, 8, 20, 'px-arm' ) . $r( 98, 64, 12, 10, 'px-hand' ) . '</g>',
-		'cheer'  => '<g class="m-wave">' . $r( 16, 92, 12, 8, 'px-arm' ) . $r( 10, 72, 8, 24, 'px-arm' ) . $r( 8, 64, 12, 10, 'px-hand' ) . '</g>'
-			. '<g class="m-wave">' . $r( 92, 92, 12, 8, 'px-arm' ) . $r( 102, 72, 8, 24, 'px-arm' ) . $r( 100, 64, 12, 10, 'px-hand' ) . '</g>',
-		'wow'    => $r( 4, 92, 24, 8, 'px-arm' ) . $r( 0, 86, 8, 10, 'px-hand' ) . $r( 92, 92, 24, 8, 'px-arm' ) . $r( 112, 86, 8, 10, 'px-hand' ),
-		'think'  => $r( 16, 92, 12, 8, 'px-arm' ) . $r( 12, 100, 8, 12, 'px-arm' ) . $r( 92, 92, 12, 8, 'px-arm' ) . $r( 96, 80, 8, 12, 'px-arm' ) . $r( 84, 74, 14, 10, 'px-hand' ),
-		'sleepy' => $r( 16, 92, 12, 8, 'px-arm' ) . $r( 12, 100, 8, 12, 'px-arm' ) . $r( 92, 92, 12, 8, 'px-arm' ) . $r( 100, 100, 8, 12, 'px-arm' ),
+	// Arms: [ class, painter ] pairs.
+	$arm = function ( $paint ) use ( $g, $body ) {
+		$a = $g();
+		$paint( $a );
+		return $a->outline( 'k', $body );
+	};
+	$down_l = function ( $a ) {
+		$a->rect( 5, 24, 2, 5, 'g' )->rect( 4, 29, 3, 2, 'l' );
+	};
+	$down_r = function ( $a ) {
+		$a->rect( 23, 24, 2, 5, 'g' )->rect( 23, 29, 3, 2, 'l' );
+	};
+	$up_r = function ( $a ) {
+		$a->rect( 23, 24, 2, 2, 'g' )->rect( 25, 22, 2, 2, 'g' )->rect( 26, 19, 3, 3, 'l' );
+	};
+	$up_l = function ( $a ) {
+		$a->rect( 5, 24, 2, 2, 'g' )->rect( 3, 22, 2, 2, 'g' )->rect( 1, 19, 3, 3, 'l' );
+	};
+	$out_l = function ( $a ) {
+		$a->rect( 2, 25, 5, 2, 'g' )->rect( 0, 24, 2, 4, 'l' );
+	};
+	$out_r = function ( $a ) {
+		$a->rect( 23, 25, 5, 2, 'g' )->rect( 28, 24, 2, 4, 'l' );
+	};
+	$chin_r = function ( $a ) {
+		$a->rect( 23, 24, 2, 2, 'g' )->rect( 24, 21, 2, 3, 'g' )->rect( 21, 19, 4, 3, 'l' );
+	};
+	$sets = array(
+		'happy'  => array( array( '', $down_l ), array( 'm-wave', $up_r ) ),
+		'cheer'  => array( array( 'm-wave px-wave-l', $up_l ), array( 'm-wave', $up_r ) ),
+		'wow'    => array( array( '', $out_l ), array( '', $out_r ) ),
+		'think'  => array( array( '', $down_l ), array( '', $chin_r ) ),
+		'sleepy' => array( array( '', $down_l ), array( '', $down_r ) ),
 	);
 
 	$extra = '';
 	if ( 'think' === $mood ) {
-		$extra = '<g class="m-think px-think">' . $r( 100, 20, 6, 6 ) . $r( 106, 6, 10, 10 ) . '</g>';
+		$extra = '<g class="m-think px-bubbles">' . $g()->rect( 25, 6, 1, 1, 'b' )->round( 26, 2, 3, 3, 'b', 1 )->svg() . '</g>';
 	} elseif ( 'cheer' === $mood ) {
-		$extra = '<g class="m-sparks px-sparks">' . $r( 4, 30, 8, 4 ) . $r( 6, 28, 4, 8 ) . $r( 106, 34, 8, 4 ) . $r( 108, 32, 4, 8 ) . $r( 96, 10, 8, 4 ) . $r( 98, 8, 4, 8 ) . '</g>';
+		$extra = '<g class="m-sparks px-sparks">' . $g()->dots( array( array( 2, 4 ), array( 1, 5 ), array( 2, 5 ), array( 3, 5 ), array( 2, 6 ), array( 26, 3 ), array( 25, 4 ), array( 26, 4 ), array( 27, 4 ), array( 26, 5 ), array( 22, 0 ), array( 22, 1 ), array( 21, 1 ), array( 23, 1 ), array( 22, 2 ) ), 'y' )->svg() . '</g>';
 	} elseif ( 'sleepy' === $mood ) {
-		$extra = '<g class="m-think px-zzz">' . $r( 98, 12, 12, 3 ) . $r( 104, 15, 3, 3 ) . $r( 101, 18, 3, 3 ) . $r( 98, 21, 12, 3 ) . '</g>';
+		$extra = '<g class="m-think px-bubbles">' . $g()->rect( 23, 1, 4, 1, 'b' )->dots( array( array( 25, 2 ), array( 24, 3 ) ), 'b' )->rect( 23, 4, 4, 1, 'b' )->svg() . '</g>';
 	}
 
-	return '<svg class="mascot mascot-pixel mascot-' . esc_attr( $mood ) . ( $class ? ' ' . esc_attr( $class ) : '' ) . '" width="' . (int) $size . '" height="' . (int) round( $size * 1.12 ) . '" viewBox="0 0 120 134" shape-rendering="crispEdges" role="img" aria-label="' . esc_attr__( 'Bit the pixel robot', 'vitalstack' ) . '">'
-		. $r( 30, 126, 60, 6, 'px-shadow' )
-		. '<g class="m-body-wrap">'
-		. '<g class="m-antenna">' . $r( 56, 10, 8, 14, 'px-stem' ) . $r( 52, 2, 16, 10, 'm-bulb px-bulb' ) . '</g>'
-		// Head with stepped "pixel" corners and a darker rim.
-		. $r( 24, 22, 72, 68, 'px-rim' ) . $r( 16, 30, 88, 52, 'px-rim' )
-		. $r( 24, 26, 72, 60, 'px-body' ) . $r( 20, 34, 80, 44, 'px-body' )
-		. $r( 28, 30, 16, 4, 'px-light' ) . $r( 24, 34, 4, 12, 'px-light' )
-		// Face screen.
-		. $r( 32, 40, 56, 36, 'px-screen' ) . $r( 28, 44, 64, 28, 'px-screen' )
-		. $eyes . $mouths[ $mood ]
-		. $r( 34, 62, 6, 4, 'px-cheek' ) . $r( 80, 62, 6, 4, 'px-cheek' )
-		// Body with a </> badge, and legs.
-		. $r( 28, 90, 64, 26, 'px-rim' ) . $r( 32, 90, 56, 22, 'px-torso' )
-		. $r( 46, 96, 4, 4, 'px-code' ) . $r( 42, 100, 4, 4, 'px-code' ) . $r( 46, 104, 4, 4, 'px-code' )
-		. $r( 58, 96, 4, 4, 'px-code' ) . $r( 56, 100, 4, 4, 'px-code' ) . $r( 54, 104, 4, 4, 'px-code' )
-		. $r( 70, 96, 4, 4, 'px-code' ) . $r( 74, 100, 4, 4, 'px-code' ) . $r( 70, 104, 4, 4, 'px-code' )
-		. $r( 36, 116, 14, 10, 'px-leg' ) . $r( 70, 116, 14, 10, 'px-leg' )
-		. $arms[ $mood ] . $extra
-		. '</g></svg>';
+	$out = '<path class="px-shadow" d="M8 33h14v1h-14z"/><g class="m-body-wrap">'
+		. '<g class="m-antenna">' . str_replace( 'class="px-y"', 'class="px-y m-bulb"', $ant->svg() ) . '</g>'
+		. $body->svg()
+		. '<g class="m-eyes">' . $face->svg() . '</g>';
+	foreach ( $sets[ $mood ] as $set ) {
+		$svg  = $arm( $set[1] )->svg();
+		$out .= $set[0] ? '<g class="' . $set[0] . '">' . $svg . '</g>' : $svg;
+	}
+	return $out . $extra . '</g>';
 }
