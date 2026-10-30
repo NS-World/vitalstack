@@ -351,13 +351,16 @@ function vitalstack_home_premium() {
 				<?php foreach ( vitalstack_premium_tracks() as $slug => $t ) : ?>
 					<a class="premium-card" href="<?php echo esc_url( vitalstack_premium_url( $slug ) ); ?>">
 						<span class="premium-card-icon" aria-hidden="true"><?php echo esc_html( $t['icon'] ); ?></span>
-						<span class="premium-badge"><?php esc_html_e( 'Premium · Coming soon', 'vitalstack' ); ?></span>
+						<span class="premium-badge"><?php echo function_exists( 'vitalstack_pay_ready' ) && vitalstack_pay_ready() ? esc_html__( 'Premium', 'vitalstack' ) : esc_html__( 'Premium · Coming soon', 'vitalstack' ); ?></span>
 						<b><?php echo esc_html( $t['title'] ); ?></b>
 						<span class="premium-card-text"><?php echo esc_html( $t['tagline'] ); ?></span>
 						<span class="premium-card-meta"><?php echo esc_html( sprintf( /* translators: %d: modules */ __( '%d modules · free modules open now', 'vitalstack' ), count( $t['modules'] ) ) ); ?> ❯</span>
 					</a>
 				<?php endforeach; ?>
 			</div>
+			<?php if ( function_exists( 'vitalstack_pricing_url' ) ) : ?>
+				<p class="home-premium-more"><a class="btn btn-ghost" href="<?php echo esc_url( vitalstack_pricing_url() ); ?>"><?php esc_html_e( 'See plans & prices (₹ / $)', 'vitalstack' ); ?> ❯</a></p>
+			<?php endif; ?>
 		</div>
 	</section>
 	<?php

@@ -82,7 +82,7 @@ function vitalstack_security_headers() {
 	header( 'X-Content-Type-Options: nosniff' );
 	header( 'X-Frame-Options: SAMEORIGIN' );
 	header( 'Referrer-Policy: strict-origin-when-cross-origin' );
-	header( 'Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()' );
+	header( 'Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(self "https://checkout.razorpay.com" "https://api.razorpay.com"), usb=()' );
 	header( 'Cross-Origin-Opener-Policy: same-origin-allow-popups' );
 	if ( is_ssl() ) {
 		header( 'Strict-Transport-Security: max-age=31536000' );

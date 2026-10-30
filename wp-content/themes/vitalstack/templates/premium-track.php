@@ -24,7 +24,7 @@ foreach ( $t['modules'] as $vs_m ) {
 <section class="premium-hero">
 	<div class="wrap premium-hero-inner">
 		<div class="premium-hero-text">
-			<p class="premium-badge"><?php esc_html_e( 'Premium career track · Coming soon', 'vitalstack' ); ?></p>
+			<p class="premium-badge"><?php echo function_exists( 'vitalstack_pay_ready' ) && vitalstack_pay_ready() ? esc_html__( 'Premium career track', 'vitalstack' ) : esc_html__( 'Premium career track · Coming soon', 'vitalstack' ); ?></p>
 			<h1><span aria-hidden="true"><?php echo esc_html( $t['icon'] ); ?></span> <?php echo esc_html( sprintf( /* translators: %s: track */ __( '%s Career Track', 'vitalstack' ), $t['title'] ) ); ?></h1>
 			<p class="premium-lead"><?php echo esc_html( $t['tagline'] ); ?></p>
 			<ul class="premium-facts">
@@ -37,6 +37,9 @@ foreach ( $t['modules'] as $vs_m ) {
 			<div class="premium-cta">
 				<?php if ( $vs_has ) : ?>
 					<p class="premium-has">✅ <?php esc_html_e( 'You have access to this track.', 'vitalstack' ); ?></p>
+				<?php elseif ( function_exists( 'vitalstack_pay_ready' ) && vitalstack_pay_ready() ) : ?>
+					<a class="btn btn-primary btn-lg" href="<?php echo esc_url( vitalstack_pricing_url() . '#plan-' . $slug ); ?>"><?php esc_html_e( 'Unlock this track', 'vitalstack' ); ?></a>
+					<p class="premium-small"><?php esc_html_e( 'Pay in ₹ with UPI or cards, or in $ worldwide. One-time payment.', 'vitalstack' ); ?></p>
 				<?php elseif ( $vs_waiting ) : ?>
 					<p class="premium-has">✅ <?php esc_html_e( 'You’re on the waitlist. We’ll email you when it opens.', 'vitalstack' ); ?></p>
 				<?php else : ?>
@@ -49,6 +52,9 @@ foreach ( $t['modules'] as $vs_m ) {
 						<button type="submit" class="btn btn-primary btn-lg"><?php esc_html_e( 'Join the waitlist (free)', 'vitalstack' ); ?></button>
 					</form>
 					<p class="premium-small"><?php esc_html_e( 'Get the early-bird price when it opens. Start the free modules today.', 'vitalstack' ); ?></p>
+					<?php if ( function_exists( 'vitalstack_pricing_url' ) ) : ?>
+						<p class="premium-small"><a href="<?php echo esc_url( vitalstack_pricing_url() ); ?>"><?php esc_html_e( 'See launch prices', 'vitalstack' ); ?> ❯</a></p>
+					<?php endif; ?>
 				<?php endif; ?>
 			</div>
 		</div>

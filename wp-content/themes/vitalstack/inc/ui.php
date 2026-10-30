@@ -247,6 +247,9 @@ function vitalstack_courses_panel() {
 							<?php foreach ( vitalstack_premium_tracks() as $slug => $t ) : ?>
 								<li><a href="<?php echo esc_url( vitalstack_premium_url( $slug ) ); ?>"><span><?php echo esc_html( $t['icon'] . ' ' . $t['title'] ); ?></span> <small><?php echo esc_html( sprintf( /* translators: %d: modules */ __( '%d modules', 'vitalstack' ), count( $t['modules'] ) ) ); ?></small></a></li>
 							<?php endforeach; ?>
+							<?php if ( function_exists( 'vitalstack_pricing_url' ) ) : ?>
+								<li><a href="<?php echo esc_url( vitalstack_pricing_url() ); ?>"><span>💎 <?php esc_html_e( 'Plans & pricing', 'vitalstack' ); ?></span> <small>₹ / $</small></a></li>
+							<?php endif; ?>
 						</ul>
 					</section>
 				<?php endif; ?>
