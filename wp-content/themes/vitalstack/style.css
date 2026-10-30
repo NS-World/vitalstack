@@ -4,7 +4,7 @@ Theme URI: https://vitalstack.co.in/
 Author: VitalStack
 Author URI: https://vitalstack.co.in/
 Description: Tutorial-site theme for VitalStack: 17 learning paths (web, Python, Java, Spring Boot, React, Angular, DSA), live animated visualizers, quizzes, certificates, daily challenge and leaderboard, brain games, cheat sheets, free coding tools, reader accounts with XP and progress sync, PWA, and AdSense-ready ad slots.
-Version: 4.4.1
+Version: 4.5.0
 Requires at least: 6.3
 Tested up to: 6.8
 Requires PHP: 8.0
@@ -1081,6 +1081,8 @@ kbd { font-family: var(--font-mono); font-size: 12px; padding: 1px 7px; border-r
 .vz-bar-track { height: 16px; border-radius: 999px; background: var(--bg-soft); overflow: hidden; }
 .vz-bar-fill { display: block; height: 100%; border-radius: inherit; transition: width .5s cubic-bezier(.3, 1.2, .5, 1); }
 .vz-bar-fill.is-good { background: var(--vz-found); } .vz-bar-fill.is-ok { background: var(--vz-active); } .vz-bar-fill.is-bad { background: var(--vz-swap); }
+.vz-grids { display: flex; flex-wrap: wrap; gap: 14px 22px; align-items: flex-start; }
+.vz-grids .vz-scroll { min-width: 0; max-width: 100%; }
 .vz-bar-value { text-align: right; font-variant-numeric: tabular-nums; }
 .vz-intervals { position: relative; display: flex; flex-direction: column; gap: 6px; padding-bottom: 22px; min-width: 360px; }
 .vz-iv-row { position: relative; height: 26px; }
@@ -1659,6 +1661,100 @@ p.tool-err { color: #c62828; font-weight: 600; margin: 8px 0; }
 .install-app { position: fixed; left: 16px; bottom: 16px; z-index: 250; display: flex; align-items: center; gap: 4px; padding: 6px 6px 6px 8px; border-radius: 999px; background: var(--dark); box-shadow: var(--shadow-lg); animation: pop .2s ease; }
 .install-app button { border: 0; background: transparent; color: #fff; font: inherit; font-weight: 700; cursor: pointer; padding: 6px 8px; }
 .install-app-x { font-size: 20px; line-height: 1; opacity: .7; }
+
+/* Charts inside lessons ([vs_figure]) */
+.lesson-figure { margin: 18px 0 24px; }
+.lesson-figure img { display: block; width: 100%; max-width: 720px; height: auto; padding: 10px; box-sizing: border-box; background: #fff; border: 1px solid var(--border); border-radius: var(--radius); }
+
+/* Premium career tracks */
+.premium-badge { display: inline-block; padding: 4px 12px; border-radius: 999px; background: linear-gradient(90deg, #f5b301, #ff8f3d); color: #2a1a00; font-size: 12px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
+.home-premium { padding: 56px 0; }
+.premium-cards { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); }
+.premium-card { position: relative; display: flex; flex-direction: column; gap: 8px; padding: 24px; border-radius: var(--radius-lg); border: 1px solid var(--border); background: linear-gradient(160deg, var(--surface), var(--bg-soft)); color: var(--text); text-decoration: none; box-shadow: var(--shadow-md); transition: transform .15s ease, border-color .15s ease; }
+.premium-card:hover { transform: translateY(-3px); border-color: #f5b301; }
+.premium-card .premium-badge { align-self: flex-start; }
+.premium-card-icon { font-size: 40px; line-height: 1; }
+.premium-card b { font-size: 24px; letter-spacing: -.01em; }
+.premium-card-text { color: var(--text-2); }
+.premium-card-meta { margin-top: auto; font-weight: 700; color: var(--brand-ink); font-size: 14px; }
+.premium-hero { padding: 48px 0 36px; background: radial-gradient(800px 360px at 85% 0%, rgba(245, 179, 1, .16), transparent 70%), var(--bg-soft); border-bottom: 1px solid var(--border); }
+.premium-hero-inner { display: grid; gap: 24px; grid-template-columns: minmax(0, 1fr) auto; align-items: center; }
+.premium-hero h1 { font-size: clamp(30px, 5vw, 48px); line-height: 1.1; margin: 12px 0; letter-spacing: -.02em; text-wrap: balance; }
+.premium-lead { font-size: 18px; color: var(--text-2); max-width: 62ch; }
+.premium-facts { list-style: none; padding: 0; margin: 18px 0; display: flex; flex-wrap: wrap; gap: 10px; }
+.premium-facts li { padding: 8px 14px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); font-size: 14px; }
+.premium-cta form { margin: 0; }
+.premium-small { font-size: 14px; color: var(--muted); margin: 8px 0 0; }
+.premium-has { font-weight: 700; color: var(--brand-ink); }
+.premium-hero-bot .mascot { width: 150px; height: auto; }
+.premium-body { display: grid; gap: 28px; grid-template-columns: minmax(0, 1fr) 320px; align-items: start; }
+.premium-main h2 { font-size: 24px; margin: 0 0 14px; }
+.premium-outcomes { margin: 0 0 32px; padding: 0; list-style: none; display: grid; gap: 8px; }
+.premium-outcomes li { padding-left: 30px; position: relative; }
+.premium-outcomes li::before { content: "✓"; position: absolute; left: 0; top: 0; width: 22px; height: 22px; border-radius: 50%; background: var(--brand-soft); color: var(--brand-ink); display: grid; place-items: center; font-weight: 800; font-size: 13px; }
+.premium-modules { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.premium-module details { border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+.premium-module.is-free details { border-left: 4px solid var(--brand); }
+.premium-module.is-locked details { border-left: 4px solid #f5b301; }
+.premium-module summary { display: flex; align-items: center; gap: 12px; padding: 14px 16px; cursor: pointer; list-style: none; }
+.premium-module summary::-webkit-details-marker { display: none; }
+.premium-module-num { flex: 0 0 auto; width: 30px; height: 30px; border-radius: 50%; background: var(--bg-soft); display: grid; place-items: center; font-weight: 800; font-size: 14px; }
+.premium-module-title { flex: 1; min-width: 0; font-weight: 700; }
+.premium-module-tag { flex: 0 0 auto; font-size: 12.5px; font-weight: 800; white-space: nowrap; }
+.premium-module-body { padding: 0 16px 16px 58px; color: var(--text-2); }
+.premium-module-body p { margin: 0 0 10px; }
+.premium-lessons { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; font-size: 15px; }
+.premium-steps { padding-left: 20px; margin: 0 0 12px; display: grid; gap: 6px; }
+.premium-side .panel h2 { font-size: 17px; }
+.premium-lock { margin: 24px 0; padding: 24px; border-radius: var(--radius-lg); border: 1px dashed #f5b301; background: rgba(245, 179, 1, .08); text-align: center; }
+.premium-lock-title { font-size: 20px; font-weight: 800; margin: 0 0 6px; }
+@media (max-width: 860px) {
+	.premium-body { grid-template-columns: minmax(0, 1fr); }
+	.premium-hero-inner { grid-template-columns: minmax(0, 1fr); }
+	.premium-hero-bot { display: none; }
+}
+@media (max-width: 520px) {
+	.premium-module summary { flex-wrap: wrap; }
+	.premium-module-tag { margin-left: 42px; }
+	.premium-module-body { padding-left: 16px; }
+}
+
+/* Focus sounds (lessons) */
+.focus-btn { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 999px; border: 1px solid var(--border-strong); background: var(--surface); color: var(--text); font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
+.focus-btn:hover, .focus-btn.is-on { border-color: var(--brand); color: var(--brand-ink); background: var(--brand-soft); }
+.focus-btn[hidden] { display: none; }
+.focus-panel { margin: 14px 0 6px; padding: 18px; border-radius: var(--radius-lg); border: 1px solid var(--border); background: var(--surface); box-shadow: var(--shadow-md); }
+.focus-head { display: flex; align-items: center; justify-content: space-between; }
+.focus-title { margin: 0; font-weight: 800; font-size: 17px; }
+.focus-close { border: 0; background: none; font-size: 24px; line-height: 1; color: var(--muted); cursor: pointer; padding: 2px 6px; }
+.focus-intro, .focus-note { margin: 6px 0 12px; font-size: 14px; color: var(--text-2); }
+.focus-note { margin: 12px 0 0; font-size: 12.5px; color: var(--muted); }
+.focus-modes { border: 0; padding: 0; margin: 0 0 12px; display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.focus-mode { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius); cursor: pointer; }
+.focus-mode:has(input:checked) { border-color: var(--brand); background: var(--brand-soft); }
+.focus-mode input { margin-top: 4px; accent-color: var(--brand); }
+.focus-mode b { display: block; font-size: 15px; }
+.focus-mode small { color: var(--muted); font-size: 13px; }
+.focus-grid { display: grid; gap: 10px 14px; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); margin-bottom: 14px; }
+.focus-row { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(--text-2); }
+.focus-row[hidden] { display: none; }
+.focus-row select, .focus-row input[type=range] { width: 100%; min-width: 0; accent-color: var(--brand); }
+.focus-row select { padding: 7px 8px; border-radius: 8px; border: 1px solid var(--border-strong); background: var(--bg); color: var(--text); font: inherit; font-size: 14px; }
+.focus-pill { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 280; display: flex; align-items: center; gap: 10px; max-width: calc(100vw - 32px); padding: 8px 8px 8px 14px; border-radius: 999px; background: var(--dark, #1b2230); color: #fff; box-shadow: var(--shadow-lg); font-size: 14px; font-weight: 700; }
+.focus-pill[hidden] { display: none; }
+.focus-pill-text { cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums; }
+.focus-pill-dot { width: 9px; height: 9px; border-radius: 50%; background: #34c987; animation: vs-glow 1.2s ease-in-out infinite; flex: 0 0 auto; }
+.focus-pill-stop { border: 0; border-radius: 999px; background: rgba(255, 255, 255, .14); color: #fff; width: 30px; height: 30px; cursor: pointer; font-size: 12px; flex: 0 0 auto; }
+@media print { .focus-btn, .focus-panel, .focus-pill { display: none !important; } }
+
+/* Sign in with an email code */
+.otp-panel form { display: grid; gap: 16px; margin: 0; }
+.otp-panel .otp-restart { display: block; }
+.otp-intro, .otp-sent-to { margin: 0 0 4px; color: var(--text-2); font-size: 15px; }
+.otp-input { font-size: 28px !important; font-weight: 800; letter-spacing: .5em; text-align: center; font-variant-numeric: tabular-nums; }
+.otp-restart { margin-top: 10px; text-align: center; }
+.btn-link { border: 0; background: none; padding: 4px; color: var(--link, var(--brand)); font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: underline; }
+.auth-card .tabs { grid-template-columns: repeat(auto-fit, minmax(88px, 1fr)); }
 
 /* Popups and notifications: keep a 12–16px gap from every screen edge and
    clear the phone's home bar, from small phones to large monitors. */

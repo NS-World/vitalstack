@@ -6,7 +6,10 @@
  */
 
 // phpcs:disable WordPress.Security.NonceVerification -- display-only query args
-$vs_tab       = isset( $_GET['tab'] ) && 'register' === $_GET['tab'] ? 'register' : 'login';
+$vs_tab       = isset( $_GET['tab'] ) && in_array( $_GET['tab'], array( 'register', 'code' ), true ) ? sanitize_key( $_GET['tab'] ) : 'login';
+if ( 'code' === $vs_tab && ! ( function_exists( 'vitalstack_otp_enabled' ) && vitalstack_otp_enabled() ) ) {
+	$vs_tab = 'login';
+}
 $vs_subscribe = ! empty( $_GET['subscribe'] );
 $vs_redirect  = vitalstack_requested_redirect();
 // phpcs:enable
@@ -37,6 +40,9 @@ get_header();
 						<button type="button" role="tab" class="tab" id="tab-login" aria-controls="panel-login" aria-selected="<?php echo 'login' === $vs_tab ? 'true' : 'false'; ?>" data-tab="login"><?php esc_html_e( 'Sign in', 'vitalstack' ); ?></button>
 						<?php if ( vitalstack_accounts_enabled() ) : ?>
 							<button type="button" role="tab" class="tab" id="tab-register" aria-controls="panel-register" aria-selected="<?php echo 'register' === $vs_tab ? 'true' : 'false'; ?>" data-tab="register"><?php esc_html_e( 'Create account', 'vitalstack' ); ?></button>
+						<?php endif; ?>
+						<?php if ( function_exists( 'vitalstack_otp_enabled' ) && vitalstack_otp_enabled() ) : ?>
+							<button type="button" role="tab" class="tab" id="tab-code" aria-controls="panel-code" aria-selected="<?php echo 'code' === $vs_tab ? 'true' : 'false'; ?>" data-tab="code"><?php esc_html_e( 'Email code', 'vitalstack' ); ?></button>
 						<?php endif; ?>
 					</div>
 
@@ -91,6 +97,11 @@ get_header();
 							</p>
 						</form>
 					<?php endif; ?>
+					<?php
+					if ( function_exists( 'vitalstack_otp_enabled' ) && vitalstack_otp_enabled() ) {
+						vitalstack_otp_panel( $vs_redirect, $vs_subscribe, 'code' === $vs_tab );
+					}
+					?>
 				</div>
 			</div>
 

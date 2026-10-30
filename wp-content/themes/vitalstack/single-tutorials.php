@@ -42,7 +42,9 @@ while ( have_posts() ) :
 				<?php else : ?>
 					<span class="muted"><?php esc_html_e( 'Published', 'vitalstack' ); ?> <time datetime="<?php echo esc_attr( get_the_date( 'c' ) ); ?>"><?php echo esc_html( get_the_date() ); ?></time></span>
 				<?php endif; ?>
+				<?php vitalstack_focus_button(); ?>
 			</div>
+			<?php vitalstack_focus_panel(); ?>
 
 			<?php
 			$vs_pmeta = array(

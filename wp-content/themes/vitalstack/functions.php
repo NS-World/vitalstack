@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'VITALSTACK_VERSION', '4.4.1' );
+define( 'VITALSTACK_VERSION', '4.5.0' );
 define( 'VITALSTACK_DIR', get_template_directory() );
 define( 'VITALSTACK_URI', get_template_directory_uri() );
 
@@ -29,12 +29,14 @@ require VITALSTACK_DIR . '/inc/learning-paths.php';
 require VITALSTACK_DIR . '/inc/seo.php';
 require VITALSTACK_DIR . '/inc/notifications.php';
 require VITALSTACK_DIR . '/inc/accounts.php';
+require VITALSTACK_DIR . '/inc/otp.php';
 require VITALSTACK_DIR . '/inc/gift.php';
 require VITALSTACK_DIR . '/inc/progress-api.php';
 require VITALSTACK_DIR . '/inc/xp.php';
 require VITALSTACK_DIR . '/inc/quiz.php';
 require VITALSTACK_DIR . '/inc/schema.php';
 require VITALSTACK_DIR . '/inc/certificates.php';
+require VITALSTACK_DIR . '/inc/premium.php';
 require VITALSTACK_DIR . '/inc/challenge.php';
 require VITALSTACK_DIR . '/inc/site-pages.php';
 require VITALSTACK_DIR . '/inc/mock-tests.php';
@@ -43,6 +45,7 @@ require VITALSTACK_DIR . '/inc/digest.php';
 require VITALSTACK_DIR . '/inc/crew.php';
 require VITALSTACK_DIR . '/inc/mascot.php';
 require VITALSTACK_DIR . '/inc/fun.php';
+require VITALSTACK_DIR . '/inc/focus.php';
 require VITALSTACK_DIR . '/inc/ui.php';
 require VITALSTACK_DIR . '/inc/contact.php';
 require VITALSTACK_DIR . '/inc/ads.php';

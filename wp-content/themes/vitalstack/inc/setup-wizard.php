@@ -505,6 +505,32 @@ function vitalstack_setup_paths() {
 			'name'        => 'Interview Problems',
 			'description' => 'Classic coding interview problems solved step by step: brute force first, then the optimal pattern, in Python.',
 		),
+		// Data and AI paths (added in 4.5; at the end so existing paths keep their order).
+		array(
+			'slug'        => 'numpy',
+			'name'        => 'NumPy',
+			'description' => 'Fast maths on whole arrays of numbers: the foundation of data science and AI in Python, with animated arrays.',
+		),
+		array(
+			'slug'        => 'pandas',
+			'name'        => 'Pandas',
+			'description' => 'Load, clean, filter, group and join tables of data in Python, explained step by step with animated tables.',
+		),
+		array(
+			'slug'        => 'data-visualization',
+			'name'        => 'Data Visualization',
+			'description' => 'Turn numbers into clear charts with Matplotlib and Seaborn, and learn which chart answers which question.',
+		),
+		array(
+			'slug'        => 'machine-learning',
+			'name'        => 'Machine Learning',
+			'description' => 'How machines learn from data: your first models with scikit-learn, from train/test split to accuracy.',
+		),
+		array(
+			'slug'        => 'prompt-engineering',
+			'name'        => 'Prompt Engineering',
+			'description' => 'Get great answers from ChatGPT, Claude and Gemini: clear prompts, examples, roles, step-by-step thinking and safe use of AI tools.',
+		),
 	);
 }
 

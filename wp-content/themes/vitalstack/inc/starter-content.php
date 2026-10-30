@@ -72,8 +72,25 @@ function vitalstack_starter_term( $taxonomy, $slug, $name ) {
 	if ( $term ) {
 		return (int) $term->term_id;
 	}
-	$made = wp_insert_term( $name, $taxonomy, array( 'slug' => $slug ) );
-	return is_wp_error( $made ) ? 0 : (int) $made['term_id'];
+	$args = array( 'slug' => $slug );
+	$pos  = 0;
+	// A new learning path gets its description and place in the topic bar.
+	if ( 'tutorial_category' === $taxonomy ) {
+		foreach ( vitalstack_setup_paths() as $i => $def ) {
+			if ( $def['slug'] === $slug ) {
+				$args['description'] = $def['description'];
+				$pos                 = $i + 1;
+			}
+		}
+	}
+	$made = wp_insert_term( $name, $taxonomy, $args );
+	if ( is_wp_error( $made ) ) {
+		return 0;
+	}
+	if ( $pos ) {
+		update_term_meta( $made['term_id'], 'vs_order', $pos );
+	}
+	return (int) $made['term_id'];
 }
 
 /**

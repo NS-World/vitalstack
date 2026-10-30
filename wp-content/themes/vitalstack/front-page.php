@@ -174,6 +174,8 @@ if ( $vs_ai ) :
 
 <?php vitalstack_home_certs(); ?>
 
+<?php vitalstack_home_premium(); ?>
+
 <section class="home-editor">
 	<div class="wrap home-editor-inner">
 		<div>

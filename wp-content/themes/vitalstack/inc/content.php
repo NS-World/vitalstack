@@ -125,3 +125,24 @@ function vitalstack_fix_lesson_wording() {
 	}
 }
 add_action( 'admin_init', 'vitalstack_fix_lesson_wording' );
+
+/**
+ * [vs_figure file="name.svg" alt="…"]: a chart image shipped with the theme
+ * (assets/lessons/), used by lessons. Only files that exist there can be shown.
+ */
+function vitalstack_figure_shortcode( $atts ) {
+	$atts = shortcode_atts(
+		array(
+			'file' => '',
+			'alt'  => '',
+		),
+		$atts,
+		'vs_figure'
+	);
+	$file = (string) $atts['file'];
+	if ( ! preg_match( '/^[a-z0-9-]+\.(svg|png)$/', $file ) || ! file_exists( VITALSTACK_DIR . '/assets/lessons/' . $file ) ) {
+		return '';
+	}
+	return '<figure class="lesson-figure"><img src="' . esc_url( VITALSTACK_URI . '/assets/lessons/' . $file ) . '" alt="' . esc_attr( $atts['alt'] ) . '" loading="lazy" decoding="async"></figure>';
+}
+add_shortcode( 'vs_figure', 'vitalstack_figure_shortcode' );

@@ -24,7 +24,8 @@ Guides (blog posts) use `category:` instead of `subject:` and `lesson:`:
 The body supports the Markdown that lessons need: ## and ### headings,
 paragraphs, - and 1. lists, | tables |, fenced ``` code blocks, `inline code`,
 **bold** and [links](/path/), plus `::viz name {json}` (live visualizer),
-`::tip text` and `::hint Label | text`. It is converted to block-editor markup, so imported lessons open
+`::tip text`, `::hint Label | text` and `::figure file.svg | alt text` (a chart from
+wp-content/themes/vitalstack/assets/lessons/). It is converted to block-editor markup, so imported lessons open
 cleanly in the WordPress editor.
 
 Import the result in WordPress: Tools -> Import -> WordPress. Lessons are
@@ -65,7 +66,7 @@ SUBJECT_NAMES = {
 
 # Code fence language → highlight.js language (the class on <code> skips auto-detection).
 FENCE_LANGS = {"js": "javascript", "jsx": "javascript", "tsx": "typescript", "ts": "typescript", "text": "plaintext",
-               "txt": "plaintext", "properties": "ini", "sh": "bash", "shell": "bash", "yml": "yaml"}
+               "txt": "plaintext", "py": "python", "properties": "ini", "sh": "bash", "shell": "bash", "yml": "yaml"}
 
 CATEGORY_NAMES = {
     "artificial-intelligence": "Artificial Intelligence",
@@ -160,6 +161,16 @@ def markdown_to_blocks(body):
         if line.startswith("::hint "):
             label, _, text = line[7:].partition("|")
             out.append(block("html", f'<details class="vs-hint"><summary>{inline(label.strip())}</summary><p>{inline(text.strip())}</p></details>'))
+            i += 1
+            continue
+        if line.startswith("::figure "):
+            # ::figure dataviz-line-chart.svg | Monthly sales as a line chart
+            name, _, alt = line[9:].partition("|")
+            name = name.strip()
+            if not re.fullmatch(r"[a-z0-9-]+\.(svg|png)", name):
+                sys.exit(f"Bad ::figure line: {line}")
+            alt = alt.strip().replace('"', "'")
+            out.append(block("shortcode", f'[vs_figure file="{name}" alt="{html.escape(alt, quote=False)}"]'))
             i += 1
             continue
         if line.startswith("### "):

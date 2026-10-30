@@ -12,6 +12,8 @@
 | Security headers | `X-Content-Type-Options`, `X-Frame-Options` (no clickjacking), `Referrer-Policy`, `Permissions-Policy`, `Cross-Origin-Opener-Policy`, and HSTS on HTTPS. |
 | Spoof-proof rate limits | Sign-up and contact-form limits also count the real connecting IP, so a faked `X-Forwarded-For` header can't bypass them. Cloudflare is detected properly. |
 | Forms | Every form has a nonce, every database query is prepared, unsubscribe links are signed. |
+| Sign in with an email code (OTP) | 6-digit code, valid 10 minutes, used once, 5 tries max; only a keyed hash is stored; 5 codes per email per hour, 60 s apart; the reply never reveals whether an email has an account; administrators must use their password. |
+| Premium lessons | Readers without access get a short preview only, on the page, in feeds and in the REST API; locked lessons are kept out of search. |
 | Strong sign-up passwords | At least 8 characters; common passwords (12345678, password123…) and the email name are refused. |
 | Password-reset flood limit | At most 3 reset emails per account per hour. |
 | No application passwords | Scripts can't sign in with long-lived keys that skip the login form. |

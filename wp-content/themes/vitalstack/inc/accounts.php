@@ -293,27 +293,30 @@ function vitalstack_requested_redirect() {
 }
 
 function vitalstack_account_messages() {
-	return array(
-		'login_failed'   => array( 'error', __( 'That email/username and password don’t match. Try again, or reset your password.', 'vitalstack' ) ),
-		'rate'           => array( 'error', __( 'Too many attempts. Please wait a few minutes and try again.', 'vitalstack' ) ),
-		'bad_nonce'      => array( 'error', __( 'Your session expired. Please try again.', 'vitalstack' ) ),
-		'missing'        => array( 'error', __( 'Please fill in all fields.', 'vitalstack' ) ),
-		'bad_email'      => array( 'error', __( 'Please enter a valid email address.', 'vitalstack' ) ),
-		'email_exists'   => array( 'error', __( 'An account with this email already exists. Sign in instead.', 'vitalstack' ) ),
-		'weak_password'  => array( 'error', __( 'Use a password with at least 8 characters that is not a common one like 12345678 or password123.', 'vitalstack' ) ),
-		'closed'         => array( 'error', __( 'New sign-ups are closed right now.', 'vitalstack' ) ),
-		'failed'         => array( 'error', __( 'Something went wrong. Please try again.', 'vitalstack' ) ),
-		'registered'     => array( 'success', __( 'Welcome to VitalStack! We sent you an email: click the link in it to confirm your address.', 'vitalstack' ) ),
-		'welcome_back'   => array( 'success', __( 'You are signed in.', 'vitalstack' ) ),
-		'verified'       => array( 'success', __( 'Email confirmed. You will now get new lessons by email.', 'vitalstack' ) ),
-		'verify_invalid' => array( 'error', __( 'That confirmation link is invalid or has expired. Send a new one below.', 'vitalstack' ) ),
-		'verify_sent'    => array( 'success', __( 'Confirmation email sent. Check your inbox (and the spam folder).', 'vitalstack' ) ),
-		'subscribed'     => array( 'success', __( 'Subscribed! We’ll email you when new lessons and guides are published.', 'vitalstack' ) ),
-		'subscribed_unv' => array( 'info', __( 'Subscribed! Confirm your email address first: we only send to confirmed addresses.', 'vitalstack' ) ),
-		'unsubscribed'   => array( 'success', __( 'You are unsubscribed and won’t get any more emails from us.', 'vitalstack' ) ),
-		'saved'          => array( 'success', __( 'Saved.', 'vitalstack' ) ),
-		'contact_sent'   => array( 'success', __( 'Thanks! Your message has been sent. We usually reply within 2 working days.', 'vitalstack' ) ),
-		'contact_failed' => array( 'error', __( 'Sorry, your message could not be sent. Please email us directly instead.', 'vitalstack' ) ),
+	return apply_filters(
+		'vitalstack_account_messages',
+		array(
+			'login_failed'   => array( 'error', __( 'That email/username and password don’t match. Try again, or reset your password.', 'vitalstack' ) ),
+			'rate'           => array( 'error', __( 'Too many attempts. Please wait a few minutes and try again.', 'vitalstack' ) ),
+			'bad_nonce'      => array( 'error', __( 'Your session expired. Please try again.', 'vitalstack' ) ),
+			'missing'        => array( 'error', __( 'Please fill in all fields.', 'vitalstack' ) ),
+			'bad_email'      => array( 'error', __( 'Please enter a valid email address.', 'vitalstack' ) ),
+			'email_exists'   => array( 'error', __( 'An account with this email already exists. Sign in instead.', 'vitalstack' ) ),
+			'weak_password'  => array( 'error', __( 'Use a password with at least 8 characters that is not a common one like 12345678 or password123.', 'vitalstack' ) ),
+			'closed'         => array( 'error', __( 'New sign-ups are closed right now.', 'vitalstack' ) ),
+			'failed'         => array( 'error', __( 'Something went wrong. Please try again.', 'vitalstack' ) ),
+			'registered'     => array( 'success', __( 'Welcome to VitalStack! We sent you an email: click the link in it to confirm your address.', 'vitalstack' ) ),
+			'welcome_back'   => array( 'success', __( 'You are signed in.', 'vitalstack' ) ),
+			'verified'       => array( 'success', __( 'Email confirmed. You will now get new lessons by email.', 'vitalstack' ) ),
+			'verify_invalid' => array( 'error', __( 'That confirmation link is invalid or has expired. Send a new one below.', 'vitalstack' ) ),
+			'verify_sent'    => array( 'success', __( 'Confirmation email sent. Check your inbox (and the spam folder).', 'vitalstack' ) ),
+			'subscribed'     => array( 'success', __( 'Subscribed! We’ll email you when new lessons and guides are published.', 'vitalstack' ) ),
+			'subscribed_unv' => array( 'info', __( 'Subscribed! Confirm your email address first: we only send to confirmed addresses.', 'vitalstack' ) ),
+			'unsubscribed'   => array( 'success', __( 'You are unsubscribed and won’t get any more emails from us.', 'vitalstack' ) ),
+			'saved'          => array( 'success', __( 'Saved.', 'vitalstack' ) ),
+			'contact_sent'   => array( 'success', __( 'Thanks! Your message has been sent. We usually reply within 2 working days.', 'vitalstack' ) ),
+			'contact_failed' => array( 'error', __( 'Sorry, your message could not be sent. Please email us directly instead.', 'vitalstack' ) ),
+		)
 	);
 }
 
