@@ -99,6 +99,8 @@ function vitalstack_pay_settings() {
 			'webhook'     => '',
 			'prices'      => array(),
 			'refund_days' => 7,
+			'demo'        => false,
+			'testers'     => '',
 		),
 		is_array( $s ) ? $s : array()
 	);
@@ -164,6 +166,25 @@ function vitalstack_pay_ready() {
 	return vitalstack_pay_settings()['open'] && '' !== $id && '' !== $sec;
 }
 
+/**
+ * Practice checkout: lets the site owner (and test emails they list) try the
+ * whole purchase without Razorpay or real money. Everyone else sees the site
+ * exactly as before.
+ */
+function vitalstack_pay_demo_for( $user_id = null ) {
+	$user_id = null === $user_id ? get_current_user_id() : (int) $user_id;
+	$s       = vitalstack_pay_settings();
+	if ( ! $user_id || empty( $s['demo'] ) ) {
+		return false;
+	}
+	if ( user_can( $user_id, 'manage_options' ) ) {
+		return true;
+	}
+	$user    = get_userdata( $user_id );
+	$testers = array_filter( array_map( 'trim', explode( "\n", strtolower( (string) $s['testers'] ) ) ) );
+	return $user && in_array( strtolower( $user->user_email ), $testers, true );
+}
+
 /* ── Order records (private; only admins see them) ───────────────────── */
 
 function vitalstack_pay_register_orders() {
@@ -225,8 +246,9 @@ add_action(
 		} elseif ( 'vs_status' === $col ) {
 			$st = get_post_meta( $id, '_vs_status', true );
 			echo esc_html( 'paid' === $st ? '✅ Paid' : ( 'failed' === $st ? '❌ Failed' : '⏳ Not paid' ) );
-			if ( 'test' === get_post_meta( $id, '_vs_mode', true ) ) {
-				echo ' <em>(test)</em>';
+			$m = get_post_meta( $id, '_vs_mode', true );
+			if ( 'test' === $m || 'demo' === $m ) {
+				echo ' <em>' . esc_html( 'demo' === $m ? __( '(practice, no money)', 'vitalstack' ) : __( '(test)', 'vitalstack' ) ) . '</em>';
 			}
 		}
 	},
@@ -360,8 +382,65 @@ function vitalstack_pay_error( $code, $message, $status = 400 ) {
 	return new WP_Error( $code, $message, array( 'status' => $status ) );
 }
 
+/**
+ * Practice order: recorded like a real one (marked "practice"), no Razorpay call.
+ */
+function vitalstack_pay_demo_order( $uid, $plan, $cur, $amount ) {
+	$plans = vitalstack_pay_plans();
+	$order = wp_insert_post(
+		array(
+			'post_type'   => 'vs_order',
+			'post_status' => 'private',
+			'post_author' => $uid,
+			'post_title'  => $plans[ $plan ]['title'] . ' (practice)',
+		),
+		true
+	);
+	if ( is_wp_error( $order ) ) {
+		return vitalstack_pay_error( 'failed', __( 'Something went wrong. Please try again.', 'vitalstack' ), 500 );
+	}
+	$oid = 'order_DEMO' . wp_generate_password( 14, false, false );
+	update_post_meta( $order, '_vs_rzp_order', $oid );
+	update_post_meta( $order, '_vs_plan', $plan );
+	update_post_meta( $order, '_vs_amount', $amount );
+	update_post_meta( $order, '_vs_currency', strtoupper( $cur ) );
+	update_post_meta( $order, '_vs_status', 'created' );
+	update_post_meta( $order, '_vs_mode', 'demo' );
+	return array(
+		'demo'        => true,
+		'order_id'    => $oid,
+		'amount'      => $amount,
+		'currency'    => strtoupper( $cur ),
+		'label'       => vitalstack_pay_price_label( $amount / 100, $cur ),
+		'description' => $plans[ $plan ]['title'] . ' · ' . $plans[ $plan ]['period'],
+	);
+}
+
+/**
+ * Practice checkout result: "success" completes the order, "failed" marks it failed.
+ */
+function vitalstack_pay_demo_verify( $oid, $result ) {
+	$order = vitalstack_pay_find_order( $oid );
+	if ( ! $order || 'demo' !== get_post_meta( $order, '_vs_mode', true ) || (int) get_post_field( 'post_author', $order ) !== get_current_user_id() || ! vitalstack_pay_demo_for() ) {
+		return vitalstack_pay_error( 'not_found', __( 'Order not found.', 'vitalstack' ), 404 );
+	}
+	if ( 'success' !== $result ) {
+		if ( 'paid' !== get_post_meta( $order, '_vs_status', true ) ) {
+			update_post_meta( $order, '_vs_status', 'failed' );
+		}
+		return vitalstack_pay_error( 'demo_failed', __( 'Practice payment failed (as you chose). In real checkout the reader sees this and can try again.', 'vitalstack' ) );
+	}
+	vitalstack_pay_complete( $order, 'pay_DEMO' . wp_generate_password( 12, false, false ) );
+	$tracks = vitalstack_pay_plans()[ get_post_meta( $order, '_vs_plan', true ) ]['tracks'] ?? array( 'data-scientist' );
+	return array(
+		'ok'       => true,
+		'redirect' => add_query_arg( 'vs_msg', 'paid', vitalstack_premium_url( $tracks[0] ) ),
+	);
+}
+
 function vitalstack_pay_rest_order( WP_REST_Request $req ) {
-	if ( ! vitalstack_pay_ready() ) {
+	$demo = vitalstack_pay_demo_for();
+	if ( ! $demo && ! vitalstack_pay_ready() ) {
 		return vitalstack_pay_error( 'closed', __( 'Premium sales open soon. Join the waitlist and we will email you.', 'vitalstack' ), 403 );
 	}
 	$uid   = get_current_user_id();
@@ -376,6 +455,9 @@ function vitalstack_pay_rest_order( WP_REST_Request $req ) {
 	}
 	list( $key_id, $secret, , $mode ) = vitalstack_pay_keys();
 	$amount = (int) $plans[ $plan ][ $cur ] * 100; // paise / cents
+	if ( $demo ) {
+		return vitalstack_pay_demo_order( $uid, $plan, $cur, $amount );
+	}
 	$order  = wp_insert_post(
 		array(
 			'post_type'   => 'vs_order',
@@ -442,6 +524,9 @@ function vitalstack_pay_rest_order( WP_REST_Request $req ) {
 
 function vitalstack_pay_rest_verify( WP_REST_Request $req ) {
 	$oid = (string) $req->get_param( 'razorpay_order_id' );
+	if ( preg_match( '/^order_DEMO[A-Za-z0-9]{8,30}$/', $oid ) ) {
+		return vitalstack_pay_demo_verify( $oid, (string) $req->get_param( 'demo_result' ) );
+	}
 	$pid = (string) $req->get_param( 'razorpay_payment_id' );
 	$sig = (string) $req->get_param( 'razorpay_signature' );
 	if ( ! preg_match( '/^order_[A-Za-z0-9]{6,40}$/', $oid ) || ! preg_match( '/^pay_[A-Za-z0-9]{6,40}$/', $pid ) || ! preg_match( '/^[a-f0-9]{64}$/', $sig ) ) {
@@ -567,6 +652,9 @@ add_action( 'template_redirect', 'vitalstack_pricing_template', 6 );
  * What a reader can do on /pricing/ for a plan: "buy", "signin", or "waitlist".
  */
 function vitalstack_pay_action() {
+	if ( vitalstack_pay_demo_for() ) {
+		return 'buy';
+	}
 	if ( ! vitalstack_pay_ready() ) {
 		return 'waitlist';
 	}
@@ -634,6 +722,9 @@ function vitalstack_pay_settings_page() {
 		<?php endif; ?>
 		<p>
 			<?php esc_html_e( 'Status:', 'vitalstack' ); ?>
+			<?php if ( ! empty( $s['demo'] ) ) : ?>
+				<strong>🧪 <?php esc_html_e( 'Practice checkout is ON (only for you and testers).', 'vitalstack' ); ?></strong><br>
+			<?php endif; ?>
 			<strong><?php echo vitalstack_pay_ready() ? esc_html( 'live' === $kmode ? __( '🟢 Taking real payments', 'vitalstack' ) : __( '🟡 Test mode (no real money)', 'vitalstack' ) ) : esc_html__( '⚪ Sales closed: readers see “Join the waitlist”', 'vitalstack' ); ?></strong>
 		</p>
 		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
@@ -641,6 +732,11 @@ function vitalstack_pay_settings_page() {
 			<?php wp_nonce_field( 'vs_pay_settings', '_vsnonce' ); ?>
 			<table class="form-table" role="presentation">
 				<tr><th><?php esc_html_e( 'Sales', 'vitalstack' ); ?></th><td><label><input type="checkbox" name="open" value="1" <?php checked( $s['open'] ); ?>> <?php esc_html_e( 'Open: readers can buy premium plans', 'vitalstack' ); ?></label></td></tr>
+				<tr><th><?php esc_html_e( 'Practice checkout', 'vitalstack' ); ?></th><td>
+					<label><input type="checkbox" name="demo" value="1" <?php checked( ! empty( $s['demo'] ) ); ?>> <?php esc_html_e( 'Let me test buying without Razorpay and without real money', 'vitalstack' ); ?></label>
+					<p class="description"><?php esc_html_e( 'Only administrators and the emails below see Buy buttons and a practice payment window. Everyone else sees the normal page. Practice orders really give access (so you can test the premium lessons) and are marked “practice” in Orders.', 'vitalstack' ); ?></p>
+					<p><label for="vs-testers"><?php esc_html_e( 'Test buyer emails (one per line, optional):', 'vitalstack' ); ?></label><br><textarea id="vs-testers" name="testers" rows="3" cols="40" placeholder="tester@gmail.com"><?php echo esc_textarea( $s['testers'] ); ?></textarea></p>
+				</td></tr>
 				<?php if ( $const ) : ?>
 					<tr><th><?php esc_html_e( 'Keys', 'vitalstack' ); ?></th><td><?php esc_html_e( 'Set in wp-config.php (VITALSTACK_RZP_KEY_ID / _KEY_SECRET / _WEBHOOK_SECRET).', 'vitalstack' ); ?> <code><?php echo esc_html( $kid ); ?></code></td></tr>
 				<?php else : ?>
@@ -683,6 +779,11 @@ function vitalstack_pay_save_settings() {
 	}
 	$s         = vitalstack_pay_settings();
 	$s['open'] = ! empty( $_POST['open'] );
+	$s['demo'] = ! empty( $_POST['demo'] );
+	if ( isset( $_POST['testers'] ) ) {
+		$emails       = preg_split( '/[\s,]+/', strtolower( sanitize_textarea_field( wp_unslash( $_POST['testers'] ) ) ) );
+		$s['testers'] = implode( "\n", array_slice( array_filter( $emails, 'is_email' ), 0, 20 ) );
+	}
 	if ( isset( $_POST['mode'] ) ) {
 		$s['mode'] = 'live' === $_POST['mode'] ? 'live' : 'test';
 	}

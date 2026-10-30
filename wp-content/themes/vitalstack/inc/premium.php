@@ -353,6 +353,9 @@ function vitalstack_home_premium() {
 				<h2><?php esc_html_e( 'Become job-ready, step by step', 'vitalstack' ); ?></h2>
 				<p><?php esc_html_e( 'Complete roadmaps that start with our free courses and go all the way to job-ready projects.', 'vitalstack' ); ?></p>
 			</div>
+			<?php if ( function_exists( 'vitalstack_premium_trailer' ) ) : ?>
+				<div class="trailer-wrap"><?php vitalstack_premium_trailer( 'home' ); ?></div>
+			<?php endif; ?>
 			<div class="premium-cards">
 				<?php foreach ( vitalstack_premium_tracks() as $slug => $t ) : ?>
 					<a class="premium-card" href="<?php echo esc_url( vitalstack_premium_url( $slug ) ); ?>">

@@ -20,6 +20,7 @@ The first run downloads Python into your browser, which takes a few seconds. Aft
 - Practise every example from the [Python tutorials](/tutorial-category/python/) and the [DSA course](/tutorial-category/dsa/).
 - Use the standard library: `math`, `random`, `datetime`, `collections`, `itertools`, `json`, `re` and more.
 - Test interview solutions before you write them on a whiteboard.
+- **Data science in the browser:** `import numpy`, `pandas`, `matplotlib`, `seaborn`, `scipy` and `scikit-learn` just work. The library downloads the first time you import it (a few seconds), and `plt.show()` draws your chart right below the output. Pick an example from the **Examples** menu to start.
 
 ## A few programs to try
 

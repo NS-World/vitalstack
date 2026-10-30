@@ -1,0 +1,76 @@
+<!-- wp:heading -->
+<h2 class="wp-block-heading">How to use the A/B test calculator</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Enter how many visitors saw each version and how many of them <strong>converted</strong> (bought, signed up, clicked). The result updates as you type:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Conversion rate</strong> of A and B, side by side.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Relative lift:</strong> how much better (or worse) B is than A, in percent.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>p-value:</strong> how likely a difference this big would be if A and B were really the same.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Confidence interval:</strong> the range the true difference probably lies in.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Reading the result</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>The default example has 250 conversions out of 5,000 for A (5%) and 300 out of 5,000 for B (6%). That is a 20% relative lift, with a p-value of about 0.028. Because 0.028 is below 0.05, the difference is <strong>statistically significant</strong> at 95% confidence: it is unlikely to be luck.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>If the confidence interval for the difference includes 0, the test is not significant: B might be better, worse, or the same.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">How it works</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>The calculator runs a <strong>two-proportion z-test</strong>, the same test data scientists run in Python:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-python">from statsmodels.stats.proportion import proportions_ztest
+z, p = proportions_ztest([300, 250], [5000, 5000])</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>It pools both groups to estimate the standard error, turns the difference into a z-score, and converts that into a two-sided p-value.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Three mistakes to avoid</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Peeking:</strong> stopping the test the first time p dips below 0.05. Decide the sample size first (use our <a href="/tools/sample-size-calculator/">sample size calculator</a>).</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Too many variations:</strong> testing 10 versions at once means one will "win" by chance.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Ignoring the size of the effect:</strong> with huge traffic, a 0.1% difference can be significant but not worth anything.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Learn the theory step by step, with animations, in our lesson on <a href="/tutorials/hypothesis-tests-p-values/">hypothesis tests and p-values</a>.</p>
+<!-- /wp:paragraph -->

@@ -6,6 +6,10 @@
  *   json-formatter          format, minify, validate and sort JSON
  *   regex-tester            live JavaScript regex matching, groups and replace
  *   html-online-editor      HTML + CSS + JavaScript with a live preview
+ *   ab-test-calculator      two-proportion z-test for A/B tests
+ *   sample-size-calculator  survey sample size and confidence intervals
+ *   csv-data-explorer       describe(), missing values, histograms, correlation
+ *   prompt-builder          build and score prompts for AI chatbots
  *
  * Everything runs locally: code never leaves the reader's browser.
  */
@@ -50,6 +54,14 @@
 	var tools = {};
 
 	/* ── Python ───────────────────────────────────────────────────────────── */
+	// Data science examples (the libraries download on first use, then run offline).
+	var PY_EXAMPLES = {
+		pandas: 'import pandas as pd\n\ndf = pd.DataFrame({\n    "name": ["Asha", "Rahul", "Meera", "Kabir", "Zoya", "Dev"],\n    "city": ["Pune", "Surat", "Delhi", "Pune", "Delhi", "Surat"],\n    "marks": [82, 64, 91, 58, 77, 88],\n})\n\nprint(df.describe().round(1))\nprint()\nprint(df.groupby("city")["marks"].mean())\nprint()\nprint(df[df["marks"] > 75])\n',
+		numpy: 'import numpy as np\n\nprices = np.array([100, 250, 80, 400])\nprint("With 18% GST:", prices * 1.18)\n\nm = np.arange(1, 10).reshape(3, 3)\nprint(m)\nprint("Column sums:", m.sum(axis=0))\nprint("Mean:", m.mean())\n',
+		chart: 'import matplotlib.pyplot as plt\n\nmonths = ["Jan", "Feb", "Mar", "Apr", "May"]\nsales = [120, 150, 135, 180, 210]\n\nplt.figure(figsize=(6, 3.5))\nplt.bar(months, sales, color="#0a7d4f")\nplt.title("Monthly sales")\nplt.ylabel("Orders")\nplt.show()\n',
+		ml: 'from sklearn.linear_model import LinearRegression\n\n# size in sq ft -> price in lakh\nX = [[650], [800], [1000], [1200], [1500]]\ny = [32, 40, 50, 59, 75]\n\nmodel = LinearRegression().fit(X, y)\nprint("Price of a 1100 sq ft flat:", round(model.predict([[1100]])[0], 1), "lakh")\nprint("Each extra sq ft adds:", round(model.coef_[0] * 100000), "rupees")\n'
+	};
+
 	tools['python-online-compiler'] = function (host) {
 		var sample = '# Write Python here and press Run (or Ctrl+Enter)\nname = input("What is your name? ")\nprint(f"Hello, {name}! 👋")\n\nsquares = [n * n for n in range(1, 6)]\nprint("Squares:", squares)\nprint("Total:", sum(squares))\n';
 		var code = codeArea(store('py') || sample, 16, run, 'Python code');
@@ -58,7 +70,10 @@
 		var status = el('span', 'tool-status', 'Ready');
 		var bRun = btn('▶ Run', 'btn-primary'), bStop = btn('■ Stop'), bClear = btn('Clear'), bReset = btn('Reset');
 		bStop.disabled = true;
-		var bar = el('div', 'tool-bar'); [bRun, bStop, bClear, bReset, status].forEach(function (x) { bar.appendChild(x); });
+		var pick = el('select', 'tool-select'); pick.setAttribute('aria-label', 'Load an example');
+		[['', 'Examples…'], ['pandas', '🐼 Pandas: analyse a table'], ['numpy', '🔢 NumPy: array maths'], ['chart', '📊 Matplotlib: draw a chart'], ['ml', '🤖 scikit-learn: first model']].forEach(function (o) { var op = el('option', '', o[1]); op.value = o[0]; pick.appendChild(op); });
+		pick.addEventListener('change', function () { if (PY_EXAMPLES[pick.value]) { code.value = PY_EXAMPLES[pick.value]; store('py', code.value); } pick.value = ''; code.focus(); });
+		var bar = el('div', 'tool-bar'); [bRun, bStop, bClear, bReset, pick, status].forEach(function (x) { bar.appendChild(x); });
 		var grid = el('div', 'tool-grid');
 		var left = el('div'); left.appendChild(panel('main.py', code)); left.appendChild(panel('Input (one line per input() call)', stdin));
 		grid.appendChild(left); grid.appendChild(panel('Output', out));
@@ -66,19 +81,29 @@
 
 		var worker = null, ready = false, timer = null, running = false;
 		function makeWorker() {
-			var src = "importScripts('" + PYODIDE + "pyodide.js');" +
+			// Charts: plt.show() turns each figure into a PNG line that the page shows as an image.
+			var mplPrelude = 'import matplotlib\nmatplotlib.use("AGG")\nimport matplotlib.pyplot as _vs_plt, io as _vs_io, base64 as _vs_b64\n' +
+				'def _vs_show(*a, **k):\n    for n in _vs_plt.get_fignums():\n        b = _vs_io.BytesIO()\n        _vs_plt.figure(n).savefig(b, format="png", bbox_inches="tight", dpi=110)\n        print("\\x00IMG:" + _vs_b64.b64encode(b.getvalue()).decode())\n    _vs_plt.close("all")\n_vs_plt.show = _vs_show\n';
+			var src = "var MPL=" + JSON.stringify(mplPrelude) + ";importScripts('" + PYODIDE + "pyodide.js');" +
 				"var py=null;var boot=loadPyodide({indexURL:'" + PYODIDE + "'}).then(function(p){py=p;postMessage({type:'ready'});}).catch(function(e){postMessage({type:'fail',text:String(e)});});" +
 				"onmessage=function(e){boot.then(function(){var lines=e.data.stdin.split('\\n'),i=0;" +
 				"py.setStdin({stdin:function(){return i<lines.length?lines[i++]:undefined;}});" +
 				"py.setStdout({batched:function(s){postMessage({type:'out',text:s});}});" +
 				"py.setStderr({batched:function(s){postMessage({type:'err',text:s});}});" +
-				"return py.runPythonAsync(e.data.code).then(function(){postMessage({type:'done'});}).catch(function(err){postMessage({type:'err',text:String(err.message||err).replace(/^Traceback[\\s\\S]*?File \"<exec>\"/,'File \"main.py\"')});postMessage({type:'done'});});});};";
+				"var mpl=/\\b(matplotlib|seaborn)\\b/.test(e.data.code);" +
+				"var prep=(py.loadPackagesFromImports?py.loadPackagesFromImports(e.data.code,{messageCallback:function(m){postMessage({type:'status',text:m});}}):Promise.resolve()).catch(function(err){postMessage({type:'err',text:'Could not load a library: '+String(err.message||err)+'\\n'});});" +
+				"return prep.then(function(){return mpl?py.runPythonAsync(MPL):null;}).then(function(){return py.runPythonAsync(e.data.code);}).then(function(){return mpl?py.runPythonAsync('_vs_show()'):null;}).then(function(){postMessage({type:'done'});}).catch(function(err){postMessage({type:'err',text:String(err.message||err).replace(/^Traceback[\\s\\S]*?File \"<exec>\"/,'File \"main.py\"')});postMessage({type:'done'});});});};";
 			var w = new Worker(URL.createObjectURL(new Blob([src], { type: 'text/javascript' })));
 			w.onmessage = function (e) {
 				var m = e.data;
 				if (m.type === 'ready') { ready = true; status.textContent = 'Python ready'; if (pending) { pending = false; send(); } }
 				else if (m.type === 'fail') { status.textContent = 'Could not load Python. Check your connection.'; finish(); }
+				else if (m.type === 'out' && m.text.indexOf('\u0000IMG:') === 0) {
+					var img = el('img', 'tool-plot'); img.alt = 'Chart from your code'; img.src = 'data:image/png;base64,' + m.text.slice(5).replace(/[^A-Za-z0-9+/=]/g, '');
+					out.appendChild(img);
+				}
 				else if (m.type === 'out') out.appendChild(document.createTextNode(m.text + '\n'));
+				else if (m.type === 'status') status.textContent = m.text.length > 60 ? 'Loading libraries…' : m.text;
 				else if (m.type === 'err') out.appendChild(el('span', 'tool-err', m.text + '\n'));
 				else if (m.type === 'done') { finish(); status.textContent = 'Finished'; award('python'); }
 				out.scrollTop = out.scrollHeight;
@@ -394,6 +419,254 @@
 		bRun.addEventListener('click', render);
 		bReset.addEventListener('click', function () { Object.keys(defaults).forEach(function (k) { areas[k].value = defaults[k]; }); render(); });
 		render();
+	};
+
+	/* ── Statistics helpers (shared by the data tools) ───────────────────── */
+	var ST = {
+		// Standard normal CDF (Abramowitz–Stegun 7.1.26, error < 1.5e-7).
+		cdf: function (z) {
+			var t = 1 / (1 + 0.3275911 * Math.abs(z) / Math.SQRT2);
+			var y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-z * z / 2);
+			return z >= 0 ? (1 + y) / 2 : (1 - y) / 2;
+		},
+		zFor: { '90': 1.6449, '95': 1.96, '99': 2.5758 },
+		num: function (v) { var n = parseFloat(String(v).replace(/,/g, '')); return isFinite(n) ? n : NaN; },
+		pct: function (x, d) { return (x * 100).toFixed(d === undefined ? 2 : d) + '%'; },
+		fmt: function (x) { return Math.abs(x) >= 1000 ? Math.round(x).toLocaleString('en-IN') : String(Math.round(x * 1000) / 1000); }
+	};
+	function field(label, value, attrs) {
+		var l = el('label', 'tool-field'); l.appendChild(el('span', '', label));
+		var i = el('input'); i.type = 'text'; i.inputMode = 'decimal'; i.value = value;
+		Object.keys(attrs || {}).forEach(function (k) { i.setAttribute(k, attrs[k]); });
+		l.appendChild(i); return { wrap: l, input: i };
+	}
+	function choice(label, opts, value) {
+		var l = el('label', 'tool-field'); l.appendChild(el('span', '', label));
+		var sel = el('select', 'tool-select'); opts.forEach(function (o) { var op = el('option', '', o[1]); op.value = o[0]; if (o[0] === value) op.selected = true; sel.appendChild(op); });
+		l.appendChild(sel); return { wrap: l, input: sel };
+	}
+
+	/* ── A/B test calculator ──────────────────────────────────────────────── */
+	tools['ab-test-calculator'] = function (host) {
+		var f = {
+			va: field('Visitors who saw A', '5000'), ca: field('Conversions from A', '250'),
+			vb: field('Visitors who saw B', '5000'), cb: field('Conversions from B', '300'),
+			conf: choice('Confidence', [['90', '90%'], ['95', '95% (standard)'], ['99', '99%']], '95')
+		};
+		var form = el('div', 'tool-form');
+		[f.va, f.ca, f.vb, f.cb, f.conf].forEach(function (x) { form.appendChild(x.wrap); });
+		var out = el('div', 'tool-result'); out.setAttribute('aria-live', 'polite');
+		host.appendChild(panel('Your test', form)); host.appendChild(panel('Result', out));
+		function calc() {
+			var va = ST.num(f.va.input.value), ca = ST.num(f.ca.input.value), vb = ST.num(f.vb.input.value), cb = ST.num(f.cb.input.value), conf = f.conf.input.value;
+			if (!(va > 0 && vb > 0 && ca >= 0 && cb >= 0 && ca <= va && cb <= vb)) { out.innerHTML = '<p class="tool-err-msg">Enter visitors greater than 0, and conversions between 0 and the number of visitors.</p>'; return; }
+			var pa = ca / va, pb = cb / vb, pool = (ca + cb) / (va + vb);
+			var se0 = Math.sqrt(pool * (1 - pool) * (1 / va + 1 / vb));
+			var z = se0 ? (pb - pa) / se0 : 0, p = 2 * (1 - ST.cdf(Math.abs(z)));
+			var se = Math.sqrt(pa * (1 - pa) / va + pb * (1 - pb) / vb), zc = ST.zFor[conf];
+			var lo = (pb - pa) - zc * se, hi = (pb - pa) + zc * se, lift = pa ? (pb - pa) / pa : 0, alpha = 1 - conf / 100, win = p < alpha;
+			var max = Math.max(pa, pb) * 1.25 || 1;
+			out.innerHTML = '<div class="ab-bars">' +
+				'<div><span>A</span><i style="width:' + (pa / max * 100) + '%"></i><b>' + ST.pct(pa) + '</b></div>' +
+				'<div><span>B</span><i class="is-b" style="width:' + (pb / max * 100) + '%"></i><b>' + ST.pct(pb) + '</b></div></div>' +
+				'<p class="ab-verdict ' + (win ? (pb > pa ? 'is-win' : 'is-lose') : 'is-tie') + '">' +
+				(win ? (pb > pa ? '✅ B is better. ' : '⚠️ B is worse. ') + 'The difference is statistically significant at ' + conf + '% confidence.' : '🤷 Not significant yet. The difference could be luck: keep the test running or collect more visitors.') + '</p>' +
+				'<table class="tool-table"><tbody>' +
+				'<tr><th>Relative lift (B vs A)</th><td>' + (lift >= 0 ? '+' : '') + ST.pct(lift, 1) + '</td></tr>' +
+				'<tr><th>Difference in conversion</th><td>' + (pb - pa >= 0 ? '+' : '') + ST.pct(pb - pa) + ' points</td></tr>' +
+				'<tr><th>' + conf + '% confidence interval</th><td>' + ST.pct(lo) + ' to ' + ST.pct(hi) + '</td></tr>' +
+				'<tr><th>z-score</th><td>' + z.toFixed(3) + '</td></tr>' +
+				'<tr><th>p-value (two-sided)</th><td>' + (p < 0.0001 ? '< 0.0001' : p.toFixed(4)) + '</td></tr>' +
+				'</tbody></table>' +
+				'<p class="tool-note">Two-proportion z-test. Decide the sample size before you start and don’t stop the test the moment it looks good.</p>';
+		}
+		host.addEventListener('input', calc); calc(); award('ab');
+	};
+
+	/* ── Sample size & confidence interval ────────────────────────────────── */
+	tools['sample-size-calculator'] = function (host) {
+		var f = {
+			mode: choice('I want to…', [['size', 'Find how many people to survey'], ['ci', 'Get a confidence interval from my results']], 'size'),
+			conf: choice('Confidence', [['90', '90%'], ['95', '95% (standard)'], ['99', '99%']], '95'),
+			moe: field('Margin of error (%)', '5'), pop: field('Population size (optional)', ''),
+			n: field('People asked', '500'), yes: field('People who said yes', '312')
+		};
+		var form = el('div', 'tool-form');
+		[f.mode, f.conf, f.moe, f.pop, f.n, f.yes].forEach(function (x) { form.appendChild(x.wrap); });
+		var out = el('div', 'tool-result'); out.setAttribute('aria-live', 'polite');
+		host.appendChild(panel('Inputs', form)); host.appendChild(panel('Result', out));
+		function calc() {
+			var size = f.mode.input.value === 'size', z = ST.zFor[f.conf.input.value];
+			f.moe.wrap.hidden = f.pop.wrap.hidden = !size; f.n.wrap.hidden = f.yes.wrap.hidden = size;
+			if (size) {
+				var e = ST.num(f.moe.input.value) / 100, N = ST.num(f.pop.input.value);
+				if (!(e > 0 && e < 0.5)) { out.innerHTML = '<p class="tool-err-msg">Margin of error must be between 0 and 50%.</p>'; return; }
+				var n0 = z * z * 0.25 / (e * e), n = N > 0 ? n0 / (1 + (n0 - 1) / N) : n0;
+				out.innerHTML = '<p class="tool-big">' + Math.ceil(n).toLocaleString('en-IN') + '</p><p>people needed for ±' + (e * 100) + '% at ' + f.conf.input.value + '% confidence' + (N > 0 ? ' (population ' + N.toLocaleString('en-IN') + ')' : '') + '.</p>' +
+					'<table class="tool-table"><thead><tr><th>Margin of error</th><th>People needed</th></tr></thead><tbody>' +
+					[10, 5, 3, 2, 1].map(function (m) { var a = z * z * 0.25 / Math.pow(m / 100, 2); a = N > 0 ? a / (1 + (a - 1) / N) : a; return '<tr><td>±' + m + '%</td><td>' + Math.ceil(a).toLocaleString('en-IN') + '</td></tr>'; }).join('') +
+					'</tbody></table><p class="tool-note">Uses p = 50%, the safest guess. Halving the margin needs about 4× the people.</p>';
+			} else {
+				var n2 = ST.num(f.n.input.value), y = ST.num(f.yes.input.value);
+				if (!(n2 > 0 && y >= 0 && y <= n2)) { out.innerHTML = '<p class="tool-err-msg">“Yes” answers must be between 0 and the number of people asked.</p>'; return; }
+				var p = y / n2, se = Math.sqrt(p * (1 - p) / n2), lo = Math.max(0, p - z * se), hi = Math.min(1, p + z * se);
+				out.innerHTML = '<p class="tool-big">' + ST.pct(p, 1) + '</p><p>' + f.conf.input.value + '% confidence interval: <b>' + ST.pct(lo, 1) + ' to ' + ST.pct(hi, 1) + '</b> (±' + ST.pct(z * se, 1) + ').</p>' +
+					'<div class="ci-line"><span class="ci-range" style="left:' + lo * 100 + '%;width:' + (hi - lo) * 100 + '%"></span><span class="ci-dot" style="left:' + p * 100 + '%"></span></div><div class="ci-scale"><span>0%</span><span>50%</span><span>100%</span></div>' +
+					'<p class="tool-note">Report it like this: “About ' + ST.pct(p, 0) + ' said yes (between ' + ST.pct(lo, 0) + ' and ' + ST.pct(hi, 0) + ').”</p>';
+			}
+		}
+		host.addEventListener('input', calc); host.addEventListener('change', calc); calc(); award('sample');
+	};
+
+	/* ── CSV data explorer ────────────────────────────────────────────────── */
+	function parseCSV(text) {
+		var rows = [], row = [], cell = '', q = false, i, c, sep = (text.split('\n')[0].match(/;/g) || []).length > (text.split('\n')[0].match(/,/g) || []).length ? ';' : (text.indexOf('\t') > -1 && text.split('\n')[0].indexOf(',') < 0 ? '\t' : ',');
+		for (i = 0; i < text.length; i++) {
+			c = text[i];
+			if (q) { if (c === '"' && text[i + 1] === '"') { cell += '"'; i++; } else if (c === '"') q = false; else cell += c; }
+			else if (c === '"') q = true;
+			else if (c === sep) { row.push(cell); cell = ''; }
+			else if (c === '\n' || c === '\r') { if (c === '\r' && text[i + 1] === '\n') i++; row.push(cell); cell = ''; if (row.some(function (x) { return x !== ''; })) rows.push(row); row = []; }
+			else cell += c;
+		}
+		row.push(cell); if (row.some(function (x) { return x !== ''; })) rows.push(row);
+		return rows;
+	}
+	function describe(values) {
+		var nums = [], miss = 0, counts = {};
+		values.forEach(function (v) {
+			var t = String(v).trim();
+			if (t === '' || /^(na|nan|null|none|-)$/i.test(t)) { miss++; return; }
+			counts[t] = (counts[t] || 0) + 1;
+			var n = ST.num(t); if (!isNaN(n) && /^-?[\d,.]+(e-?\d+)?$/i.test(t)) nums.push(n);
+		});
+		var filled = values.length - miss, numeric = filled > 0 && nums.length === filled;
+		var d = { count: filled, missing: miss, unique: Object.keys(counts).length, numeric: numeric };
+		if (numeric) {
+			var s = nums.slice().sort(function (a, b) { return a - b; }), n = s.length;
+			var q = function (p) { var k = (n - 1) * p, f = Math.floor(k); return f + 1 < n ? s[f] + (k - f) * (s[f + 1] - s[f]) : s[f]; };
+			var mean = s.reduce(function (a, b) { return a + b; }, 0) / n;
+			d.mean = mean; d.std = n > 1 ? Math.sqrt(s.reduce(function (a, b) { return a + (b - mean) * (b - mean); }, 0) / (n - 1)) : 0;
+			d.min = s[0]; d.q1 = q(0.25); d.median = q(0.5); d.q3 = q(0.75); d.max = s[n - 1]; d.values = nums;
+			var iqr = d.q3 - d.q1; d.outliers = s.filter(function (x) { return x < d.q1 - 1.5 * iqr || x > d.q3 + 1.5 * iqr; }).length;
+		} else {
+			d.top = Object.keys(counts).sort(function (a, b) { return counts[b] - counts[a]; }).slice(0, 3).map(function (k) { return [k, counts[k]]; });
+		}
+		return d;
+	}
+	function corr(a, b) {
+		var n = a.length, ma = 0, mb = 0, i; for (i = 0; i < n; i++) { ma += a[i]; mb += b[i]; } ma /= n; mb /= n;
+		var sab = 0, sa = 0, sb = 0; for (i = 0; i < n; i++) { sab += (a[i] - ma) * (b[i] - mb); sa += (a[i] - ma) * (a[i] - ma); sb += (b[i] - mb) * (b[i] - mb); }
+		return sa && sb ? sab / Math.sqrt(sa * sb) : 0;
+	}
+	tools['csv-data-explorer'] = function (host) {
+		var sample = 'name,city,age,marks,hours_studied\nAsha,Pune,21,82,6\nRahul,Surat,23,64,3\nMeera,Delhi,20,91,8\nKabir,Pune,25,58,2\nZoya,Delhi,22,77,5\nDev,Surat,24,88,7\nIsha,Mumbai,21,,4\nArjun,Mumbai,26,70,4\nNeha,Delhi,22,95,9\nVikram,Pune,23,45,1\n';
+		var area = codeArea(store('csv') || sample, 9, run, 'CSV data');
+		var file = el('input'); file.type = 'file'; file.accept = '.csv,.tsv,.txt,text/csv';
+		var bRun = btn('Explore data', 'btn-primary'), bSample = btn('Sample data'), status = el('span', 'tool-status', 'Data never leaves your browser.');
+		var bar = el('div', 'tool-bar'); [bRun, bSample, file, status].forEach(function (x) { bar.appendChild(x); });
+		var out = el('div', 'csv-out'); out.setAttribute('aria-live', 'polite');
+		host.appendChild(bar); host.appendChild(panel('Paste CSV (first row = column names)', area)); host.appendChild(out);
+		file.addEventListener('change', function () {
+			var fl = file.files[0]; if (!fl) return;
+			if (fl.size > 5 * 1024 * 1024) { status.textContent = 'File is over 5 MB. Please use a smaller sample.'; return; }
+			var r = new FileReader(); r.onload = function () { area.value = String(r.result); run(); }; r.readAsText(fl);
+		});
+		bSample.addEventListener('click', function () { area.value = sample; run(); });
+		bRun.addEventListener('click', run);
+		function run() {
+			var rows = parseCSV(area.value.slice(0, 5 * 1024 * 1024));
+			if (rows.length < 2) { out.innerHTML = '<p class="tool-err-msg">Paste at least a header row and one data row.</p>'; return; }
+			if (area.value.length < 200000) store('csv', area.value);
+			var head = rows[0].map(function (h, i) { return h.trim() || 'column_' + (i + 1); }), data = rows.slice(1, 50001);
+			var cols = head.map(function (h, i) { return describe(data.map(function (r) { return r[i] === undefined ? '' : r[i]; })); });
+			status.textContent = data.length.toLocaleString('en-IN') + ' rows × ' + head.length + ' columns';
+			var html = '<h3>1. First rows <small>df.head()</small></h3><div class="tool-scroll"><table class="tool-table"><thead><tr><th></th>' + head.map(function (h) { return '<th>' + esc(h) + '</th>'; }).join('') + '</tr></thead><tbody>' +
+				data.slice(0, 6).map(function (r, k) { return '<tr><th>' + k + '</th>' + head.map(function (_, i) { var v = r[i] === undefined ? '' : r[i]; return '<td' + (String(v).trim() === '' ? ' class="is-missing">NaN' : '>' + esc(v)) + '</td>'; }).join('') + '</tr>'; }).join('') + '</tbody></table></div>';
+			var miss = cols.reduce(function (a, c) { return a + c.missing; }, 0);
+			html += '<h3>2. Columns <small>df.info() + df.describe()</small></h3><div class="csv-cards">' + cols.map(function (c, i) {
+				var body = c.numeric
+					? '<dl><dt>mean</dt><dd>' + ST.fmt(c.mean) + '</dd><dt>median</dt><dd>' + ST.fmt(c.median) + '</dd><dt>std</dt><dd>' + ST.fmt(c.std) + '</dd><dt>min / max</dt><dd>' + ST.fmt(c.min) + ' / ' + ST.fmt(c.max) + '</dd><dt>Q1 / Q3</dt><dd>' + ST.fmt(c.q1) + ' / ' + ST.fmt(c.q3) + '</dd></dl>' + hist(c.values) +
+						(c.outliers ? '<p class="csv-flag">⚠️ ' + c.outliers + ' outlier' + (c.outliers > 1 ? 's' : '') + ' (1.5 × IQR rule)</p>' : '') +
+						(Math.abs(c.mean - c.median) > 0.25 * (c.std || 1) ? '<p class="csv-flag">↗ Skewed: mean and median differ, prefer the median.</p>' : '')
+					: '<dl><dt>unique</dt><dd>' + c.unique + '</dd>' + c.top.map(function (t) { return '<dt>' + esc(t[0]) + '</dt><dd>' + t[1] + '×</dd>'; }).join('') + '</dl>';
+				return '<div class="csv-card"><p class="csv-col">' + esc(head[i]) + ' <span>' + (c.numeric ? 'number' : 'text') + '</span></p><p class="csv-count">' + c.count + ' values' + (c.missing ? ' · <b>' + c.missing + ' missing</b>' : '') + '</p>' + body + '</div>';
+			}).join('') + '</div>';
+			var numIdx = cols.map(function (c, i) { return c.numeric ? i : -1; }).filter(function (i) { return i > -1; });
+			if (numIdx.length > 1) {
+				html += '<h3>3. Correlation <small>df.corr()</small></h3><div class="tool-scroll"><table class="tool-table csv-corr"><thead><tr><th></th>' + numIdx.map(function (i) { return '<th>' + esc(head[i]) + '</th>'; }).join('') + '</tr></thead><tbody>';
+				var best = null;
+				numIdx.forEach(function (i) {
+					html += '<tr><th>' + esc(head[i]) + '</th>' + numIdx.map(function (j) {
+						var pairs = data.map(function (r) { return [ST.num(r[i]), ST.num(r[j])]; }).filter(function (p) { return !isNaN(p[0]) && !isNaN(p[1]); });
+						var r = corr(pairs.map(function (p) { return p[0]; }), pairs.map(function (p) { return p[1]; }));
+						if (i < j && (!best || Math.abs(r) > Math.abs(best[2]))) best = [i, j, r];
+						var a = Math.round(Math.abs(r) * 70);
+						return '<td style="background:' + (r >= 0 ? 'rgba(10,125,79,' : 'rgba(220,60,60,') + (a / 100) + ')">' + r.toFixed(2) + '</td>';
+					}).join('') + '</tr>';
+				});
+				html += '</tbody></table></div>';
+				if (best) html += '<p class="tool-note">Strongest link: <b>' + esc(head[best[0]]) + '</b> and <b>' + esc(head[best[1]]) + '</b> (r = ' + best[2].toFixed(2) + '). Remember: correlation is not causation.</p>';
+			}
+			html += '<h3>' + (numIdx.length > 1 ? '4' : '3') + '. Data health</h3><ul class="csv-health"><li>' + (miss ? '⚠️ ' + miss + ' missing value' + (miss > 1 ? 's' : '') + ': decide to fill (median) or drop them.' : '✅ No missing values.') + '</li>' +
+				'<li>' + (data.some(function (r) { return r.length !== head.length; }) ? '⚠️ Some rows have a different number of columns.' : '✅ Every row has ' + head.length + ' columns.') + '</li></ul>' +
+				'<details class="csv-code"><summary>See the same analysis in Pandas</summary><pre><code>import pandas as pd\n\ndf = pd.read_csv("data.csv")\nprint(df.head())\ndf.info()\nprint(df.describe())\nprint(df.isna().sum())\nprint(df.corr(numeric_only=True))</code></pre></details>';
+			out.innerHTML = html;
+			award('csv');
+		}
+		function hist(v) {
+			var lo = Math.min.apply(null, v), hi = Math.max.apply(null, v), k = 8, b = [0, 0, 0, 0, 0, 0, 0, 0];
+			v.forEach(function (x) { b[hi === lo ? 0 : Math.min(k - 1, Math.floor((x - lo) / (hi - lo) * k))]++; });
+			var m = Math.max.apply(null, b);
+			return '<div class="csv-hist" aria-label="Histogram">' + b.map(function (c) { return '<i style="height:' + (c / m * 100) + '%" title="' + c + '"></i>'; }).join('') + '</div>';
+		}
+		run();
+	};
+
+	/* ── Prompt builder ───────────────────────────────────────────────────── */
+	tools['prompt-builder'] = function (host) {
+		var parts = [
+			['role', 'Role: who should the AI be?', 'You are a friendly Python teacher.'],
+			['task', 'Task: what exactly should it do?', 'Explain list comprehensions.'],
+			['context', 'Context: who is it for, what do they know?', 'The student is a beginner who already knows for-loops.'],
+			['example', 'Example (optional): show the style you want', 'squares = [n * n for n in range(5)]'],
+			['format', 'Format: how should the answer look?', 'Use 3 short bullet points and one code example.'],
+			['rules', 'Constraints: tone, length, what to avoid', 'Simple English. Under 150 words.']
+		];
+		var form = el('div', 'tool-form tool-form-1'), inputs = {};
+		parts.forEach(function (p) {
+			var l = el('label', 'tool-field'); l.appendChild(el('span', '', p[1]));
+			var t = el('textarea'); t.rows = 2; t.value = store('pb-' + p[0]) || p[2]; inputs[p[0]] = t;
+			l.appendChild(t); form.appendChild(l);
+		});
+		var out = el('pre', 'tool-out tool-prompt'), score = el('div', 'pb-score');
+		var bCopy = btn('Copy prompt', 'btn-primary'), bClear = btn('Clear all'), bSample = btn('Example');
+		var bar = el('div', 'tool-bar'); [bCopy, bClear, bSample].forEach(function (x) { bar.appendChild(x); });
+		var grid = el('div', 'tool-grid'); grid.appendChild(panel('Build your prompt', form)); var right = el('div'); right.appendChild(panel('Your prompt', out)); right.appendChild(score); grid.appendChild(right);
+		host.appendChild(bar); host.appendChild(grid);
+		function build() {
+			var t = function (k) { return inputs[k].value.trim(); }, lines = [];
+			if (t('role')) lines.push(t('role'));
+			if (t('task')) lines.push(t('task'));
+			if (t('context')) lines.push('Context: ' + t('context'));
+			if (t('example')) lines.push('Example of the style I want:\n' + t('example'));
+			if (t('format')) lines.push('Format: ' + t('format'));
+			if (t('rules')) lines.push('Rules: ' + t('rules'));
+			out.textContent = lines.join('\n\n') || 'Fill in the boxes on the left.';
+			var have = parts.filter(function (p) { return t(p[0]); }).length, vague = /\b(something|stuff|good|nice|etc)\b/i.test(t('task'));
+			var tips = [];
+			if (!t('task')) tips.push('Add a task: one clear verb (explain, summarise, fix, compare…).');
+			if (!t('format')) tips.push('Say the format (bullets, table, JSON, word limit) to stop rambling answers.');
+			if (!t('context')) tips.push('Add context: the AI can’t guess who the answer is for.');
+			if (vague) tips.push('Your task has vague words like “good” or “stuff”: be specific.');
+			score.innerHTML = '<p class="pb-meter"><b>' + have + '/6</b> parts · ' + (have >= 5 && !vague ? '🟢 Strong prompt' : have >= 3 ? '🟡 Good, can be better' : '🔴 Too vague') + '</p>' + (tips.length ? '<ul>' + tips.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' : '<p>Ready for ChatGPT, Claude or Gemini.</p>');
+			parts.forEach(function (p) { store('pb-' + p[0], inputs[p[0]].value); });
+		}
+		form.addEventListener('input', build);
+		bCopy.addEventListener('click', function () { (navigator.clipboard ? navigator.clipboard.writeText(out.textContent) : Promise.reject()).then(function () { bCopy.textContent = 'Copied ✓'; setTimeout(function () { bCopy.textContent = 'Copy prompt'; }, 1500); award('prompt'); }).catch(function () {}); });
+		bClear.addEventListener('click', function () { parts.forEach(function (p) { inputs[p[0]].value = ''; }); build(); });
+		bSample.addEventListener('click', function () { parts.forEach(function (p) { inputs[p[0]].value = p[2]; }); build(); });
+		build();
 	};
 
 	document.querySelectorAll('.tool[data-tool]').forEach(function (host) {

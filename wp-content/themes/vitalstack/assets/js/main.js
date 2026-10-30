@@ -232,6 +232,44 @@
 		});
 	})();
 
+	/* ── Premium trailer: scenes play in turn while it is on screen ──────── */
+	document.querySelectorAll('[data-trailer]').forEach(function (tr) {
+		var scenes = tr.querySelectorAll('.tr-scene'), dots = tr.querySelectorAll('.tr-dots i');
+		var toggle = tr.querySelector('[data-tr-toggle]');
+		var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		var at = -1, timer = null, playing = false, visible = false, paused = false;
+		if (still) { tr.classList.add('is-still'); return; }
+		function show(i) {
+			at = (i + scenes.length) % scenes.length;
+			scenes.forEach(function (s, k) { s.classList.toggle('is-on', k === at); });
+			dots.forEach(function (d, k) { d.classList.toggle('is-on', k === at); d.classList.toggle('is-done', k < at); });
+		}
+		function next() { show(at + 1); timer = setTimeout(next, +scenes[at].getAttribute('data-d') || 3500); }
+		function play() {
+			if (playing) return;
+			playing = true; tr.classList.remove('is-paused');
+			toggle.textContent = '❚❚'; toggle.setAttribute('aria-label', 'Pause trailer');
+			timer = setTimeout(next, +scenes[at].getAttribute('data-d') || 3500);
+		}
+		function pause() {
+			playing = false; clearTimeout(timer); tr.classList.add('is-paused');
+			toggle.textContent = '▶'; toggle.setAttribute('aria-label', 'Play trailer');
+		}
+		toggle.addEventListener('click', function () { paused = playing; if (playing) pause(); else play(); });
+		dots.forEach(function (d, k) {
+			d.addEventListener('click', function () { clearTimeout(timer); show(k); if (playing) timer = setTimeout(next, +scenes[k].getAttribute('data-d')); });
+		});
+		show(0);
+		if ('IntersectionObserver' in window) {
+			new IntersectionObserver(function (es) {
+				visible = es[0].isIntersecting;
+				if (visible && !paused) play(); else if (!visible && playing) { pause(); }
+			}, { threshold: 0.35 }).observe(tr);
+		} else {
+			play();
+		}
+	});
+
 	/* ── Account dropdown ─────────────────────────────────────────────────── */
 	document.querySelectorAll('[data-dropdown]').forEach(function (btn) {
 		var menu = btn.nextElementSibling;

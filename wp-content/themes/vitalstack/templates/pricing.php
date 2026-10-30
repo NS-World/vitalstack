@@ -40,12 +40,18 @@ if ( ! empty( $vs_save ) ) {
 			<h1><?php esc_html_e( 'Learn the skills companies are hiring for right now', 'vitalstack' ); ?></h1>
 			<p class="premium-lead"><?php esc_html_e( 'Data science and Gen AI, explained step by step with live animations you can play with. Build real projects, earn a certificate, and walk into interviews ready.', 'vitalstack' ); ?></p>
 			<?php vitalstack_flash(); ?>
-			<?php if ( 'waitlist' === $vs_action ) : ?>
+			<?php if ( vitalstack_pay_demo_for() ) : ?>
+				<p class="pricing-soon pricing-demo">🧪 <?php esc_html_e( 'Practice checkout is on: only you (and your test emails) see these Buy buttons. No real money moves.', 'vitalstack' ); ?></p>
+			<?php elseif ( 'waitlist' === $vs_action ) : ?>
 				<p class="pricing-soon">🚀 <?php esc_html_e( 'Premium opens soon. These are the launch prices: join the waitlist to be first in.', 'vitalstack' ); ?></p>
 			<?php endif; ?>
 		</div>
 		<div class="pricing-hero-bot" aria-hidden="true"><?php echo vitalstack_mascot( 'cheer', 140, '', 'dev' ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></div>
 	</div>
+</section>
+
+<section class="section pricing-trailer">
+	<div class="wrap trailer-wrap"><?php vitalstack_premium_trailer( 'pricing' ); ?></div>
 </section>
 
 <section class="section pricing" data-pay data-action="<?php echo esc_attr( $vs_action ); ?>"<?php if ( 'buy' === $vs_action ) : ?> data-api="<?php echo esc_url( rest_url( 'vitalstack/v1/pay/' ) ); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'wp_rest' ) ); ?>"<?php endif; ?>>

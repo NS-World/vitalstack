@@ -1,0 +1,71 @@
+<!-- wp:heading -->
+<h2 class="wp-block-heading">What it does</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Paste a CSV (or upload a file) and the explorer does the first 10 minutes of any data analysis for you:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li><strong>First rows</strong>, like <code>df.head()</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Every column</strong>: number or text, count, missing values, and for numbers the mean, median, standard deviation, quartiles and a small histogram, like <code>df.describe()</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Warnings</strong> for outliers (the 1.5 × IQR rule) and skewed columns where the median tells the truth better than the mean.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Correlation matrix</strong> between number columns, like <code>df.corr()</code>, with the strongest relationship pointed out.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Data health</strong>: missing values and rows with the wrong number of columns.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Your data <strong>never leaves your browser</strong>. Nothing is uploaded, so you can safely explore files from work or college.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Try the sample data</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>The sample has 10 students with their city, age, marks and hours studied. Notice that one student has no marks (a missing value), and that marks and hours studied have a correlation of 0.99: students who study more score more. (In real data, always ask whether something else could explain a correlation.)</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Tips for clean CSV files</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>The first row should contain the column names.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Commas, semicolons and tabs are detected automatically.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Text with commas inside must be wrapped in "double quotes".</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Empty cells, NA, NaN, null and "-" count as missing.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Next step: do it in Pandas</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Click <strong>See the same analysis in Pandas</strong> under the results to get the code, then run it in our <a href="/tools/python-online-compiler/">Python online compiler</a>, which supports Pandas. Learn Pandas step by step in our free <a href="/tutorial-category/pandas/">Pandas course</a>.</p>
+<!-- /wp:paragraph -->

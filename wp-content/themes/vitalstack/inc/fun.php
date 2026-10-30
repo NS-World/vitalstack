@@ -55,6 +55,7 @@ function vitalstack_fun_assets() {
 		'gamesUrl'  => vitalstack_games_url(),
 		'problemsUrl' => vitalstack_problems_url(),
 		'lessonBase' => home_url( '/tutorials/' ),
+		'buddy'     => (bool) get_theme_mod( 'vitalstack_study_buddy', true ),
 		'mascot'    => array(
 			'happy' => vitalstack_mascot( 'happy', 90 ),
 			'cheer' => vitalstack_mascot( 'cheer', 90 ),

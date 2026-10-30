@@ -168,6 +168,22 @@ function vitalstack_customize_register( $wp_customize ) {
 		)
 	);
 
+	$wp_customize->add_setting(
+		'vitalstack_study_buddy',
+		array(
+			'default'           => true,
+			'sanitize_callback' => 'wp_validate_boolean',
+		)
+	);
+	$wp_customize->add_control(
+		'vitalstack_study_buddy',
+		array(
+			'label'   => __( 'Study buddy: halfway through a lesson, a character asks a quick recall question about what was just read', 'vitalstack' ),
+			'section' => 'vitalstack_layout',
+			'type'    => 'checkbox',
+		)
+	);
+
 	/* ── Social links (keys unchanged from v1) ── */
 	foreach ( vitalstack_social_networks() as $id => $label ) {
 		$wp_customize->add_setting(

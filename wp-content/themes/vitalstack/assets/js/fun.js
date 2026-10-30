@@ -233,6 +233,44 @@
 		obs.observe(complete);
 	}
 
+	/* ── Study buddy: a recall question halfway through a lesson ──────────── */
+	// Saying the idea you just read in your own words is one of the best ways
+	// to remember it (retrieval practice). Once per lesson, easy to switch off.
+	var prose = document.querySelector('.prose');
+	var buddyOff = function () { try { return localStorage.getItem('vs-buddy-off') === '1'; } catch (e) { return false; } };
+	if (cfg.buddy !== false && prose && complete && !buddyOff() && 'IntersectionObserver' in window) {
+		var heads = prose.querySelectorAll('h2');
+		var words = (prose.textContent || '').split(/\s+/).length;
+		var seenKey = 'vs-buddy-' + location.pathname;
+		var seen = false; try { seen = sessionStorage.getItem(seenKey) === '1'; } catch (e) {}
+		if (heads.length >= 2 && words > 350 && !seen) {
+			var mark = heads[Math.floor(heads.length / 2)];
+			var bo = new IntersectionObserver(function (entries) {
+				if (!entries[0].isIntersecting) return;
+				bo.disconnect();
+				try { sessionStorage.setItem(seenKey, '1'); } catch (e) {}
+				// The section the reader just finished: the heading before the halfway one.
+				var done = heads[Math.max(0, Array.prototype.indexOf.call(heads, mark) - 1)].textContent.replace(/\s+/g, ' ').trim();
+				var left = Math.max(1, Math.round(words / 2 / 200));
+				var tip = document.createElement('div');
+				tip.className = 'mascot-nudge study-buddy';
+				tip.setAttribute('role', 'status');
+				tip.innerHTML = '<div class="mascot-nudge-bot">' + mascot('happy') + '</div><div><p class="study-buddy-head">Halfway there! 🚀 About ' + left + ' min left.</p>' +
+					'<p class="study-buddy-q">Quick recall: can you explain <b></b> in one sentence, without scrolling up?</p>' +
+					'<p class="study-buddy-why">Saying it in your own words makes it stick.</p>' +
+					'<button type="button" class="btn-link study-buddy-off">Don’t show these tips</button></div><button type="button" class="mascot-nudge-close" aria-label="Close">×</button>';
+				tip.querySelector('.study-buddy-q b').textContent = '“' + done.slice(0, 80) + '”';
+				document.body.appendChild(tip);
+				requestAnimationFrame(function () { tip.classList.add('is-visible'); });
+				var gone = function () { tip.classList.remove('is-visible'); setTimeout(function () { tip.remove(); }, 400); };
+				tip.querySelector('.mascot-nudge-close').addEventListener('click', gone);
+				tip.querySelector('.study-buddy-off').addEventListener('click', function () { try { localStorage.setItem('vs-buddy-off', '1'); } catch (e) {} gone(); });
+				setTimeout(gone, 12000);
+			}, { rootMargin: '0px 0px -40% 0px' });
+			bo.observe(mark);
+		}
+	}
+
 	/* ── Hero card slides ─────────────────────────────────────────────────── */
 	document.querySelectorAll('[data-hero-card]').forEach(function (card) {
 		var slides = card.querySelectorAll('.hero-slide');
