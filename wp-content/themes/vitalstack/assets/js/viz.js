@@ -2473,6 +2473,94 @@
 		}
 	};
 
+	/* ── Statistics (premium Data Scientist track) ── */
+
+	A['stat-center'] = {
+		title: 'Mean vs median: which one tells the truth?',
+		inputs: [{ key: 'data', label: 'Values', type: 'array' }],
+		defaults: { data: [22, 25, 25, 28, 30, 31, 150] },
+		code: function (inp) { return ['import numpy as np', 'x = np.array([' + (inp.data || []).join(', ') + '])', 'np.mean(x)', 'np.median(x)']; },
+		run: function (inp) {
+			var x = (inp.data || []).filter(function (v) { return typeof v === 'number'; }).slice(0, 12);
+			if (!x.length) x = [1];
+			var r = recorder(), n = x.length, bars = function (cls) { return x.map(function (v, i) { return { label: String(v), value: v, cls: cls ? cls(v, i) : 'ok' }; }); };
+			r('Here are ' + n + ' values. Think of them as salaries in ₹ thousands for a small team (the last one is the boss).', 1, { bars: bars() });
+			var sum = 0;
+			x.forEach(function (v, i) { sum += v; if (i === n - 1 || n <= 6) r('Mean step: add them up. Running total = ' + sum + '.', 2, { bars: bars(function (_, k) { return k <= i ? 'good' : 'ok'; }), vars: { total: sum, count: i + 1 } }); });
+			var mean = Math.round(sum / n * 100) / 100;
+			r('Mean = total ÷ count = ' + sum + ' ÷ ' + n + ' = ' + mean + '. One very big value pulls the mean up.', 2, { bars: bars(function (v) { return v > mean ? 'bad' : 'ok'; }), vars: { mean: mean } });
+			var sorted = x.slice().sort(function (a, b) { return a - b; });
+			var mid = n % 2 ? sorted[(n - 1) / 2] : (sorted[n / 2 - 1] + sorted[n / 2]) / 2;
+			r('Median step: sort the values. The median is the middle one' + (n % 2 ? '.' : ' (the average of the two middle ones, because n is even).'), 3, { bars: sorted.map(function (v, i) { return { label: String(v), value: v, cls: (n % 2 ? i === (n - 1) / 2 : i === n / 2 - 1 || i === n / 2) ? 'good' : 'ok' }; }), vars: { mean: mean, median: mid } });
+			r(mean > mid * 1.2 ? 'Median ' + mid + ' vs mean ' + mean + ': the median describes a "typical" person much better here. Use the median when data has outliers (salaries, house prices).' : 'Mean and median are close, so the data is fairly balanced and either one works.', 3, { bars: bars(function (v) { return v === mid ? 'good' : v > mean ? 'bad' : 'ok'; }), vars: { mean: mean, median: mid }, out: 'mean ' + mean + ' · median ' + mid });
+			return r.steps;
+		}
+	};
+
+	A['stat-bayes'] = {
+		title: 'Bayes: you tested positive. Are you really sick?',
+		inputs: [{ key: 'rate', label: 'How common is the disease?', type: 'choice', options: ['1 in 100', '1 in 1000', '1 in 10'] }],
+		defaults: { rate: '1 in 100' },
+		code: ['people   = 10000', 'sick     = people * prevalence', 'true_pos = sick * 0.99          # test catches 99%', 'false_pos = (people - sick) * 0.05  # 5% false alarms', 'p = true_pos / (true_pos + false_pos)'],
+		run: function (inp) {
+			var den = Number(String(inp.rate).split(' ').pop()) || 100, N = 10000, sick = N / den, healthy = N - sick;
+			var tp = Math.round(sick * 0.99), fp = Math.round(healthy * 0.05), r = recorder();
+			r('Imagine ' + N.toLocaleString('en-IN') + ' people. The disease affects 1 in ' + den + ', so ' + sick.toLocaleString('en-IN') + ' are sick.', 1, { bars: [{ label: 'sick', value: sick, cls: 'bad' }, { label: 'healthy', value: healthy, cls: 'good' }] });
+			r('The test is good: it catches 99% of sick people. That is ' + tp.toLocaleString('en-IN') + ' true positives.', 3, { bars: [{ label: 'sick & +', value: tp, cls: 'bad' }, { label: 'healthy', value: healthy, cls: 'good' }], vars: { true_pos: tp } });
+			r('But it also wrongly says "positive" for 5% of healthy people: ' + fp.toLocaleString('en-IN') + ' false alarms. The healthy group is huge, so 5% of it is a lot.', 4, { bars: [{ label: 'true +', value: tp, cls: 'bad' }, { label: 'false +', value: fp, cls: 'ok' }], vars: { true_pos: tp, false_pos: fp } });
+			var p = Math.round(tp / (tp + fp) * 1000) / 10;
+			r('Everyone who tested positive: ' + (tp + fp).toLocaleString('en-IN') + ' people. Only ' + tp.toLocaleString('en-IN') + ' of them are sick. P(sick | positive) = ' + tp + ' ÷ ' + (tp + fp) + ' = ' + p + '%.', 5, { bars: [{ label: 'true +', value: tp, cls: 'bad' }, { label: 'false +', value: fp, cls: 'ok' }], vars: { true_pos: tp, false_pos: fp, 'P(sick|+)': p + '%' }, out: p + '%' });
+			r('This is Bayes\' theorem: how rare something is (the prior) matters as much as how accurate the test is. Try "1 in 10" and "1 in 1000" to see it change.', 5, { bars: [{ label: 'true +', value: tp, cls: 'bad' }, { label: 'false +', value: fp, cls: 'ok' }], vars: { 'P(sick|+)': p + '%' }, out: p + '%' });
+			return r.steps;
+		}
+	};
+
+	A['stat-clt'] = {
+		title: 'Central limit theorem: averages become a bell curve',
+		inputs: [{ key: 'k', label: 'Dice per throw', type: 'choice', options: ['1', '2', '5', '10'] }],
+		defaults: { k: '5' },
+		code: function (inp) { return ['import numpy as np', 'rng = np.random.default_rng(7)', 'rolls = rng.integers(1, 7, size=(500, ' + inp.k + '))', 'means = rolls.mean(axis=1)    # 500 averages', 'np.histogram(means, bins=6, range=(1, 7))']; },
+		run: function (inp) {
+			var k = Number(inp.k) || 1, seed = 7, r = recorder();
+			function rnd() { seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648; }
+			var bins = [0, 0, 0, 0, 0, 0], labels = ['1–2', '2–3', '3–4', '4–5', '5–6', '6'], done = 0;
+			function bars() { return bins.map(function (b, i) { return { label: labels[i], value: b, cls: i === 2 || i === 3 ? 'good' : 'ok' }; }); }
+			r('One die is fair: every face 1 to 6 is equally likely, a flat shape. Now throw ' + k + ' dice at a time and write down their average.', 2, { bars: bars(), vars: { 'dice per throw': k } });
+			[1, 4, 20, 75, 150, 250].forEach(function (upto) {
+				var last = [];
+				while (done < upto * 2) {
+					var t = 0; last = []; for (var d = 0; d < k; d++) { var v = 1 + Math.floor(rnd() * 6); last.push(v); t += v; }
+					var m = t / k; bins[Math.min(5, Math.floor(m) - 1)]++; done++;
+				}
+				r('After ' + done + ' throws (last one: ' + last.join(', ') + ' → average ' + (Math.round(last.reduce(function (a, b) { return a + b; }, 0) / k * 100) / 100) + ').', 3, { bars: bars(), vars: { throws: done } });
+			});
+			r(k === 1 ? 'With 1 die the averages stay flat. Pick 5 or 10 dice and run it again.' : 'The averages pile up in the middle (around 3.5) and thin out at the edges: a bell shape, even though one die is flat. That is the central limit theorem, and it is why the normal curve appears everywhere.', 4, { bars: bars(), out: done + ' averages' });
+			return r.steps;
+		}
+	};
+
+	A['stat-pvalue'] = {
+		title: 'p-value: is this coin fair?',
+		inputs: [{ key: 'heads', label: 'Heads in 100 flips', type: 'number' }],
+		defaults: { heads: 61 },
+		code: function (inp) { return ['from scipy import stats', 'result = stats.binomtest(' + inp.heads + ', n=100, p=0.5)', 'result.pvalue']; },
+		run: function (inp) {
+			var h = Math.max(0, Math.min(100, Math.round(Number(inp.heads) || 0))), r = recorder();
+			var lc = [0]; for (var i = 1; i <= 100; i++) lc[i] = lc[i - 1] + Math.log(i);
+			function pk(x) { return Math.exp(lc[100] - lc[x] - lc[100 - x] - 100 * Math.LN2); }
+			var dist = Math.abs(h - 50), pv = 0; for (var x = 0; x <= 100; x++) if (Math.abs(x - 50) >= dist) pv += pk(x);
+			pv = Math.min(1, pv);
+			var shown = []; for (var y = 34; y <= 66; y += 2) shown.push(y);
+			function bars(mark) { return shown.map(function (x) { return { label: String(x), value: Math.round(pk(x) * 1000) / 10, cls: mark && Math.abs(x - 50) >= dist ? 'bad' : 'ok' }; }); }
+			r('Start by assuming the boring explanation, the null hypothesis: the coin is fair (50% heads).', 1, { vars: { heads: h, flips: 100 } });
+			r('If the coin is fair, this is how likely each number of heads is (in %). Most results land near 50, just by luck.', 2, { bars: bars(false) });
+			r('We saw ' + h + ' heads, ' + dist + ' away from 50. The p-value adds up the chance of a result at least this far from 50, in either direction (the red bars).', 2, { bars: bars(true) });
+			var pr = pv < 0.001 ? pv.toExponential(1) : String(Math.round(pv * 10000) / 10000);
+			r('p-value = ' + pr + '. ' + (pv < 0.05 ? 'That is below 0.05: a fair coin would rarely do this, so we reject "fair". Something is probably off with the coin.' : 'That is not below 0.05: a fair coin does this often enough, so we have no strong evidence it is unfair.'), 3, { bars: bars(true), vars: { 'p-value': pr }, out: pv < 0.05 ? 'reject H0' : 'keep H0' });
+			return r.steps;
+		}
+	};
+
 	A['prompt-anatomy'] = {
 		title: 'Anatomy of a good prompt',
 		wide: true,

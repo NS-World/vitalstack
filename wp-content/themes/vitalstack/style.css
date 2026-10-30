@@ -4,7 +4,7 @@ Theme URI: https://vitalstack.co.in/
 Author: VitalStack
 Author URI: https://vitalstack.co.in/
 Description: Tutorial-site theme for VitalStack: 17 learning paths (web, Python, Java, Spring Boot, React, Angular, DSA), live animated visualizers, quizzes, certificates, daily challenge and leaderboard, brain games, cheat sheets, free coding tools, reader accounts with XP and progress sync, PWA, and AdSense-ready ad slots.
-Version: 4.5.0
+Version: 4.6.0
 Requires at least: 6.3
 Tested up to: 6.8
 Requires PHP: 8.0
@@ -1741,6 +1741,8 @@ p.tool-err { color: #c62828; font-weight: 600; margin: 8px 0; }
 .premium-module details { border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
 .premium-module.is-free details { border-left: 4px solid var(--brand); }
 .premium-module.is-locked details { border-left: 4px solid #f5b301; }
+.premium-module.is-ready details { border-left: 4px solid #f5b301; background: linear-gradient(90deg, rgba(245, 179, 1, .08), var(--surface) 40%); }
+.premium-module.is-ready .premium-lessons { margin-bottom: 12px; }
 .premium-module summary { display: flex; align-items: center; gap: 12px; padding: 14px 16px; cursor: pointer; list-style: none; }
 .premium-module summary::-webkit-details-marker { display: none; }
 .premium-module-num { flex: 0 0 auto; width: 30px; height: 30px; border-radius: 50%; background: var(--bg-soft); display: grid; place-items: center; font-weight: 800; font-size: 14px; }
@@ -1753,6 +1755,7 @@ p.tool-err { color: #c62828; font-weight: 600; margin: 8px 0; }
 .premium-side .panel h2 { font-size: 17px; }
 .premium-lock { margin: 24px 0; padding: 24px; border-radius: var(--radius-lg); border: 1px dashed #f5b301; background: rgba(245, 179, 1, .08); text-align: center; }
 .premium-lock-title { font-size: 20px; font-weight: 800; margin: 0 0 6px; }
+.premium-lock-perks { font-size: 14px; font-weight: 600; color: var(--text-2); }
 @media (max-width: 860px) {
 	.premium-body { grid-template-columns: minmax(0, 1fr); }
 	.premium-hero-inner { grid-template-columns: minmax(0, 1fr); }

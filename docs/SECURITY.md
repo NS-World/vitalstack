@@ -58,3 +58,15 @@ No website can stop screenshots: they are taken by the phone or computer, outsid
 - When someone copies a long paragraph of lesson text, the copied text automatically ends with `Source: <lesson title> – <link>`, so reposted content points back to you. Code blocks copy clean.
 - Certificates and the PDF gift carry the site name and a verify link.
 - If someone republishes your lessons, file a DMCA removal with Google: https://support.google.com/legal/answer/3110420
+
+## Added in 4.6
+
+| Area | Protection |
+|---|---|
+| Sign-up | Account is created only after a 6-digit email code. Until then the password is held only as a WordPress hash, for at most 10 minutes. |
+| Sign-in | Two-step: password, then an emailed code. Codes are never stored (only an HMAC keyed with the site's secret salt), work once, expire in 10 min, 5 tries, 5 codes/email/hour, 60 s between codes. |
+| Trusted devices | Random 40-character token in an HttpOnly, Secure, SameSite cookie; only its HMAC is stored. 30 days, max 5 per account, all forgotten on password change/reset. |
+| wp-login.php | Readers can't use it to skip the code; staff still can (keep a 2FA plugin for admins). |
+| Payments | Price set by the server; access only after Razorpay's HMAC-SHA256 signature checks out; webhook signed with its own secret and amount/currency checked; one grant per order (database-unique lock); only the buyer can complete their order; rate limits on order and verify. |
+| Payment keys | Best in wp-config.php. If typed in the settings page, secrets are encrypted (libsodium secretbox, or AES-256-GCM) with a key derived from the wp-config salts, and never shown again. |
+| Browser permissions | `Permissions-Policy` allows the Payment Request API only for the site itself and Razorpay's checkout. |

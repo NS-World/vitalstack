@@ -43,7 +43,7 @@ function vitalstack_premium_tracks() {
 				array( 'title' => __( 'Data Visualization', 'vitalstack' ), 'path' => 'data-visualization', 'about' => __( 'Charts that tell a story with Matplotlib and Seaborn.', 'vitalstack' ) ),
 				array( 'title' => __( 'Machine Learning Basics', 'vitalstack' ), 'path' => 'machine-learning', 'about' => __( 'What a model is, train/test split, your first regression and classifier with scikit-learn.', 'vitalstack' ) ),
 				array( 'title' => __( 'SQL for Data Analysis', 'vitalstack' ), 'path' => 'sql', 'about' => __( 'SELECT, JOIN, GROUP BY and window functions for analytics.', 'vitalstack' ) ),
-				array( 'title' => __( 'Statistics and Probability', 'vitalstack' ), 'lessons' => array( __( 'Mean, median, spread and the five-number summary', 'vitalstack' ), __( 'Probability, conditional probability and Bayes’ theorem', 'vitalstack' ), __( 'Distributions: binomial, normal and the central limit theorem', 'vitalstack' ), __( 'Sampling and confidence intervals', 'vitalstack' ), __( 'Hypothesis tests: z, t, chi-square and p-values', 'vitalstack' ), __( 'Correlation vs causation', 'vitalstack' ) ) ),
+				array( 'title' => __( 'Statistics and Probability', 'vitalstack' ), 'path' => 'statistics', 'premium' => true, 'about' => __( 'Averages and spread, probability and Bayes, the normal curve, confidence intervals, p-values and correlation: 6 animated lessons with tested code.', 'vitalstack' ), 'lessons' => array( __( 'Mean, median, spread and the five-number summary', 'vitalstack' ), __( 'Probability, conditional probability and Bayes’ theorem', 'vitalstack' ), __( 'Distributions: binomial, normal and the central limit theorem', 'vitalstack' ), __( 'Sampling and confidence intervals', 'vitalstack' ), __( 'Hypothesis tests: z, t, chi-square and p-values', 'vitalstack' ), __( 'Correlation vs causation', 'vitalstack' ) ) ),
 				array( 'title' => __( 'Exploratory Data Analysis and Feature Engineering', 'vitalstack' ), 'lessons' => array( __( 'An EDA checklist for any new dataset', 'vitalstack' ), __( 'Missing values and outliers: find, decide, fix', 'vitalstack' ), __( 'Encoding categories and scaling numbers', 'vitalstack' ), __( 'Creating features that models can learn from', 'vitalstack' ) ) ),
 				array( 'title' => __( 'Machine Learning in Depth', 'vitalstack' ), 'lessons' => array( __( 'Linear and logistic regression, step by step', 'vitalstack' ), __( 'Decision trees, random forests and gradient boosting', 'vitalstack' ), __( 'k-NN, Naive Bayes and SVM', 'vitalstack' ), __( 'Clustering with k-means and DBSCAN', 'vitalstack' ), __( 'PCA and dimensionality reduction', 'vitalstack' ), __( 'Metrics, cross-validation and hyper-parameter tuning', 'vitalstack' ), __( 'Imbalanced data and model explainability', 'vitalstack' ) ) ),
 				array( 'title' => __( 'Dashboards with Power BI', 'vitalstack' ), 'lessons' => array( __( 'Connecting data and the data model', 'vitalstack' ), __( 'Measures and DAX basics', 'vitalstack' ), __( 'Interactive reports with slicers and drill-down', 'vitalstack' ) ) ),
@@ -156,7 +156,13 @@ function vitalstack_premium_preview( $content, $track ) {
 	return $preview . '<div class="premium-lock"><p class="premium-lock-title">🔒 ' . esc_html__( 'This is a premium lesson', 'vitalstack' ) . '</p><p>'
 		/* translators: %s: track name */
 		. esc_html( sprintf( __( 'It is part of the %s career track.', 'vitalstack' ), $t['title'] ) ) . '</p>'
-		. '<a class="btn btn-primary" href="' . esc_url( vitalstack_premium_url( $track ) ) . '">' . esc_html__( 'See the track', 'vitalstack' ) . '</a></div>';
+		. '<p class="premium-lock-perks">🎬 ' . esc_html__( 'Live animations', 'vitalstack' ) . ' · 🧪 ' . esc_html__( 'Tested code', 'vitalstack' ) . ' · 💼 ' . esc_html__( 'Projects', 'vitalstack' ) . ' · 🎓 ' . esc_html__( 'Certificate', 'vitalstack' ) . '</p>'
+		. ( function_exists( 'vitalstack_pay_ready' ) && vitalstack_pay_ready()
+			? '<a class="btn btn-primary" href="' . esc_url( vitalstack_pricing_url() . '#plan-' . $track ) . '">' . esc_html__( 'Unlock this lesson', 'vitalstack' ) . '</a> '
+			: '' )
+		. '<a class="btn btn-ghost" href="' . esc_url( vitalstack_premium_url( $track ) ) . '">' . esc_html__( 'See the track', 'vitalstack' ) . '</a>'
+		. ( is_user_logged_in() ? '' : '<p class="premium-small">' . esc_html__( 'Already a member?', 'vitalstack' ) . ' <a href="' . esc_url( vitalstack_account_url( array( 'redirect_to' => get_permalink() ) ) ) . '">' . esc_html__( 'Sign in', 'vitalstack' ) . '</a></p>' )
+		. '</div>';
 }
 
 // Locked lessons stay out of search results (their text isn't on the page).

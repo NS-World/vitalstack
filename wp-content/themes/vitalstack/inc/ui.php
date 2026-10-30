@@ -216,7 +216,7 @@ function vitalstack_courses_panel() {
 	<div class="courses-panel" id="courses-panel" hidden>
 		<div class="wrap courses-panel-inner">
 			<div class="courses-panel-head">
-				<p class="courses-panel-title"><?php esc_html_e( 'All courses', 'vitalstack' ); ?> <span><?php echo esc_html( sprintf( /* translators: %d: courses */ _n( '%d free course', '%d free courses', count( $paths ), 'vitalstack' ), count( $paths ) ) ); ?></span></p>
+				<p class="courses-panel-title"><?php esc_html_e( 'All courses', 'vitalstack' ); ?> <span><?php echo esc_html( sprintf( /* translators: %d: courses */ _n( '%d course', '%d courses', count( $paths ), 'vitalstack' ), count( $paths ) ) ); ?></span></p>
 				<button type="button" class="icon-btn courses-close" data-courses-close aria-label="<?php esc_attr_e( 'Close all courses', 'vitalstack' ); ?>"><?php echo vitalstack_icon( 'close', 18 ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></button>
 			</div>
 			<div class="courses-grid">
@@ -235,7 +235,7 @@ function vitalstack_courses_panel() {
 								$url     = ( 'dsa-problems' === $path->slug && vitalstack_problems_url() ) ? vitalstack_problems_url() : get_term_link( $path );
 								$active  = $current && $current->term_id === $path->term_id;
 								?>
-								<li><a href="<?php echo esc_url( is_wp_error( $url ) ? get_permalink( $lessons[0] ) : $url ); ?>"<?php echo $active ? ' class="is-active" aria-current="true"' : ''; ?>><span><?php echo esc_html( $path->name ); ?></span> <small><?php echo esc_html( sprintf( /* translators: %d: lessons */ _n( '%d lesson', '%d lessons', count( $lessons ), 'vitalstack' ), count( $lessons ) ) ); ?></small></a></li>
+								<li><a href="<?php echo esc_url( is_wp_error( $url ) ? get_permalink( $lessons[0] ) : $url ); ?>"<?php echo $active ? ' class="is-active" aria-current="true"' : ''; ?>><span><?php echo esc_html( ( get_term_meta( $path->term_id, 'vs_premium', true ) ? '⭐ ' : '' ) . $path->name ); ?></span> <small><?php echo esc_html( sprintf( /* translators: %d: lessons */ _n( '%d lesson', '%d lessons', count( $lessons ), 'vitalstack' ), count( $lessons ) ) ); ?></small></a></li>
 							<?php endforeach; ?>
 						</ul>
 					</section>

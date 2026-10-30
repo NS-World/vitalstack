@@ -153,12 +153,19 @@ function vitalstack_run_setup( $remove_samples = true ) {
 			);
 			if ( ! is_wp_error( $res ) ) {
 				update_term_meta( $res['term_id'], 'vs_order', $i + 1 );
+				if ( ! empty( $path['premium'] ) ) {
+					update_term_meta( $res['term_id'], 'vs_premium', $path['premium'] );
+				}
 				/* translators: %s: name */
 				$report[] = sprintf( __( 'Learning path created: %s', 'vitalstack' ), $path['name'] );
 			}
 		} elseif ( (int) get_term_meta( $term->term_id, 'vs_order', true ) !== $i + 1 ) {
 			// Keep the theme's order when new paths are added in an update.
 			update_term_meta( $term->term_id, 'vs_order', $i + 1 );
+		}
+		// A path the theme ships as premium stays premium (only ever added, never removed here).
+		if ( $term && ! empty( $path['premium'] ) && ! get_term_meta( $term->term_id, 'vs_premium', true ) ) {
+			update_term_meta( $term->term_id, 'vs_premium', $path['premium'] );
 		}
 	}
 
@@ -530,6 +537,13 @@ function vitalstack_setup_paths() {
 			'slug'        => 'prompt-engineering',
 			'name'        => 'Prompt Engineering',
 			'description' => 'Get great answers from ChatGPT, Claude and Gemini: clear prompts, examples, roles, step-by-step thinking and safe use of AI tools.',
+		),
+		// Premium paths (4.6): lessons show a preview to readers without access.
+		array(
+			'slug'        => 'statistics',
+			'name'        => 'Statistics',
+			'description' => 'Statistics and probability for data science: averages, Bayes, the normal curve, confidence intervals, p-values and correlation, with live animations. Part of the Data Scientist premium track.',
+			'premium'     => 'data-scientist',
 		),
 	);
 }

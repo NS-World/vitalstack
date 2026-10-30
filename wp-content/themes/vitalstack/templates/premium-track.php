@@ -13,12 +13,12 @@ $vs_waiting   = is_user_logged_in() && get_user_meta( get_current_user_id(), 'vs
 $vs_free_mods = array_filter(
 	$t['modules'],
 	function ( $m ) {
-		return ! empty( $m['path'] );
+		return ! empty( $m['path'] ) && empty( $m['premium'] );
 	}
 );
 $vs_lessons   = 0;
 foreach ( $t['modules'] as $vs_m ) {
-	$vs_lessons += empty( $vs_m['path'] ) ? count( $vs_m['lessons'] ) : vitalstack_premium_free_count( $vs_m['path'] );
+	$vs_lessons += empty( $vs_m['path'] ) ? count( $vs_m['lessons'] ) : max( vitalstack_premium_free_count( $vs_m['path'] ), isset( $vs_m['lessons'] ) ? count( $vs_m['lessons'] ) : 0 );
 }
 ?>
 <section class="premium-hero">
@@ -76,16 +76,17 @@ foreach ( $t['modules'] as $vs_m ) {
 			<ol class="premium-modules">
 				<?php
 				foreach ( $t['modules'] as $vs_i => $vs_m ) :
-					$vs_free = ! empty( $vs_m['path'] );
-					$vs_term = $vs_free ? get_term_by( 'slug', $vs_m['path'], 'tutorial_category' ) : null;
-					$vs_n    = $vs_free ? vitalstack_premium_free_count( $vs_m['path'] ) : count( $vs_m['lessons'] );
+					$vs_free  = ! empty( $vs_m['path'] ) && empty( $vs_m['premium'] );
+					$vs_ready = ! empty( $vs_m['path'] ) && ! empty( $vs_m['premium'] ) && vitalstack_premium_free_count( $vs_m['path'] ) > 0; // premium lessons already published
+					$vs_term  = ! empty( $vs_m['path'] ) ? get_term_by( 'slug', $vs_m['path'], 'tutorial_category' ) : null;
+					$vs_n     = $vs_free ? vitalstack_premium_free_count( $vs_m['path'] ) : count( $vs_m['lessons'] );
 					?>
-					<li class="premium-module <?php echo $vs_free ? 'is-free' : 'is-locked'; ?>">
+					<li class="premium-module <?php echo $vs_free ? 'is-free' : ( $vs_ready ? 'is-ready' : 'is-locked' ); ?>">
 						<details <?php echo 0 === $vs_i ? 'open' : ''; ?>>
 							<summary>
 								<span class="premium-module-num"><?php echo (int) $vs_i + 1; ?></span>
 								<span class="premium-module-title"><?php echo esc_html( $vs_m['title'] ); ?></span>
-								<span class="premium-module-tag"><?php echo $vs_free ? '✅ ' . esc_html__( 'Free now', 'vitalstack' ) : '🔒 ' . esc_html__( 'Premium', 'vitalstack' ); ?></span>
+								<span class="premium-module-tag"><?php echo $vs_free ? '✅ ' . esc_html__( 'Free now', 'vitalstack' ) : ( $vs_ready ? '⭐ ' . esc_html__( 'Premium · Ready', 'vitalstack' ) : '🔒 ' . esc_html__( 'Premium', 'vitalstack' ) ); ?></span>
 							</summary>
 							<div class="premium-module-body">
 								<?php if ( $vs_free ) : ?>
@@ -96,11 +97,17 @@ foreach ( $t['modules'] as $vs_m ) {
 										<p class="muted small"><?php esc_html_e( 'Free lessons are being published. Check back soon.', 'vitalstack' ); ?></p>
 									<?php endif; ?>
 								<?php else : ?>
+									<?php if ( $vs_ready && ! empty( $vs_m['about'] ) ) : ?>
+										<p><?php echo esc_html( $vs_m['about'] ); ?></p>
+									<?php endif; ?>
 									<ul class="premium-lessons">
 										<?php foreach ( $vs_m['lessons'] as $vs_l ) : ?>
-											<li><span aria-hidden="true">🔒</span> <?php echo esc_html( $vs_l ); ?></li>
+											<li><span aria-hidden="true"><?php echo $vs_has ? '✅' : '🔒'; ?></span> <?php echo esc_html( $vs_l ); ?></li>
 										<?php endforeach; ?>
 									</ul>
+									<?php if ( $vs_ready && $vs_term ) : ?>
+										<a class="btn btn-ghost btn-sm" href="<?php echo esc_url( get_term_link( $vs_term ) ); ?>"><?php echo $vs_has ? esc_html__( 'Open the module', 'vitalstack' ) : esc_html__( 'Preview the lessons', 'vitalstack' ); ?> ❯</a>
+									<?php endif; ?>
 								<?php endif; ?>
 							</div>
 						</details>
