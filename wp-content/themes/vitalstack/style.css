@@ -4,7 +4,7 @@ Theme URI: https://vitalstack.co.in/
 Author: VitalStack
 Author URI: https://vitalstack.co.in/
 Description: Tutorial-site theme for VitalStack: 17 learning paths (web, Python, Java, Spring Boot, React, Angular, DSA), live animated visualizers, quizzes, certificates, daily challenge and leaderboard, brain games, cheat sheets, free coding tools, reader accounts with XP and progress sync, PWA, and AdSense-ready ad slots.
-Version: 4.6.0
+Version: 4.6.1
 Requires at least: 6.3
 Tested up to: 6.8
 Requires PHP: 8.0
@@ -313,47 +313,90 @@ kbd { font-family: var(--font-mono); font-size: 12px; padding: 1px 7px; border-r
 /* Topic bar: arrows when it overflows, and the "All courses" panel. */
 .topicbar { position: relative; }
 .topicbar-row { display: flex; align-items: stretch; height: var(--topicbar-h); }
+.topicbar-scroll { position: relative; flex: 1 1 auto; min-width: 0; display: flex; }
 .topicbar-row .topicbar-inner { flex: 1 1 auto; min-width: 0; scroll-behavior: smooth; }
 .topic-arrow {
-	flex: 0 0 30px; display: inline-flex; align-items: center; justify-content: center; padding: 0; border: 0;
-	background: #000; color: var(--on-dark); font-size: 26px; line-height: 1; cursor: pointer;
+	position: absolute; top: 0; bottom: 0; z-index: 2; width: 52px; display: flex; align-items: center; padding: 0 8px; border: 0;
+	background: linear-gradient(90deg, var(--dark) 45%, transparent); color: var(--on-dark); cursor: pointer;
 }
+.topic-arrow.is-prev { left: 0; justify-content: flex-start; }
+.topic-arrow.is-next { right: 0; justify-content: flex-end; background: linear-gradient(270deg, var(--dark) 45%, transparent); }
 .topic-arrow[hidden] { display: none; }
-.topic-arrow:hover { background: var(--brand); color: var(--on-brand); }
-.topic-arrow.is-prev { box-shadow: 8px 0 10px -6px rgba(0, 0, 0, .6); }
-.topic-arrow.is-next { box-shadow: -8px 0 10px -6px rgba(0, 0, 0, .6); }
-.topic-all {
-	flex: 0 0 auto; display: inline-flex; align-items: center; gap: 8px; padding: 0 16px; border: 0; cursor: pointer;
-	background: var(--brand); color: var(--on-brand); font: inherit; font-size: 15px; font-weight: 700; white-space: nowrap;
+.topic-arrow span {
+	display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: rgba(255, 255, 255, .16);
+	font-size: 22px; line-height: 1; padding-bottom: 2px; transition: background .12s, transform .12s;
 }
-.topic-all:hover, .topic-all[aria-expanded="true"] { filter: brightness(1.1); }
-.topic-all-icon { font-size: 18px; line-height: 1; }
-@media (max-width: 479px) {
-	.topic-all { padding: 0 13px; }
-	.topic-all-text { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.topic-arrow:hover span, .topic-arrow:focus-visible span { background: var(--brand); color: var(--on-brand); transform: scale(1.08); }
+.topic-all {
+	flex: 0 0 auto; display: inline-flex; align-items: center; gap: 8px; margin: 6px 8px 6px 4px; padding: 0 14px; border: 0; border-radius: 999px; cursor: pointer;
+	background: var(--brand); color: var(--on-brand); font: inherit; font-size: 15px; font-weight: 700; white-space: nowrap; box-shadow: 0 0 0 1px rgba(255, 255, 255, .12);
+	transition: filter .12s;
+}
+.topic-all:hover { filter: brightness(1.1); }
+.topic-all[aria-expanded="true"] { background: #fff; color: var(--dark); }
+.topic-all-icon { fill: currentColor; flex-shrink: 0; }
+.topic-all-caret { flex-shrink: 0; transition: transform .15s; }
+.topic-all[aria-expanded="true"] .topic-all-caret { transform: rotate(180deg); }
+.topic-all-short { display: none; }
+@media (max-width: 599px) {
+	.topic-all { padding: 0 12px; gap: 6px; font-size: 14px; margin-right: 6px; }
+	.topic-all-text { display: none; }
+	.topic-all-short { display: inline; }
 }
 .courses-panel {
-	position: absolute; left: 0; right: 0; top: 100%; z-index: 110; background: var(--surface); color: var(--text);
-	border-bottom: 1px solid var(--border); box-shadow: var(--shadow-lg);
+	position: absolute; left: 0; right: 0; top: 100%; z-index: 260; background: var(--bg-soft, var(--surface)); color: var(--text);
+	border-bottom: 1px solid var(--border); box-shadow: 0 24px 48px rgba(0, 0, 0, .18);
 	max-height: calc(100vh - var(--header-h) - 12px); max-height: calc(100dvh - var(--header-h) - 12px); overflow-y: auto; overscroll-behavior: contain;
+	animation: vs-panel-in .16s ease-out;
 }
+@keyframes vs-panel-in { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .courses-panel { animation: none; } }
 .courses-panel[hidden] { display: none; }
-.courses-panel-inner { padding-top: 16px; padding-bottom: 22px; }
-.courses-panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
-.courses-panel-title { margin: 0; font-size: 19px; font-weight: 800; }
+.courses-panel-inner { padding-top: 18px; padding-bottom: 24px; }
+.courses-panel-head { position: sticky; top: 0; z-index: 1; display: flex; align-items: center; gap: 14px; margin: -18px 0 14px; padding: 14px 0 12px; background: inherit; background: var(--bg-soft, var(--surface)); border-bottom: 1px solid var(--border); }
+.courses-panel-title { margin: 0; font-size: 20px; font-weight: 800; white-space: nowrap; }
 .courses-panel-title span { margin-left: 6px; font-size: 14px; font-weight: 600; color: var(--text-2); }
-.courses-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px 22px; }
-.courses-group h2 { margin: 6px 0 6px; font-size: 13px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--text-2); }
-.courses-group ul { margin: 0; padding: 0; list-style: none; }
+.courses-find { flex: 1 1 auto; max-width: 340px; margin-left: auto; display: flex; align-items: center; gap: 8px; padding: 0 12px; height: 40px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); color: var(--text-2); }
+.courses-find:focus-within { border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-soft); }
+.courses-find input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; color: var(--text); font: inherit; font-size: 15px; }
+.courses-close { flex-shrink: 0; }
+.courses-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.courses-group { padding: 14px 14px 10px; border-radius: var(--radius-lg); background: var(--surface); border: 1px solid var(--border); border-top: 4px solid var(--g, var(--brand)); }
+.courses-group.is-web { --g: #3b82f6; }
+.courses-group.is-code { --g: #0a7d4f; }
+.courses-group.is-java { --g: #e76f00; }
+.courses-group.is-data { --g: #8b5cf6; }
+.courses-group.is-more { --g: #64748b; }
+.courses-group h2 { display: flex; align-items: center; gap: 8px; margin: 0 0 8px; font-size: 13px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--text-2); }
+.courses-group ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 2px; }
+.courses-group li[hidden], .courses-group[hidden] { display: none; }
 .courses-group a {
-	display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 8px 10px; margin: 0 -10px;
+	display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 10px; margin: 0 -6px;
 	border-radius: 8px; color: var(--text); font-weight: 600; font-size: 15px;
 }
 .courses-group a:hover { background: var(--bg-soft); text-decoration: none; color: var(--brand-ink); }
-.courses-group a.is-active { background: var(--brand-soft); color: var(--brand-ink); }
-.courses-group small { flex-shrink: 0; font-size: 12.5px; font-weight: 500; color: var(--text-2); }
-.courses-premium { padding: 4px 14px 8px; border-radius: var(--radius); background: var(--bg-soft); border: 1px dashed var(--border); }
-.courses-premium a { margin: 0 -6px; padding: 8px 6px; }
+.courses-group a.is-active { background: var(--brand-soft); color: var(--brand-ink); box-shadow: inset 3px 0 0 var(--brand); }
+.courses-group small { flex-shrink: 0; padding: 2px 8px; border-radius: 999px; background: var(--bg-soft); font-size: 12px; font-weight: 600; color: var(--text-2); }
+.courses-premium { grid-column: 1 / -1; --g: #f5b301; background: linear-gradient(100deg, rgba(245, 179, 1, .12), var(--surface) 60%); }
+.courses-premium ul { grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 6px 16px; }
+.courses-premium a { margin: 0; }
+.courses-none { margin: 18px 0 0; text-align: center; color: var(--text-2); }
+body.courses-open .install-app, body.courses-open .cookie-note { display: none; }
+@media (max-width: 1100px) { .courses-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 719px) {
+	/* Phones: a full-height sheet under the header, with its own scroll. */
+	.courses-panel { position: fixed; top: var(--courses-top, var(--header-h)); bottom: 0; max-height: none; box-shadow: none; }
+	.courses-panel-head { flex-wrap: wrap; gap: 10px; }
+	.courses-find { order: 3; flex-basis: 100%; max-width: none; margin-left: 0; }
+	.courses-close { margin-left: auto; }
+	.courses-grid { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+	.courses-group ul { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+	.courses-group a { flex-direction: column; align-items: flex-start; gap: 4px; margin: 0; padding: 10px 12px; border: 1px solid var(--border); background: var(--bg-soft); min-height: 64px; justify-content: center; }
+	.courses-group a span { line-height: 1.25; }
+	.courses-premium ul { grid-template-columns: minmax(0, 1fr); }
+	.courses-premium a { flex-direction: row; align-items: center; min-height: 0; }
+	.courses-panel-inner { padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px)); }
+}
 .drawer-practice { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 14px 0 6px; }
 .drawer-practice a { display: flex; align-items: center; gap: 8px; padding: 12px; border-radius: var(--radius); background: var(--bg-soft); border: 1px solid var(--border); color: var(--text); font-weight: 700; font-size: 15px; }
 .drawer-practice a:hover { border-color: var(--brand); text-decoration: none; }

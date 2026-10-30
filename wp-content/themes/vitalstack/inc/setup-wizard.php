@@ -427,6 +427,8 @@ function vitalstack_setup_paths() {
 	// One path per subject, like a classic tutorial site: the topic bar shows
 	// these subjects, and each subject's lessons fill the left sidebar.
 	return array(
+		// Learning order: web, programming and DSA, Java backend, then data and AI.
+		// The topic bar, the "All courses" panel and the homepage follow this order.
 		array(
 			'slug'        => 'html',
 			'name'        => 'HTML',
@@ -443,9 +445,14 @@ function vitalstack_setup_paths() {
 			'description' => 'The language that makes web pages interactive, from your first variable to working with the DOM.',
 		),
 		array(
-			'slug'        => 'sql',
-			'name'        => 'SQL',
-			'description' => 'The language for storing and querying data in databases like MySQL and PostgreSQL.',
+			'slug'        => 'react',
+			'name'        => 'React',
+			'description' => 'Build modern user interfaces with React: components, props, state, hooks, routing and data fetching.',
+		),
+		array(
+			'slug'        => 'angular',
+			'name'        => 'Angular',
+			'description' => 'Build large web apps with Angular: components, templates, signals, services, routing, forms and RxJS.',
 		),
 		array(
 			'slug'        => 'python',
@@ -461,6 +468,21 @@ function vitalstack_setup_paths() {
 			'slug'        => 'java-oop',
 			'name'        => 'Java OOP',
 			'description' => 'Object-oriented programming in Java: classes, objects, the four pillars and SOLID, with animated diagrams.',
+		),
+		array(
+			'slug'        => 'sql',
+			'name'        => 'SQL',
+			'description' => 'The language for storing and querying data in databases like MySQL and PostgreSQL.',
+		),
+		array(
+			'slug'        => 'dsa',
+			'name'        => 'DSA',
+			'description' => 'Data structures and algorithms, one pattern at a time, with live animations you can play, pause and replay.',
+		),
+		array(
+			'slug'        => 'dsa-problems',
+			'name'        => 'Interview Problems',
+			'description' => 'Classic coding interview problems solved step by step: brute force first, then the optimal pattern, in Python.',
 		),
 		array(
 			'slug'        => 'servlet',
@@ -493,27 +515,6 @@ function vitalstack_setup_paths() {
 			'description' => 'Build full-stack business apps in Java with Jmix: entities, views, data access, security and deployment.',
 		),
 		array(
-			'slug'        => 'react',
-			'name'        => 'React',
-			'description' => 'Build modern user interfaces with React: components, props, state, hooks, routing and data fetching.',
-		),
-		array(
-			'slug'        => 'angular',
-			'name'        => 'Angular',
-			'description' => 'Build large web apps with Angular: components, templates, signals, services, routing, forms and RxJS.',
-		),
-		array(
-			'slug'        => 'dsa',
-			'name'        => 'DSA',
-			'description' => 'Data structures and algorithms, one pattern at a time, with live animations you can play, pause and replay.',
-		),
-		array(
-			'slug'        => 'dsa-problems',
-			'name'        => 'Interview Problems',
-			'description' => 'Classic coding interview problems solved step by step: brute force first, then the optimal pattern, in Python.',
-		),
-		// Data and AI paths (added in 4.5; at the end so existing paths keep their order).
-		array(
 			'slug'        => 'numpy',
 			'name'        => 'NumPy',
 			'description' => 'Fast maths on whole arrays of numbers: the foundation of data science and AI in Python, with animated arrays.',
@@ -529,6 +530,12 @@ function vitalstack_setup_paths() {
 			'description' => 'Turn numbers into clear charts with Matplotlib and Seaborn, and learn which chart answers which question.',
 		),
 		array(
+			'slug'        => 'statistics',
+			'name'        => 'Statistics',
+			'description' => 'Statistics and probability for data science: averages, Bayes, the normal curve, confidence intervals, p-values and correlation, with live animations. Part of the Data Scientist premium track.',
+			'premium'     => 'data-scientist',
+		),
+		array(
 			'slug'        => 'machine-learning',
 			'name'        => 'Machine Learning',
 			'description' => 'How machines learn from data: your first models with scikit-learn, from train/test split to accuracy.',
@@ -537,13 +544,6 @@ function vitalstack_setup_paths() {
 			'slug'        => 'prompt-engineering',
 			'name'        => 'Prompt Engineering',
 			'description' => 'Get great answers from ChatGPT, Claude and Gemini: clear prompts, examples, roles, step-by-step thinking and safe use of AI tools.',
-		),
-		// Premium paths (4.6): lessons show a preview to readers without access.
-		array(
-			'slug'        => 'statistics',
-			'name'        => 'Statistics',
-			'description' => 'Statistics and probability for data science: averages, Bayes, the normal curve, confidence intervals, p-values and correlation, with live animations. Part of the Data Scientist premium track.',
-			'premium'     => 'data-scientist',
 		),
 	);
 }

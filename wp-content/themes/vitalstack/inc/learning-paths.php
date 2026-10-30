@@ -34,15 +34,17 @@ function vitalstack_learning_paths() {
 			}
 		)
 	);
-	// Paths with an explicit order (term meta "vs_order", set by VitalStack
-	// Setup) come first in that order; the rest follow, biggest first.
+	// The theme's own paths follow the learning order in vitalstack_setup_paths();
+	// other paths with an explicit order (term meta "vs_order") come next in
+	// that order; the rest follow, biggest first.
+	$rank = function_exists( 'vitalstack_setup_paths' ) ? array_flip( wp_list_pluck( vitalstack_setup_paths(), 'slug' ) ) : array();
 	usort(
 		$paths,
-		function ( $a, $b ) {
+		function ( $a, $b ) use ( $rank ) {
 			$oa = (int) get_term_meta( $a->term_id, 'vs_order', true );
 			$ob = (int) get_term_meta( $b->term_id, 'vs_order', true );
-			$oa = $oa ? $oa : PHP_INT_MAX;
-			$ob = $ob ? $ob : PHP_INT_MAX;
+			$oa = isset( $rank[ $a->slug ] ) ? $rank[ $a->slug ] + 1 : ( $oa ? 1000 + $oa : PHP_INT_MAX );
+			$ob = isset( $rank[ $b->slug ] ) ? $rank[ $b->slug ] + 1 : ( $ob ? 1000 + $ob : PHP_INT_MAX );
 			if ( $oa !== $ob ) {
 				return $oa < $ob ? -1 : 1;
 			}

@@ -217,6 +217,7 @@ function vitalstack_courses_panel() {
 		<div class="wrap courses-panel-inner">
 			<div class="courses-panel-head">
 				<p class="courses-panel-title"><?php esc_html_e( 'All courses', 'vitalstack' ); ?> <span><?php echo esc_html( sprintf( /* translators: %d: courses */ _n( '%d course', '%d courses', count( $paths ), 'vitalstack' ), count( $paths ) ) ); ?></span></p>
+				<label class="courses-find"><span class="screen-reader-text"><?php esc_html_e( 'Find a course', 'vitalstack' ); ?></span><?php echo vitalstack_icon( 'search', 16 ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?><input type="search" placeholder="<?php esc_attr_e( 'Find a course…', 'vitalstack' ); ?>" data-courses-find autocomplete="off"></label>
 				<button type="button" class="icon-btn courses-close" data-courses-close aria-label="<?php esc_attr_e( 'Close all courses', 'vitalstack' ); ?>"><?php echo vitalstack_icon( 'close', 18 ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></button>
 			</div>
 			<div class="courses-grid">
@@ -226,7 +227,7 @@ function vitalstack_courses_panel() {
 						continue;
 					}
 					?>
-					<section class="courses-group">
+					<section class="courses-group is-<?php echo esc_attr( $g ); ?>">
 						<h2><span aria-hidden="true"><?php echo esc_html( $groups[ $g ][1] ); ?></span> <?php echo esc_html( $groups[ $g ][0] ); ?></h2>
 						<ul>
 							<?php
@@ -235,7 +236,7 @@ function vitalstack_courses_panel() {
 								$url     = ( 'dsa-problems' === $path->slug && vitalstack_problems_url() ) ? vitalstack_problems_url() : get_term_link( $path );
 								$active  = $current && $current->term_id === $path->term_id;
 								?>
-								<li><a href="<?php echo esc_url( is_wp_error( $url ) ? get_permalink( $lessons[0] ) : $url ); ?>"<?php echo $active ? ' class="is-active" aria-current="true"' : ''; ?>><span><?php echo esc_html( ( get_term_meta( $path->term_id, 'vs_premium', true ) ? '⭐ ' : '' ) . $path->name ); ?></span> <small><?php echo esc_html( sprintf( /* translators: %d: lessons */ _n( '%d lesson', '%d lessons', count( $lessons ), 'vitalstack' ), count( $lessons ) ) ); ?></small></a></li>
+								<li data-name="<?php echo esc_attr( strtolower( $path->name . ' ' . $path->slug ) ); ?>"><a href="<?php echo esc_url( is_wp_error( $url ) ? get_permalink( $lessons[0] ) : $url ); ?>"<?php echo $active ? ' class="is-active" aria-current="true"' : ''; ?>><span><?php echo esc_html( ( get_term_meta( $path->term_id, 'vs_premium', true ) ? '⭐ ' : '' ) . $path->name ); ?></span> <small><?php echo esc_html( sprintf( /* translators: %d: lessons */ _n( '%d lesson', '%d lessons', count( $lessons ), 'vitalstack' ), count( $lessons ) ) ); ?></small></a></li>
 							<?php endforeach; ?>
 						</ul>
 					</section>
@@ -254,6 +255,7 @@ function vitalstack_courses_panel() {
 					</section>
 				<?php endif; ?>
 			</div>
+			<p class="courses-none" hidden><?php esc_html_e( 'No course matches. Try another word, or search all tutorials from the search box.', 'vitalstack' ); ?></p>
 		</div>
 	</div>
 	<?php
@@ -469,7 +471,41 @@ function vitalstack_lesson_buttons() {
 /**
  * Example code shown on the homepage per learning path (kept short and runnable).
  */
+/**
+ * A live animation shown instead of a code example on the homepage, for
+ * courses that have a good one ('' = show the code example).
+ */
+function vitalstack_path_viz( $term ) {
+	$viz = array(
+		'dsa'                => 'binary-search',
+		'dsa-problems'       => 'two-sum',
+		'numpy'              => 'np-broadcast',
+		'pandas'             => 'pd-groupby',
+		'machine-learning'   => 'ml-workflow',
+		'statistics'         => 'stat-bayes',
+		'prompt-engineering' => 'llm-next-token',
+	);
+	return $term && isset( $viz[ $term->slug ] ) ? $viz[ $term->slug ] : '';
+}
+
 function vitalstack_path_example( $term ) {
+	// One example per course, so no two courses on the homepage look the same.
+	$by_slug = array(
+		'html'               => array( 'HTML', "<!DOCTYPE html>\n<html>\n<body>\n\n<h1>My First Heading</h1>\n<p>My first paragraph.</p>\n\n</body>\n</html>", 'html' ),
+		'angular'            => array( 'TypeScript', "@Component({\n  selector: 'app-hello',\n  template: `<h1>Hello, {{ name }}!</h1>\n             <button (click)=\"likes++\">👍 {{ likes }}</button>`\n})\nexport class HelloComponent {\n  name = 'VitalStack';\n  likes = 0;\n}", '' ),
+		'java'               => array( 'Java', "public class Main {\n  public static void main(String[] args) {\n    String name = \"VitalStack\";\n    for (int i = 1; i <= 3; i++) {\n      System.out.println(\"Lesson \" + i + \" on \" + name);\n    }\n  }\n}", '' ),
+		'java-oop'           => array( 'Java', "class Car {\n  String brand;\n  Car(String brand) { this.brand = brand; }\n  void drive() { System.out.println(brand + \" is moving\"); }\n}\n\nCar myCar = new Car(\"Tata\");\nmyCar.drive();   // Tata is moving", '' ),
+		'servlet'            => array( 'Java', "@WebServlet(\"/hello\")\npublic class HelloServlet extends HttpServlet {\n  protected void doGet(HttpServletRequest req, HttpServletResponse res)\n      throws IOException {\n    String name = req.getParameter(\"name\");\n    res.getWriter().println(\"Hello, \" + name);\n  }\n}", '' ),
+		'jpa'                => array( 'Java', "@Entity\npublic class Student {\n  @Id @GeneratedValue\n  private Long id;\n  private String name;\n  private int marks;\n}\n\nem.persist(new Student(\"Asha\", 91));", '' ),
+		'hibernate'          => array( 'Java', "try (Session session = factory.openSession()) {\n  Transaction tx = session.beginTransaction();\n  session.persist(new Student(\"Asha\", 91));\n  tx.commit();\n}", '' ),
+		'spring'             => array( 'Java', "@Component\nclass EmailService {\n  void send(String to) { System.out.println(\"Mail to \" + to); }\n}\n\n@Component\nclass SignupService {\n  private final EmailService email;\n  SignupService(EmailService email) { this.email = email; }  // injected\n}", '' ),
+		'spring-boot'        => array( 'Java', "@RestController\npublic class HelloController {\n  @GetMapping(\"/hello\")\n  public String hello(@RequestParam String name) {\n    return \"Hello, \" + name + \"!\";\n  }\n}", '' ),
+		'jmix'               => array( 'Java', "@JmixEntity\n@Entity\npublic class Customer {\n  @Id @JmixGeneratedValue\n  private UUID id;\n  @InstanceName\n  private String name;\n  private String email;\n}", '' ),
+		'data-visualization' => array( 'Python', "import matplotlib.pyplot as plt\n\nmonths = [\"Jan\", \"Feb\", \"Mar\", \"Apr\"]\nsales = [120, 150, 135, 180]\n\nplt.bar(months, sales, color=\"#0a7d4f\")\nplt.title(\"Monthly sales\")\nplt.show()", '' ),
+	);
+	if ( $term && isset( $by_slug[ $term->slug ] ) ) {
+		return $by_slug[ $term->slug ];
+	}
 	$key = $term ? ' ' . $term->slug . ' ' . strtolower( $term->name ) . ' ' : '';
 	// Checked in order; "javascript" must be tested before "java".
 	$examples = array(

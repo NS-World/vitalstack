@@ -178,20 +178,54 @@
 		var open = document.querySelector('[data-courses-open]');
 		var panel = document.getElementById('courses-panel');
 		if (!open || !panel) return;
+		var find = panel.querySelector('[data-courses-find]');
+		var none = panel.querySelector('.courses-none');
+		var phone = window.matchMedia('(max-width: 719px)');
 		function setOpen(on) {
+			if (on) {
+				// On phones the panel is a sheet that starts right under the topic bar.
+				var bar = open.closest('.topicbar');
+				if (bar) panel.style.setProperty('--courses-top', Math.max(0, Math.round(bar.getBoundingClientRect().bottom)) + 'px');
+			}
 			panel.hidden = !on;
 			open.setAttribute('aria-expanded', on ? 'true' : 'false');
+			document.body.classList.toggle('courses-open', on);
+			document.body.style.overflow = on && phone.matches ? 'hidden' : '';
 			if (on) {
-				var a = panel.querySelector('a.is-active') || panel.querySelector('a');
-				if (a) a.focus({ preventScroll: true });
+				var a = panel.querySelector('a.is-active');
+				if (a) a.scrollIntoView({ block: 'nearest' });
+				if (!phone.matches && find) find.focus({ preventScroll: true });
+				else if (a) a.focus({ preventScroll: true });
 			}
+		}
+		if (find) {
+			find.addEventListener('input', function () {
+				var q = find.value.trim().toLowerCase(), shown = 0;
+				panel.querySelectorAll('li[data-name]').forEach(function (li) {
+					var hit = !q || li.getAttribute('data-name').indexOf(q) !== -1;
+					li.hidden = !hit;
+					if (hit) shown++;
+				});
+				panel.querySelectorAll('.courses-group:not(.courses-premium)').forEach(function (g) {
+					g.hidden = !g.querySelector('li[data-name]:not([hidden])');
+				});
+				var prem = panel.querySelector('.courses-premium');
+				if (prem) prem.hidden = !!q;
+				if (none) none.hidden = shown > 0;
+			});
+			find.addEventListener('keydown', function (e) {
+				if (e.key === 'Enter') {
+					var first = panel.querySelector('li[data-name]:not([hidden]) a');
+					if (first) { e.preventDefault(); window.location.href = first.href; }
+				}
+			});
 		}
 		open.addEventListener('click', function (e) { e.stopPropagation(); setOpen(panel.hidden); });
 		panel.querySelectorAll('[data-courses-close]').forEach(function (b) {
 			b.addEventListener('click', function () { setOpen(false); open.focus(); });
 		});
 		document.addEventListener('click', function (e) {
-			if (!panel.hidden && !panel.contains(e.target)) setOpen(false);
+			if (!panel.hidden && !panel.contains(e.target) && !open.contains(e.target)) setOpen(false);
 		});
 		document.addEventListener('keydown', function (e) {
 			if (e.key === 'Escape' && !panel.hidden) { setOpen(false); open.focus(); }

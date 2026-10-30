@@ -128,11 +128,11 @@ foreach ( $vs_paths as $vs_i => $vs_path ) :
 				<div class="path-progress subject-progress" aria-hidden="true"><span class="path-progress-bar"></span></div>
 			</div>
 			<div class="subject-example">
-				<?php if ( in_array( $vs_path->slug, array( 'dsa', 'dsa-problems' ), true ) ) : ?>
-					<div class="vs-viz" data-viz="<?php echo 'dsa' === $vs_path->slug ? 'binary-search' : 'two-sum'; ?>"></div>
+				<?php if ( vitalstack_path_viz( $vs_path ) ) : ?>
+					<div class="vs-viz" data-viz="<?php echo esc_attr( vitalstack_path_viz( $vs_path ) ); ?>"></div>
 				<?php else : ?>
 				<div class="example">
-					<p class="example-label"><?php echo esc_html( sprintf( /* translators: %s: language */ __( '%s Example', 'vitalstack' ), $vs_example[0] ) ); ?></p>
+					<p class="example-label"><?php echo esc_html( sprintf( /* translators: %s: course name */ __( '%s Example', 'vitalstack' ), $vs_path->name ) ); ?></p>
 					<pre class="example-code"><code class="language-<?php echo esc_attr( strtolower( $vs_example[0] ) ); ?>"><?php echo esc_html( $vs_example[1] ); ?></code></pre>
 					<?php if ( $vs_example[2] ) : ?>
 						<button type="button" class="btn btn-primary" data-tryit-lang="<?php echo esc_attr( $vs_example[2] ); ?>"><?php esc_html_e( 'Try it Yourself', 'vitalstack' ); ?> ❯</button>

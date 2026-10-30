@@ -41,13 +41,19 @@
 
 	<nav class="topicbar" aria-label="<?php esc_attr_e( 'Topics', 'vitalstack' ); ?>">
 		<div class="topicbar-row">
-			<button type="button" class="topic-arrow is-prev" data-topic-scroll="-1" aria-label="<?php esc_attr_e( 'Scroll topics left', 'vitalstack' ); ?>" tabindex="-1" hidden>&#8249;</button>
+			<div class="topicbar-scroll">
+			<button type="button" class="topic-arrow is-prev" data-topic-scroll="-1" aria-label="<?php esc_attr_e( 'Scroll topics left', 'vitalstack' ); ?>" tabindex="-1" hidden><span aria-hidden="true">&#8249;</span></button>
 			<div class="wrap topicbar-inner">
 				<a class="topic-home<?php echo is_front_page() ? ' is-active' : ''; ?>" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php esc_attr_e( 'Home', 'vitalstack' ); ?>"><?php echo vitalstack_icon( 'home', 18 ); // phpcs:ignore ?></a>
 				<?php vitalstack_topic_links(); ?>
 			</div>
-			<button type="button" class="topic-arrow is-next" data-topic-scroll="1" aria-label="<?php esc_attr_e( 'Scroll topics right', 'vitalstack' ); ?>" tabindex="-1" hidden>&#8250;</button>
-			<button type="button" class="topic-all" data-courses-open aria-controls="courses-panel" aria-expanded="false"><span class="topic-all-icon" aria-hidden="true">&#9776;</span><span class="topic-all-text"><?php esc_html_e( 'All courses', 'vitalstack' ); ?></span></button>
+			<button type="button" class="topic-arrow is-next" data-topic-scroll="1" aria-label="<?php esc_attr_e( 'Scroll topics right', 'vitalstack' ); ?>" tabindex="-1" hidden><span aria-hidden="true">&#8250;</span></button>
+			</div>
+			<button type="button" class="topic-all" data-courses-open aria-controls="courses-panel" aria-expanded="false">
+				<svg class="topic-all-icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><rect x="1" y="1" width="6" height="6" rx="1.5"/><rect x="9" y="1" width="6" height="6" rx="1.5"/><rect x="1" y="9" width="6" height="6" rx="1.5"/><rect x="9" y="9" width="6" height="6" rx="1.5"/></svg>
+				<span class="topic-all-text"><?php esc_html_e( 'All courses', 'vitalstack' ); ?></span><span class="topic-all-short"><?php esc_html_e( 'Courses', 'vitalstack' ); ?></span>
+				<svg class="topic-all-caret" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+			</button>
 		</div>
 		<?php vitalstack_courses_panel(); ?>
 	</nav>
