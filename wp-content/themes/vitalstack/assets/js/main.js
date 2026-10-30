@@ -259,6 +259,27 @@
 		});
 	});
 
+	/* ── Email code step: digits only, submit at 6, resend countdown ──────── */
+	document.querySelectorAll('.otp-verify .otp-input').forEach(function (inp) {
+		inp.addEventListener('input', function () {
+			var v = inp.value.replace(/\D/g, '').slice(0, 6);
+			if (v !== inp.value) inp.value = v;
+			if (v.length === 6 && inp.form && !inp.form.dataset.sent) {
+				inp.form.dataset.sent = '1';
+				if (inp.form.requestSubmit) inp.form.requestSubmit(); else inp.form.submit();
+			}
+		});
+	});
+	document.querySelectorAll('[data-resend-wait]').forEach(function (b) {
+		var left = +b.getAttribute('data-resend-wait'), label = b.textContent;
+		b.disabled = true;
+		(function tick() {
+			if (left <= 0) { b.disabled = false; b.textContent = label; return; }
+			b.textContent = label + ' (' + left-- + 's)';
+			setTimeout(tick, 1000);
+		})();
+	});
+
 	/* ── Reading progress ─────────────────────────────────────────────────── */
 	var bar = document.querySelector('.reading-progress span');
 	var article = document.querySelector('.prose');

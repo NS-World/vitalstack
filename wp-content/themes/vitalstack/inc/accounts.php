@@ -429,14 +429,23 @@ function vitalstack_handle_login() {
 		}
 	}
 
-	$user = wp_signon(
-		array(
-			'user_login'    => $login,
-			'user_password' => $password,
-			'remember'      => ! empty( $_POST['rememberme'] ),
-		),
-		is_ssl()
-	);
+	// With sign-in codes on, the password is checked here and the session
+	// only starts once the emailed code is entered (see inc/otp.php).
+	$two_step = function_exists( 'vitalstack_codes_on' ) && vitalstack_codes_on( 'login' );
+	if ( $two_step ) {
+		$GLOBALS['vitalstack_code_login'] = true;
+		$user = wp_authenticate( $login, $password );
+		unset( $GLOBALS['vitalstack_code_login'] );
+	} else {
+		$user = wp_signon(
+			array(
+				'user_login'    => $login,
+				'user_password' => $password,
+				'remember'      => ! empty( $_POST['rememberme'] ),
+			),
+			is_ssl()
+		);
+	}
 	if ( is_wp_error( $user ) ) {
 		if ( 'vs_locked' === $user->get_error_code() ) {
 			vitalstack_account_redirect( 'rate', array( 'tab' => 'login' ) );
@@ -449,6 +458,25 @@ function vitalstack_handle_login() {
 				'redirect_to' => $redirect,
 			)
 		);
+	}
+
+	if ( $two_step ) {
+		if ( ! vitalstack_device_trusted( $user->ID ) ) {
+			vitalstack_code_start(
+				'login',
+				$user->user_email,
+				array(
+					'uid'       => $user->ID,
+					'remember'  => ! empty( $_POST['rememberme'] ),
+					'subscribe' => ! empty( $_POST['subscribe'] ),
+					'redirect'  => $redirect,
+				)
+			);
+		}
+		// A browser they trusted earlier: no code needed this time.
+		wp_set_current_user( $user->ID );
+		wp_set_auth_cookie( $user->ID, ! empty( $_POST['rememberme'] ), is_ssl() );
+		do_action( 'wp_login', $user->user_login, $user );
 	}
 
 	if ( ! empty( $_POST['subscribe'] ) ) {
@@ -505,6 +533,21 @@ function vitalstack_handle_register() {
 	}
 	if ( mb_strlen( $password ) < 8 || vitalstack_password_is_common( $password, $email ) ) {
 		vitalstack_account_redirect( 'weak_password', $back );
+	}
+
+	// With sign-up codes on, nothing is created yet: the details wait (the
+	// password only as its hash) until the code from the email is entered.
+	if ( function_exists( 'vitalstack_codes_on' ) && vitalstack_codes_on( 'signup' ) ) {
+		vitalstack_code_start(
+			'signup',
+			$email,
+			array(
+				'name'      => $name,
+				'pass'      => wp_hash_password( $password ),
+				'subscribe' => ! empty( $_POST['subscribe'] ),
+				'redirect'  => $redirect,
+			)
+		);
 	}
 
 	// Username from the email's local part, made unique.

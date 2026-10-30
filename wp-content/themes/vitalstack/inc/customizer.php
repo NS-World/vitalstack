@@ -94,6 +94,8 @@ function vitalstack_customize_register( $wp_customize ) {
 	$member_fields = array(
 		'vitalstack_accounts_enabled' => __( 'Allow readers to create accounts', 'vitalstack' ),
 		'vitalstack_notify_enabled'   => __( 'Email subscribers when a new post or tutorial is published', 'vitalstack' ),
+		'vitalstack_signup_codes'     => __( 'Confirm new accounts with a 6-digit email code (the account is created only after the code)', 'vitalstack' ),
+		'vitalstack_login_codes'      => __( 'Two-step sign-in: after the password, readers enter a code we email them (turn off if the site can’t send email)', 'vitalstack' ),
 	);
 	foreach ( $member_fields as $id => $label ) {
 		$wp_customize->add_setting(
