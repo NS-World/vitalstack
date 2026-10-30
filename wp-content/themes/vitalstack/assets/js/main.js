@@ -134,6 +134,70 @@
 		b.addEventListener('click', function () { closeDialog(search); });
 	});
 
+	/* ── Topic bar: arrows when it overflows, "All courses" panel ──────────── */
+	(function () {
+		var bar = document.querySelector('.topicbar-row .topicbar-inner');
+		if (!bar) return;
+		var prev = document.querySelector('[data-topic-scroll="-1"]');
+		var next = document.querySelector('[data-topic-scroll="1"]');
+		function arrows() {
+			var max = bar.scrollWidth - bar.clientWidth;
+			if (prev) prev.hidden = bar.scrollLeft <= 2;
+			if (next) next.hidden = max <= 2 || bar.scrollLeft >= max - 2;
+		}
+		[prev, next].forEach(function (b) {
+			if (!b) return;
+			b.addEventListener('click', function () {
+				bar.scrollBy({ left: +b.getAttribute('data-topic-scroll') * Math.max(160, bar.clientWidth * 0.7), behavior: 'smooth' });
+			});
+		});
+		bar.addEventListener('scroll', arrows, { passive: true });
+		window.addEventListener('resize', arrows);
+		// Bring the course being read into view (centred) on small screens.
+		var active = bar.querySelector('a.is-active:not(.topic-home)');
+		if (active) {
+			arrows();
+			var br = bar.getBoundingClientRect(), ar = active.getBoundingClientRect();
+			if (ar.right > br.right || ar.left < br.left) {
+				bar.style.scrollBehavior = 'auto';
+				bar.scrollLeft += ar.left - br.left - (br.width - ar.width) / 2;
+				bar.style.scrollBehavior = '';
+			}
+		}
+		// Mouse wheels scroll the bar sideways (trackpads already do).
+		bar.addEventListener('wheel', function (e) {
+			var max = bar.scrollWidth - bar.clientWidth;
+			if (Math.abs(e.deltaY) > Math.abs(e.deltaX) && max > 0 && (e.deltaY < 0 ? bar.scrollLeft > 0 : bar.scrollLeft < max - 1)) {
+				bar.scrollLeft += e.deltaY;
+				e.preventDefault();
+			}
+		}, { passive: false });
+		arrows();
+		if (document.fonts && document.fonts.ready) document.fonts.ready.then(arrows);
+
+		var open = document.querySelector('[data-courses-open]');
+		var panel = document.getElementById('courses-panel');
+		if (!open || !panel) return;
+		function setOpen(on) {
+			panel.hidden = !on;
+			open.setAttribute('aria-expanded', on ? 'true' : 'false');
+			if (on) {
+				var a = panel.querySelector('a.is-active') || panel.querySelector('a');
+				if (a) a.focus({ preventScroll: true });
+			}
+		}
+		open.addEventListener('click', function (e) { e.stopPropagation(); setOpen(panel.hidden); });
+		panel.querySelectorAll('[data-courses-close]').forEach(function (b) {
+			b.addEventListener('click', function () { setOpen(false); open.focus(); });
+		});
+		document.addEventListener('click', function (e) {
+			if (!panel.hidden && !panel.contains(e.target)) setOpen(false);
+		});
+		document.addEventListener('keydown', function (e) {
+			if (e.key === 'Escape' && !panel.hidden) { setOpen(false); open.focus(); }
+		});
+	})();
+
 	/* ── Account dropdown ─────────────────────────────────────────────────── */
 	document.querySelectorAll('[data-dropdown]').forEach(function (btn) {
 		var menu = btn.nextElementSibling;

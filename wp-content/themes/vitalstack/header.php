@@ -40,10 +40,16 @@
 	</div>
 
 	<nav class="topicbar" aria-label="<?php esc_attr_e( 'Topics', 'vitalstack' ); ?>">
-		<div class="wrap topicbar-inner">
-			<a class="topic-home<?php echo is_front_page() ? ' is-active' : ''; ?>" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php esc_attr_e( 'Home', 'vitalstack' ); ?>"><?php echo vitalstack_icon( 'home', 18 ); // phpcs:ignore ?></a>
-			<?php vitalstack_topic_links(); ?>
+		<div class="topicbar-row">
+			<button type="button" class="topic-arrow is-prev" data-topic-scroll="-1" aria-label="<?php esc_attr_e( 'Scroll topics left', 'vitalstack' ); ?>" tabindex="-1" hidden>&#8249;</button>
+			<div class="wrap topicbar-inner">
+				<a class="topic-home<?php echo is_front_page() ? ' is-active' : ''; ?>" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php esc_attr_e( 'Home', 'vitalstack' ); ?>"><?php echo vitalstack_icon( 'home', 18 ); // phpcs:ignore ?></a>
+				<?php vitalstack_topic_links(); ?>
+			</div>
+			<button type="button" class="topic-arrow is-next" data-topic-scroll="1" aria-label="<?php esc_attr_e( 'Scroll topics right', 'vitalstack' ); ?>" tabindex="-1" hidden>&#8250;</button>
+			<button type="button" class="topic-all" data-courses-open aria-controls="courses-panel" aria-expanded="false"><span class="topic-all-icon" aria-hidden="true">&#9776;</span><span class="topic-all-text"><?php esc_html_e( 'All courses', 'vitalstack' ); ?></span></button>
 		</div>
+		<?php vitalstack_courses_panel(); ?>
 	</nav>
 </header>
 

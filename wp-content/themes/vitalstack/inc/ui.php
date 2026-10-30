@@ -185,6 +185,78 @@ function vitalstack_topic_links() {
 }
 
 /**
+ * "All courses" panel under the topic bar: every learning path, grouped,
+ * so no course is hidden off the edge of the bar on any screen size.
+ */
+function vitalstack_courses_panel() {
+	$paths = vitalstack_learning_paths();
+	if ( ! $paths ) {
+		return;
+	}
+	$groups = array(
+		'web'  => array( __( 'Web development', 'vitalstack' ), '🌐', array( 'html', 'css', 'javascript', 'typescript', 'react', 'angular', 'node', 'nodejs', 'bootstrap', 'tailwind' ) ),
+		'code' => array( __( 'Programming & DSA', 'vitalstack' ), '💻', array( 'python', 'java', 'java-oop', 'c', 'cpp', 'sql', 'dsa', 'dsa-problems', 'git' ) ),
+		'java' => array( __( 'Java backend', 'vitalstack' ), '☕', array( 'servlet', 'jsp', 'jdbc', 'jpa', 'hibernate', 'spring', 'spring-boot', 'microservices', 'jmix' ) ),
+		'data' => array( __( 'Data & AI', 'vitalstack' ), '🤖', array( 'numpy', 'pandas', 'data-visualization', 'statistics', 'machine-learning', 'deep-learning', 'prompt-engineering', 'generative-ai' ) ),
+		'more' => array( __( 'More courses', 'vitalstack' ), '📚', array() ),
+	);
+	$sorted = array_fill_keys( array_keys( $groups ), array() );
+	foreach ( $paths as $path ) {
+		$key = 'more';
+		foreach ( $groups as $g => $meta ) {
+			if ( in_array( $path->slug, $meta[2], true ) ) {
+				$key = $g;
+				break;
+			}
+		}
+		$sorted[ $key ][] = $path;
+	}
+	$current = is_singular( 'tutorials' ) ? vitalstack_tutorial_path() : null;
+	?>
+	<div class="courses-panel" id="courses-panel" hidden>
+		<div class="wrap courses-panel-inner">
+			<div class="courses-panel-head">
+				<p class="courses-panel-title"><?php esc_html_e( 'All courses', 'vitalstack' ); ?> <span><?php echo esc_html( sprintf( /* translators: %d: courses */ _n( '%d free course', '%d free courses', count( $paths ), 'vitalstack' ), count( $paths ) ) ); ?></span></p>
+				<button type="button" class="icon-btn courses-close" data-courses-close aria-label="<?php esc_attr_e( 'Close all courses', 'vitalstack' ); ?>"><?php echo vitalstack_icon( 'close', 18 ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></button>
+			</div>
+			<div class="courses-grid">
+				<?php
+				foreach ( $sorted as $g => $list ) :
+					if ( ! $list ) {
+						continue;
+					}
+					?>
+					<section class="courses-group">
+						<h2><span aria-hidden="true"><?php echo esc_html( $groups[ $g ][1] ); ?></span> <?php echo esc_html( $groups[ $g ][0] ); ?></h2>
+						<ul>
+							<?php
+							foreach ( $list as $path ) :
+								$lessons = vitalstack_path_lessons( $path );
+								$url     = ( 'dsa-problems' === $path->slug && vitalstack_problems_url() ) ? vitalstack_problems_url() : get_term_link( $path );
+								$active  = $current && $current->term_id === $path->term_id;
+								?>
+								<li><a href="<?php echo esc_url( is_wp_error( $url ) ? get_permalink( $lessons[0] ) : $url ); ?>"<?php echo $active ? ' class="is-active" aria-current="true"' : ''; ?>><span><?php echo esc_html( $path->name ); ?></span> <small><?php echo esc_html( sprintf( /* translators: %d: lessons */ _n( '%d lesson', '%d lessons', count( $lessons ), 'vitalstack' ), count( $lessons ) ) ); ?></small></a></li>
+							<?php endforeach; ?>
+						</ul>
+					</section>
+				<?php endforeach; ?>
+				<?php if ( function_exists( 'vitalstack_premium_tracks' ) ) : ?>
+					<section class="courses-group courses-premium">
+						<h2><span aria-hidden="true">⭐</span> <?php esc_html_e( 'Premium career tracks', 'vitalstack' ); ?></h2>
+						<ul>
+							<?php foreach ( vitalstack_premium_tracks() as $slug => $t ) : ?>
+								<li><a href="<?php echo esc_url( vitalstack_premium_url( $slug ) ); ?>"><span><?php echo esc_html( $t['icon'] . ' ' . $t['title'] ); ?></span> <small><?php echo esc_html( sprintf( /* translators: %d: modules */ __( '%d modules', 'vitalstack' ), count( $t['modules'] ) ) ); ?></small></a></li>
+							<?php endforeach; ?>
+						</ul>
+					</section>
+				<?php endif; ?>
+			</div>
+		</div>
+	</div>
+	<?php
+}
+
+/**
  * Sign in / Sign up buttons, or the signed-in reader's menu.
  */
 function vitalstack_account_menu() {
