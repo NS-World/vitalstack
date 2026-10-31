@@ -131,7 +131,13 @@ add_action(
 				'methods'             => 'GET',
 				'callback'            => 'vitalstack_rest_lesson',
 				'permission_callback' => 'is_user_logged_in',
-				'args'                => array( 'id' => array( 'validate_callback' => 'is_numeric' ) ),
+				'args'                => array(
+					'id' => array(
+						'validate_callback' => function ( $v ) {
+							return is_numeric( $v );
+						},
+					),
+				),
 			)
 		);
 		register_rest_route(

@@ -62,6 +62,10 @@ Built from the "Premium plans: secure payments and protected content" design (v1
 - Bottom popups now stack neatly instead of overlapping, from 320px phones to big monitors: cookie notice, install-app pill, focus-sounds pill, end-of-lesson nudge, celebration, toast and study buddy.
 - The install-app pill waits until the cookie notice is answered.
 
+## Fixes in 4.8.1 and 4.8.2
+- 4.8.1: the site logo grew to fill the whole page on some screens. The premium watermark had reused the logo's CSS class name; the watermark now has its own name. The new data-tool tables got their own class too.
+- 4.8.2: premium lessons failed to load for paying readers on PHP 8 (the lesson API's ID check called a PHP function with the wrong number of arguments).
+
 ## After uploading
 1. Appearance → VitalStack Setup → **Run setup**. This creates the draft **Refund and Cancellation Policy** page. Review and publish it, and link it in the footer menu.
 2. Paste the Terms and Privacy additions below into your live pages.
