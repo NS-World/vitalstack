@@ -15,7 +15,7 @@ The theme does the website side: pricing page, orders, signature checks, giving 
 3. Webhook: Razorpay Dashboard → **Webhooks** → Add New:
    - URL: copy it from the settings page (it ends in `/wp-json/vitalstack/v1/pay/webhook`).
    - Secret: type a long random password, and paste the same one into **Webhook Secret** in WordPress.
-   - Events: `payment.captured`, `order.paid`, `payment.failed`.
+   - Events: `payment.captured`, `order.paid`, `payment.failed`, `refund.processed`, `payment.dispute.created`.
 4. Sign in to your site as a normal reader (not admin), open `/pricing/`, buy a plan with Razorpay's test card or test UPI (`success@razorpay`). You should land on the track page with "Payment received", get a receipt email, and see the order under **Orders**.
 
 ## 3. Go live

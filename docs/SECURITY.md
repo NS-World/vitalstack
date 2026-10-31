@@ -70,3 +70,17 @@ No website can stop screenshots: they are taken by the phone or computer, outsid
 | Payments | Price set by the server; access only after Razorpay's HMAC-SHA256 signature checks out; webhook signed with its own secret and amount/currency checked; one grant per order (database-unique lock); only the buyer can complete their order; rate limits on order and verify. |
 | Payment keys | Best in wp-config.php. If typed in the settings page, secrets are encrypted (libsodium secretbox, or AES-256-GCM) with a key derived from the wp-config salts, and never shown again. |
 | Browser permissions | `Permissions-Policy` allows the Payment Request API only for the site itself and Razorpay's checkout. |
+
+## Added in 4.8 (premium security design)
+
+| Area | Protection |
+|---|---|
+| 2FA | Authenticator app (RFC 6238, ±30 s, no code reuse), secret encrypted at rest; 10 hashed one-time backup codes; 5 wrong codes = 15 min pause + email. |
+| Step-up | Buying (and moving premium to a new device) needs a security check in the last 15 minutes. |
+| Buy checklist | Confirmed email + subscribed + fresh security check, enforced on the server. |
+| Devices | Random HttpOnly device token (only its HMAC stored); sessions are labelled per device so "sign out" really ends them; premium on 1 phone + 1 computer; max 3 switches per 30 days. |
+| Premium delivery | Lesson body only via an authenticated, no-store API that checks plan, suspension, device and reading speed (40/hour, 200/day) on every request. |
+| Watermarks | Visible (name · ID · date) and invisible (zero-width, HMAC-checked reader ID) on every premium lesson; leak finder in Tools → VitalStack Security. |
+| Deterrence | Copy, select, right-click, drag and print blocked on premium text (code keeps its Copy button). |
+| Audit | Sign-ins, failures, lesson opens, payments, refunds, 2FA changes, device switches, pauses; 180 days; email alerts for the serious ones; one-click suspend. |
+| Payments | Coupons and prices server-side only; refund/dispute webhooks remove access; Founder Lifetime capped at 200. |

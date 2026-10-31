@@ -136,7 +136,8 @@ if ( $vs_plans['all-year']['inr'] < $vs_monthly12 ) {
 			<span>💳 <?php esc_html_e( 'We never see your card or UPI PIN', 'vitalstack' ); ?></span>
 			<span>🔁 <?php esc_html_e( 'One-time payment, no auto-renewal', 'vitalstack' ); ?></span>
 			<?php if ( $vs_refund ) : ?>
-				<span>↩️ <?php echo esc_html( sprintf( /* translators: %d: days */ _n( '%d-day refund if it’s not for you', '%d-day refund if it’s not for you', $vs_refund, 'vitalstack' ), $vs_refund ) ); ?></span>
+				<?php $vs_refund_page = function_exists( 'vitalstack_find_published_page' ) ? vitalstack_find_published_page( 'refund-policy', 'Refund and Cancellation Policy' ) : null; ?>
+				<span>↩️ <?php if ( $vs_refund_page ) : ?><a href="<?php echo esc_url( get_permalink( $vs_refund_page ) ); ?>"><?php endif; ?><?php echo esc_html( sprintf( /* translators: %d: days */ _n( '%d-day refund if it’s not for you', '%d-day refund if it’s not for you', $vs_refund, 'vitalstack' ), $vs_refund ) ); ?><?php if ( $vs_refund_page ) : ?></a><?php endif; ?></span>
 			<?php endif; ?>
 		</p>
 	</div>

@@ -779,6 +779,28 @@ function vitalstack_setup_pages() {
 				)
 			),
 		),
+		// Razorpay asks for this page before it activates payments (added in 4.8).
+		'refund-policy'    => array(
+			'title'    => 'Refund and Cancellation Policy',
+			'status'   => 'draft',
+			'template' => 'page-legal.php',
+			'content'  => vitalstack_setup_blocks(
+				array(
+					array( 'p', '<em>Last updated: ' . $date . '</em>' ),
+					array( 'p', 'This policy covers VitalStack Premium plans bought on ' . $site . '. All free lessons, tools and games stay free and need no payment.' ),
+					array( 'h2', 'What you buy' ),
+					array( 'p', 'Premium plans give your account online access to premium lessons, projects and certificates for the period shown at checkout (1 month, 12 months, or for life for Founder Lifetime). It is a digital service: nothing is shipped.' ),
+					array( 'h2', '7-day refund' ),
+					array( 'p', 'If Premium is not for you, write to ' . $mail . ' within 7 days of paying. If you have opened less than 30% of the premium lessons in your plan, we refund the full amount to your original payment method. Refunds usually reach you in 5–7 working days, depending on your bank.' ),
+					array( 'h2', 'When we can’t refund' ),
+					array( 'p', 'After 7 days, or once you have opened 30% or more of the premium lessons, the payment is not refundable. Accounts closed for sharing access or content (see our Terms of Service) are not refunded.' ),
+					array( 'h2', 'Cancelling' ),
+					array( 'p', 'Plans are one-time payments and do not renew automatically, so there is nothing to cancel. If you buy again before your plan ends, the new time is added on. If we add monthly AutoPay in future, you will be able to cancel it at any time from your account and from your UPI or card app.' ),
+					array( 'h2', 'Payment problems' ),
+					array( 'p', 'If money was taken but your plan is not active within an hour, email ' . $mail . ' with your order ID or payment ID from the receipt and we will fix it. Failed payments are returned to you by your bank automatically.' ),
+				)
+			),
+		),
 		'cookie-policy'    => array(
 			'title'    => 'Cookie Policy',
 			'status'   => 'draft',
