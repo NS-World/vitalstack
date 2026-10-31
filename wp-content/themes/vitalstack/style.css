@@ -2046,6 +2046,16 @@ p.tool-err { color: #c62828; font-weight: 600; margin: 8px 0; }
 .plan-cta { margin-top: auto; }
 .plan-cta form { margin: 0; }
 .pay-msg { margin: 18px 0 0; }
+.plan-ribbon.is-gold { background: linear-gradient(90deg, #c9a227, #f5d76e); }
+.plan.is-life { background: linear-gradient(180deg, rgba(245, 179, 1, .1), var(--surface) 45%); }
+.plan-pick select { width: 100%; margin: 0 0 8px; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font: inherit; font-weight: 700; }
+.plan-was { margin-right: 6px; color: var(--text-2); font-size: 18px; }
+.pay-coupon { max-width: 460px; margin: 18px auto 0; padding: 10px 14px; border: 1px dashed var(--border); border-radius: var(--radius); background: var(--surface); }
+.pay-coupon summary { cursor: pointer; font-weight: 700; }
+.pay-coupon-row { display: flex; gap: 8px; margin-top: 10px; }
+.pay-coupon-row input { flex: 1; min-width: 0; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font: inherit; text-transform: uppercase; letter-spacing: .05em; }
+.pay-coupon-msg { margin: 8px 0 0; font-size: 14px; }
+.pay-coupon-msg:empty { display: none; }
 .pricing-trust { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 20px; margin: 22px 0 0; color: var(--text-2); font-size: 14px; font-weight: 600; }
 .pricing-why .section-title { margin-top: 12px; text-align: center; }
 .why-grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); margin-bottom: 44px; }

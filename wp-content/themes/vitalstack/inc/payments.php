@@ -30,43 +30,66 @@ defined( 'ABSPATH' ) || exit;
  * Settings > VitalStack Payments.
  */
 function vitalstack_pay_plans() {
+	$all   = array_keys( vitalstack_premium_tracks() ); // every track, including ones added later
 	$plans = array(
-		'all-month' => array(
-			'title'  => __( 'All-Access Monthly', 'vitalstack' ),
-			'tracks' => array( 'data-scientist', 'gen-ai-developer' ),
+		'all-month'           => array(
+			'title'  => __( 'Pro Monthly', 'vitalstack' ),
+			'tracks' => $all,
 			'days'   => 31,
-			'inr'    => 499,
-			'usd'    => 12,
+			'inr'    => 399,
+			'usd'    => 9,
 			'period' => __( '1 month', 'vitalstack' ),
-			'blurb'  => __( 'Try everything for a month.', 'vitalstack' ),
+			'blurb'  => __( 'Every premium track for a month. Cancel any time.', 'vitalstack' ),
 		),
-		'data-scientist' => array(
+		'agentic-ai-engineer' => array(
+			'title'  => __( 'Agentic AI Engineer Track', 'vitalstack' ),
+			'tracks' => array( 'agentic-ai-engineer' ),
+			'days'   => 365,
+			'inr'    => 1999,
+			'usd'    => 39,
+			'period' => __( '12 months', 'vitalstack' ),
+			'blurb'  => __( 'Build, test and ship AI agents, MCP servers and multi-agent systems.', 'vitalstack' ),
+			'track'  => true,
+		),
+		'data-scientist'      => array(
 			'title'  => __( 'Data Scientist Track', 'vitalstack' ),
 			'tracks' => array( 'data-scientist' ),
 			'days'   => 365,
-			'inr'    => 2999,
-			'usd'    => 59,
+			'inr'    => 1999,
+			'usd'    => 39,
 			'period' => __( '12 months', 'vitalstack' ),
 			'blurb'  => __( 'Statistics, machine learning, SQL, Power BI and 6 projects.', 'vitalstack' ),
+			'track'  => true,
 		),
-		'gen-ai-developer' => array(
+		'gen-ai-developer'    => array(
 			'title'  => __( 'Gen AI Developer Track', 'vitalstack' ),
 			'tracks' => array( 'gen-ai-developer' ),
 			'days'   => 365,
-			'inr'    => 2999,
-			'usd'    => 59,
+			'inr'    => 1999,
+			'usd'    => 39,
 			'period' => __( '12 months', 'vitalstack' ),
 			'blurb'  => __( 'LLMs, RAG, AI agents and deploying real AI apps.', 'vitalstack' ),
+			'track'  => true,
 		),
-		'all-year' => array(
-			'title'  => __( 'All-Access Yearly', 'vitalstack' ),
-			'tracks' => array( 'data-scientist', 'gen-ai-developer' ),
+		'all-year'            => array(
+			'title'  => __( 'Pro Yearly', 'vitalstack' ),
+			'tracks' => $all,
 			'days'   => 365,
-			'inr'    => 4999,
-			'usd'    => 99,
+			'inr'    => 2999,
+			'usd'    => 69,
 			'period' => __( '12 months', 'vitalstack' ),
-			'blurb'  => __( 'Both career tracks and everything we add this year.', 'vitalstack' ),
+			'blurb'  => __( 'Every track and everything we add this year.', 'vitalstack' ),
 			'best'   => true,
+		),
+		'lifetime'            => array(
+			'title'  => __( 'Founder Lifetime', 'vitalstack' ),
+			'tracks' => $all,
+			'days'   => 0, // 0 = no end date
+			'inr'    => 6999,
+			'usd'    => 149,
+			'period' => __( 'once, for life', 'vitalstack' ),
+			'blurb'  => __( 'All current and future tracks, for life. First 200 buyers only.', 'vitalstack' ),
+			'limit'  => 200,
 		),
 	);
 	$saved = vitalstack_pay_settings()['prices'];
@@ -78,6 +101,68 @@ function vitalstack_pay_plans() {
 		}
 	}
 	return $plans;
+}
+
+/**
+ * Coupons from Settings, one per line:
+ *   CODE | plans (comma list, or *) | 20% or 1999 (fixed ₹ price) | max uses (0 = no limit) | expiry YYYY-MM-DD
+ */
+function vitalstack_pay_coupons() {
+	$out = array();
+	foreach ( preg_split( '/\R/', (string) vitalstack_pay_settings()['coupons'] ) as $line ) {
+		$f = array_map( 'trim', explode( '|', $line ) );
+		if ( count( $f ) < 3 || ! preg_match( '/^[A-Z0-9_-]{3,30}$/', strtoupper( $f[0] ) ) ) {
+			continue;
+		}
+		$out[ strtoupper( $f[0] ) ] = array(
+			'plans'   => '*' === $f[1] ? array( '*' ) : array_map( 'trim', explode( ',', $f[1] ) ),
+			'percent' => preg_match( '/^(\d{1,2})%$/', $f[2], $m ) ? (int) $m[1] : 0,
+			'price'   => preg_match( '/^₹?\s*(\d+)$/u', $f[2], $m ) ? (int) $m[1] : 0,
+			'max'     => isset( $f[3] ) ? absint( $f[3] ) : 0,
+			'expires' => isset( $f[4] ) && preg_match( '/^\d{4}-\d{2}-\d{2}$/', $f[4] ) ? strtotime( $f[4] . ' 23:59:59' ) : 0,
+		);
+	}
+	return $out;
+}
+
+/**
+ * Price of a plan in minor units (paise/cents) after an optional coupon.
+ *
+ * @return array|WP_Error [amount, coupon code or '', label]
+ */
+function vitalstack_pay_price( $plan, $cur, $code = '' ) {
+	$plans = vitalstack_pay_plans();
+	$base  = (int) $plans[ $plan ][ $cur ];
+	$code  = strtoupper( preg_replace( '/[^A-Za-z0-9_-]/', '', (string) $code ) );
+	if ( '' === $code ) {
+		return array( $base * 100, '', vitalstack_pay_price_label( $base, $cur ) );
+	}
+	$all = vitalstack_pay_coupons();
+	$c   = isset( $all[ $code ] ) ? $all[ $code ] : null;
+	$used = (array) get_option( 'vs_pay_coupon_uses', array() );
+	if ( ! $c || ( $c['expires'] && $c['expires'] < time() ) || ( $c['max'] && ( $used[ $code ] ?? 0 ) >= $c['max'] ) ) {
+		return new WP_Error( 'bad_coupon', __( 'That coupon is not valid or has expired.', 'vitalstack' ), array( 'status' => 400 ) );
+	}
+	if ( ! in_array( '*', $c['plans'], true ) && ! in_array( $plan, $c['plans'], true ) ) {
+		return new WP_Error( 'bad_coupon', __( 'That coupon doesn’t apply to this plan.', 'vitalstack' ), array( 'status' => 400 ) );
+	}
+	if ( $c['percent'] ) {
+		$minor = (int) round( $base * 100 * ( 100 - $c['percent'] ) / 100 );
+	} else {
+		// A fixed rupee price; in dollars the same share of the normal price.
+		$ratio = $plans[ $plan ]['inr'] ? $c['price'] / $plans[ $plan ]['inr'] : 1;
+		$minor = 'inr' === $cur ? $c['price'] * 100 : (int) max( 100, round( $base * $ratio ) * 100 );
+	}
+	$minor = max( 100, min( $base * 100, $minor ) );
+	return array( $minor, $code, vitalstack_pay_price_label( $minor / 100, $cur ) );
+}
+
+/**
+ * Founder Lifetime places left (paid lifetime orders count against the limit).
+ */
+function vitalstack_pay_lifetime_left() {
+	$plan = vitalstack_pay_plans()['lifetime'];
+	return max( 0, (int) $plan['limit'] - (int) get_option( 'vs_pay_lifetime_sold', 0 ) );
 }
 
 function vitalstack_pay_price_label( $amount, $cur ) {
@@ -101,6 +186,7 @@ function vitalstack_pay_settings() {
 			'refund_days' => 7,
 			'demo'        => false,
 			'testers'     => '',
+			'coupons'     => '',
 		),
 		is_array( $s ) ? $s : array()
 	);
@@ -270,6 +356,20 @@ function vitalstack_pay_find_order( $rzp_order_id ) {
 	return $ids ? (int) $ids[0] : 0;
 }
 
+function vitalstack_pay_find_by_payment( $payment_id ) {
+	$ids = get_posts(
+		array(
+			'post_type'      => 'vs_order',
+			'post_status'    => 'any',
+			'posts_per_page' => 1,
+			'fields'         => 'ids',
+			'meta_key'       => '_vs_payment', // phpcs:ignore WordPress.DB.SlowDBQuery
+			'meta_value'     => $payment_id, // phpcs:ignore WordPress.DB.SlowDBQuery
+		)
+	);
+	return $ids ? (int) $ids[0] : 0;
+}
+
 /* ── Giving access ────────────────────────────────────────────────────── */
 
 /**
@@ -295,6 +395,8 @@ function vitalstack_pay_complete( $order_id, $payment_id ) {
 	$p      = $all[ $plan ];
 	$access = get_user_meta( $uid, 'vs_premium', true );
 	$access = is_array( $access ) ? $access : array();
+	// Kept so a refund or dispute can put access back exactly as it was.
+	update_post_meta( $order_id, '_vs_prev_access', $access );
 	$until  = 0;
 	foreach ( $p['tracks'] as $track ) {
 		$now = isset( $access[ $track ] ) ? (int) $access[ $track ] : 0;
@@ -302,17 +404,75 @@ function vitalstack_pay_complete( $order_id, $payment_id ) {
 			continue; // already has it with no end date
 		}
 		// Buying again before the end adds the time on, it never cuts it short.
-		$access[ $track ] = max( time(), $now ) + $p['days'] * DAY_IN_SECONDS;
-		$until            = max( $until, $access[ $track ] );
+		$access[ $track ] = $p['days'] ? max( time(), $now ) + $p['days'] * DAY_IN_SECONDS : 1;
+		$until            = $p['days'] ? max( $until, $access[ $track ] ) : $until;
 	}
 	update_user_meta( $uid, 'vs_premium', $access );
 	update_post_meta( $order_id, '_vs_status', 'paid' );
 	update_post_meta( $order_id, '_vs_payment', $payment_id );
 	update_post_meta( $order_id, '_vs_paid_at', time() );
 	update_post_meta( $order_id, '_vs_until', $until );
+	update_post_meta( $order_id, '_vs_invoice', vitalstack_pay_next_invoice() );
+	if ( 'lifetime' === $plan ) {
+		update_option( 'vs_pay_lifetime_sold', (int) get_option( 'vs_pay_lifetime_sold', 0 ) + 1, false );
+	}
+	$coupon = get_post_meta( $order_id, '_vs_coupon', true );
+	if ( $coupon ) {
+		$uses            = (array) get_option( 'vs_pay_coupon_uses', array() );
+		$uses[ $coupon ] = ( isset( $uses[ $coupon ] ) ? (int) $uses[ $coupon ] : 0 ) + 1;
+		update_option( 'vs_pay_coupon_uses', $uses, false );
+	}
 	vitalstack_pay_receipt( $order_id );
 	do_action( 'vitalstack_premium_paid', $uid, $plan, $order_id );
 	return true;
+}
+
+/**
+ * Sequential invoice number for the Indian financial year, e.g. VS/2026-27/0001.
+ */
+function vitalstack_pay_next_invoice() {
+	$y   = (int) wp_date( 'Y' );
+	$fy  = (int) wp_date( 'n' ) >= 4 ? $y : $y - 1;
+	$key = 'vs_pay_invoice_' . $fy;
+	$n   = (int) get_option( $key, 0 ) + 1;
+	update_option( $key, $n, false );
+	return sprintf( 'VS/%d-%02d/%04d', $fy, ( $fy + 1 ) % 100, $n );
+}
+
+/**
+ * Refund or dispute: put the reader's access back to what it was before
+ * this order, mark the order and tell the site owner.
+ */
+function vitalstack_pay_revoke( $order_id, $why ) {
+	if ( 'paid' !== get_post_meta( $order_id, '_vs_status', true ) ) {
+		return;
+	}
+	$uid    = (int) get_post_field( 'post_author', $order_id );
+	$plan   = vitalstack_pay_plans()[ get_post_meta( $order_id, '_vs_plan', true ) ] ?? null;
+	$prev   = get_post_meta( $order_id, '_vs_prev_access', true );
+	$prev   = is_array( $prev ) ? $prev : array();
+	$access = get_user_meta( $uid, 'vs_premium', true );
+	$access = is_array( $access ) ? $access : array();
+	foreach ( $plan ? $plan['tracks'] : array() as $track ) {
+		if ( isset( $prev[ $track ] ) ) {
+			$access[ $track ] = $prev[ $track ];
+		} else {
+			unset( $access[ $track ] );
+		}
+	}
+	update_user_meta( $uid, 'vs_premium', $access );
+	update_post_meta( $order_id, '_vs_status', $why );
+	update_post_meta( $order_id, '_vs_revoked_at', time() );
+	if ( function_exists( 'vitalstack_audit' ) ) {
+		vitalstack_audit( 'pay_' . $why, $uid, array( 'order' => $order_id ) );
+	}
+	$user = get_userdata( $uid );
+	vitalstack_mail(
+		get_option( 'admin_email' ),
+		/* translators: 1: refunded|disputed, 2: order */
+		sprintf( __( 'VitalStack: order %2$d %1$s, access removed', 'vitalstack' ), $why, $order_id ),
+		'<p>' . esc_html( sprintf( 'Order %d (%s) was %s. Premium access from this order has been removed.', $order_id, $user ? $user->user_email : '?', $why ) ) . '</p>'
+	);
 }
 
 function vitalstack_pay_receipt( $order_id ) {
@@ -329,6 +489,7 @@ function vitalstack_pay_receipt( $order_id ) {
 		__( 'Access until', 'vitalstack' ) => $until ? wp_date( get_option( 'date_format' ), $until ) : __( 'No end date', 'vitalstack' ),
 		__( 'Payment ID', 'vitalstack' ) => get_post_meta( $order_id, '_vs_payment', true ),
 		__( 'Order ID', 'vitalstack' )   => get_post_meta( $order_id, '_vs_rzp_order', true ),
+		__( 'Invoice no.', 'vitalstack' ) => get_post_meta( $order_id, '_vs_invoice', true ),
 	);
 	$table = '<table style="border-collapse:collapse;margin:12px 0">';
 	foreach ( $rows as $k => $v ) {
@@ -364,6 +525,15 @@ add_action(
 				'methods'             => 'POST',
 				'callback'            => 'vitalstack_pay_rest_verify',
 				'permission_callback' => 'is_user_logged_in',
+			)
+		);
+		register_rest_route(
+			'vitalstack/v1',
+			'/pay/quote',
+			array(
+				'methods'             => 'POST',
+				'callback'            => 'vitalstack_pay_rest_quote',
+				'permission_callback' => '__return_true',
 			)
 		);
 		register_rest_route(
@@ -453,10 +623,21 @@ function vitalstack_pay_rest_order( WP_REST_Request $req ) {
 	if ( vitalstack_rate_limited( 'pay_order|' . $uid, 10, HOUR_IN_SECONDS ) ) {
 		return vitalstack_pay_error( 'rate', __( 'Too many attempts. Please wait a few minutes and try again.', 'vitalstack' ), 429 );
 	}
+	if ( 'lifetime' === $plan && vitalstack_pay_lifetime_left() < 1 ) {
+		return vitalstack_pay_error( 'sold_out', __( 'All Founder Lifetime places are taken. Pro Yearly gives you everything too.', 'vitalstack' ), 410 );
+	}
 	list( $key_id, $secret, , $mode ) = vitalstack_pay_keys();
-	$amount = (int) $plans[ $plan ][ $cur ] * 100; // paise / cents
+	$price = vitalstack_pay_price( $plan, $cur, (string) $req->get_param( 'coupon' ) );
+	if ( is_wp_error( $price ) ) {
+		return $price;
+	}
+	list( $amount, $coupon ) = $price; // paise / cents, from the server's price list
 	if ( $demo ) {
-		return vitalstack_pay_demo_order( $uid, $plan, $cur, $amount );
+		$out = vitalstack_pay_demo_order( $uid, $plan, $cur, $amount );
+		if ( $coupon && is_array( $out ) ) {
+			update_post_meta( vitalstack_pay_find_order( $out['order_id'] ), '_vs_coupon', $coupon );
+		}
+		return $out;
 	}
 	$order  = wp_insert_post(
 		array(
@@ -502,6 +683,9 @@ function vitalstack_pay_rest_order( WP_REST_Request $req ) {
 	}
 	update_post_meta( $order, '_vs_rzp_order', $body['id'] );
 	update_post_meta( $order, '_vs_plan', $plan );
+	if ( $coupon ) {
+		update_post_meta( $order, '_vs_coupon', $coupon );
+	}
 	update_post_meta( $order, '_vs_amount', $amount );
 	update_post_meta( $order, '_vs_currency', strtoupper( $cur ) );
 	update_post_meta( $order, '_vs_status', 'created' );
@@ -520,6 +704,25 @@ function vitalstack_pay_rest_order( WP_REST_Request $req ) {
 			'email' => $user->user_email,
 		),
 	);
+}
+
+/**
+ * Price after a coupon, for the pricing page (no order is created).
+ */
+function vitalstack_pay_rest_quote( WP_REST_Request $req ) {
+	if ( vitalstack_rate_limited( 'pay_quote|' . vitalstack_remote_ip(), 30, HOUR_IN_SECONDS ) ) {
+		return vitalstack_pay_error( 'rate', __( 'Too many attempts. Please wait a few minutes and try again.', 'vitalstack' ), 429 );
+	}
+	$plan = sanitize_key( (string) $req->get_param( 'plan' ) );
+	$cur  = 'usd' === sanitize_key( (string) $req->get_param( 'currency' ) ) ? 'usd' : 'inr';
+	if ( ! isset( vitalstack_pay_plans()[ $plan ] ) ) {
+		return vitalstack_pay_error( 'bad_plan', __( 'Please pick a plan.', 'vitalstack' ) );
+	}
+	$price = vitalstack_pay_price( $plan, $cur, (string) $req->get_param( 'coupon' ) );
+	if ( is_wp_error( $price ) ) {
+		return $price;
+	}
+	return array( 'label' => $price[2], 'coupon' => $price[1] );
 }
 
 function vitalstack_pay_rest_verify( WP_REST_Request $req ) {
@@ -559,11 +762,23 @@ function vitalstack_pay_rest_webhook( WP_REST_Request $req ) {
 	$raw = $req->get_body();
 	$sig = (string) $req->get_header( 'x_razorpay_signature' );
 	if ( '' === $hook_secret || '' === $sig || ! hash_equals( hash_hmac( 'sha256', $raw, $hook_secret ), $sig ) ) {
+		if ( function_exists( 'vitalstack_audit' ) ) {
+			vitalstack_audit( 'webhook_bad_signature', 0, array(), true );
+		}
 		return new WP_REST_Response( array( 'ok' => false ), 400 );
 	}
 	$event = json_decode( $raw, true );
-	$pay   = $event['payload']['payment']['entity'] ?? null;
 	$type  = $event['event'] ?? '';
+	// Money went back to the buyer: the access it bought goes too.
+	$refund = $event['payload']['refund']['entity'] ?? ( $event['payload']['dispute']['entity'] ?? null );
+	if ( in_array( $type, array( 'refund.processed', 'payment.dispute.created' ), true ) && is_array( $refund ) && ! empty( $refund['payment_id'] ) ) {
+		$paid = vitalstack_pay_find_by_payment( (string) $refund['payment_id'] );
+		if ( $paid ) {
+			vitalstack_pay_revoke( $paid, 'refund.processed' === $type ? 'refunded' : 'disputed' );
+		}
+		return new WP_REST_Response( array( 'ok' => true ), 200 );
+	}
+	$pay   = $event['payload']['payment']['entity'] ?? null;
 	if ( ! is_array( $pay ) || empty( $pay['order_id'] ) ) {
 		return new WP_REST_Response( array( 'ok' => true ), 200 ); // not about an order of ours
 	}
@@ -752,7 +967,7 @@ function vitalstack_pay_settings_page() {
 						<p class="description"><?php esc_html_e( 'Secrets are stored encrypted. They are never shown again.', 'vitalstack' ); ?></p></td></tr>
 				<?php endif; ?>
 				<tr><th><?php esc_html_e( 'Webhook URL', 'vitalstack' ); ?></th><td><code><?php echo esc_html( rest_url( 'vitalstack/v1/pay/webhook' ) ); ?></code>
-					<p class="description"><?php esc_html_e( 'In Razorpay Dashboard > Settings > Webhooks, add this URL with the events payment.captured, order.paid and payment.failed, and the same webhook secret as above.', 'vitalstack' ); ?></p>
+					<p class="description"><?php esc_html_e( 'In Razorpay Dashboard > Settings > Webhooks, add this URL with the events payment.captured, order.paid, payment.failed, refund.processed and payment.dispute.created, and the same webhook secret as above.', 'vitalstack' ); ?></p>
 					<p class="description"><?php echo $khook ? '✅ ' . esc_html__( 'Webhook secret set.', 'vitalstack' ) : '⚠️ ' . esc_html__( 'No webhook secret yet: payments still work, but a reader who closes the tab right after paying needs you to give access by hand.', 'vitalstack' ); ?></p></td></tr>
 				<tr><th><?php esc_html_e( 'Prices', 'vitalstack' ); ?></th><td>
 					<table class="widefat striped" style="max-width:560px"><thead><tr><th><?php esc_html_e( 'Plan', 'vitalstack' ); ?></th><th>₹ INR</th><th>$ USD</th></tr></thead><tbody>
@@ -763,6 +978,14 @@ function vitalstack_pay_settings_page() {
 					<?php endforeach; ?>
 					</tbody></table>
 					<p class="description"><?php esc_html_e( 'US dollar payments need “International payments” switched on in your Razorpay account.', 'vitalstack' ); ?></p>
+				</td></tr>
+				<tr><th><?php esc_html_e( 'Coupons', 'vitalstack' ); ?></th><td>
+					<textarea name="coupons" rows="4" cols="70" class="code" placeholder="LAUNCH | all-year | 1999 | 0 | 2026-12-31&#10;STUDENT20 | * | 20% | 500 |"><?php echo esc_textarea( $s['coupons'] ); ?></textarea>
+					<p class="description"><?php esc_html_e( 'One per line: CODE | plans (all-month, all-year, lifetime, a track slug, comma-separated, or * for all) | 20% off or a fixed ₹ price | max uses (0 = no limit) | expiry date (optional). Checked only on the server.', 'vitalstack' ); ?></p>
+					<?php $vs_used = (array) get_option( 'vs_pay_coupon_uses', array() ); if ( $vs_used ) : ?>
+						<p class="description"><?php echo esc_html( __( 'Used so far:', 'vitalstack' ) . ' ' . implode( ', ', array_map( function ( $k, $v ) { return $k . ' ' . $v . '×'; }, array_keys( $vs_used ), $vs_used ) ) ); ?></p>
+					<?php endif; ?>
+					<p class="description"><?php echo esc_html( sprintf( /* translators: %d: places */ __( 'Founder Lifetime places left: %d', 'vitalstack' ), vitalstack_pay_lifetime_left() ) ); ?></p>
 				</td></tr>
 				<tr><th><?php esc_html_e( 'Refund window', 'vitalstack' ); ?></th><td><input type="number" min="0" max="60" name="refund_days" value="<?php echo (int) $s['refund_days']; ?>" style="width:70px"> <?php esc_html_e( 'days (shown on the pricing page; 0 hides it)', 'vitalstack' ); ?></td></tr>
 			</table>
@@ -780,6 +1003,9 @@ function vitalstack_pay_save_settings() {
 	$s         = vitalstack_pay_settings();
 	$s['open'] = ! empty( $_POST['open'] );
 	$s['demo'] = ! empty( $_POST['demo'] );
+	if ( isset( $_POST['coupons'] ) ) {
+		$s['coupons'] = mb_substr( sanitize_textarea_field( wp_unslash( $_POST['coupons'] ) ), 0, 4000 );
+	}
 	if ( isset( $_POST['testers'] ) ) {
 		$emails       = preg_split( '/[\s,]+/', strtolower( sanitize_textarea_field( wp_unslash( $_POST['testers'] ) ) ) );
 		$s['testers'] = implode( "\n", array_slice( array_filter( $emails, 'is_email' ), 0, 20 ) );

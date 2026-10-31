@@ -28,6 +28,8 @@
 		root.querySelectorAll('.plan-alt').forEach(function (el) { el.textContent = el.getAttribute('data-alt-' + cur); });
 		if (note) note.textContent = NOTES[cur];
 		try { localStorage.setItem('vs-cur', cur); } catch (e) {}
+		root.querySelectorAll('.plan-was').forEach(function (w) { w.remove(); });
+		if (window.__vsRequote) window.__vsRequote();
 	}
 	var saved = null;
 	try { saved = localStorage.getItem('vs-cur'); } catch (e) {}
@@ -37,6 +39,22 @@
 		saved = /^Asia\/(Kolkata|Calcutta)$/.test(tz) ? 'inr' : 'usd';
 	}
 	setCur(saved);
+
+	/* ── Career Track card: pick which track ── */
+	root.querySelectorAll('[data-plan-pick]').forEach(function (sel) {
+		var card = sel.closest('[data-plan-card]');
+		sel.addEventListener('change', function () {
+			var o = sel.options[sel.selectedIndex];
+			var amt = card.querySelector('.plan-amount');
+			amt.setAttribute('data-inr', o.getAttribute('data-inr')); amt.setAttribute('data-usd', o.getAttribute('data-usd'));
+			card.querySelector('.plan-blurb').textContent = o.getAttribute('data-blurb');
+			var b = card.querySelector('[data-buy]'); if (b) b.setAttribute('data-buy', sel.value);
+			var t = card.querySelector('[data-plan-track]'); if (t) t.value = o.getAttribute('data-track');
+			var n = card.querySelector('input[name=_vsnonce]'); if (n && o.getAttribute('data-wl-nonce')) n.value = o.getAttribute('data-wl-nonce');
+			setCur(cur);
+			if (window.__vsRequote) window.__vsRequote();
+		});
+	});
 	root.querySelectorAll('[data-cur]').forEach(function (b) {
 		b.addEventListener('click', function () { setCur(b.getAttribute('data-cur')); });
 		b.addEventListener('keydown', function (e) {
@@ -71,6 +89,43 @@
 			});
 		});
 	}
+	/* ── Coupon: checked by the server for each plan on screen ── */
+	var coupon = '', okFor = {};
+	var cInput = root.querySelector('[data-coupon]'), cMsg = root.querySelector('.pay-coupon-msg');
+	function requote() {
+		if (!coupon) return;
+		var names = [];
+		okFor = {};
+		var jobs = Array.prototype.map.call(root.querySelectorAll('[data-buy]'), function (b) {
+			var plan = b.getAttribute('data-buy'), card = b.closest('[data-plan-card]');
+			return post('quote', { plan: plan, currency: cur, coupon: coupon }).then(function (q) {
+				okFor[plan] = true;
+				var amt = card.querySelector('.plan-amount');
+				var was = card.querySelector('.plan-was');
+				if (!was) { was = document.createElement('s'); was.className = 'plan-was'; amt.parentNode.insertBefore(was, amt); }
+				was.textContent = amt.getAttribute('data-' + cur);
+				amt.textContent = q.label;
+				names.push(card.querySelector('h2').textContent);
+			}).catch(function () {});
+		});
+		Promise.all(jobs).then(function () {
+			if (cMsg) cMsg.textContent = names.length ? '✅ ' + coupon + ' applied to: ' + names.join(', ') : '❌ That coupon is not valid for these plans, or has expired.';
+		});
+	}
+	window.__vsRequote = requote;
+	var cApply = root.querySelector('[data-coupon-apply]');
+	if (cApply) {
+		cApply.addEventListener('click', function () {
+			coupon = (cInput.value || '').toUpperCase().replace(/[^A-Z0-9_-]/g, '');
+			cInput.value = coupon;
+			root.querySelectorAll('.plan-was').forEach(function (w) { w.remove(); });
+			root.querySelectorAll('.plan-amount').forEach(function (a) { a.textContent = a.getAttribute('data-' + cur); });
+			if (!coupon) { okFor = {}; if (cMsg) cMsg.textContent = ''; return; }
+			requote();
+		});
+		cInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); cApply.click(); } });
+	}
+
 	var sdk = null;
 	function loadCheckout() {
 		if (window.Razorpay) return Promise.resolve();
@@ -92,7 +147,8 @@
 		btn.addEventListener('click', function () {
 			say('');
 			busy(true, 'Opening secure checkout…');
-			post('order', { plan: btn.getAttribute('data-buy'), currency: cur }).then(function (o) {
+			var plan = btn.getAttribute('data-buy');
+			post('order', { plan: plan, currency: cur, coupon: okFor[plan] ? coupon : '' }).then(function (o) {
 				if (o.demo) { practice(o, busy); return; }
 				return loadCheckout().then(function () { openRazorpay(o, busy); });
 			}).catch(function (e) { busy(false); say(e.message); });

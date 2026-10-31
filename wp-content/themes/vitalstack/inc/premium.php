@@ -79,6 +79,35 @@ function vitalstack_premium_tracks() {
 				array( 'title' => __( 'Capstone Projects', 'vitalstack' ), 'lessons' => array( __( 'Customer support chatbot over a company FAQ', 'vitalstack' ), __( 'Chat with your PDFs (RAG)', 'vitalstack' ), __( 'Research agent that searches and summarises', 'vitalstack' ), __( 'AI study buddy that makes quizzes from notes', 'vitalstack' ) ) ),
 			),
 		),
+		'agentic-ai-engineer' => array(
+			'title'    => __( 'Agentic AI Engineer', 'vitalstack' ),
+			'icon'     => '🦾',
+			'tagline'  => __( 'Design, build, test and ship AI agents that plan, use tools, remember and work together, safely.', 'vitalstack' ),
+			'for'      => __( 'Developers who know Python and some prompt engineering, and want the most in-demand AI skill of 2026.', 'vitalstack' ),
+			'outcomes' => array(
+				__( 'Explain the plan → act → observe loop, and know when an agent is the wrong tool', 'vitalstack' ),
+				__( 'Give agents tools with function calling, JSON schemas, retries and error handling', 'vitalstack' ),
+				__( 'Add short-term, long-term and vector memory', 'vitalstack' ),
+				__( 'Build an MCP server and connect it to an agent', 'vitalstack' ),
+				__( 'Test agents with evals and tracing, and defend them against prompt injection', 'vitalstack' ),
+				__( 'Ship 4 capstone agents: research, support, coding and browser', 'vitalstack' ),
+			),
+			'modules'  => array(
+				array( 'title' => __( 'Python Foundations', 'vitalstack' ), 'path' => 'python', 'about' => __( 'Functions, dictionaries, JSON, files and errors: what every agent is built from.', 'vitalstack' ) ),
+				array( 'title' => __( 'Prompt Engineering', 'vitalstack' ), 'path' => 'prompt-engineering', 'about' => __( 'Clear instructions, examples, roles and structured output: the language agents think in.', 'vitalstack' ) ),
+				array( 'title' => __( 'Agent Basics', 'vitalstack' ), 'lessons' => array( __( 'What an agent is: the plan → act → observe loop', 'vitalstack' ), __( 'Workflows vs agents: when not to use an agent', 'vitalstack' ), __( 'Your first agent in 40 lines of Python', 'vitalstack' ) ) ),
+				array( 'title' => __( 'Tool Use in Depth', 'vitalstack' ), 'lessons' => array( __( 'Function calling and JSON schemas', 'vitalstack' ), __( 'Errors, retries and timeouts', 'vitalstack' ), __( 'Designing tools an LLM can use well', 'vitalstack' ) ) ),
+				array( 'title' => __( 'Memory and State', 'vitalstack' ), 'lessons' => array( __( 'Short-term memory: the context window', 'vitalstack' ), __( 'Long-term memory and summaries', 'vitalstack' ), __( 'Vector memory with embeddings', 'vitalstack' ) ) ),
+				array( 'title' => __( 'Reasoning Patterns', 'vitalstack' ), 'lessons' => array( __( 'ReAct: reason and act', 'vitalstack' ), __( 'Plan-and-execute', 'vitalstack' ), __( 'Reflection and self-correction', 'vitalstack' ) ) ),
+				array( 'title' => __( 'MCP: Model Context Protocol', 'vitalstack' ), 'lessons' => array( __( 'What MCP is and why it matters', 'vitalstack' ), __( 'Build an MCP server', 'vitalstack' ), __( 'Connect it to an agent', 'vitalstack' ) ) ),
+				array( 'title' => __( 'Frameworks Compared', 'vitalstack' ), 'lessons' => array( __( 'LangGraph', 'vitalstack' ), __( 'CrewAI', 'vitalstack' ), __( 'Claude Agent SDK and OpenAI Agents SDK', 'vitalstack' ), __( 'Choosing (or skipping) a framework', 'vitalstack' ) ) ),
+				array( 'title' => __( 'Multi-Agent Systems', 'vitalstack' ), 'lessons' => array( __( 'Orchestrator and workers', 'vitalstack' ), __( 'Hand-offs and shared state', 'vitalstack' ) ) ),
+				array( 'title' => __( 'Evals and Tracing', 'vitalstack' ), 'lessons' => array( __( 'Test sets for agents', 'vitalstack' ), __( 'LLM-as-judge', 'vitalstack' ), __( 'Tracing and observability', 'vitalstack' ) ) ),
+				array( 'title' => __( 'Safety', 'vitalstack' ), 'lessons' => array( __( 'Prompt injection and how to defend', 'vitalstack' ), __( 'Permissions and human approval', 'vitalstack' ), __( 'Sandboxes for code-running agents', 'vitalstack' ) ) ),
+				array( 'title' => __( 'Production', 'vitalstack' ), 'lessons' => array( __( 'Cost and latency', 'vitalstack' ), __( 'Caching', 'vitalstack' ), __( 'Deployment and monitoring', 'vitalstack' ) ) ),
+				array( 'title' => __( 'Capstone Projects', 'vitalstack' ), 'lessons' => array( __( 'Research agent', 'vitalstack' ), __( 'Customer support agent with tools', 'vitalstack' ), __( 'Coding agent', 'vitalstack' ), __( 'Browser agent', 'vitalstack' ) ) ),
+			),
+		),
 	);
 }
 
@@ -100,6 +129,23 @@ function vitalstack_user_has_premium( $track, $user_id = null ) {
 	$access = (array) get_user_meta( $user_id, 'vs_premium', true );
 	$value  = isset( $access[ $track ] ) ? (int) $access[ $track ] : 0;
 	return 1 === $value || $value > time();
+}
+
+/**
+ * Whether a reader has any paid premium access right now (staff not counted).
+ */
+function vitalstack_reader_has_any_premium( $user_id = null ) {
+	$user_id = null === $user_id ? get_current_user_id() : (int) $user_id;
+	if ( ! $user_id ) {
+		return false;
+	}
+	$access = get_user_meta( $user_id, 'vs_premium', true );
+	foreach ( (array) $access as $v ) {
+		if ( 1 === (int) $v || (int) $v > time() ) {
+			return true;
+		}
+	}
+	return false;
 }
 
 /**

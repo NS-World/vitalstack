@@ -63,7 +63,7 @@ add_action( 'customize_register', 'vitalstack_adsense_customizer' );
  */
 function vitalstack_adsense_head() {
 	$client = vitalstack_adsense_client();
-	if ( ! $client || is_admin() || vitalstack_is_account_page() || get_query_var( 'vs_cert' ) || is_404() || is_search() ) {
+	if ( ! $client || is_admin() || vitalstack_is_account_page() || get_query_var( 'vs_cert' ) || is_404() || is_search() || ( function_exists( 'vitalstack_reader_has_any_premium' ) && vitalstack_reader_has_any_premium() ) ) {
 		return;
 	}
 	printf(
@@ -139,6 +139,10 @@ function vitalstack_ads_allowed() {
 		return false;
 	}
 	if ( vitalstack_is_account_page() || get_query_var( 'vs_cert' ) ) {
+		return false;
+	}
+	// Premium readers paid for an ad-free site.
+	if ( function_exists( 'vitalstack_reader_has_any_premium' ) && vitalstack_reader_has_any_premium() ) {
 		return false;
 	}
 	if ( is_page_template( array( 'page-games.php', 'page-daily-challenge.php', 'page-mock-test.php' ) ) ) {

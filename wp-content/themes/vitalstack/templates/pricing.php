@@ -17,20 +17,21 @@ $vs_signin = vitalstack_account_url(
 		'redirect_to' => vitalstack_pricing_url(),
 	)
 );
-// The yearly bundle is only called cheaper when the prices really make it so.
-if ( $vs_plans['all-year']['inr'] < $vs_plans['data-scientist']['inr'] + $vs_plans['gen-ai-developer']['inr'] ) {
-	$vs_save = $vs_plans['data-scientist']['inr'] + $vs_plans['gen-ai-developer']['inr'] - $vs_plans['all-year']['inr'];
-}
-$vs_order = array( 'all-month', 'data-scientist', 'all-year', 'gen-ai-developer' );
-$vs_feats = array(
-	'all-month'        => array( __( 'Both career tracks', 'vitalstack' ), __( 'All premium lessons, quizzes and projects', 'vitalstack' ), __( 'Good for a quick sprint before interviews', 'vitalstack' ) ),
-	'data-scientist'   => array( __( '13 modules, beginner to job-ready', 'vitalstack' ), __( 'Statistics, ML, SQL, Power BI', 'vitalstack' ), __( '6 portfolio projects + certificate', 'vitalstack' ) ),
-	'all-year'         => array( __( 'Data Scientist + Gen AI Developer', 'vitalstack' ), __( 'Every new premium module this year', 'vitalstack' ), __( 'Both certificates', 'vitalstack' ) ),
-	'gen-ai-developer' => array( __( '12 modules, Python to AI apps', 'vitalstack' ), __( 'LLMs, RAG, AI agents, deployment', 'vitalstack' ), __( 'Real AI projects + certificate', 'vitalstack' ) ),
+$vs_track_ids = array_keys( array_filter( $vs_plans, function ( $p ) { return ! empty( $p['track'] ); } ) );
+$vs_order     = array( 'all-month', 'track', 'all-year', 'lifetime' );
+$vs_lifeleft  = vitalstack_pay_lifetime_left();
+$vs_ntracks   = count( $vs_tracks );
+$vs_feats     = array(
+	'all-month' => array( sprintf( /* translators: %d: tracks */ __( 'All %d career tracks', 'vitalstack' ), $vs_ntracks ), __( 'Every premium lesson, quiz and project', 'vitalstack' ), __( 'No ads anywhere on the site', 'vitalstack' ) ),
+	'track'     => array( __( 'One career track for 12 months', 'vitalstack' ), __( 'Its projects + certificate', 'vitalstack' ), __( 'No ads anywhere on the site', 'vitalstack' ) ),
+	'all-year'  => array( sprintf( /* translators: %d: tracks */ __( 'All %d career tracks for 12 months', 'vitalstack' ), $vs_ntracks ), __( 'Every new track and module added this year', 'vitalstack' ), __( 'All certificates · no ads', 'vitalstack' ) ),
+	'lifetime'  => array( __( 'Every current and future track, for life', 'vitalstack' ), __( 'Pay once, never again', 'vitalstack' ), __( 'Founder badge on your profile', 'vitalstack' ) ),
 );
-if ( ! empty( $vs_save ) ) {
-	/* translators: %s: amount saved */
-	$vs_feats['all-year'][] = sprintf( __( 'Save %s vs buying both tracks', 'vitalstack' ), vitalstack_pay_price_label( $vs_save, 'inr' ) );
+// The yearly plan is only called cheaper when the prices really make it so.
+$vs_monthly12 = $vs_plans['all-month']['inr'] * 12;
+if ( $vs_plans['all-year']['inr'] < $vs_monthly12 ) {
+	/* translators: %d: percent */
+	$vs_feats['all-year'][] = sprintf( __( '%d%% less than paying monthly', 'vitalstack' ), round( ( 1 - $vs_plans['all-year']['inr'] / $vs_monthly12 ) * 100 ) );
 }
 ?>
 <section class="pricing-hero">
@@ -65,13 +66,27 @@ if ( ! empty( $vs_save ) ) {
 		<div class="pricing-grid">
 			<?php
 			foreach ( $vs_order as $vs_id ) :
-				$vs_p = $vs_plans[ $vs_id ];
+				$vs_buy = 'track' === $vs_id ? $vs_track_ids[0] : $vs_id;
+				$vs_p   = $vs_plans[ $vs_buy ];
+				$vs_out = 'lifetime' === $vs_id && $vs_lifeleft < 1;
+				$vs_btn = empty( $vs_p['best'] ) ? 'btn-ghost' : 'btn-primary';
 				?>
-				<article class="plan<?php echo empty( $vs_p['best'] ) ? '' : ' is-best'; ?>" id="plan-<?php echo esc_attr( $vs_id ); ?>">
+				<article class="plan<?php echo empty( $vs_p['best'] ) ? '' : ' is-best'; ?><?php echo 'lifetime' === $vs_id ? ' is-life' : ''; ?>" id="plan-<?php echo esc_attr( $vs_id ); ?>" data-plan-card>
 					<?php if ( ! empty( $vs_p['best'] ) ) : ?>
 						<p class="plan-ribbon"><?php esc_html_e( 'Best value', 'vitalstack' ); ?></p>
+					<?php elseif ( 'lifetime' === $vs_id ) : ?>
+						<p class="plan-ribbon is-gold"><?php echo esc_html( $vs_out ? __( 'Sold out', 'vitalstack' ) : sprintf( /* translators: %d: places */ __( 'Only %d places', 'vitalstack' ), $vs_lifeleft ) ); ?></p>
 					<?php endif; ?>
-					<h2><?php echo esc_html( $vs_p['title'] ); ?></h2>
+					<h2><?php echo esc_html( 'track' === $vs_id ? __( 'Career Track', 'vitalstack' ) : $vs_p['title'] ); ?></h2>
+					<?php if ( 'track' === $vs_id ) : ?>
+						<label class="plan-pick"><span class="screen-reader-text"><?php esc_html_e( 'Choose a track', 'vitalstack' ); ?></span>
+							<select data-plan-pick>
+								<?php foreach ( $vs_track_ids as $vs_t ) : ?>
+									<option value="<?php echo esc_attr( $vs_t ); ?>" data-inr="<?php echo esc_attr( vitalstack_pay_price_label( $vs_plans[ $vs_t ]['inr'], 'inr' ) ); ?>" data-usd="<?php echo esc_attr( vitalstack_pay_price_label( $vs_plans[ $vs_t ]['usd'], 'usd' ) ); ?>" data-blurb="<?php echo esc_attr( $vs_plans[ $vs_t ]['blurb'] ); ?>" data-track="<?php echo esc_attr( $vs_plans[ $vs_t ]['tracks'][0] ); ?>"<?php echo is_user_logged_in() ? ' data-wl-nonce="' . esc_attr( wp_create_nonce( 'vs_waitlist_' . $vs_plans[ $vs_t ]['tracks'][0] ) ) . '"' : ''; ?>><?php echo esc_html( $vs_tracks[ $vs_plans[ $vs_t ]['tracks'][0] ]['icon'] . ' ' . $vs_tracks[ $vs_plans[ $vs_t ]['tracks'][0] ]['title'] ); ?></option>
+								<?php endforeach; ?>
+							</select>
+						</label>
+					<?php endif; ?>
 					<p class="plan-blurb"><?php echo esc_html( $vs_p['blurb'] ); ?></p>
 					<p class="plan-price">
 						<span class="plan-amount" data-inr="<?php echo esc_attr( vitalstack_pay_price_label( $vs_p['inr'], 'inr' ) ); ?>" data-usd="<?php echo esc_attr( vitalstack_pay_price_label( $vs_p['usd'], 'usd' ) ); ?>"><?php echo esc_html( vitalstack_pay_price_label( $vs_p['inr'], 'inr' ) ); ?></span>
@@ -84,24 +99,37 @@ if ( ! empty( $vs_save ) ) {
 						<?php endforeach; ?>
 					</ul>
 					<div class="plan-cta">
-						<?php if ( 'buy' === $vs_action ) : ?>
-							<button type="button" class="btn <?php echo empty( $vs_p['best'] ) ? 'btn-ghost' : 'btn-primary'; ?> btn-block" data-buy="<?php echo esc_attr( $vs_id ); ?>"><?php esc_html_e( 'Get it now', 'vitalstack' ); ?></button>
+						<?php if ( $vs_out ) : ?>
+							<button type="button" class="btn btn-ghost btn-block" disabled><?php esc_html_e( 'Sold out', 'vitalstack' ); ?></button>
+						<?php elseif ( 'buy' === $vs_action ) : ?>
+							<button type="button" class="btn <?php echo esc_attr( $vs_btn ); ?> btn-block" data-buy="<?php echo esc_attr( $vs_buy ); ?>"><?php esc_html_e( 'Get it now', 'vitalstack' ); ?></button>
 						<?php elseif ( 'signin' === $vs_action ) : ?>
-							<a class="btn <?php echo empty( $vs_p['best'] ) ? 'btn-ghost' : 'btn-primary'; ?> btn-block" href="<?php echo esc_url( $vs_signin ); ?>"><?php esc_html_e( 'Create free account to buy', 'vitalstack' ); ?></a>
+							<a class="btn <?php echo esc_attr( $vs_btn ); ?> btn-block" href="<?php echo esc_url( $vs_signin ); ?>"><?php esc_html_e( 'Create free account to buy', 'vitalstack' ); ?></a>
 						<?php else : ?>
 							<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 								<input type="hidden" name="action" value="vs_waitlist">
-								<input type="hidden" name="track" value="<?php echo esc_attr( $vs_p['tracks'][0] ); ?>">
+								<input type="hidden" name="track" value="<?php echo esc_attr( $vs_p['tracks'][0] ); ?>" data-plan-track>
 								<?php if ( is_user_logged_in() ) : ?>
 									<?php wp_nonce_field( 'vs_waitlist_' . $vs_p['tracks'][0], '_vsnonce' ); ?>
 								<?php endif; ?>
-								<button type="submit" class="btn <?php echo empty( $vs_p['best'] ) ? 'btn-ghost' : 'btn-primary'; ?> btn-block"><?php esc_html_e( 'Join the waitlist', 'vitalstack' ); ?></button>
+								<button type="submit" class="btn <?php echo esc_attr( $vs_btn ); ?> btn-block"><?php esc_html_e( 'Join the waitlist', 'vitalstack' ); ?></button>
 							</form>
 						<?php endif; ?>
 					</div>
 				</article>
 			<?php endforeach; ?>
 		</div>
+		<?php if ( 'buy' === $vs_action ) : ?>
+			<details class="pay-coupon">
+				<summary><?php esc_html_e( 'Have a coupon code?', 'vitalstack' ); ?></summary>
+				<div class="pay-coupon-row">
+					<label class="screen-reader-text" for="vs-coupon"><?php esc_html_e( 'Coupon code', 'vitalstack' ); ?></label>
+					<input id="vs-coupon" type="text" data-coupon maxlength="30" autocomplete="off" autocapitalize="characters" placeholder="LAUNCH">
+					<button type="button" class="btn btn-ghost btn-sm" data-coupon-apply><?php esc_html_e( 'Apply', 'vitalstack' ); ?></button>
+				</div>
+				<p class="pay-coupon-msg" aria-live="polite"></p>
+			</details>
+		<?php endif; ?>
 		<p class="pay-msg" role="alert" hidden></p>
 		<p class="pricing-trust">
 			<span>🔒 <?php esc_html_e( 'Secure checkout by Razorpay', 'vitalstack' ); ?></span>
@@ -145,6 +173,8 @@ if ( ! empty( $vs_save ) ) {
 					<tr><th scope="row"><?php esc_html_e( 'Advanced ML, deep learning, LLMs, RAG and AI agents', 'vitalstack' ); ?></th><td>—</td><td>✅</td></tr>
 					<tr><th scope="row"><?php esc_html_e( 'Guided portfolio projects', 'vitalstack' ); ?></th><td>—</td><td>✅</td></tr>
 					<tr><th scope="row"><?php esc_html_e( 'Career track certificate', 'vitalstack' ); ?></th><td>—</td><td>✅</td></tr>
+					<tr><th scope="row"><?php esc_html_e( 'Line-by-line animated code walkthroughs', 'vitalstack' ); ?></th><td>—</td><td>✅</td></tr>
+					<tr><th scope="row"><?php esc_html_e( 'No ads', 'vitalstack' ); ?></th><td>—</td><td>✅</td></tr>
 				</tbody>
 			</table>
 		</div>
@@ -162,7 +192,7 @@ if ( ! empty( $vs_save ) ) {
 			<details><summary><?php esc_html_e( 'Is it a subscription? Will I be charged again?', 'vitalstack' ); ?></summary><p><?php esc_html_e( 'No. You pay once for the period you choose. Nothing renews automatically. If you buy again before it ends, the new time is added on.', 'vitalstack' ); ?></p></details>
 			<details><summary><?php esc_html_e( 'When do I get access?', 'vitalstack' ); ?></summary><p><?php esc_html_e( 'Right after the payment succeeds. We also email you a receipt. Your access is shown on your account page.', 'vitalstack' ); ?></p></details>
 			<?php if ( $vs_refund ) : ?>
-				<details><summary><?php esc_html_e( 'What if it’s not for me?', 'vitalstack' ); ?></summary><p><?php echo esc_html( sprintf( /* translators: %d: days */ __( 'Write to us within %d days of paying and we will refund you in full. No long forms.', 'vitalstack' ), $vs_refund ) ); ?></p></details>
+				<details><summary><?php esc_html_e( 'What if it’s not for me?', 'vitalstack' ); ?></summary><p><?php echo esc_html( sprintf( /* translators: %d: days */ __( 'Write to us within %d days of paying and, if you have opened less than 30%% of the premium lessons, we refund you in full. No long forms.', 'vitalstack' ), $vs_refund ) ); ?></p></details>
 			<?php endif; ?>
 			<details><summary><?php esc_html_e( 'Do I need to know coding already?', 'vitalstack' ); ?></summary><p><?php esc_html_e( 'No. Both tracks start from zero with our free Python lessons, and every step builds on the one before.', 'vitalstack' ); ?></p></details>
 			<details><summary><?php esc_html_e( 'Will free lessons stay free?', 'vitalstack' ); ?></summary><p><?php esc_html_e( 'Yes. Everything that is free today stays free. Premium adds the deeper career material on top.', 'vitalstack' ); ?></p></details>
