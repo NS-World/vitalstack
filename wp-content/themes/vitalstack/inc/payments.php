@@ -548,6 +548,19 @@ add_action(
 	}
 );
 
+/**
+ * What a reader must have done before paying (design §7): confirmed email,
+ * subscribed to course updates, and a security check in the last 15 minutes.
+ */
+function vitalstack_pay_checklist( $user_id ) {
+	$app = function_exists( 'vitalstack_totp_on' ) && vitalstack_totp_on( $user_id );
+	return array(
+		array( 'key' => 'email', 'done' => vitalstack_is_verified( $user_id ), 'label' => __( 'Confirm your email address', 'vitalstack' ) ),
+		array( 'key' => 'subscribe', 'done' => vitalstack_is_subscribed( $user_id ), 'label' => __( 'Subscribe to course and lesson updates', 'vitalstack' ) ),
+		array( 'key' => 'security', 'done' => function_exists( 'vitalstack_stepup_fresh' ) ? vitalstack_stepup_fresh( $user_id ) : true, 'label' => __( 'Quick security check (6-digit code)', 'vitalstack' ), 'method' => $app ? 'app' : 'email' ),
+	);
+}
+
 function vitalstack_pay_error( $code, $message, $status = 400 ) {
 	return new WP_Error( $code, $message, array( 'status' => $status ) );
 }
@@ -622,6 +635,10 @@ function vitalstack_pay_rest_order( WP_REST_Request $req ) {
 	}
 	if ( vitalstack_rate_limited( 'pay_order|' . $uid, 10, HOUR_IN_SECONDS ) ) {
 		return vitalstack_pay_error( 'rate', __( 'Too many attempts. Please wait a few minutes and try again.', 'vitalstack' ), 429 );
+	}
+	$steps = vitalstack_pay_checklist( $uid );
+	if ( array_filter( $steps, function ( $st ) { return ! $st['done']; } ) ) {
+		return new WP_Error( 'checklist', __( 'A few quick steps before you buy.', 'vitalstack' ), array( 'status' => 403, 'steps' => $steps ) );
 	}
 	if ( 'lifetime' === $plan && vitalstack_pay_lifetime_left() < 1 ) {
 		return vitalstack_pay_error( 'sold_out', __( 'All Founder Lifetime places are taken. Pro Yearly gives you everything too.', 'vitalstack' ), 410 );

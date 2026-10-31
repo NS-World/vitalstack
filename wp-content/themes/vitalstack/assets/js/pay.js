@@ -84,7 +84,7 @@
 			body: JSON.stringify(data)
 		}).then(function (r) {
 			return r.json().catch(function () { return {}; }).then(function (j) {
-				if (!r.ok) throw new Error(j && j.message ? j.message : 'Something went wrong. Please try again.');
+				if (!r.ok) { var err = new Error(j && j.message ? j.message : 'Something went wrong. Please try again.'); err.code = j && j.code; err.data = j && j.data; throw err; }
 				return j;
 			});
 		});
@@ -151,9 +151,67 @@
 			post('order', { plan: plan, currency: cur, coupon: okFor[plan] ? coupon : '' }).then(function (o) {
 				if (o.demo) { practice(o, busy); return; }
 				return loadCheckout().then(function () { openRazorpay(o, busy); });
-			}).catch(function (e) { busy(false); say(e.message); });
+			}).catch(function (e) {
+				busy(false);
+				if (e.code === 'checklist' && e.data && e.data.steps) checklist(e.data.steps, function () { btn.click(); });
+				else say(e.message);
+			});
 		});
 	});
+
+	/* Before buying: confirm email, subscribe, quick security check (design §7). */
+	var secApi = api.replace(/pay\/$/, 'security/');
+	function secPost(path, data) {
+		return fetch(secApi + path, { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': nonce }, body: JSON.stringify(data) })
+			.then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok) throw new Error(j.message || 'Something went wrong. Please try again.'); return j; }); });
+	}
+	function checklist(steps, done) {
+		var d = document.createElement('div');
+		d.className = 'pay-demo pay-check'; d.setAttribute('role', 'dialog'); d.setAttribute('aria-modal', 'true'); d.setAttribute('aria-label', 'Before you buy');
+		d.innerHTML = '<div class="pay-demo-box"><p class="pay-demo-tag">🔐 Before you buy</p><p class="pay-check-sub">Three quick steps keep your account and payment safe.</p><ol class="pay-steps"></ol><p class="pay-check-msg" aria-live="polite"></p><button type="button" class="btn-link" data-close>Close</button></div>';
+		document.body.appendChild(d);
+		var list = d.querySelector('.pay-steps'), msg = d.querySelector('.pay-check-msg');
+		function close() { d.remove(); document.removeEventListener('keydown', esc); }
+		function esc(e) { if (e.key === 'Escape') close(); }
+		document.addEventListener('keydown', esc);
+		d.querySelector('[data-close]').addEventListener('click', close);
+		function draw(st) {
+			steps = st;
+			list.innerHTML = '';
+			var left = 0;
+			steps.forEach(function (s) {
+				var li = document.createElement('li');
+				li.className = s.done ? 'is-done' : '';
+				li.innerHTML = '<span class="pay-step-mark">' + (s.done ? '✓' : '') + '</span><div class="pay-step-body"><b></b><div class="pay-step-act"></div></div>';
+				li.querySelector('b').textContent = s.label;
+				var act = li.querySelector('.pay-step-act');
+				if (!s.done) {
+					left++;
+					if (s.key === 'email') act.appendChild(action('Resend confirmation email', function () { return secPost('checklist', { action: 'confirm' }).then(function () { msg.textContent = '📧 Sent. Click the link in the email, then come back and press Buy again.'; }); }));
+					if (s.key === 'subscribe') act.appendChild(action('Subscribe now', function () { return secPost('checklist', { action: 'subscribe' }).then(function (j) { draw(j.steps); }); }));
+					if (s.key === 'security') securityStep(act, s.method);
+				}
+				list.appendChild(li);
+			});
+			if (!left) { msg.textContent = 'All set ✅ Opening checkout…'; setTimeout(function () { close(); done(); }, 700); }
+		}
+		function action(label, fn) {
+			var b = document.createElement('button'); b.type = 'button'; b.className = 'btn btn-primary btn-sm'; b.textContent = label;
+			b.addEventListener('click', function () { b.disabled = true; msg.textContent = ''; fn().catch(function (e) { msg.textContent = e.message; }).then(function () { b.disabled = false; }); });
+			return b;
+		}
+		function securityStep(act, method) {
+			var row = document.createElement('div'); row.className = 'pay-code-row';
+			var inp = document.createElement('input'); inp.type = 'text'; inp.inputMode = method === 'app' ? 'text' : 'numeric'; inp.maxLength = 9; inp.autocomplete = 'one-time-code'; inp.placeholder = method === 'app' ? 'Code from your app' : '6-digit code'; inp.setAttribute('aria-label', inp.placeholder);
+			var ok = action('Verify', function () { return secPost('stepup', { action: 'check', code: inp.value }).then(function () { steps.forEach(function (s) { if (s.key === 'security') s.done = true; }); draw(steps); }); });
+			if (method !== 'app') {
+				act.appendChild(action('Email me a code', function () { return secPost('stepup', { action: 'send' }).then(function (j) { msg.textContent = '📧 Code sent to ' + j.to + '.'; inp.focus(); }); }));
+			}
+			row.appendChild(inp); row.appendChild(ok); act.appendChild(row);
+			inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') ok.click(); });
+		}
+		draw(steps);
+	}
 
 	function finishPaid(v) {
 		say('Payment received 🎉 Taking you to your course…', true);

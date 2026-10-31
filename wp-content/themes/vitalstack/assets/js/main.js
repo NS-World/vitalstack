@@ -333,13 +333,23 @@
 
 	/* ── Email code step: digits only, submit at 6, resend countdown ──────── */
 	document.querySelectorAll('.otp-verify .otp-input').forEach(function (inp) {
+		// Authenticator screens (inputmode=text) also take backup codes like "ab12-cd34".
+		var backup = inp.getAttribute('inputmode') === 'text';
 		inp.addEventListener('input', function () {
-			var v = inp.value.replace(/\D/g, '').slice(0, 6);
+			var v = backup ? inp.value.replace(/[^A-Za-z0-9-]/g, '').slice(0, 9) : inp.value.replace(/\D/g, '').slice(0, 6);
 			if (v !== inp.value) inp.value = v;
-			if (v.length === 6 && inp.form && !inp.form.dataset.sent) {
+			if (/^\d{6}$/.test(v) && inp.form && !inp.form.dataset.sent) {
 				inp.form.dataset.sent = '1';
 				if (inp.form.requestSubmit) inp.form.requestSubmit(); else inp.form.submit();
 			}
+		});
+	});
+	document.querySelectorAll('[data-copy-codes]').forEach(function (b) {
+		b.addEventListener('click', function () {
+			var label = b.textContent;
+			(navigator.clipboard ? navigator.clipboard.writeText(b.getAttribute('data-copy-codes')) : Promise.reject()).then(function () {
+				b.textContent = 'Copied ✓'; setTimeout(function () { b.textContent = label; }, 1500);
+			}).catch(function () {});
 		});
 	});
 	document.querySelectorAll('[data-resend-wait]').forEach(function (b) {

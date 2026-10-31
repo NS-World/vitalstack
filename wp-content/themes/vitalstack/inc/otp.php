@@ -162,11 +162,26 @@ function vitalstack_code_start( $purpose, $email, $payload ) {
 	if ( $old && 'login' === $purpose && isset( $old['purpose'], $old['uid'] ) && 'login' === $old['purpose'] && (int) $old['uid'] === (int) $payload['uid'] ) {
 		vitalstack_otp_back( 'code_again', $back );
 	}
-	if ( ! vitalstack_otp_can_send( $email ) ) {
+	// Readers with an authenticator app type its code instead of getting an email.
+	$app = 'login' === $purpose && function_exists( 'vitalstack_totp_on' ) && vitalstack_totp_on( (int) $payload['uid'] );
+	if ( $app && vitalstack_2fa_locked( (int) $payload['uid'] ) ) {
+		vitalstack_account_redirect( '2fa_locked', array( 'tab' => 'login' ) + $back );
+	}
+	if ( ! $app && ! vitalstack_otp_can_send( $email ) ) {
 		vitalstack_account_redirect( 'otp_wait', array( 'tab' => 'signup' === $purpose ? 'register' : 'login' ) + $back );
 	}
 	if ( $old ) {
 		delete_transient( 'vs_otp_' . hash( 'sha256', $old['sid'] ) );
+	}
+	if ( $app ) {
+		$sid = strtolower( wp_generate_password( 32, false, false ) );
+		set_transient(
+			'vs_otp_' . hash( 'sha256', $sid ),
+			array_merge( $payload, array( 'purpose' => $purpose, 'method' => 'app', 'email' => $email, 'hash' => '', 'tries' => 0, 'sends' => 0, 'expires' => time() + VITALSTACK_OTP_TTL, 'mask' => vitalstack_otp_mask( $email ) ) ),
+			VITALSTACK_OTP_TTL
+		);
+		vitalstack_otp_cookie( $sid, time() + VITALSTACK_OTP_TTL );
+		vitalstack_otp_back( 'code_app', $back );
 	}
 	$sid  = strtolower( wp_generate_password( 32, false, false ) );
 	$code = vitalstack_otp_new_code();
@@ -287,6 +302,7 @@ function vitalstack_handle_code_resend() {
 	$code = vitalstack_otp_new_code();
 	$sid  = $data['sid'];
 	unset( $data['sid'] );
+	$data['method'] = 'email'; // "Email me a code instead" from the app screen
 	// A new code replaces the old one; the attempt does not get longer than one TTL from now.
 	$data['hash']    = vitalstack_otp_hash( $sid, $code );
 	$data['tries']   = 0;
@@ -331,12 +347,18 @@ function vitalstack_handle_otp_verify() {
 	set_transient( 'vs_otp_' . hash( 'sha256', $sid ), $data, max( 1, $left ) );
 	$data['sid'] = $sid;
 
-	$code = isset( $_POST['code'] ) ? preg_replace( '/\D/', '', (string) wp_unslash( $_POST['code'] ) ) : '';
+	$raw  = isset( $_POST['code'] ) ? sanitize_text_field( wp_unslash( $_POST['code'] ) ) : '';
+	$code = preg_replace( '/\D/', '', $raw );
 	if ( $data['tries'] > VITALSTACK_OTP_TRIES ) {
 		vitalstack_otp_forget( $data );
 		vitalstack_otp_back( 'otp_expired', $back );
 	}
-	if ( 6 !== strlen( $code ) || ! hash_equals( $data['hash'], vitalstack_otp_hash( $sid, $code ) ) ) {
+	if ( isset( $data['method'] ) && 'app' === $data['method'] ) {
+		// Authenticator code or a backup code (vitalstack_2fa_verify counts failures).
+		if ( ! vitalstack_2fa_verify( (int) $data['uid'], $raw ) ) {
+			vitalstack_otp_back( vitalstack_2fa_locked( (int) $data['uid'] ) ? '2fa_locked' : ( $data['tries'] >= VITALSTACK_OTP_TRIES ? 'otp_expired' : 'otp_wrong' ), $back );
+		}
+	} elseif ( 6 !== strlen( $code ) || ! hash_equals( $data['hash'], vitalstack_otp_hash( $sid, $code ) ) ) {
 		vitalstack_otp_back( $data['tries'] >= VITALSTACK_OTP_TRIES ? 'otp_expired' : 'otp_wrong', $back );
 	}
 	vitalstack_otp_forget( $data );
@@ -403,6 +425,9 @@ function vitalstack_code_finish_signup( $data, $redirect ) {
 	update_user_meta( $user->ID, 'vs_email_verified', 1 );
 	vitalstack_set_subscribed( $user->ID, ! empty( $data['subscribe'] ) );
 	vitalstack_send_welcome( $user->ID );
+	if ( function_exists( 'vitalstack_2fa_passed' ) ) {
+		vitalstack_2fa_passed( $user->ID );
+	}
 
 	wp_set_current_user( $user->ID );
 	wp_set_auth_cookie( $user->ID, true, is_ssl() );
@@ -420,6 +445,9 @@ function vitalstack_code_finish_login( $data, $redirect ) {
 		vitalstack_account_redirect( 'failed', array( 'tab' => 'login' ) );
 	}
 	update_user_meta( $user->ID, 'vs_email_verified', 1 );
+	if ( function_exists( 'vitalstack_2fa_passed' ) ) {
+		vitalstack_2fa_passed( $user->ID ); // a fresh security check, good for buying for 15 minutes
+	}
 	wp_set_current_user( $user->ID );
 	wp_set_auth_cookie( $user->ID, ! empty( $data['remember'] ), is_ssl() );
 	do_action( 'wp_login', $user->user_login, $user );
@@ -505,6 +533,7 @@ add_filter(
 				'otp_welcome' => array( 'success', __( 'Welcome to VitalStack! Your account is ready and your email is confirmed.', 'vitalstack' ) ),
 				'otp_admin'   => array( 'info', __( 'Site administrators sign in with their password.', 'vitalstack' ) ),
 				'code_signup' => array( 'success', __( 'Almost done! We emailed you a 6-digit code (check spam too). Enter it below to create your account.', 'vitalstack' ) ),
+				'code_app'    => array( 'info', __( 'Password correct. Now type the 6-digit code from your authenticator app.', 'vitalstack' ) ),
 				'code_login'  => array( 'success', __( 'Password correct. For your safety we emailed you a 6-digit code (check spam too). Enter it below to sign in.', 'vitalstack' ) ),
 				'code_again'  => array( 'info', __( 'Enter the code we already emailed you. You can ask for a new one below.', 'vitalstack' ) ),
 				'code_resent' => array( 'success', __( 'New code sent. Only the newest code works.', 'vitalstack' ) ),
@@ -522,6 +551,7 @@ add_filter(
  */
 function vitalstack_code_panel( $pending, $redirect ) {
 	$purpose = isset( $pending['purpose'] ) ? $pending['purpose'] : 'code';
+	$app     = isset( $pending['method'] ) && 'app' === $pending['method'];
 	$titles  = array(
 		'signup' => __( 'Confirm your email', 'vitalstack' ),
 		'login'  => __( 'Two-step sign-in', 'vitalstack' ),
@@ -543,7 +573,7 @@ function vitalstack_code_panel( $pending, $redirect ) {
 			<p class="otp-sent-to">
 				<?php
 				/* translators: %s: masked email address */
-				echo esc_html( sprintf( __( 'We emailed a 6-digit code to %s. It expires in 10 minutes.', 'vitalstack' ), $pending['mask'] ) );
+				echo esc_html( $app ? __( 'Open your authenticator app and type the 6-digit code for VitalStack. Lost your phone? Use a backup code.', 'vitalstack' ) : sprintf( __( 'We emailed a 6-digit code to %s. It expires in 10 minutes.', 'vitalstack' ), $pending['mask'] ) );
 				?>
 			</p>
 		</div>
@@ -553,7 +583,11 @@ function vitalstack_code_panel( $pending, $redirect ) {
 			<?php wp_nonce_field( 'vs_otp_verify', '_vsnonce' ); ?>
 			<label class="field">
 				<span><?php esc_html_e( '6-digit code', 'vitalstack' ); ?></span>
-				<input class="otp-input" type="text" name="code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" placeholder="••••••" required autofocus>
+				<?php if ( $app ) : ?>
+					<input class="otp-input" type="text" name="code" inputmode="text" maxlength="9" autocomplete="one-time-code" placeholder="123456" required autofocus>
+				<?php else : ?>
+					<input class="otp-input" type="text" name="code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" placeholder="••••••" required autofocus>
+				<?php endif; ?>
 			</label>
 			<?php if ( 'login' === $purpose ) : ?>
 				<label class="check"><input type="checkbox" name="trust" value="1" checked> <?php esc_html_e( 'Trust this device for 30 days (don’t tick on a shared computer)', 'vitalstack' ); ?></label>
@@ -566,7 +600,11 @@ function vitalstack_code_panel( $pending, $redirect ) {
 					<input type="hidden" name="action" value="vs_code_resend">
 					<input type="hidden" name="redirect_to" value="<?php echo esc_url( $redirect ); ?>">
 					<?php wp_nonce_field( 'vs_code_resend', '_vsnonce' ); ?>
-					<button type="submit" class="btn-link" data-resend-wait="60"><?php esc_html_e( 'Didn’t get it? Send a new code', 'vitalstack' ); ?></button>
+					<?php if ( $app ) : ?>
+						<button type="submit" class="btn-link"><?php esc_html_e( 'No phone with you? Email me a code instead', 'vitalstack' ); ?></button>
+					<?php else : ?>
+						<button type="submit" class="btn-link" data-resend-wait="60"><?php esc_html_e( 'Didn’t get it? Send a new code', 'vitalstack' ); ?></button>
+					<?php endif; ?>
 				</form>
 			<?php endif; ?>
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">

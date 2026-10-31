@@ -2084,7 +2084,36 @@ a.why-card:hover { border-color: #f5b301; text-decoration: none; transform: tran
 .pay-demo-amount { margin: 0; font-size: 34px; font-weight: 800; letter-spacing: -.02em; }
 .pay-demo-methods { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 4px 0 8px; }
 .pay-demo-methods span { padding: 4px 10px; border-radius: 8px; border: 1px solid var(--border); font-size: 13px; color: var(--text-2); }
+.pay-check .pay-demo-box { text-align: left; width: min(100%, 440px); }
+.pay-check-sub { margin: 0; color: var(--text-2); font-size: 14px; }
+.pay-steps { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 10px; }
+.pay-steps li { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border: 1px solid var(--border); border-radius: 12px; }
+.pay-steps li.is-done { background: var(--brand-soft); border-color: transparent; }
+.pay-step-mark { flex: 0 0 24px; height: 24px; display: grid; place-items: center; border-radius: 50%; border: 2px solid var(--border); font-weight: 800; color: var(--on-brand); }
+.pay-steps li.is-done .pay-step-mark { background: var(--brand); border-color: var(--brand); }
+.pay-step-body { flex: 1; min-width: 0; display: grid; gap: 8px; }
+.pay-step-act { display: grid; gap: 8px; }
+.pay-step-act:empty { display: none; }
+.pay-code-row { display: flex; gap: 8px; }
+.pay-code-row input { flex: 1; min-width: 0; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font: inherit; font-size: 18px; letter-spacing: .15em; text-align: center; }
+.pay-check-msg { margin: 0; font-size: 14px; }
+.pay-check-msg:empty { display: none; }
 .pay-demo-note { margin: 0; font-size: 12.5px; color: var(--text-2); }
+.twofa-status { margin: 0 0 8px; font-weight: 700; }
+.twofa-form { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+.twofa-form .twofa-code { flex: 1 1 140px; min-width: 0; font-size: 20px !important; letter-spacing: .2em; padding: 8px 10px; }
+.twofa-steps { padding-left: 20px; display: grid; gap: 12px; }
+.twofa-steps li > .btn, .twofa-key { display: block; margin-top: 6px; }
+.twofa-key { padding: 8px 10px; border-radius: 8px; background: var(--bg-soft); font-size: 15px; letter-spacing: .08em; word-break: break-all; }
+.twofa-codes { margin: 0 0 12px; padding: 12px; border-radius: 10px; border: 2px dashed #f5b301; background: rgba(245, 179, 1, .08); }
+.twofa-codes ol { columns: 2; margin: 8px 0; padding-left: 22px; font-family: var(--font-mono); }
+.twofa-more summary { cursor: pointer; font-weight: 700; }
+.devices-list { list-style: none; margin: 0 0 12px; padding: 0; display: grid; gap: 8px; }
+.devices-list li { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 10px; }
+.devices-icon { font-size: 22px; }
+.devices-name { flex: 1; min-width: 0; display: grid; font-weight: 600; }
+.devices-name small { font-weight: 500; color: var(--text-2); }
+.devices-list form { margin: 0; }
 .pay-panel-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
 .pay-panel-list li { display: flex; flex-direction: column; }
 .pay-panel-list a { font-weight: 700; }
