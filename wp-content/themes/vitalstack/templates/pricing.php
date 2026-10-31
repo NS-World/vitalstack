@@ -114,6 +114,14 @@ if ( ! empty( $vs_save ) ) {
 	</div>
 </section>
 
+<section class="section pricing-walk">
+	<div class="wrap trailer-wrap">
+		<h2 class="section-title"><?php esc_html_e( 'How premium explains code: every line, step by step', 'vitalstack' ); ?></h2>
+		<p class="premium-lead"><?php esc_html_e( 'Press Play. Watch the pointer move, the variables change and the output appear. Switch to “Deep dive” for the toppers’ version.', 'vitalstack' ); ?></p>
+		<div class="prose"><?php echo vitalstack_walk_demo(); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped above ?></div>
+	</div>
+</section>
+
 <section class="section pricing-why">
 	<div class="wrap">
 		<h2 class="section-title"><?php esc_html_e( 'Why learners choose Premium', 'vitalstack' ); ?></h2>

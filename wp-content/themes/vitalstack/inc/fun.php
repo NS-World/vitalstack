@@ -40,8 +40,25 @@ function vitalstack_needs_viz() {
 	return false;
 }
 
+/**
+ * Whether the current request shows a line-by-line code walkthrough.
+ */
+function vitalstack_needs_walk() {
+	if ( get_query_var( 'vs_pricing' ) ) {
+		return true;
+	}
+	if ( is_singular() ) {
+		$post = get_queried_object();
+		return $post && false !== strpos( (string) $post->post_content, 'vs-walk' );
+	}
+	return false;
+}
+
 function vitalstack_fun_assets() {
 	wp_enqueue_script( 'vitalstack-fun', vitalstack_asset_url( 'assets/js/fun.js' ), array(), VITALSTACK_VERSION, array( 'in_footer' => true, 'strategy' => 'defer' ) );
+	if ( vitalstack_needs_walk() ) {
+		wp_enqueue_script( 'vitalstack-walk', vitalstack_asset_url( 'assets/js/walk.js' ), array( 'vitalstack-fun' ), VITALSTACK_VERSION, array( 'in_footer' => true, 'strategy' => 'defer' ) );
+	}
 	if ( vitalstack_needs_viz() ) {
 		wp_enqueue_script( 'vitalstack-viz', vitalstack_asset_url( 'assets/js/viz.js' ), array( 'vitalstack-fun' ), VITALSTACK_VERSION, array( 'in_footer' => true, 'strategy' => 'defer' ) );
 	}

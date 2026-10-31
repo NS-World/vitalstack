@@ -13,6 +13,32 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
+ * A sample line-by-line walkthrough for /pricing/ (the Bayes one from the
+ * Statistics module), so visitors see how premium lessons explain code.
+ */
+function vitalstack_walk_demo() {
+	$code  = "def bayes(prior, hit_rate, false_alarm):\n    true_pos = hit_rate * prior\n    false_pos = false_alarm * (1 - prior)\n    return true_pos / (true_pos + false_pos)\n\np = bayes(prior=0.01, hit_rate=0.99, false_alarm=0.05)\nprint(round(p, 3))";
+	$steps = array(
+		array( 1, __( 'We define a function with three inputs. Nothing runs yet: Python just remembers the recipe.', 'vitalstack' ), __( 'def creates a function object named bayes. Its body runs only when it is called on line 6.', 'vitalstack' ), array(), '' ),
+		array( 6, __( 'Now we call it: 1% of people are sick, the test catches 99%, and 5% of healthy people get a false alarm.', 'vitalstack' ), '', array( 'prior' => '0.01', 'hit_rate' => '0.99', 'false_alarm' => '0.05' ), '' ),
+		array( 2, __( 'Share of everyone who is sick and tests positive: 0.99 × 0.01.', 'vitalstack' ), __( 'This is P(positive | sick) × P(sick) = P(positive and sick).', 'vitalstack' ), array( 'true_pos' => '0.0099' ), '' ),
+		array( 3, __( 'Share who are healthy but test positive: 0.05 × 0.99. Five times more than the real cases!', 'vitalstack' ), __( '1 − prior is P(healthy) = 0.99. This is P(positive and healthy).', 'vitalstack' ), array( 'false_pos' => '0.0495' ), '' ),
+		array( 4, __( 'Of all positives, how many are real? 0.0099 ÷ 0.0594 ≈ 0.167.', 'vitalstack' ), __( 'The denominator is P(positive), the evidence. The result is the posterior P(sick | positive).', 'vitalstack' ), array( 'result' => '0.16666666666666669' ), '' ),
+		array( 6, __( 'The answer comes back and is stored in p.', 'vitalstack' ), '', array( 'p' => '0.16666666666666669' ), '' ),
+		array( 7, __( 'Only 16.7%: a positive test for a rare disease is usually a false alarm.', 'vitalstack' ), '', array(), '0.167' ),
+	);
+	$out = '<div class="vs-walk" data-lang="python" data-title="' . esc_attr__( 'Bayes’ theorem as a function', 'vitalstack' ) . '"><pre class="vs-walk-src"><code class="language-python">' . esc_html( $code ) . '</code></pre><ol class="vs-walk-steps">';
+	foreach ( $steps as $s ) {
+		$attrs = ' data-line="' . (int) $s[0] . '"';
+		$attrs .= $s[2] ? ' data-deep="' . esc_attr( $s[2] ) . '"' : '';
+		$attrs .= $s[3] ? ' data-vars="' . esc_attr( wp_json_encode( $s[3] ) ) . '"' : '';
+		$attrs .= $s[4] ? ' data-out="' . esc_attr( $s[4] ) . '"' : '';
+		$out   .= '<li' . $attrs . '><b>' . esc_html( sprintf( /* translators: %d: line */ __( 'Line %d:', 'vitalstack' ), $s[0] ) ) . '</b> ' . esc_html( $s[1] ) . '</li>';
+	}
+	return $out . '</ol></div>';
+}
+
+/**
  * Lowest monthly price, for the last scene.
  */
 function vitalstack_trailer_price() {

@@ -108,6 +108,38 @@ std:        1.581
 
 Step by step: how far is each value from the mean, square those distances (so negatives don't cancel positives), average them (that is the **variance**), then take the square root to get back to the original units (runs). That is the standard deviation.
 
+Now watch the same calculation run, one line at a time. Press **Play**, or tap any line:
+
+::walk python | Standard deviation, step by step
+marks = [38, 41, 40, 39, 42]
+mean = sum(marks) / len(marks)
+total = 0
+for m in marks:
+    total += (m - mean) ** 2
+variance = total / (len(marks) - 1)
+std = variance ** 0.5
+print("mean:", mean)
+print("std:", round(std, 3))
+::notes
+1: We store five scores in a **list**. // deep: A list keeps items in order, so marks[0] is 38. // vars: marks=[38, 41, 40, 39, 42]
+2: The **mean**: add all five (200) and divide by how many (5). // deep: sum() adds the list, len() counts it. Dividing with / always gives a float, so 40.0, not 40. // vars: mean=40.0
+3: An empty box to collect the squared distances. // vars: total=0
+4: The loop picks the first score: **38**. // deep: A for loop gives each item of the list to m, one at a time, from left to right. // vars: m=38
+5: 38 is 2 below the mean. Squared: (−2)² = **4**, added to total. // deep: Squaring makes every distance positive, so scores below the mean don't cancel scores above it. // vars: total=4.0
+4: Next score: **41**. // vars: m=41
+5: 41 − 40 = 1, squared = 1. Total is now **5**. // vars: total=5.0
+4: Next score: **40**. // vars: m=40
+5: 40 is exactly the mean: distance 0, total stays **5**. // vars: total=5.0
+4: Next score: **39**. // vars: m=39
+5: −1 squared = 1. Total **6**. // vars: total=6.0
+4: Last score: **42**. // vars: m=42
+5: 2 squared = 4. Total **10**. The loop ends: no more scores. // vars: total=10.0
+6: **Variance** = 10 ÷ (5 − 1) = **2.5**. // deep: We divide by n − 1 (not n) because this is a sample; it gives a fairer estimate of the real spread. This is ddof=1 in NumPy. // vars: variance=2.5
+7: Square root brings us back to "runs": **std ≈ 1.581**. // deep: x ** 0.5 is the square root. The variance is in squared units (runs²), so the root puts it back into runs. // vars: std=1.5811388300841898
+8: Print the mean. // out: mean: 40.0
+9: Print the std, rounded to 3 decimals. A steady batter: scores stay about 1.6 runs from the average. // out: std: 1.581
+::end
+
 ## Quartiles and the IQR
 
 Sort the data and cut it into four equal parts. The cut points are the **quartiles**:

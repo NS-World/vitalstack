@@ -54,6 +54,34 @@ Output:
 
 ::hint What a p-value is NOT | It is not "the probability that H₀ is true", and a small p-value doesn't mean the effect is big or important. It only says: this data would be surprising if nothing were going on.
 
+### Where a p-value comes from (simulation)
+
+You don't need a formula to get a p-value. Pretend the coin is fair, flip it 100 times, and repeat that 10,000 times. Count how often the result is at least as extreme as our 61 heads (11 or more away from 50):
+
+::walk python | A p-value by simulation
+import random
+random.seed(1)
+extreme = 0
+for trial in range(10000):
+    heads = sum(random.random() < 0.5 for _ in range(100))
+    if abs(heads - 50) >= 11:
+        extreme += 1
+print("p ≈", extreme / 10000)
+::notes
+1: Python's built-in random module: no installs needed.
+2: A **seed** makes the "random" flips repeatable, so you get the same answer as this lesson. // deep: Random generators are deterministic: the same seed always gives the same sequence. Remove the seed to see slightly different results each run.
+3: A counter for results as extreme as ours. // vars: extreme=0
+4: Repeat the whole experiment **10,000 times**. // vars: trial=0
+5: One experiment: 100 fair flips. random.random() < 0.5 is True half the time; sum() counts the Trues. First run: **47 heads**. // deep: True counts as 1 and False as 0, so summing booleans counts heads. // vars: heads=47
+6: Is 47 at least 11 away from 50? |47 − 50| = 3. **No**. // vars: heads=47
+4: Second experiment. // vars: trial=1
+5: **54 heads** this time. // vars: heads=54
+6: |54 − 50| = 4. Still not extreme. // vars: heads=54
+4: …and so on, 10,000 times. A fair coin rarely lands 11+ away from 50. // vars: trial=9999
+7: Each time it does, we add 1. After all 10,000 runs, extreme is **364**. // vars: extreme=364
+8: 364 ÷ 10,000 = **0.0364**, very close to the exact p-value 0.035 from SciPy. That's what a p-value means: how often pure luck looks this extreme. // out: p ≈ 0.0364
+::end
+
 ## The t-test: comparing two averages (A/B testing)
 
 Two versions of a checkout page. Did version B make people spend more?

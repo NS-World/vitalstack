@@ -20,6 +20,8 @@ import pathlib
 import re
 import sys
 
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+
 import matplotlib
 
 matplotlib.use("Agg")
@@ -70,6 +72,32 @@ def check(path):
             if want != got:
                 print(f"  MISMATCH {path.name} block {i}:\n--- shown ---\n{want}\n--- actual ---\n{got}\n")
                 bad += 1
+    return bad + check_walks(path, text)
+
+
+def check_walks(path, text):
+    """Run each ::walk python block; its "out:" notes, in order, must equal what it prints."""
+    from lessons_to_wxr import parse_walk  # noqa: E402 (same folder)
+    lines, bad = text.splitlines(), 0
+    for k, line in enumerate(lines):
+        if not line.startswith("::walk "):
+            continue
+        lang, title, code, steps = parse_walk(lines, k)
+        if lang not in ("python", "py"):
+            continue
+        out = io.StringIO()
+        try:
+            with contextlib.redirect_stdout(out):
+                exec(compile("\n".join(code), f"{path.name}#walk:{title}", "exec"), {})
+        except Exception as exc:  # noqa: BLE001
+            print(f"  ERROR {path.name} walk '{title}': {type(exc).__name__}: {exc}")
+            bad += 1
+            continue
+        want = "\n".join(s["out"] for s in steps if s["out"]).strip()
+        got = "\n".join(l.rstrip() for l in out.getvalue().strip("\n").splitlines())
+        if want and want != got:
+            print(f"  MISMATCH {path.name} walk '{title}':\n--- notes say ---\n{want}\n--- actual ---\n{got}\n")
+            bad += 1
     return bad
 
 

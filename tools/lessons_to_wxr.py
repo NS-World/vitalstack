@@ -24,6 +24,7 @@ Guides (blog posts) use `category:` instead of `subject:` and `lesson:`:
 The body supports the Markdown that lessons need: ## and ### headings,
 paragraphs, - and 1. lists, | tables |, fenced ``` code blocks, `inline code`,
 **bold** and [links](/path/), plus `::viz name {json}` (live visualizer),
+`::walk lang | title` ... `::notes` ... `::end` (line-by-line code walkthrough),
 `::tip text`, `::hint Label | text` and `::figure file.svg | alt text` (a chart from
 wp-content/themes/vitalstack/assets/lessons/). It is converted to block-editor markup, so imported lessons open
 cleanly in the WordPress editor.
@@ -122,6 +123,77 @@ def block(name, inner, attrs=""):
     return f"<!-- wp:{name}{attrs} -->\n{inner}\n<!-- /wp:{name} -->\n\n"
 
 
+def walk_end(lines, start):
+    for k in range(start + 1, len(lines)):
+        if lines[k].strip() == "::end":
+            return k
+    sys.exit(f"::walk without ::end (line {start + 1})")
+
+
+def parse_walk(lines, start):
+    """A line-by-line code walkthrough:
+
+    ::walk python | Title
+    <code>
+    ::notes
+    1: simple words // deep: more detail // vars: total=0, i=1 // out: printed text
+    ::end
+    """
+    head = lines[start][7:]
+    lang, _, title = head.partition("|")
+    end = walk_end(lines, start)
+    body = lines[start + 1:end]
+    if "::notes" not in [b.strip() for b in body]:
+        sys.exit(f"::walk without ::notes (line {start + 1})")
+    cut = [b.strip() for b in body].index("::notes")
+    code, notes = body[:cut], [n for n in body[cut + 1:] if n.strip()]
+    steps = []
+    for n in notes:
+        m = re.match(r"^\s*(\d+)\s*:\s*(.+)$", n)
+        if not m:
+            sys.exit(f"Bad ::walk note: {n}")
+        line_no = int(m.group(1))
+        if not 1 <= line_no <= len(code):
+            sys.exit(f"::walk note points at line {line_no}, code has {len(code)} lines")
+        parts = [p.strip() for p in m.group(2).split(" // ")]
+        step = {"line": line_no, "text": parts[0], "deep": "", "vars": {}, "out": ""}
+        for p in parts[1:]:
+            key, _, val = p.partition(":")
+            key, val = key.strip(), val.strip()
+            if key == "deep":
+                step["deep"] = val
+            elif key == "out":
+                step["out"] = val.replace("\\n", "\n")
+            elif key == "vars":
+                for pair in re.split(r",\s*(?=[A-Za-z_][\w.\[\]\"']*\s*=)", val):
+                    k, _, v = pair.partition("=")
+                    step["vars"][k.strip()] = v.strip()
+            else:
+                sys.exit(f"Unknown ::walk field '{key}' in: {n}")
+        steps.append(step)
+    return lang.strip().lower(), title.strip(), code, steps
+
+
+def walk_block(lines, start):
+    lang, title, code, steps = parse_walk(lines, start)
+    lang = FENCE_LANGS.get(lang, lang)
+    items = []
+    for st in steps:
+        attrs = f' data-line="{st["line"]}"'
+        if st["deep"]:
+            attrs += f' data-deep="{html.escape(st["deep"], quote=True)}"'
+        if st["vars"]:
+            attrs += f' data-vars="{html.escape(json.dumps(st["vars"], ensure_ascii=False), quote=True)}"'
+        if st["out"]:
+            attrs += f' data-out="{html.escape(st["out"], quote=True)}"'
+        items.append(f"<li{attrs}><b>Line {st['line']}:</b> {inline(st['text'])}</li>")
+    return (
+        f'<div class="vs-walk" data-lang="{html.escape(lang, quote=True)}" data-title="{html.escape(title, quote=True)}">'
+        f'<pre class="vs-walk-src"><code class="language-{html.escape(lang, quote=True)}">{html.escape(chr(10).join(code), quote=False)}</code></pre>'
+        f'<ol class="vs-walk-steps">{"".join(items)}</ol></div>'
+    )
+
+
 def markdown_to_blocks(body):
     lines = body.strip("\n").splitlines()
     out = []
@@ -153,6 +225,10 @@ def markdown_to_blocks(body):
             div = f'<div class="vs-viz" data-viz="{m.group(1)}" data-input="{html.escape(data, quote=True)}"></div>'
             out.append(block("html", div))
             i += 1
+            continue
+        if line.startswith("::walk "):
+            out.append(block("html", walk_block(lines, i)))
+            i = walk_end(lines, i) + 1
             continue
         if line.startswith("::tip "):
             out.append(block("html", f'<div class="vs-tip"><p>{inline(line[6:].strip())}</p></div>'))

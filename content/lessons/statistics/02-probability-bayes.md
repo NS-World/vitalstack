@@ -158,6 +158,26 @@ Output:
 0.802
 ```
 
+Here is the same function, run line by line with the medical-test numbers:
+
+::walk python | Bayes' theorem as a function
+def bayes(prior, hit_rate, false_alarm):
+    true_pos = hit_rate * prior
+    false_pos = false_alarm * (1 - prior)
+    return true_pos / (true_pos + false_pos)
+
+p = bayes(prior=0.01, hit_rate=0.99, false_alarm=0.05)
+print(round(p, 3))
+::notes
+1: We **define** a function with three inputs. Nothing runs yet: Python just remembers the recipe. // deep: def creates a function object named bayes. Its body runs only when it is called on line 6.
+6: Now we **call** it: 1% of people are sick, the test catches 99%, and 5% of healthy people get a false alarm. // vars: prior=0.01, hit_rate=0.99, false_alarm=0.05
+2: Share of everyone who is sick **and** tests positive: 0.99 × 0.01. // deep: This is P(positive | sick) × P(sick) = P(positive and sick). // vars: true_pos=0.0099
+3: Share who are healthy **but** test positive: 0.05 × 0.99. Five times more than the real cases! // deep: 1 − prior is P(healthy) = 0.99. This is P(positive and healthy). // vars: false_pos=0.0495
+4: Of all positives, how many are real? 0.0099 ÷ 0.0594 ≈ **0.167**. // deep: The denominator is P(positive), the evidence. The result is the posterior P(sick | positive). // vars: result=0.16666666666666669
+6: The answer comes back and is stored in **p**. // vars: p=0.16666666666666669
+7: Only **16.7%**: a positive test from a rare disease is usually a false alarm. // out: 0.167
+::end
+
 Two lessons hiding here:
 
 1. **Base rates matter.** For a rare event, even a great test produces mostly false alarms. This is why fraud alerts, spam filters and medical screening all need a second check.

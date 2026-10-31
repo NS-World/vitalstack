@@ -525,6 +525,7 @@
 			window.hljs.configure({ languages: ['xml', 'css', 'javascript', 'python', 'sql', 'bash', 'json', 'java', 'typescript', 'plaintext'] });
 		}
 		document.querySelectorAll('.prose pre').forEach(function (pre) {
+			if (pre.closest('.vs-walk')) return; // walk.js draws its own code view
 			var code = pre.querySelector('code');
 			if (!code) {
 				code = document.createElement('code');
