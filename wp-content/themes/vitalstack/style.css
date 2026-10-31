@@ -4,7 +4,7 @@ Theme URI: https://vitalstack.co.in/
 Author: VitalStack
 Author URI: https://vitalstack.co.in/
 Description: Tutorial-site theme for VitalStack: 17 learning paths (web, Python, Java, Spring Boot, React, Angular, DSA), live animated visualizers, quizzes, certificates, daily challenge and leaderboard, brain games, cheat sheets, free coding tools, reader accounts with XP and progress sync, PWA, and AdSense-ready ad slots.
-Version: 4.8.0
+Version: 4.8.1
 Requires at least: 6.3
 Tested up to: 6.8
 Requires PHP: 8.0
@@ -1716,10 +1716,10 @@ body.courses-open .install-app, body.courses-open .cookie-note { display: none; 
 .tool-big { margin: 0; font-size: 40px; font-weight: 800; letter-spacing: -.02em; color: var(--brand-ink); }
 .tool-note { color: var(--text-2); font-size: 14px; }
 .tool-err-msg { color: #c0392b; font-weight: 600; }
-.tool-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-.tool-table th, .tool-table td { padding: 7px 10px; border-bottom: 1px solid var(--border); text-align: left; }
-.tool-table thead th { background: var(--bg-soft); }
-.tool-table td.is-missing { color: #c0392b; font-style: italic; }
+.dt-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.dt-table th, .dt-table td { padding: 7px 10px; border-bottom: 1px solid var(--border); text-align: left; }
+.dt-table thead th { background: var(--bg-soft); }
+.dt-table td.is-missing { color: #c0392b; font-style: italic; }
 .tool-scroll { overflow-x: auto; border: 1px solid var(--border); border-radius: 8px; }
 .ab-bars { display: grid; gap: 8px; margin-bottom: 12px; }
 .ab-bars div { display: grid; grid-template-columns: 24px 1fr 64px; align-items: center; gap: 8px; font-weight: 800; }
@@ -1937,7 +1937,7 @@ p.tool-err { color: #c62828; font-weight: 600; margin: 8px 0; }
 .vs-protected { position: relative; min-height: 160px; }
 .vs-protected.is-loaded .vs-protected-body { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 .vs-protected.is-loaded .vs-protected-body pre, .vs-protected.is-loaded .vs-protected-body code, .vs-protected input, .vs-protected textarea { -webkit-user-select: text; user-select: text; }
-.vs-mark { position: absolute; inset: 0; z-index: 2; pointer-events: none; background-repeat: repeat; }
+.vs-watermark { position: absolute; inset: 0; z-index: 2; pointer-events: none; background-repeat: repeat; }
 .vs-protected-state { display: flex; align-items: center; gap: 10px; padding: 28px 0; color: var(--text-2); font-weight: 600; }
 .vs-protected-spin { width: 18px; height: 18px; border-radius: 50%; border: 3px solid var(--border); border-top-color: var(--brand); animation: vs-spin .8s linear infinite; }
 @keyframes vs-spin { to { transform: rotate(360deg); } }

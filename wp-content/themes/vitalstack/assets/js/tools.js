@@ -471,7 +471,7 @@
 				'<div><span>B</span><i class="is-b" style="width:' + (pb / max * 100) + '%"></i><b>' + ST.pct(pb) + '</b></div></div>' +
 				'<p class="ab-verdict ' + (win ? (pb > pa ? 'is-win' : 'is-lose') : 'is-tie') + '">' +
 				(win ? (pb > pa ? '✅ B is better. ' : '⚠️ B is worse. ') + 'The difference is statistically significant at ' + conf + '% confidence.' : '🤷 Not significant yet. The difference could be luck: keep the test running or collect more visitors.') + '</p>' +
-				'<table class="tool-table"><tbody>' +
+				'<table class="dt-table"><tbody>' +
 				'<tr><th>Relative lift (B vs A)</th><td>' + (lift >= 0 ? '+' : '') + ST.pct(lift, 1) + '</td></tr>' +
 				'<tr><th>Difference in conversion</th><td>' + (pb - pa >= 0 ? '+' : '') + ST.pct(pb - pa) + ' points</td></tr>' +
 				'<tr><th>' + conf + '% confidence interval</th><td>' + ST.pct(lo) + ' to ' + ST.pct(hi) + '</td></tr>' +
@@ -503,7 +503,7 @@
 				if (!(e > 0 && e < 0.5)) { out.innerHTML = '<p class="tool-err-msg">Margin of error must be between 0 and 50%.</p>'; return; }
 				var n0 = z * z * 0.25 / (e * e), n = N > 0 ? n0 / (1 + (n0 - 1) / N) : n0;
 				out.innerHTML = '<p class="tool-big">' + Math.ceil(n).toLocaleString('en-IN') + '</p><p>people needed for ±' + (e * 100) + '% at ' + f.conf.input.value + '% confidence' + (N > 0 ? ' (population ' + N.toLocaleString('en-IN') + ')' : '') + '.</p>' +
-					'<table class="tool-table"><thead><tr><th>Margin of error</th><th>People needed</th></tr></thead><tbody>' +
+					'<table class="dt-table"><thead><tr><th>Margin of error</th><th>People needed</th></tr></thead><tbody>' +
 					[10, 5, 3, 2, 1].map(function (m) { var a = z * z * 0.25 / Math.pow(m / 100, 2); a = N > 0 ? a / (1 + (a - 1) / N) : a; return '<tr><td>±' + m + '%</td><td>' + Math.ceil(a).toLocaleString('en-IN') + '</td></tr>'; }).join('') +
 					'</tbody></table><p class="tool-note">Uses p = 50%, the safest guess. Halving the margin needs about 4× the people.</p>';
 			} else {
@@ -581,7 +581,7 @@
 			var head = rows[0].map(function (h, i) { return h.trim() || 'column_' + (i + 1); }), data = rows.slice(1, 50001);
 			var cols = head.map(function (h, i) { return describe(data.map(function (r) { return r[i] === undefined ? '' : r[i]; })); });
 			status.textContent = data.length.toLocaleString('en-IN') + ' rows × ' + head.length + ' columns';
-			var html = '<h3>1. First rows <small>df.head()</small></h3><div class="tool-scroll"><table class="tool-table"><thead><tr><th></th>' + head.map(function (h) { return '<th>' + esc(h) + '</th>'; }).join('') + '</tr></thead><tbody>' +
+			var html = '<h3>1. First rows <small>df.head()</small></h3><div class="tool-scroll"><table class="dt-table"><thead><tr><th></th>' + head.map(function (h) { return '<th>' + esc(h) + '</th>'; }).join('') + '</tr></thead><tbody>' +
 				data.slice(0, 6).map(function (r, k) { return '<tr><th>' + k + '</th>' + head.map(function (_, i) { var v = r[i] === undefined ? '' : r[i]; return '<td' + (String(v).trim() === '' ? ' class="is-missing">NaN' : '>' + esc(v)) + '</td>'; }).join('') + '</tr>'; }).join('') + '</tbody></table></div>';
 			var miss = cols.reduce(function (a, c) { return a + c.missing; }, 0);
 			html += '<h3>2. Columns <small>df.info() + df.describe()</small></h3><div class="csv-cards">' + cols.map(function (c, i) {
@@ -594,7 +594,7 @@
 			}).join('') + '</div>';
 			var numIdx = cols.map(function (c, i) { return c.numeric ? i : -1; }).filter(function (i) { return i > -1; });
 			if (numIdx.length > 1) {
-				html += '<h3>3. Correlation <small>df.corr()</small></h3><div class="tool-scroll"><table class="tool-table csv-corr"><thead><tr><th></th>' + numIdx.map(function (i) { return '<th>' + esc(head[i]) + '</th>'; }).join('') + '</tr></thead><tbody>';
+				html += '<h3>3. Correlation <small>df.corr()</small></h3><div class="tool-scroll"><table class="dt-table csv-corr"><thead><tr><th></th>' + numIdx.map(function (i) { return '<th>' + esc(head[i]) + '</th>'; }).join('') + '</tr></thead><tbody>';
 				var best = null;
 				numIdx.forEach(function (i) {
 					html += '<tr><th>' + esc(head[i]) + '</th>' + numIdx.map(function (j) {

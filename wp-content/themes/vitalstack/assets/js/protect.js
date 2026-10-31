@@ -33,7 +33,7 @@
 		var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="360" height="200"><text x="20" y="120" transform="rotate(-24 180 100)" font-family="sans-serif" font-size="15" fill="rgba(120,120,120,0.13)">' +
 			text.replace(/[<>&"]/g, '') + '</text></svg>';
 		var w = document.createElement('div');
-		w.className = 'vs-mark'; w.setAttribute('aria-hidden', 'true');
+		w.className = 'vs-watermark'; w.setAttribute('aria-hidden', 'true');
 		w.style.backgroundImage = 'url("data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg) + '")';
 		box.appendChild(w);
 	}
