@@ -35,10 +35,6 @@ function vitalstack_device_label( $ua = null ) {
  * This browser's device token, created (and sent as a cookie) if missing.
  */
 function vitalstack_device_token( $create = true ) {
-	static $made = '';
-	if ( $made ) {
-		return $made;
-	}
 	$raw = isset( $_COOKIE[ VITALSTACK_DEV_COOKIE ] ) ? preg_replace( '/[^A-Za-z0-9]/', '', (string) wp_unslash( $_COOKIE[ VITALSTACK_DEV_COOKIE ] ) ) : '';
 	if ( 40 === strlen( $raw ) ) {
 		return $raw;

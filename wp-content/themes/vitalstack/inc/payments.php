@@ -331,7 +331,13 @@ add_action(
 			echo esc_html( vitalstack_pay_price_label( (int) get_post_meta( $id, '_vs_amount', true ) / 100, 'INR' === $cur ? 'inr' : 'usd' ) . ' ' . $cur );
 		} elseif ( 'vs_status' === $col ) {
 			$st = get_post_meta( $id, '_vs_status', true );
-			echo esc_html( 'paid' === $st ? '✅ Paid' : ( 'failed' === $st ? '❌ Failed' : '⏳ Not paid' ) );
+			echo esc_html( 'paid' === $st ? '✅ Paid' : ( 'failed' === $st ? '❌ Failed' : ( 'refunded' === $st ? '↩️ Refunded' : ( 'disputed' === $st ? '⚠️ Disputed' : '⏳ Not paid' ) ) ) );
+			if ( 'paid' === $st && function_exists( 'vitalstack_audit_table' ) ) {
+				// For the refund rule: how many premium lessons were opened since paying.
+				global $wpdb;
+				$opened = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(DISTINCT data) FROM ' . vitalstack_audit_table() . " WHERE uid = %d AND event = 'lesson_open' AND t >= %d", (int) get_post_field( 'post_author', $id ), (int) get_post_meta( $id, '_vs_paid_at', true ) ) ); // phpcs:ignore WordPress.DB
+				echo '<br><small>' . esc_html( sprintf( /* translators: %d: lessons */ _n( '%d premium lesson opened', '%d premium lessons opened', $opened, 'vitalstack' ), $opened ) ) . '</small>';
+			}
 			$m = get_post_meta( $id, '_vs_mode', true );
 			if ( 'test' === $m || 'demo' === $m ) {
 				echo ' <em>' . esc_html( 'demo' === $m ? __( '(practice, no money)', 'vitalstack' ) : __( '(test)', 'vitalstack' ) ) . '</em>';

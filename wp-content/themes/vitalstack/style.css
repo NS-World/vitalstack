@@ -1934,6 +1934,30 @@ p.tool-err { color: #c62828; font-weight: 600; margin: 8px 0; }
 	.wk-bubble.is-pop, .wk-var.is-changed, .wk-out.is-new { animation: none; }
 	.wk-pointer { transition: none; }
 }
+/* Protected premium lessons */
+.vs-protected { position: relative; min-height: 160px; }
+.vs-protected.is-loaded .vs-protected-body { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+.vs-protected.is-loaded .vs-protected-body pre, .vs-protected.is-loaded .vs-protected-body code, .vs-protected input, .vs-protected textarea { -webkit-user-select: text; user-select: text; }
+.vs-mark { position: absolute; inset: 0; z-index: 2; pointer-events: none; background-repeat: repeat; }
+.vs-protected-state { display: flex; align-items: center; gap: 10px; padding: 28px 0; color: var(--text-2); font-weight: 600; }
+.vs-protected-spin { width: 18px; height: 18px; border-radius: 50%; border: 3px solid var(--border); border-top-color: var(--brand); animation: vs-spin .8s linear infinite; }
+@keyframes vs-spin { to { transform: rotate(360deg); } }
+.vs-protected-card [hidden] { display: none !important; }
+.vs-protected-card > *, .vs-pc-check > * { min-width: 0; overflow-wrap: anywhere; }
+.vs-protected-card { grid-template-columns: minmax(0, 1fr); display: grid; gap: 10px; padding: 20px; border-radius: var(--radius-lg); border: 1px solid var(--border); background: var(--surface); box-shadow: var(--shadow-md, none); }
+.vs-protected-card p { margin: 0; }
+.vs-pc-title { font-size: 19px; font-weight: 800; }
+.vs-pc-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.vs-pc-check { display: grid; gap: 8px; max-width: 420px; }
+.vs-pc-check[hidden] { display: none; }
+.vs-pc-sub { color: var(--text-2); font-size: 14px; }
+.vs-pc-msg { font-size: 14px; font-weight: 600; }
+.vs-pc-msg:empty { display: none; }
+@media print {
+	.vs-protected, body.vs-no-print .vs-protected { display: none !important; }
+	body.vs-has-protected .doc-main::after { content: "Premium lessons can’t be printed. Read them online at vitalstack.co.in."; display: block; padding: 20px; border: 1px solid #ccc; }
+}
+@media (prefers-reduced-motion: reduce) { .vs-protected-spin { animation-duration: 2.4s; } }
 /* Premium trailer */
 .trailer { position: relative; margin: 0; border-radius: 20px; overflow: hidden; background: radial-gradient(600px 300px at 80% 0%, rgba(245, 179, 1, .25), transparent 70%), linear-gradient(160deg, #0f1f1a, #142b3a); color: #f4f7f5; box-shadow: var(--shadow-lg); }
 .tr-stage { position: relative; aspect-ratio: 16 / 9; min-height: 300px; }

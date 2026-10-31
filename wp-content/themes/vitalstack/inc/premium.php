@@ -171,7 +171,14 @@ function vitalstack_premium_gate( $content ) {
 		return $content;
 	}
 	$track = vitalstack_lesson_track();
-	if ( ! $track || vitalstack_user_has_premium( $track ) ) {
+	if ( ! $track ) {
+		return $content;
+	}
+	if ( vitalstack_user_has_premium( $track ) ) {
+		// Paying readers get a shell; the body comes from the protected lesson API (inc/protect.php).
+		if ( function_exists( 'vitalstack_protect_applies' ) && vitalstack_protect_applies() && in_the_loop() && is_main_query() ) {
+			return vitalstack_protect_shell( get_the_ID() );
+		}
 		return $content;
 	}
 	return vitalstack_premium_preview( $content, $track );

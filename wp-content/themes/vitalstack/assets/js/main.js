@@ -535,7 +535,8 @@
 			window.hljs.configure({ languages: ['xml', 'css', 'javascript', 'python', 'sql', 'bash', 'json', 'java', 'typescript', 'plaintext'] });
 		}
 		document.querySelectorAll('.prose pre').forEach(function (pre) {
-			if (pre.closest('.vs-walk')) return; // walk.js draws its own code view
+			if (pre.closest('.vs-walk') || pre.getAttribute('data-vs-done')) return; // walk.js draws its own code view
+			pre.setAttribute('data-vs-done', '1');
 			var code = pre.querySelector('code');
 			if (!code) {
 				code = document.createElement('code');
@@ -595,6 +596,7 @@
 			});
 		}
 	}
+	window.VSEnhanceCode = enhanceCode; // for premium lessons loaded after the page
 	if (document.readyState === 'loading') {
 		document.addEventListener('DOMContentLoaded', enhanceCode);
 	} else {

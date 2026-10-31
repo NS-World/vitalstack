@@ -2719,5 +2719,6 @@
 		}, { rootMargin: '600px 0px' });
 		hosts.forEach(function (h) { io.observe(h); });
 	}
+	window.VSViz.init = init; // for premium lessons loaded after the page
 	if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();

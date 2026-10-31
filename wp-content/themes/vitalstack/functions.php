@@ -41,6 +41,8 @@ require VITALSTACK_DIR . '/inc/payments.php';
 require VITALSTACK_DIR . '/inc/promo.php';
 require VITALSTACK_DIR . '/inc/twofa.php';
 require VITALSTACK_DIR . '/inc/devices.php';
+require VITALSTACK_DIR . '/inc/audit.php';
+require VITALSTACK_DIR . '/inc/protect.php';
 require VITALSTACK_DIR . '/inc/challenge.php';
 require VITALSTACK_DIR . '/inc/site-pages.php';
 require VITALSTACK_DIR . '/inc/mock-tests.php';

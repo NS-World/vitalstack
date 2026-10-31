@@ -193,6 +193,7 @@
 	}
 
 	// After every deferred script (syntax highlighting, mascots) has run.
-	function start() { document.querySelectorAll('.vs-walk').forEach(build); }
+	function start() { document.querySelectorAll('.vs-walk:not(.is-ready)').forEach(build); }
+	window.VSWalk = start; // for premium lessons loaded after the page
 	if (document.readyState === 'complete') start(); else document.addEventListener('DOMContentLoaded', start);
 })();
