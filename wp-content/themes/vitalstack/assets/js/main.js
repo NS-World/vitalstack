@@ -842,7 +842,14 @@
 		var box = document.createElement('div');
 		box.className = 'install-app';
 		box.innerHTML = '<button type="button" class="install-app-go">📲 Install the VitalStack app</button><button type="button" class="install-app-x" aria-label="Not now">×</button>';
-		document.body.appendChild(box);
+		// One thing at a time: wait until the cookie notice is answered.
+		var cookieNote = document.getElementById('cookie-note');
+		if (cookieNote && !cookieNote.hidden) {
+			var wait = new MutationObserver(function () { if (cookieNote.hidden) { wait.disconnect(); document.body.appendChild(box); } });
+			wait.observe(cookieNote, { attributes: true, attributeFilter: ['hidden'] });
+		} else {
+			document.body.appendChild(box);
+		}
 		box.querySelector('.install-app-go').addEventListener('click', function () {
 			prompt.prompt();
 			prompt.userChoice.finally(function () { box.remove(); });
@@ -852,4 +859,44 @@
 			box.remove();
 		});
 	});
+
+	/* ── Popup dock: bottom popups stack instead of covering each other ─── */
+	// Lowest first. Each one that overlaps (left–right) a lower one sits above it.
+	var DOCK = ['.cookie-note:not([hidden])', '.install-app', '.focus-pill:not([hidden])', '.nudge', '.mascot-nudge', '.celebrate', '.toast.is-visible'];
+	var docking = false;
+	function dock() {
+		if (docking) return;
+		docking = true;
+		var placed = [];
+		DOCK.forEach(function (sel) {
+			document.querySelectorAll(sel).forEach(function (el) {
+				el.style.bottom = '';
+				var cs = getComputedStyle(el);
+				if (cs.position !== 'fixed' || cs.display === 'none') return;
+				var base = parseFloat(cs.bottom) || 0, r = el.getBoundingClientRect(), need = base;
+				placed.forEach(function (p) {
+					if (r.left < p.right - 1 && r.right > p.left + 1) need = Math.max(need, window.innerHeight - p.top + 8);
+				});
+				if (need > base) el.style.bottom = need + 'px';
+				var h = r.height;
+				placed.push({ left: r.left, right: r.right, top: window.innerHeight - need - h });
+			});
+		});
+		docking = false;
+	}
+	var dockTimer;
+	function dockSoon() { clearTimeout(dockTimer); dockTimer = setTimeout(dock, 30); }
+	if ('MutationObserver' in window) {
+		new MutationObserver(function (list) {
+			for (var i = 0; i < list.length; i++) {
+				var t = list[i].target;
+				if ((list[i].type === 'childList' && t === document.body) || (t.matches && t.matches('.cookie-note, .install-app, .focus-pill, .nudge, .mascot-nudge, .celebrate, .toast'))) { dockSoon(); return; }
+			}
+		}).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class', 'hidden'] });
+		// Popups that change state themselves (class or hidden on the element).
+		document.addEventListener('transitionend', dockSoon, true);
+	}
+	window.addEventListener('resize', dockSoon);
+	window.VSDock = dock;
+	dockSoon();
 })();

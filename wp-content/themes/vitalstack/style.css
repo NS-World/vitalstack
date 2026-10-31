@@ -576,7 +576,6 @@ body.courses-open .install-app, body.courses-open .cookie-note { display: none; 
 .study-buddy .study-buddy-q { margin-top: 4px; font-size: 14.5px; }
 .study-buddy .study-buddy-why { margin-top: 4px; font-size: 13px; color: var(--text-2); }
 .study-buddy-off { margin-top: 6px; font-size: 12.5px; padding: 0; }
-body:has(.install-app:not([hidden])) .mascot-nudge, body:has(.cookie-note:not([hidden])) .mascot-nudge { bottom: 92px; }
 @media (max-width: 480px) { .mascot-nudge { left: 12px; right: 12px; max-width: none; } }
 @media (prefers-reduced-motion: reduce) { .mascot-nudge { transition: none; } }
 @media (prefers-reduced-motion: reduce) {
