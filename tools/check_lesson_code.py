@@ -29,7 +29,18 @@ import matplotlib.pyplot as plt  # noqa: E402
 
 plt.show = lambda *a, **k: None
 
-API_SDKS = {"anthropic", "openai", "google", "pydantic", "streamlit", "dotenv", "fastapi", "uvicorn"}
+# Packages that need an API key, a server or a big install (GPU frameworks, Spark, databases):
+# blocks importing them are examples to read, not run here.
+API_SDKS = {"anthropic", "openai", "google", "pydantic", "streamlit", "dotenv", "fastapi", "uvicorn",
+            "requests", "torch", "torchvision", "tensorflow", "keras", "cv2", "ultralytics", "pyspark",
+            "pymongo", "langchain", "langchain_core", "langchain_openai", "langchain_anthropic",
+            "langchain_community", "langgraph", "llama_index", "crewai", "mcp", "transformers",
+            "datasets", "peft", "trl", "gymnasium", "gym", "chromadb", "sentence_transformers",
+            "xgboost", "statsmodels", "nltk", "mlflow", "boto3", "sagemaker", "azure", "evidently",
+            "shap", "networkx", "diffusers", "joblib", "prophet", "tiktoken", "faiss", "docker",
+            "whisper", "faster_whisper", "ollama", "vllm", "unsloth", "bitsandbytes", "accelerate", "gradio",
+            "guardrails", "presidio_analyzer", "agents", "autogen", "smolagents", "ragas", "deepeval",
+            "langsmith", "litellm", "redis", "pyspark", "e2b", "playwright_stealth"}
 BLOCK = re.compile(r"```(\w+)\n(.*?)```", re.S)
 FIGURES = pathlib.Path(__file__).resolve().parent.parent / "wp-content" / "themes" / "vitalstack" / "assets" / "lessons"
 SAVE = False
