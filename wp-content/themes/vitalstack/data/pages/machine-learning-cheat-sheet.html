@@ -1,0 +1,80 @@
+<!-- wp:heading -->
+<h2 class="wp-block-heading">The scikit-learn workflow</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-python">from sklearn.model_selection import train_test_split
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+model = make_pipeline(StandardScaler(), LogisticRegression(max_iter=1000))
+model.fit(X_train, y_train)            # learn from training data only
+print(model.score(X_test, y_test))     # judge on unseen data</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Which algorithm?</h2>
+<!-- /wp:heading -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>Problem</th><th>Start with</th><th>Then try</th></tr></thead><tbody><tr><td>Predict a number</td><td>Linear regression</td><td>Random forest, gradient boosting</td></tr><tr><td>Yes/no or categories</td><td>Logistic regression</td><td>Random forest, gradient boosting, SVM</td></tr><tr><td>Text classification</td><td>TF-IDF + logistic regression</td><td>Transformers</td></tr><tr><td>Find groups (no labels)</td><td>k-means</td><td>DBSCAN, hierarchical</td></tr><tr><td>Too many features</td><td>PCA</td><td>Feature selection</td></tr><tr><td>Images, audio</td><td>Pre-trained CNN / transformer</td><td>Fine-tuning</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Preprocessing</h2>
+<!-- /wp:heading -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>Task</th><th>Tool</th></tr></thead><tbody><tr><td>Fill missing numbers</td><td><code>SimpleImputer(strategy="median")</code></td></tr><tr><td>Categories → numbers</td><td><code>OneHotEncoder(handle_unknown="ignore")</code></td></tr><tr><td>Scale features</td><td><code>StandardScaler()</code> (needed for k-NN, SVM, linear models)</td></tr><tr><td>Mixed columns</td><td><code>ColumnTransformer([...])</code></td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Metrics</h2>
+<!-- /wp:heading -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>Regression</th><th>Classification</th></tr></thead><tbody><tr><td>MAE: average error in real units</td><td>Accuracy: share correct (misleading if imbalanced)</td></tr><tr><td>RMSE: punishes big errors</td><td>Precision: of predicted positives, how many are right</td></tr><tr><td>R²: share of variance explained</td><td>Recall: of real positives, how many we caught</td></tr><tr><td>MAPE: error as a percentage</td><td>F1: balance of precision and recall; ROC AUC: ranking quality</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Validation and tuning</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-python">from sklearn.model_selection import cross_val_score, GridSearchCV
+scores = cross_val_score(model, X, y, cv=5, scoring="f1")
+grid = GridSearchCV(RandomForestClassifier(), {"max_depth": [3, 6, None], "n_estimators": [100, 300]}, cv=5)
+grid.fit(X_train, y_train); print(grid.best_params_)</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Common mistakes</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Fitting scalers or encoders on all data (leakage): fit on training data only, or use a pipeline.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Using accuracy on imbalanced data: check recall and precision of the rare class.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Random splits for time series: train on the past, test on the future.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Features only known after the outcome (target leakage).</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>No baseline: always compare with a simple model or "predict the average".</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Learn every topic step by step in <a href="/tutorial-category/machine-learning/">Machine Learning</a> and the premium <a href="/tutorial-category/ml-in-depth/">Machine Learning in Depth</a> module.</p>
+<!-- /wp:paragraph -->

@@ -11,7 +11,7 @@ LangChain is the most widely used framework for building LLM apps in Python and 
 
 ::scene Snap-together AI
 🧱 | Blocks | A prompt template, a chat model and an output parser are three separate blocks. | dev
-🔗 | Chain | The pipe symbol joins them: prompt | model | parser. Input flows left to right. | chip
+🔗 | Chain | The pipe symbol joins prompt, model and parser into one chain. Input flows left to right. | chip
 🔁 | Swap | Change the model block from GPT to Claude or Gemini, and nothing else changes. | byte
 📦 | Reuse | The chain becomes one object you can call, batch, stream or plug into a bigger app. | bugsy
 ::end

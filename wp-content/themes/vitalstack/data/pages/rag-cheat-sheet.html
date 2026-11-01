@@ -1,0 +1,65 @@
+<!-- wp:heading -->
+<h2 class="wp-block-heading">The pipeline</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>documents → extract text → chunk (+ metadata) → embed → vector store
+question  → embed → retrieve top-k → (re-rank) → prompt with chunks → answer + citations</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Chunking</h2>
+<!-- /wp:heading -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>Setting</th><th>Typical start</th><th>Notes</th></tr></thead><tbody><tr><td>Chunk size</td><td>300–800 tokens</td><td>Smaller = precise, larger = more context</td></tr><tr><td>Overlap</td><td>10–20%</td><td>Keeps sentences that cross a boundary</td></tr><tr><td>Split on</td><td>Headings → paragraphs → sentences</td><td>Follow the document's structure</td></tr><tr><td>Metadata</td><td>source, page, section, date</td><td>Needed for citations and filters</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Retrieval</h2>
+<!-- /wp:heading -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>Technique</th><th>Use when</th></tr></thead><tbody><tr><td>Vector search (embeddings)</td><td>Questions use different words than the docs</td></tr><tr><td>Keyword search (BM25)</td><td>Exact terms, codes, names, error messages</td></tr><tr><td>Hybrid (both)</td><td>Most real apps</td></tr><tr><td>Re-ranking</td><td>Retrieve 20–50, re-rank, keep the best 3–8</td></tr><tr><td>Metadata filters</td><td>"Only HR policies", "only 2026 documents"</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:paragraph -->
+<p>Rule: use the <strong>same embedding model</strong> for documents and questions.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">A grounded prompt</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-plaintext">Answer the question using ONLY the sources below.
+Cite each fact like [S2]. If the sources don't contain the answer,
+say "I couldn't find this in the documents."
+
+&lt;sources&gt;
+[S1] (handbook.pdf, p.12) ...
+[S2] (leave-policy.pdf, p.3) ...
+&lt;/sources&gt;
+
+Question: {question}</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Evaluation</h2>
+<!-- /wp:heading -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>Metric</th><th>Question</th></tr></thead><tbody><tr><td>Retrieval hit rate / recall@k</td><td>Is the right chunk in the top k?</td></tr><tr><td>Faithfulness</td><td>Is every claim supported by the retrieved text?</td></tr><tr><td>Answer correctness</td><td>Does it match the reference answer?</td></tr><tr><td>Citation validity</td><td>Do cited sources exist in what was retrieved?</td></tr><tr><td>Refusal rate</td><td>Does it say "not found" when it should?</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Symptoms and fixes</h2>
+<!-- /wp:heading -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>Symptom</th><th>Likely fix</th></tr></thead><tbody><tr><td>Right answer exists but isn't found</td><td>Better chunking, hybrid search, more k, re-ranking</td></tr><tr><td>Finds it, answers wrongly</td><td>Clearer prompt, fewer but better chunks</td></tr><tr><td>Makes things up</td><td>"Only from sources" rule, refuse when nothing retrieved, citation checks</td></tr><tr><td>Slow or costly</td><td>Smaller k, cache answers, shorter chunks</td></tr><tr><td>Old information</td><td>Re-index on change, date metadata and filters</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:paragraph -->
+<p>Build it step by step in the premium <a href="/tutorial-category/rag/">RAG module</a> and the <a href="/tutorial-category/genai-capstones/">Chat with your PDFs capstone</a>.</p>
+<!-- /wp:paragraph -->
