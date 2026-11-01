@@ -41,7 +41,7 @@ API_SDKS = {"anthropic", "openai", "google", "pydantic", "streamlit", "dotenv", 
             "whisper", "faster_whisper", "ollama", "vllm", "unsloth", "bitsandbytes", "accelerate", "gradio",
             "guardrails", "presidio_analyzer", "agents", "autogen", "smolagents", "ragas", "deepeval",
             "langsmith", "litellm", "redis", "pyspark", "e2b", "playwright_stealth", "claude_agent_sdk",
-            "langfuse", "opentelemetry", "pypdf"}
+            "langfuse", "opentelemetry", "pypdf", "playwright"}
 BLOCK = re.compile(r"```(\w+)\n(.*?)```", re.S)
 FIGURES = pathlib.Path(__file__).resolve().parent.parent / "wp-content" / "themes" / "vitalstack" / "assets" / "lessons"
 SAVE = False
