@@ -21,6 +21,9 @@ function vitalstack_daily_question( $date = '' ) {
 	$pool = array();
 	foreach ( glob( VITALSTACK_DIR . '/data/quizzes/*.php' ) as $file ) {
 		$path = basename( $file, '.php' );
+		if ( function_exists( 'vitalstack_path_track' ) && vitalstack_path_track( $path ) ) {
+			continue; // the daily question is public, so it never comes from a premium path
+		}
 		foreach ( vitalstack_path_quizzes( $path ) as $slug => $questions ) {
 			foreach ( $questions as $i => $q ) {
 				$pool[] = array( $path, $slug, $i );

@@ -545,6 +545,18 @@ function vitalstack_setup_paths() {
 			'name'        => 'Prompt Engineering',
 			'description' => 'Get great answers from ChatGPT, Claude and Gemini: clear prompts, examples, roles, step-by-step thinking and safe use of AI tools.',
 		),
+		array(
+			'slug'        => 'llm-basics',
+			'name'        => 'How LLMs Work',
+			'description' => 'Tokens, embeddings, attention, temperature and hallucinations: how large language models really work, with runnable Python. Part of the Gen AI Developer premium track.',
+			'premium'     => 'gen-ai-developer',
+		),
+		array(
+			'slug'        => 'ai-agents',
+			'name'        => 'AI Agents: Basics',
+			'description' => 'The plan, act, observe loop, workflows vs agents, and your first agent with tools, error handling and a step limit, in plain Python. Part of the Agentic AI Engineer premium track.',
+			'premium'     => 'agentic-ai-engineer',
+		),
 	);
 }
 

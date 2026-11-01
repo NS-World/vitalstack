@@ -80,6 +80,13 @@ function vitalstack_lesson_quiz() {
 	if ( ! $questions ) {
 		return;
 	}
+	// A premium lesson's quiz (with its answers) is part of the paid content.
+	if ( function_exists( 'vitalstack_lesson_track' ) ) {
+		$track = vitalstack_lesson_track( get_the_ID() );
+		if ( $track && ! vitalstack_user_has_premium( $track ) ) {
+			return;
+		}
+	}
 	$slug = get_post_field( 'post_name', get_the_ID() );
 	?>
 	<section class="quiz" data-quiz="<?php echo esc_attr( $slug ); ?>" aria-labelledby="quiz-title">

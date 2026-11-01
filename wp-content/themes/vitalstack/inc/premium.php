@@ -68,7 +68,7 @@ function vitalstack_premium_tracks() {
 				array( 'title' => __( 'Python Foundations', 'vitalstack' ), 'path' => 'python', 'about' => __( 'The Python every AI developer needs: functions, dictionaries, files, JSON and errors.', 'vitalstack' ) ),
 				array( 'title' => __( 'Prompt Engineering', 'vitalstack' ), 'path' => 'prompt-engineering', 'about' => __( 'Clear instructions, examples, roles, step-by-step reasoning and structured output.', 'vitalstack' ) ),
 				array( 'title' => __( 'NumPy and Pandas for AI', 'vitalstack' ), 'path' => 'numpy', 'about' => __( 'Vectors, matrices and data tables, the raw material of every model.', 'vitalstack' ) ),
-				array( 'title' => __( 'How LLMs Work', 'vitalstack' ), 'lessons' => array( __( 'Tokens and next-token prediction', 'vitalstack' ), __( 'Embeddings: meaning as numbers', 'vitalstack' ), __( 'Transformers and attention, visually', 'vitalstack' ), __( 'Context windows, temperature and sampling', 'vitalstack' ), __( 'Why models hallucinate and how to reduce it', 'vitalstack' ) ) ),
+				array( 'title' => __( 'How LLMs Work', 'vitalstack' ), 'path' => 'llm-basics', 'premium' => true, 'about' => __( 'Tokens, embeddings, attention, temperature and hallucinations: 5 animated lessons with runnable Python.', 'vitalstack' ), 'lessons' => array( __( 'Tokens and next-token prediction', 'vitalstack' ), __( 'Embeddings: meaning as numbers', 'vitalstack' ), __( 'Transformers and attention, visually', 'vitalstack' ), __( 'Context windows, temperature and sampling', 'vitalstack' ), __( 'Why models hallucinate and how to reduce it', 'vitalstack' ) ) ),
 				array( 'title' => __( 'Working with LLM APIs', 'vitalstack' ), 'lessons' => array( __( 'Your first API call (Claude, OpenAI, Gemini)', 'vitalstack' ), __( 'Chat history and system prompts', 'vitalstack' ), __( 'Streaming responses', 'vitalstack' ), __( 'Structured output with JSON schemas', 'vitalstack' ), __( 'Errors, retries, rate limits and cost', 'vitalstack' ), __( 'Keeping API keys and user data safe', 'vitalstack' ) ) ),
 				array( 'title' => __( 'Retrieval-Augmented Generation (RAG)', 'vitalstack' ), 'lessons' => array( __( 'Why RAG: answers from your own data', 'vitalstack' ), __( 'Chunking documents', 'vitalstack' ), __( 'Embeddings and vector databases', 'vitalstack' ), __( 'Retrieval, re-ranking and citations', 'vitalstack' ), __( 'Evaluating a RAG app', 'vitalstack' ) ) ),
 				array( 'title' => __( 'LangChain and LlamaIndex', 'vitalstack' ), 'lessons' => array( __( 'Chains, prompts and output parsers', 'vitalstack' ), __( 'Memory for chatbots', 'vitalstack' ), __( 'Document loaders and retrievers', 'vitalstack' ) ) ),
@@ -95,7 +95,7 @@ function vitalstack_premium_tracks() {
 			'modules'  => array(
 				array( 'title' => __( 'Python Foundations', 'vitalstack' ), 'path' => 'python', 'about' => __( 'Functions, dictionaries, JSON, files and errors: what every agent is built from.', 'vitalstack' ) ),
 				array( 'title' => __( 'Prompt Engineering', 'vitalstack' ), 'path' => 'prompt-engineering', 'about' => __( 'Clear instructions, examples, roles and structured output: the language agents think in.', 'vitalstack' ) ),
-				array( 'title' => __( 'Agent Basics', 'vitalstack' ), 'lessons' => array( __( 'What an agent is: the plan → act → observe loop', 'vitalstack' ), __( 'Workflows vs agents: when not to use an agent', 'vitalstack' ), __( 'Your first agent in 40 lines of Python', 'vitalstack' ) ) ),
+				array( 'title' => __( 'Agent Basics', 'vitalstack' ), 'path' => 'ai-agents', 'premium' => true, 'about' => __( 'The plan → act → observe loop, when not to use an agent, and your first agent with tools, errors and a step limit: 3 lessons with runnable Python.', 'vitalstack' ), 'lessons' => array( __( 'What an agent is: the plan → act → observe loop', 'vitalstack' ), __( 'Workflows vs agents: when not to use an agent', 'vitalstack' ), __( 'Your first agent in 40 lines of Python', 'vitalstack' ) ) ),
 				array( 'title' => __( 'Tool Use in Depth', 'vitalstack' ), 'lessons' => array( __( 'Function calling and JSON schemas', 'vitalstack' ), __( 'Errors, retries and timeouts', 'vitalstack' ), __( 'Designing tools an LLM can use well', 'vitalstack' ) ) ),
 				array( 'title' => __( 'Memory and State', 'vitalstack' ), 'lessons' => array( __( 'Short-term memory: the context window', 'vitalstack' ), __( 'Long-term memory and summaries', 'vitalstack' ), __( 'Vector memory with embeddings', 'vitalstack' ) ) ),
 				array( 'title' => __( 'Reasoning Patterns', 'vitalstack' ), 'lessons' => array( __( 'ReAct: reason and act', 'vitalstack' ), __( 'Plan-and-execute', 'vitalstack' ), __( 'Reflection and self-correction', 'vitalstack' ) ) ),
@@ -160,6 +160,18 @@ function vitalstack_lesson_track( $post_id = null ) {
 		return '';
 	}
 	$track = (string) get_term_meta( $path->term_id, 'vs_premium', true );
+	return isset( vitalstack_premium_tracks()[ $track ] ) ? $track : '';
+}
+
+/**
+ * The premium track of a whole learning path ('' for free paths).
+ */
+function vitalstack_path_track( $path_slug ) {
+	$term = get_term_by( 'slug', $path_slug, 'tutorial_category' );
+	if ( ! $term ) {
+		return '';
+	}
+	$track = (string) get_term_meta( $term->term_id, 'vs_premium', true );
 	return isset( vitalstack_premium_tracks()[ $track ] ) ? $track : '';
 }
 

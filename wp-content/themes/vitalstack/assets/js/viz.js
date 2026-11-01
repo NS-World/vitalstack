@@ -2473,6 +2473,47 @@
 		}
 	};
 
+	A['llm-attention'] = {
+		title: 'Attention: which words help explain "bank"?',
+		inputs: [{ key: 'sentence', label: 'Sentence', type: 'choice', options: ['I sat by the river bank', 'I put cash in the bank'] }],
+		defaults: { sentence: 'I sat by the river bank' },
+		code: ['scores  = relevance(words, "bank")', 'weights = softmax(scores)       # all positive, sum to 1', 'bank    = sum(w * value for w, value in zip(weights, values))'],
+		run: function (inp) {
+			var river = String(inp.sentence).indexOf('river') > -1, r = recorder();
+			var words = river ? ['I', 'sat', 'by', 'the', 'river'] : ['I', 'put', 'cash', 'in', 'the'];
+			var scores = river ? [0.2, 1.0, 0.5, 0.1, 3.0] : [0.2, 0.6, 3.0, 0.4, 0.1];
+			var ex = scores.map(Math.exp), tot = ex.reduce(function (a, b) { return a + b; }, 0);
+			var w = ex.map(function (e) { return Math.round(e / tot * 100); });
+			var top = words[w.indexOf(Math.max.apply(null, w))];
+			r('The model is reading the word "bank". To understand it, it scores how useful every other word is.', 1, { bars: words.map(function (x, i) { return { label: x, value: scores[i], cls: 'ok' }; }), vars: { word: '"bank"' } });
+			r('Softmax turns the scores into percentages that add up to 100. Big scores grow, small ones shrink.', 2, { bars: words.map(function (x, i) { return { label: x, value: w[i], cls: x === top ? 'good' : 'ok' }; }), vars: { top: top + ' ' + Math.max.apply(null, w) + '%' } });
+			r('The meaning of "bank" becomes a mix of the other words, weighted by attention. "' + top + '" wins, so here bank means ' + (river ? 'the side of a river (nature).' : 'a place for money.'), 3, { bars: words.map(function (x, i) { return { label: x, value: w[i], cls: x === top ? 'good' : 'ok' }; }), vars: { bank: river ? 'nature' : 'money' }, out: 'bank = ' + (river ? 'river bank' : 'money bank') });
+			r('Same word, different sentence, different meaning. Switch the sentence above to see attention move to another word.', 3, { bars: words.map(function (x, i) { return { label: x, value: w[i], cls: x === top ? 'good' : 'ok' }; }), vars: { bank: river ? 'nature' : 'money' }, out: 'bank = ' + (river ? 'river bank' : 'money bank') });
+			return r.steps;
+		}
+	};
+
+	A['agent-loop'] = {
+		title: 'An AI agent: plan → act → observe',
+		inputs: [{ key: 'goal', label: 'Goal', type: 'choice', options: ['18% GST on ₹2,450 + ₹120 delivery', 'Minutes for 3 Python + 2 SQL lessons'] }],
+		defaults: { goal: '18% GST on ₹2,450 + ₹120 delivery' },
+		code: ['for step in range(5):', '    reply = model(history)          # plan', '    if "answer" in reply: break', '    result = run_tool(reply)        # act', '    history.append(result)          # observe'],
+		run: function (inp) {
+			var gst = String(inp.goal).indexOf('GST') > -1, r = recorder(), hist = 1;
+			var calls = gst ? [['calculator', '2450 * 0.18', '441'], ['calculator', '2450 + 441 + 120', '3011']] : [['minutes_for', 'python, 3', '54'], ['minutes_for', 'sql, 2', '28'], ['calculator', '54 + 28', '82']];
+			var answer = gst ? 'GST ₹441, total ₹3,011' : '82 minutes';
+			r('The goal goes into the history. The model can only talk; your code runs the tools.', 1, { vars: { history: hist + ' message', step: 0 } });
+			calls.forEach(function (c, i) {
+				r('Plan: the model asks for the ' + c[0] + ' tool with "' + c[1] + '".', 2, { vars: { step: i, reply: c[0] + '(' + c[1] + ')' } });
+				r('Act: your code checks the request and runs ' + c[0] + '. Result: ' + c[2] + '.', 4, { vars: { step: i, result: c[2] } });
+				hist++;
+				r('Observe: the result joins the history, so the model sees it next round.', 5, { vars: { step: i, history: hist + ' messages' } });
+			});
+			r('The model now has everything it needs and replies with an answer instead of a tool call. The loop ends.', 3, { vars: { step: calls.length, history: hist + ' messages' }, out: answer });
+			return r.steps;
+		}
+	};
+
 	/* ── Statistics (premium Data Scientist track) ── */
 
 	A['stat-center'] = {

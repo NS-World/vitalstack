@@ -76,19 +76,31 @@ def check(path):
 
 
 def check_walks(path, text):
-    """Run each ::walk python block; its "out:" notes, in order, must equal what it prints."""
+    """Run each ::walk python block; its "out:" notes, in order, must equal what it prints.
+
+    Like the code blocks, a walk can use functions and variables defined by the
+    ```python blocks above it in the same lesson.
+    """
     from lessons_to_wxr import parse_walk  # noqa: E402 (same folder)
     lines, bad = text.splitlines(), 0
+    offsets = [0]
+    for line in lines:
+        offsets.append(offsets[-1] + len(line) + 1)
     for k, line in enumerate(lines):
         if not line.startswith("::walk "):
             continue
         lang, title, code, steps = parse_walk(lines, k)
         if lang not in ("python", "py"):
             continue
+        ns = {}
+        with contextlib.redirect_stdout(io.StringIO()):
+            for m in BLOCK.finditer(text[: offsets[k]]):
+                if m.group(1) in ("python", "py"):
+                    exec(compile(m.group(2), f"{path.name}#before-walk", "exec"), ns)
         out = io.StringIO()
         try:
             with contextlib.redirect_stdout(out):
-                exec(compile("\n".join(code), f"{path.name}#walk:{title}", "exec"), {})
+                exec(compile("\n".join(code), f"{path.name}#walk:{title}", "exec"), ns)
         except Exception as exc:  # noqa: BLE001
             print(f"  ERROR {path.name} walk '{title}': {type(exc).__name__}: {exc}")
             bad += 1

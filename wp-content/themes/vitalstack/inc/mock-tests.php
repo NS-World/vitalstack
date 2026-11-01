@@ -28,6 +28,13 @@ function vitalstack_path_term( $slug ) {
  */
 function vitalstack_mock_questions( $path_slug ) {
 	$out = array();
+	// Premium paths: questions and answers are for readers with access only.
+	if ( function_exists( 'vitalstack_path_track' ) ) {
+		$track = vitalstack_path_track( $path_slug );
+		if ( $track && ! vitalstack_user_has_premium( $track ) ) {
+			return $out;
+		}
+	}
 	foreach ( vitalstack_path_quizzes( $path_slug ) as $lesson => $questions ) {
 		foreach ( $questions as $q ) {
 			$q['l'] = $lesson;
@@ -93,6 +100,9 @@ function vitalstack_mock_current_path() {
  */
 function vitalstack_mock_samples( $path_slug, $max = 10 ) {
 	$out = array();
+	if ( function_exists( 'vitalstack_path_track' ) && vitalstack_path_track( $path_slug ) && ! vitalstack_user_has_premium( vitalstack_path_track( $path_slug ) ) ) {
+		return $out;
+	}
 	foreach ( vitalstack_path_quizzes( $path_slug ) as $questions ) {
 		if ( $questions ) {
 			$out[] = $questions[0];

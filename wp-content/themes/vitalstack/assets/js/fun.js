@@ -429,4 +429,68 @@
 			});
 		});
 	});
+	/* ── Up next: after "Mark complete", offer the next lesson with a short countdown ── */
+	document.addEventListener('vs:lesson-complete', function () {
+		var link = document.querySelector('.lesson-end [data-up-next]') || document.querySelector('[data-up-next]');
+		var end = document.querySelector('.lesson-end');
+		if (!link || !end || end.querySelector('.up-next')) return;
+		var secs = 10, timer = null;
+		var box = document.createElement('div');
+		box.className = 'up-next'; box.setAttribute('role', 'status');
+		box.innerHTML = '<div class="up-next-ring" aria-hidden="true"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15.5"/><circle class="up-next-arc" cx="18" cy="18" r="15.5"/></svg><b></b></div>'
+			+ '<div class="up-next-text"><span class="up-next-label">Up next</span><strong></strong></div>'
+			+ '<div class="up-next-actions"><a class="btn btn-primary btn-sm" data-up-go>Start now ❯</a><button type="button" class="btn btn-ghost btn-sm" data-up-stay>Stay here</button></div>';
+		box.querySelector('strong').textContent = link.getAttribute('data-up-next');
+		box.querySelector('[data-up-go]').href = link.href;
+		var num = box.querySelector('.up-next-ring b'), arc = box.querySelector('.up-next-arc');
+		function paint() { num.textContent = secs; arc.style.strokeDashoffset = String(97.4 * (1 - secs / 10)); }
+		function stop() { clearInterval(timer); timer = null; box.classList.add('is-stopped'); num.textContent = '⏸'; }
+		box.querySelector('[data-up-stay]').addEventListener('click', function () { stop(); box.remove(); });
+		end.insertBefore(box, end.firstChild);
+		// Keep it clear of the celebration popup at the bottom of the screen.
+		try { box.scrollIntoView({ block: 'center', behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); } catch (e) { box.scrollIntoView(); }
+		paint();
+		// Count down only while the reader is looking; any scroll or key press pauses it.
+		timer = setInterval(function () {
+			if (document.visibilityState !== 'visible') return;
+			secs--; paint();
+			if (secs <= 0) { clearInterval(timer); location.href = link.href; }
+		}, 1000);
+		['wheel', 'touchmove', 'keydown'].forEach(function (ev) { window.addEventListener(ev, function () { if (timer && secs < 9) stop(); }, { passive: true }); });
+	});
+
+	/* ── Daily learning goal: 15 active minutes a day ─────────────────────── */
+	(function () {
+		var GOAL = 15 * 60, last = Date.now(), goal = store.get('vs-goal', {});
+		if (goal.day !== today()) goal = { day: today(), secs: 0, done: false };
+		['pointerdown', 'keydown', 'scroll', 'touchstart'].forEach(function (ev) { window.addEventListener(ev, function () { last = Date.now(); }, { passive: true }); });
+		var pill = null, meta = document.querySelector('.doc-meta');
+		if (meta) {
+			pill = document.createElement('span');
+			pill.className = 'goal-pill';
+			pill.title = 'Learn 15 minutes a day to build the habit';
+			pill.innerHTML = '<svg viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="15.5"/><circle class="goal-arc" cx="18" cy="18" r="15.5"/></svg><span></span>';
+			meta.appendChild(pill);
+		}
+		function paint() {
+			if (!pill) return;
+			var mins = Math.min(15, Math.floor(goal.secs / 60));
+			pill.querySelector('span').textContent = goal.done ? '🎯 Daily goal done' : '🎯 ' + mins + ' / 15 min today';
+			pill.querySelector('.goal-arc').style.strokeDashoffset = String(97.4 * (1 - Math.min(1, goal.secs / GOAL)));
+			pill.classList.toggle('is-done', !!goal.done);
+		}
+		paint();
+		setInterval(function () {
+			// Count only time when the page is visible and the reader did something in the last 90 seconds.
+			if (document.visibilityState !== 'visible' || Date.now() - last > 90000) return;
+			if (goal.day !== today()) goal = { day: today(), secs: 0, done: false };
+			goal.secs += 15;
+			if (!goal.done && goal.secs >= GOAL) {
+				goal.done = true;
+				celebrate('Daily goal reached! 🎯', '15 minutes of learning today. Come back tomorrow to keep your streak.', 'cheer', 0);
+			}
+			store.set('vs-goal', goal);
+			paint();
+		}, 15000);
+	})();
 })();

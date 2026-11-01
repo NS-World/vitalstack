@@ -197,7 +197,7 @@ function vitalstack_courses_panel() {
 		'web'  => array( __( 'Web development', 'vitalstack' ), '🌐', array( 'html', 'css', 'javascript', 'typescript', 'react', 'angular', 'node', 'nodejs', 'bootstrap', 'tailwind' ) ),
 		'code' => array( __( 'Programming & DSA', 'vitalstack' ), '💻', array( 'python', 'java', 'java-oop', 'c', 'cpp', 'sql', 'dsa', 'dsa-problems', 'git' ) ),
 		'java' => array( __( 'Java backend', 'vitalstack' ), '☕', array( 'servlet', 'jsp', 'jdbc', 'jpa', 'hibernate', 'spring', 'spring-boot', 'microservices', 'jmix' ) ),
-		'data' => array( __( 'Data & AI', 'vitalstack' ), '🤖', array( 'numpy', 'pandas', 'data-visualization', 'statistics', 'machine-learning', 'deep-learning', 'prompt-engineering', 'generative-ai' ) ),
+		'data' => array( __( 'Data & AI', 'vitalstack' ), '🤖', array( 'numpy', 'pandas', 'data-visualization', 'statistics', 'machine-learning', 'deep-learning', 'prompt-engineering', 'llm-basics', 'ai-agents', 'generative-ai' ) ),
 		'more' => array( __( 'More courses', 'vitalstack' ), '📚', array() ),
 	);
 	$sorted = array_fill_keys( array_keys( $groups ), array() );
@@ -453,9 +453,9 @@ function vitalstack_lesson_buttons() {
 			<a class="btn btn-primary" href="<?php echo esc_url( get_term_link( $path ) ); ?>">❮ <?php echo esc_html( $path->name ); ?></a>
 		<?php endif; ?>
 		<?php if ( $next ) : ?>
-			<a class="btn btn-primary" href="<?php echo esc_url( get_permalink( $next ) ); ?>" rel="next"><?php esc_html_e( 'Next', 'vitalstack' ); ?> ❯</a>
+			<a class="btn btn-primary" href="<?php echo esc_url( get_permalink( $next ) ); ?>" rel="next" data-up-next="<?php echo esc_attr( get_the_title( $next ) ); ?>"><?php esc_html_e( 'Next', 'vitalstack' ); ?> ❯</a>
 		<?php elseif ( $next_path ) : ?>
-			<a class="btn btn-primary" href="<?php echo esc_url( get_permalink( vitalstack_path_lessons( $next_path )[0] ) ); ?>">
+			<a class="btn btn-primary" href="<?php echo esc_url( get_permalink( vitalstack_path_lessons( $next_path )[0] ) ); ?>" data-up-next="<?php echo esc_attr( $next_path->name ); ?>">
 				<?php
 				/* translators: %s: next subject name */
 				echo esc_html( sprintf( __( 'Next: %s', 'vitalstack' ), $next_path->name ) );
@@ -484,6 +484,8 @@ function vitalstack_path_viz( $term ) {
 		'machine-learning'   => 'ml-workflow',
 		'statistics'         => 'stat-bayes',
 		'prompt-engineering' => 'llm-next-token',
+		'llm-basics'         => 'llm-attention',
+		'ai-agents'          => 'agent-loop',
 	);
 	return $term && isset( $viz[ $term->slug ] ) ? $viz[ $term->slug ] : '';
 }

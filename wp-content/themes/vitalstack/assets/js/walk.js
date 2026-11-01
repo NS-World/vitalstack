@@ -53,7 +53,30 @@
 			['Simple', 'Deep dive'].forEach(function (lab, k) { var b = el('button', '', lab); b.type = 'button'; b.setAttribute('aria-pressed', k ? 'false' : 'true'); depth.appendChild(b); });
 			head.appendChild(depth);
 		}
+		var b3d = null;
+		if (hasVars || hasOut) {
+			b3d = el('button', 'wk-3d-btn', '🧊 3D view'); b3d.type = 'button'; b3d.setAttribute('aria-pressed', 'false');
+			b3d.title = 'Watch the code run on a 3D stage';
+			head.appendChild(b3d);
+		}
 		host.appendChild(head);
+
+		// 3D stage: variables become crates, printed text appears on a screen, a crew character walks to what changed.
+		var stage = null, crates = null, screen = null, actor = null, card = null, room = null;
+		if (b3d) {
+			stage = el('div', 'wk-stage'); stage.hidden = true; stage.setAttribute('aria-hidden', 'true');
+			var scene = el('div', 'wk-scene');
+			room = el('div', 'wk-room');
+			room.appendChild(el('div', 'wk-floor'));
+			room.appendChild(el('div', 'wk-wall'));
+			crates = el('div', 'wk-crates'); room.appendChild(crates);
+			screen = el('div', 'wk-screen'); screen.appendChild(el('span', 'wk-screen-title', 'Output'));
+			screen.appendChild(el('pre', 'wk-screen-text')); room.appendChild(screen);
+			actor = el('div', 'wk-actor'); room.appendChild(actor);
+			scene.appendChild(room); stage.appendChild(scene);
+			card = el('div', 'wk-card'); stage.appendChild(card);
+			host.appendChild(stage);
+		}
 
 		var body = el('div', 'wk-body');
 		var codePane = el('div', 'wk-code'); codePane.setAttribute('aria-hidden', 'true');
@@ -148,6 +171,7 @@
 				outBox.textContent = steps.slice(0, at + 1).filter(function (x) { return x.out; }).map(function (x) { return x.out; }).join('\n');
 				if (s.out) { outBox.classList.remove('is-new'); void outBox.offsetWidth; outBox.classList.add('is-new'); }
 			}
+			if (stage && !stage.hidden) renderStage(s);
 			count.textContent = 'Step ' + (at + 1) + ' / ' + steps.length;
 			Array.prototype.forEach.call(dots.children, function (d, k) { d.classList.toggle('is-on', k === at); d.classList.toggle('is-done', k < at); });
 			bBack.disabled = at <= 0; bNext.disabled = at >= steps.length - 1;
@@ -188,6 +212,55 @@
 				Array.prototype.forEach.call(depth.children, function (b) { b.setAttribute('aria-pressed', b === e.target ? 'true' : 'false'); });
 				render();
 			});
+		}
+		function renderStage(s) {
+			var state = {}, changed = '', order = [];
+			steps.slice(0, at + 1).forEach(function (x, k) {
+				Object.keys(x.vars).forEach(function (v) {
+					if (!(v in state)) order.push(v);
+					if (k === at && state[v] !== x.vars[v]) changed = v;
+					state[v] = x.vars[v];
+				});
+			});
+			var shown = order.slice(-6); // the six most recent boxes fit the stage
+			crates.textContent = '';
+			shown.forEach(function (v) {
+				var val = String(state[v]), c = el('div', 'wk-crate' + (v === changed ? ' is-changed' : ''));
+				var front = el('div', 'wk-face wk-front'), top = el('div', 'wk-face wk-top'), right = el('div', 'wk-face wk-right');
+				front.appendChild(el('span', 'wk-crate-name', v.length > 10 ? v.slice(0, 9) + '…' : v));
+				front.appendChild(el('span', 'wk-crate-val', val.length > 16 ? val.slice(0, 15) + '…' : val));
+				c.title = v + ' = ' + val;
+				c.appendChild(front); c.appendChild(top); c.appendChild(right);
+				crates.appendChild(c);
+			});
+			if (!shown.length) crates.appendChild(el('div', 'wk-crate-empty', 'Boxes appear here when the code stores a value'));
+			var outs = steps.slice(0, at + 1).filter(function (x) { return x.out; }).map(function (x) { return x.out; });
+			screen.querySelector('.wk-screen-text').textContent = outs.slice(-3).join('\n') || '…';
+			screen.classList.toggle('is-new', !!s.out);
+			// The actor walks to the box that changed (or to the screen when something prints).
+			var slot = changed ? shown.indexOf(changed) : -1;
+			var target = s.out ? screen : (slot > -1 ? crates.children[slot] : null);
+			var x = target ? (target === screen ? 0 : crates.offsetLeft) + target.offsetLeft + target.offsetWidth / 2 - actor.offsetWidth / 2 : 0;
+			actor.style.setProperty('--x', Math.max(0, Math.round(x)) + 'px');
+			actor.innerHTML = mascot(at === steps.length - 1 ? 'cheer' : (s.out ? 'wow' : 'think'));
+			actor.classList.remove('is-hop'); void actor.offsetWidth; actor.classList.add('is-hop');
+			card.textContent = '';
+			card.appendChild(el('span', 'wk-card-num', 'Line ' + (s.line + 1)));
+			card.appendChild(el('code', '', lines[s.line] || ''));
+			card.classList.remove('is-flip'); void card.offsetWidth; card.classList.add('is-flip');
+		}
+		function set3d(on) {
+			if (!stage) return;
+			stage.hidden = !on; host.classList.toggle('is-3d', on);
+			b3d.setAttribute('aria-pressed', on ? 'true' : 'false');
+			b3d.textContent = on ? '🧊 3D on' : '🧊 3D view';
+			try { localStorage.setItem('vs_walk_3d', on ? '1' : '0'); } catch (e) {}
+			if (on && at > -1) renderStage(steps[at]);
+		}
+		if (b3d) {
+			b3d.addEventListener('click', function () { set3d(stage.hidden); });
+			var pref = null; try { pref = localStorage.getItem('vs_walk_3d'); } catch (e) {}
+			if (pref === '1') set3d(true);
 		}
 		go(0);
 	}
