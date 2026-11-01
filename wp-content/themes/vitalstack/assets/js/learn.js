@@ -1,0 +1,445 @@
+/*
+ * Beginner helpers for lessons (4.12).
+ *  1. Story strips: a lesson film (.vs-scene) becomes an illustrated comic strip narrated by Nova.
+ *  2. Explain this code: what every import is for, and what each line of Python does, in plain words.
+ *  3. Tap-to-explain words: AI terms in the lesson text open a short definition from the AI Dictionary.
+ * Runs on page load and again when a premium lesson finishes loading (vs:lesson-loaded).
+ */
+(function () {
+	'use strict';
+	var CFG = window.vitalstackLearn || {};
+	function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+	function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+	var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+	/* ── 1. Story strips ───────────────────────────────────────────────── */
+	var MOODS = ['wave', 'point', 'think', 'explain', 'wow'];
+	var revealer = ('IntersectionObserver' in window) ? new IntersectionObserver(function (es) {
+		es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('is-in'); revealer.unobserve(e.target); } });
+	}, { rootMargin: '0px 0px -10% 0px' }) : null;
+
+	function stories(scope) {
+		if (CFG.films) return;
+		scope.querySelectorAll('.vs-scene:not([data-story])').forEach(function (sc) {
+			sc.setAttribute('data-story', '1');
+			var shots = sc.querySelectorAll('.vs-scene-shots > li');
+			if (!shots.length) return;
+			var fig = el('figure', 'vs-story');
+			var cap = el('figcaption', 'vs-story-title');
+			cap.innerHTML = '<span aria-hidden="true">📖</span> ' + esc(sc.getAttribute('data-title') || 'Story');
+			fig.appendChild(cap);
+			var list = el('ol', 'vs-story-panels');
+			shots.forEach(function (li, i) {
+				var last = i === shots.length - 1;
+				var p = el('li', 'vs-panel vs-panel-' + (i % 5));
+				p.style.setProperty('--d', (i * 0.12) + 's');
+				var art = el('div', 'vs-panel-art');
+				art.setAttribute('aria-hidden', 'true');
+				art.appendChild(el('span', 'vs-panel-num', String(i + 1)));
+				art.appendChild(el('span', 'vs-panel-icon', li.getAttribute('data-icon') || '✨'));
+				var nova = el('div', 'vs-panel-nova');
+				if (window.VSNova) nova.innerHTML = window.VSNova.svg(last && shots.length > 1 ? 'cheer' : MOODS[i % MOODS.length], 74);
+				art.appendChild(nova);
+				p.appendChild(art);
+				var chap = li.getAttribute('data-chapter');
+				if (chap) p.appendChild(el('p', 'vs-panel-chapter', chap));
+				var bub = el('p', 'vs-panel-bubble'); bub.innerHTML = li.innerHTML; p.appendChild(bub);
+				list.appendChild(p);
+				if (revealer && !reduce) revealer.observe(p); else p.classList.add('is-in');
+			});
+			fig.appendChild(list);
+			if (shots.length > 1) {
+				var hint = el('p', 'vs-story-swipe', 'Swipe for the next picture →');
+				hint.setAttribute('aria-hidden', 'true');
+				fig.appendChild(hint);
+			}
+			sc.hidden = true;
+			sc.parentNode.insertBefore(fig, sc.nextSibling);
+		});
+	}
+
+	/* ── 2. Explain this code ──────────────────────────────────────────── */
+	var LIBS = {
+		'numpy': 'NumPy: super-fast maths on whole lists (arrays) of numbers at once.',
+		'pandas': 'Pandas: Excel inside Python. Load, clean, filter and summarise tables of data.',
+		'matplotlib': 'Matplotlib: draws charts and graphs.',
+		'matplotlib.pyplot': 'Matplotlib\'s plotting tools: bar charts, line charts, scatter plots.',
+		'seaborn': 'Seaborn: good-looking statistical charts with less code.',
+		'sklearn': 'scikit-learn: ready-made machine learning models and tools.',
+		'sklearn.model_selection': 'scikit-learn helpers to split data and test models fairly (train/test split, cross-validation).',
+		'sklearn.linear_model': 'scikit-learn\'s line-based models: linear and logistic regression.',
+		'sklearn.ensemble': 'scikit-learn models made of many trees: random forest and gradient boosting.',
+		'sklearn.metrics': 'scikit-learn scorecards: accuracy, precision, recall, error and similarity.',
+		'sklearn.preprocessing': 'scikit-learn tools to prepare data: scaling numbers, encoding categories.',
+		'sklearn.cluster': 'scikit-learn tools that group similar rows automatically (k-means, DBSCAN).',
+		'sklearn.decomposition': 'scikit-learn tools to squeeze many columns into a few (PCA).',
+		'sklearn.feature_extraction.text': 'scikit-learn tools that turn text into numbers (TF-IDF, word counts).',
+		'sklearn.pipeline': 'scikit-learn pipelines: chain preparation steps and a model into one object.',
+		'sklearn.datasets': 'Practice datasets that come with scikit-learn.',
+		'sklearn.tree': 'scikit-learn decision trees: yes/no questions that lead to an answer.',
+		'sklearn.neighbors': 'scikit-learn k-nearest neighbours: decide by looking at the most similar examples.',
+		'sklearn.svm': 'scikit-learn support vector machines.',
+		'sklearn.naive_bayes': 'scikit-learn Naive Bayes: fast probability-based classifiers.',
+		'sklearn.impute': 'scikit-learn tools to fill in missing values.',
+		'sklearn.compose': 'scikit-learn tools to treat different columns differently.',
+		'sklearn.inspection': 'scikit-learn tools to see which features a model relies on.',
+		'scipy': 'SciPy: advanced maths and statistics.',
+		'json': 'json: read and write JSON, the text format apps and APIs use to share data.',
+		're': 're: regular expressions, patterns for finding text (like all phone numbers).',
+		'math': 'math: square roots, logs, rounding and other maths.',
+		'random': 'random: random numbers and shuffling.',
+		'os': 'os: talk to the operating system: files, folders, environment variables.',
+		'sys': 'sys: settings of the running Python program.',
+		'time': 'time: clocks and waiting.',
+		'datetime': 'datetime: dates and times.',
+		'collections': 'collections: handy containers like Counter (counting) and defaultdict.',
+		'itertools': 'itertools: tools for looping in clever ways.',
+		'functools': 'functools: tools that work on functions.',
+		'pathlib': 'pathlib: work with file and folder paths safely.',
+		'csv': 'csv: read and write CSV spreadsheet files.',
+		'sqlite3': 'sqlite3: a small SQL database built into Python.',
+		'hashlib': 'hashlib: makes fingerprints (hashes) of data.',
+		'subprocess': 'subprocess: run other programs from Python.',
+		'tempfile': 'tempfile: temporary files and folders that are cleaned up later.',
+		'shutil': 'shutil: copy, move and delete files and folders.',
+		'difflib': 'difflib: compare two texts and show the differences.',
+		'ast': 'ast: read Python code as a tree (used here to do maths safely).',
+		'operator': 'operator: +, -, *, / as functions.',
+		'inspect': 'inspect: look inside functions (names, inputs, docstrings).',
+		'typing': 'typing: labels that say what type of data a variable holds.',
+		'dataclasses': 'dataclasses: quick classes for holding data.',
+		'concurrent.futures': 'concurrent.futures: run several jobs at the same time.',
+		'asyncio': 'asyncio: do many waiting tasks (like API calls) at once.',
+		'contextlib': 'contextlib: helpers for "with" blocks.',
+		'urllib.parse': 'urllib.parse: split a web address (URL) into its parts.',
+		'graphlib': 'graphlib: put tasks in the right order when some depend on others.',
+		'resource': 'resource: limit how much CPU and memory a program may use.',
+		'requests': 'requests: download web pages and call web APIs.',
+		'anthropic': 'anthropic: the official Python library for calling Claude models.',
+		'openai': 'openai: the official Python library for OpenAI models (also used by some other providers).',
+		'google': 'Google\'s Python library, here for Gemini models.',
+		'langchain': 'LangChain: building blocks for LLM apps (prompts, chains, retrievers).',
+		'langchain_core': 'LangChain\'s core pieces: prompts, messages, output parsers, tools.',
+		'langchain_anthropic': 'LangChain\'s connector for Claude models.',
+		'langchain_openai': 'LangChain\'s connector for OpenAI models.',
+		'langchain_community': 'Community connectors for LangChain: loaders, vector stores and more.',
+		'langchain_text_splitters': 'LangChain tools that cut long text into chunks.',
+		'langgraph': 'LangGraph: build AI agents as a map of steps (a graph).',
+		'llama_index': 'LlamaIndex: tools to index your documents and ask questions over them.',
+		'crewai': 'CrewAI: build teams of AI agents with roles and tasks.',
+		'mcp': 'MCP: the official library for the Model Context Protocol (connect AI apps to tools).',
+		'chromadb': 'Chroma: a vector database that stores embeddings and finds similar text.',
+		'transformers': 'Hugging Face Transformers: download and run thousands of open AI models.',
+		'datasets': 'Hugging Face Datasets: load training and test data.',
+		'peft': 'PEFT: cheap fine-tuning methods like LoRA.',
+		'trl': 'TRL: training helpers for fine-tuning language models.',
+		'torch': 'PyTorch: a deep learning framework for building and training neural networks.',
+		'tensorflow': 'TensorFlow: a deep learning framework from Google.',
+		'keras': 'Keras: an easy way to build neural networks layer by layer.',
+		'cv2': 'OpenCV: tools for images and video.',
+		'PIL': 'Pillow: open, edit and save images.',
+		'streamlit': 'Streamlit: turn a Python script into a web app.',
+		'fastapi': 'FastAPI: build web APIs (URLs other programs can call).',
+		'pydantic': 'Pydantic: checks that data has the right fields and types.',
+		'uvicorn': 'Uvicorn: the web server that runs a FastAPI app.',
+		'joblib': 'joblib: save a trained model to a file and load it later.',
+		'pyspark': 'PySpark: process huge data across many computers.',
+		'pymongo': 'PyMongo: talk to a MongoDB database.',
+		'statsmodels': 'statsmodels: statistics and forecasting models.',
+		'nltk': 'NLTK: classic tools for working with human language.',
+		'playwright': 'Playwright: control a real web browser from code.',
+		'diffusers': 'Diffusers: run image-generation (diffusion) models.',
+		'whisper': 'Whisper: turn speech into text.',
+		'xgboost': 'XGBoost: a powerful gradient boosting model.',
+		'dotenv': 'python-dotenv: load secret keys from a .env file.',
+		'claude_agent_sdk': 'Claude Agent SDK: build agents with the same loop and tools as Claude Code.',
+		'agents': 'OpenAI Agents SDK: agents, tools and hand-offs.'
+	};
+	var METHODS = [
+		[/\bnp\.array\(/, 'makes a NumPy array: a fast list (or table) of numbers.'],
+		[/\bpd\.DataFrame\(/, 'makes a table (DataFrame) with rows and columns.'],
+		[/\bpd\.Series\(/, 'makes a single column of data (a Series).'],
+		[/\banthropic\.Anthropic\(/, 'creates a Claude client that reads your API key from the environment.'],
+		[/\bsqlite3\.connect\(/, 'opens (or creates) a SQLite database.'],
+		[/\bplt\.(bar|plot|scatter|hist)\(/, 'draws a chart.'],
+		[/\bTfidfVectorizer\(/, 'creates a tool that turns text into TF-IDF numbers.'],
+		[/\bcosine_similarity\(/, 'measures how similar two vectors are (1 = same direction).'],
+		[/\btrain_test_split\(/, 'splits the data into a training part (to learn from) and a test part (to check on).'],
+		[/\.fit_transform\(/, 'learns from the data and transforms it in one step.'],
+		[/\.fit\(/, 'trains (fits) the model on the data.'],
+		[/\.predict_proba\(/, 'asks the trained model for probabilities.'],
+		[/\.predict\(/, 'asks the trained model for its answers (predictions).'],
+		[/\.transform\(/, 'applies what was learned to change the data.'],
+		[/\.score\(/, 'measures how well the model does.'],
+		[/\bread_csv\(/, 'loads a CSV file into a table (DataFrame).'],
+		[/\.groupby\(/, 'groups rows that share a value, like all sales per city.'],
+		[/\.describe\(/, 'gives quick statistics: count, mean, min, max.'],
+		[/\.head\(/, 'shows the first few rows.'],
+		[/\.messages\.create\(/, 'sends a message to the AI model and waits for its reply.'],
+		[/\.messages\.stream\(/, 'asks the AI model and receives the reply word by word.'],
+		[/\.invoke\(/, 'runs the chain or graph and returns the result.'],
+		[/\bjson\.loads\(/, 'turns JSON text into a Python dictionary or list.'],
+		[/\bjson\.dumps\(/, 'turns Python data into JSON text.'],
+		[/\.execute\(/, 'runs an SQL command on the database.'],
+		[/\.append\(/, 'adds one item to the end of a list.'],
+		[/\.split\(/, 'cuts text into a list of pieces.'],
+		[/\.join\(/, 'glues a list of texts into one text.'],
+		[/\.replace\(/, 'swaps some text for other text.'],
+		[/\.lower\(/, 'makes text lowercase.'],
+		[/\.strip\(/, 'removes spaces from the start and end.'],
+		[/\.items\(\)/, 'goes through each key and value of a dictionary.'],
+		[/\.get\(/, 'reads a value from a dictionary safely (no error if it is missing).'],
+		[/\bsorted\(/, 'returns the items in order.'],
+		[/\blen\(/, 'counts how many items there are.'],
+		[/\brange\(/, 'makes a sequence of numbers.'],
+		[/\bsum\(/, 'adds up the numbers.'],
+		[/\bround\(/, 'rounds the number.'],
+		[/\bmax\(/, 'picks the biggest.'],
+		[/\bmin\(/, 'picks the smallest.'],
+		[/\bopen\(/, 'opens a file.'],
+		[/\.compile\(/, 'prepares the model or graph so it can run.'],
+		[/\.show\(/, 'shows the chart or table.']
+	];
+	function libInfo(name) {
+		var parts = name.split('.');
+		for (var i = parts.length; i > 0; i--) {
+			var key = parts.slice(0, i).join('.');
+			if (LIBS[key]) return LIBS[key];
+		}
+		return '';
+	}
+	function libSay(name) { var i = libInfo(name), c = i.indexOf(':'); return c > -1 && !/\s/.test(i.slice(0, c).trim().replace(/['’]s$/, '')) ? i.slice(c + 1).trim() : i.replace(/: /, ', ').replace(/\.$/, ''); }
+	function parseImports(code) {
+		var out = [];
+		code.split('\n').forEach(function (ln) {
+			var m;
+			if ((m = ln.match(/^\s*from\s+([\w.]+)\s+import\s+(.+)$/))) {
+				out.push({ mod: m[1], names: m[2].replace(/[()\\]/g, '').split(',').map(function (s) { return s.trim().split(/\s+as\s+/)[0]; }).filter(Boolean) });
+			} else if ((m = ln.match(/^\s*import\s+(.+)$/))) {
+				m[1].split(',').forEach(function (p) { var bits = p.trim().split(/\s+as\s+/); out.push({ mod: bits[0], alias: bits[1] || '' }); });
+			}
+		});
+		return out;
+	}
+	function describeValue(v) {
+		v = v.trim();
+		if (/^\[/.test(v)) return 'a list (an ordered collection)';
+		if (/^\{/.test(v)) return /:/.test(v) || /^\{\s*$/.test(v) || v === '{}' ? 'a dictionary (labels → values)' : 'a set';
+		if (/^\(/.test(v) && /,/.test(v)) return 'a tuple (a fixed group of values)';
+		if (/^(f|r|b)?["']/.test(v)) return 'text (a string)';
+		if (/^-?\d+(_\d+)*$/.test(v)) return 'a whole number';
+		if (/^-?\d*\.\d+(e-?\d+)?$/.test(v)) return 'a decimal number';
+		if (/^(True|False)$/.test(v)) return 'True or False';
+		if (/^None$/.test(v)) return 'nothing yet (None)';
+		if (/^lambda\b/.test(v)) return 'a tiny one-line function';
+		return '';
+	}
+	function methodNote(line) {
+		for (var i = 0; i < METHODS.length; i++) if (METHODS[i][0].test(line)) return ' It ' + METHODS[i][1];
+		return '';
+	}
+	function explainLine(raw, state) {
+		var t = raw.trim();
+		var m;
+		if (state.str) { if (/("""|''')/.test(t)) state.str = false; return ['text', 'Text', '…still part of the text block above.']; }
+		if (/^("""|''')/.test(t) && !/^(["']{3}).*\1$/.test(t)) { state.str = true; return ['text', 'Text', 'Starts a block of text (a docstring or long string) that spans several lines.']; }
+		if (state.depth > 0) { return ['cont', '…', '…continues the line above.']; }
+		if (/^#/.test(t)) return ['note', 'Note', 'A comment: a note for humans. Python ignores it.'];
+		if ((m = t.match(/^from\s+([\w.]+)\s+import\s+(.+)/))) { var d = libSay(m[1]); return ['import', 'Import', 'Brings in ' + m[2].replace(/[()\\]/g, '').trim() + ' from the ' + m[1] + ' toolbox' + (d ? ': ' + d : '.')]; }
+		if ((m = t.match(/^import\s+(.+)/))) { var mods = m[1].split(',').map(function (p) { return p.trim().split(/\s+as\s+/); }); return ['import', 'Import', mods.map(function (b) { var dd = libSay(b[0]); return 'Brings in the ' + b[0] + ' toolbox' + (b[1] ? ' (nicknamed ' + b[1] + ')' : '') + (dd ? ': ' + dd : '.'); }).join(' ')]; }
+		if (/^@/.test(t)) return ['deco', 'Decorator', 'A decorator: gives the function below an extra power (for example, turns it into a tool).'];
+		if ((m = t.match(/^(async\s+)?def\s+(\w+)\s*\((.*?)\)?\s*(->.*)?:?$/))) { var args = (m[3] || '').split(',').map(function (s) { return s.trim().split(/[:=]/)[0].trim(); }).filter(function (s) { return s && s !== 'self'; }); return ['def', 'Function', 'Defines a function called ' + m[2] + ': a reusable recipe.' + (args.length ? ' Its inputs: ' + args.join(', ') + '.' : ' It takes no inputs.') + (m[1] ? ' (async: it can wait for slow things without blocking.)' : '')]; }
+		if ((m = t.match(/^class\s+(\w+)\((\w*(Error|Exception))\)/))) return ['class', 'Class', 'Defines a new kind of error called ' + m[1] + ', so the code can raise and catch it by name.'];
+		if ((m = t.match(/^class\s+(\w+)/))) return ['class', 'Class', 'Defines a class called ' + m[1] + ': a blueprint for creating objects.'];
+		if (t === 'raise') return ['safe', 'Error', 'Passes the same error on to the code that called this one.'];
+		if (/^raise\b/.test(t)) return ['safe', 'Error', 'Raises an error on purpose: stops here and reports what went wrong.'];
+		if (/^assert\b/.test(t)) return ['safe', 'Check', 'Checks that something is true; if not, the program stops with an error. Used in tests.'];
+		if (/^(global|nonlocal)\b/.test(t)) return ['var', 'Variable', 'Lets this function change a variable from outside it.'];
+		if (/^return\b/.test(t)) return ['return', 'Return', t === 'return' ? 'Ends the function here.' : 'Sends the result back to whoever called this function.' + methodNote(t)];
+		if ((m = t.match(/^(async\s+)?for\s+(.+?)\s+in\s+(.+):$/))) return ['loop', 'Loop', 'Repeats the indented lines below once for each ' + m[2] + ' in ' + m[3] + '.'];
+		if ((m = t.match(/^while\s+(.+):$/))) return ['loop', 'Loop', 'Keeps repeating the lines below while ' + m[1] + ' is true.'];
+		if ((m = t.match(/^if\s+(.+):$/))) return ['if', 'Decision', 'Runs the indented lines below only if ' + m[1] + '.'];
+		if ((m = t.match(/^elif\s+(.+):$/))) return ['if', 'Decision', 'Otherwise, if ' + m[1] + ', run these lines instead.'];
+		if (/^else\s*:$/.test(t)) return ['if', 'Decision', 'In every other case, run these lines.'];
+		if (/^try\s*:$/.test(t)) return ['safe', 'Safety net', 'Tries the lines below. If one fails, Python jumps to "except" instead of crashing.'];
+		if ((m = t.match(/^except\s*(.*?)(\s+as\s+\w+)?:$/))) return ['safe', 'Safety net', 'Runs only if an error' + (m[1] ? ' of type ' + m[1] : '') + ' happened above.'];
+		if (/^finally\s*:$/.test(t)) return ['safe', 'Safety net', 'Always runs at the end, error or not.'];
+		if ((m = t.match(/^(async\s+)?with\s+(.+?)(\s+as\s+(.+))?:$/))) return ['with', 'Open & close', 'Opens ' + m[2] + (m[4] ? ' (called ' + m[4] + ')' : '') + ' and closes it automatically when the block ends.'];
+		if (/^print\(/.test(t)) return ['print', 'Print', 'Shows a result on the screen, so you can see what happened.'];
+		if (/^(break|continue|pass)$/.test(t)) return ['loop', t === 'pass' ? 'Skip' : 'Loop', { break: 'Stops the loop right now.', continue: 'Skips to the next round of the loop.', pass: 'Does nothing: a placeholder.' }[t]];
+		if ((m = t.match(/^([\w.\[\]'"]+(\s*,\s*[\w.]+)*)\s*([+\-*/]?)=\s*(?!=)(.+)$/))) {
+			if (m[3]) return ['var', 'Update', 'Updates ' + m[1] + ' (' + { '+': 'adds to it', '-': 'subtracts from it', '*': 'multiplies it', '/': 'divides it' }[m[3]] + ').'];
+			var kind = describeValue(m[4]);
+			var many = /,/.test(m[1]);
+			return ['var', 'Variable', (many ? 'Stores values in ' + m[1] + ' at once.' : 'Stores ' + (kind || 'a value') + ' in a variable called ' + m[1] + '.') + methodNote(m[4])];
+		}
+		var note = methodNote(t);
+		return ['call', 'Action', note ? 'Runs a step.' + note : 'Runs a step: calls a function or method.'];
+	}
+	function bracketDelta(line) {
+		var s = line.replace(/(["'])(?:\\.|(?!\1).)*\1/g, '').replace(/#.*/, '');
+		return (s.match(/[([{]/g) || []).length - (s.match(/[)\]}]/g) || []).length;
+	}
+	function explainCode(scope) {
+		scope.querySelectorAll('pre.wp-block-code > code.language-python:not([data-explained])').forEach(function (code) {
+			code.setAttribute('data-explained', '1');
+			var src = code.textContent.replace(/\s+$/, '');
+			var lines = src.split('\n');
+			if (lines.length < 2 && !/import/.test(src)) return;
+			var pre = code.parentNode;
+			var box = el('div', 'vs-explain');
+			var imports = parseImports(src);
+			if (imports.length) {
+				var uses = el('div', 'vs-explain-uses');
+				uses.appendChild(el('span', 'vs-explain-uses-label', '📦 Tools this code uses:'));
+				var seen = {};
+				imports.forEach(function (im) {
+					var key = im.mod;
+					if (seen[key]) return; seen[key] = 1;
+					var info = libInfo(im.mod);
+					var chip = el('span', 'vs-explain-chip');
+					chip.innerHTML = '<code>' + esc(im.mod) + '</code>' + (im.alias ? ' <small>as ' + esc(im.alias) + '</small>' : '') + (info ? '<span class="vs-explain-chip-say">' + esc(info.indexOf(':') > -1 ? info.slice(info.indexOf(':') + 1).trim() : info) + '</span>' : '');
+					uses.appendChild(chip);
+				});
+				box.appendChild(uses);
+			}
+			var btn = el('button', 'vs-explain-toggle');
+			btn.type = 'button'; btn.setAttribute('aria-expanded', 'false');
+			btn.innerHTML = '<span aria-hidden="true">🧩</span> Explain this code, line by line';
+			var body = el('div', 'vs-explain-body'); body.hidden = true;
+			var head = el('div', 'vs-explain-head');
+			if (window.VSNova) { var nv = el('div', 'vs-explain-nova'); nv.setAttribute('aria-hidden', 'true'); nv.innerHTML = window.VSNova.svg('explain', 56); head.appendChild(nv); }
+			head.appendChild(el('p', '', 'Here is what each line does, in plain words. Colours show the kind of line.'));
+			body.appendChild(head);
+			var ol = el('ol', 'vs-explain-lines');
+			var state = { str: false, depth: 0 };
+			lines.forEach(function (ln, i) {
+				if (!ln.trim()) { state.depth = Math.max(0, state.depth); return; }
+				var r = explainLine(ln, state);
+				state.depth = Math.max(0, state.depth + bracketDelta(ln));
+				var li = el('li', 'vs-xl vs-xl-' + r[0]);
+				var top = el('div', 'vs-xl-top');
+				top.appendChild(el('span', 'vs-xl-n', String(i + 1)));
+				top.appendChild(el('span', 'vs-xl-tag', r[1]));
+				var c = el('code', 'vs-xl-code', ln.replace(/^\s+/, function (s) { return s.replace(/\t/g, '    '); }));
+				top.appendChild(c);
+				li.appendChild(top);
+				li.appendChild(el('p', 'vs-xl-say', r[2]));
+				ol.appendChild(li);
+			});
+			body.appendChild(ol);
+			btn.addEventListener('click', function () {
+				var open = btn.getAttribute('aria-expanded') === 'true';
+				btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+				body.hidden = open;
+				btn.lastChild.textContent = open ? ' Explain this code, line by line' : ' Hide the explanation';
+			});
+			box.appendChild(btn);
+			box.appendChild(body);
+			pre.parentNode.insertBefore(box, pre.nextSibling);
+		});
+	}
+
+	/* ── 3. Tap-to-explain words ───────────────────────────────────────── */
+	var SKIP = { 'model': 1, 'prompt': 1, 'planning': 1, 'memory': 1, 'retrieval': 1, 'citation': 1, 'dataset': 1, 'vector': 1, 'chatbot': 1, 'streaming': 1, 'deployment': 1, 'latency': 1, 'benchmark': 1, 'bias': 1, 'sandbox': 1, 'orchestrator': 1, 'tracing': 1, 'inference': 1, 'parameters': 1, 'attention': 1, 'api': 1 };
+	var MATCHERS = null;
+	function buildMatchers() {
+		MATCHERS = [];
+		(CFG.terms || []).forEach(function (t) {
+			var slug = t[0], label = t[1];
+			if (SKIP[slug]) return;
+			var forms = [];
+			var main = label.replace(/\s*\(.*?\)\s*/g, ' ').replace(/\s*\/.*$/, '').trim();
+			if (main.length >= 3) forms.push(main);
+			var paren = label.match(/\(([^)]+)\)/);
+			if (paren && /^[A-Z][A-Za-z-]{1,8}$/.test(paren[1]) && paren[1].length >= 3) forms.push(paren[1]);
+			if (/^[A-Z]{2,}$/.test(main)) forms = [main];
+			forms.forEach(function (f) {
+				var cs = /^[A-Z]{2,}/.test(f); // acronyms must match case
+				MATCHERS.push({ slug: slug, term: t, re: new RegExp('\\b' + f.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s+') + (cs ? '' : 's?') + '\\b', cs ? '' : 'i') });
+			});
+		});
+		MATCHERS.sort(function (a, b) { return b.re.source.length - a.re.source.length; });
+	}
+	var pop = null, popFor = null;
+	function closePop() { if (pop) { pop.hidden = true; if (popFor) { popFor.setAttribute('aria-expanded', 'false'); popFor.focus({ preventScroll: true }); } popFor = null; } }
+	function openPop(btn) {
+		var t = null, slug = btn.getAttribute('data-term');
+		(CFG.terms || []).forEach(function (x) { if (x[0] === slug) t = x; });
+		if (!t) return;
+		if (!pop) {
+			pop = el('div', 'vs-termpop'); pop.setAttribute('role', 'dialog'); pop.setAttribute('aria-modal', 'false'); pop.hidden = true;
+			document.body.appendChild(pop);
+			document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closePop(); });
+			document.addEventListener('click', function (e) { if (pop && !pop.hidden && !pop.contains(e.target) && !e.target.closest('.vs-term')) closePop(); });
+			window.addEventListener('resize', function () { if (pop && !pop.hidden && popFor) place(popFor); }, { passive: true });
+		}
+		if (popFor && popFor !== btn) popFor.setAttribute('aria-expanded', 'false');
+		popFor = btn; btn.setAttribute('aria-expanded', 'true');
+		pop.setAttribute('aria-label', t[1]);
+		pop.innerHTML = '<div class="vs-termpop-head"><span class="vs-termpop-emoji" aria-hidden="true">' + esc(t[3]) + '</span><strong>' + esc(t[1]) + '</strong><button type="button" class="vs-termpop-x" aria-label="Close">×</button></div><p>' + esc(t[2]) + '</p>' + (CFG.dictUrl ? '<a href="' + esc(CFG.dictUrl + '#' + t[0]) + '">Example and more in the AI Dictionary →</a>' : '');
+		pop.querySelector('.vs-termpop-x').addEventListener('click', closePop);
+		pop.hidden = false;
+		place(btn);
+		pop.querySelector('.vs-termpop-x').focus({ preventScroll: true });
+	}
+	function place(btn) {
+		if (window.innerWidth < 640) { pop.classList.add('is-sheet'); pop.style.left = pop.style.top = ''; return; }
+		pop.classList.remove('is-sheet');
+		var r = btn.getBoundingClientRect(), w = pop.offsetWidth, h = pop.offsetHeight;
+		var left = Math.min(Math.max(12, r.left + r.width / 2 - w / 2), document.documentElement.clientWidth - w - 12);
+		var top = r.bottom + 8;
+		if (top + h > window.innerHeight - 12) top = Math.max(12, r.top - h - 8);
+		pop.style.left = (left + window.scrollX) + 'px';
+		pop.style.top = (top + window.scrollY) + 'px';
+	}
+	function words(scope) {
+		if (!CFG.terms || !CFG.terms.length) return;
+		if (!MATCHERS) buildMatchers();
+		var prose = scope.querySelector('.prose, .entry-content') || scope;
+		var used = {};
+		prose.querySelectorAll('.vs-term').forEach(function (b) { used[b.getAttribute('data-term')] = 1; });
+		var count = Object.keys(used).length;
+		var blocks = prose.querySelectorAll('p, li, td, blockquote');
+		for (var b = 0; b < blocks.length && count < 14; b++) {
+			var blk = blocks[b];
+			if (blk.closest('pre, code, a, h1, h2, h3, .vs-walk, .vs-story, .vs-explain, .vs-scene, .quiz, .vs-termpop, nav, .toc, button, .vs-viz, .viz')) continue;
+			var walker = document.createTreeWalker(blk, NodeFilter.SHOW_TEXT, { acceptNode: function (n) { return n.parentNode.closest('code, a, button, strong.vs-term, .vs-term') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT; } });
+			var nodes = []; while (walker.nextNode()) nodes.push(walker.currentNode);
+			for (var k = 0; k < nodes.length && count < 14; k++) {
+				var node = nodes[k];
+				for (var j = 0; j < MATCHERS.length; j++) {
+					var mt = MATCHERS[j];
+					if (used[mt.slug]) continue;
+					var hit = mt.re.exec(node.nodeValue);
+					if (!hit) continue;
+					var after = node.splitText(hit.index);
+					after.nodeValue = after.nodeValue.slice(hit[0].length);
+					var btn = el('button', 'vs-term', hit[0]);
+					btn.type = 'button'; btn.setAttribute('data-term', mt.slug); btn.setAttribute('aria-expanded', 'false');
+					btn.title = 'What does "' + mt.term[1] + '" mean?';
+					after.parentNode.insertBefore(btn, after);
+					used[mt.slug] = 1; count++;
+					nodes.splice(k + 1, 0, after);
+					break;
+				}
+			}
+		}
+	}
+	document.addEventListener('click', function (e) {
+		var t = e.target.closest && e.target.closest('.vs-term');
+		if (!t) return;
+		e.preventDefault();
+		if (popFor === t && pop && !pop.hidden) closePop(); else openPop(t);
+	});
+
+	function run(scope) {
+		scope = scope || document;
+		try { stories(scope); } catch (e) { /* never break the lesson */ }
+		try { explainCode(scope); } catch (e) { }
+		try { words(scope); } catch (e) { }
+	}
+	if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { run(); }); else run();
+	document.addEventListener('vs:lesson-loaded', function () { run(); });
+	window.VSLearn = { run: run };
+})();

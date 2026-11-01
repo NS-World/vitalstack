@@ -49,6 +49,7 @@ function vitalstack_practice_links() {
 	}
 	$links = array();
 	$pages = array(
+		'ai-city'      => array( __( 'AI City 3D', 'vitalstack' ), '🏙️' ),
 		'mock-tests'   => array( __( 'Mock Tests', 'vitalstack' ), '📝' ),
 		'roadmaps'     => array( __( 'Roadmaps', 'vitalstack' ), '🗺️' ),
 		'cheat-sheets' => array( __( 'Cheat Sheets', 'vitalstack' ), '📄' ),

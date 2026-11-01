@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'VITALSTACK_VERSION', '4.11.0' );
+define( 'VITALSTACK_VERSION', '4.12.0' );
 define( 'VITALSTACK_DIR', get_template_directory() );
 define( 'VITALSTACK_URI', get_template_directory_uri() );
 
@@ -55,5 +55,8 @@ require VITALSTACK_DIR . '/inc/focus.php';
 require VITALSTACK_DIR . '/inc/ui.php';
 require VITALSTACK_DIR . '/inc/contact.php';
 require VITALSTACK_DIR . '/inc/ads.php';
+require VITALSTACK_DIR . '/inc/ai-dictionary.php';
+require VITALSTACK_DIR . '/inc/ai-city.php';
+require VITALSTACK_DIR . '/inc/learn-helpers.php';
 require VITALSTACK_DIR . '/inc/setup-wizard.php';
 require VITALSTACK_DIR . '/inc/starter-content.php';

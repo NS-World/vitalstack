@@ -846,6 +846,18 @@ function vitalstack_setup_pages() {
 			'template' => 'page-games.php',
 			'content'  => '',
 		),
+		'ai-city'          => array(
+			'title'    => 'AI City: Gen AI and Agents in 3D',
+			'status'   => 'publish',
+			'template' => 'page-ai-city.php',
+			'content'  => '',
+		),
+		'ai-dictionary'    => array(
+			'title'    => 'AI Dictionary',
+			'status'   => 'publish',
+			'template' => 'page-ai-dictionary.php',
+			'content'  => '',
+		),
 		'dsa-problems'     => array(
 			'title'    => 'Interview Problems',
 			'status'   => 'publish',

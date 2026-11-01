@@ -174,6 +174,12 @@ if ( $vs_ai ) :
 
 <?php vitalstack_home_certs(); ?>
 
+<?php
+if ( function_exists( 'vitalstack_home_ai_city' ) ) {
+	vitalstack_home_ai_city();
+}
+?>
+
 <?php vitalstack_home_premium(); ?>
 
 <section class="home-editor">
