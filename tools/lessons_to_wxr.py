@@ -25,7 +25,8 @@ The body supports the Markdown that lessons need: ## and ### headings,
 paragraphs, - and 1. lists, | tables |, fenced ``` code blocks, `inline code`,
 **bold** and [links](/path/), plus `::viz name {json}` (live visualizer),
 `::walk lang | title` ... `::notes` ... `::end` (line-by-line code walkthrough),
-`::tip text`, `::hint Label | text` and `::figure file.svg | alt text` (a chart from
+`::scene Title` ... `::end` (a short animated "film": one shot per line,
+`icon | chapter | subtitle | crew`), `::tip text`, `::hint Label | text` and `::figure file.svg | alt text` (a chart from
 wp-content/themes/vitalstack/assets/lessons/). It is converted to block-editor markup, so imported lessons open
 cleanly in the WordPress editor.
 
@@ -194,6 +195,36 @@ def walk_block(lines, start):
     )
 
 
+CREW = {"dev", "chip", "bugsy", "byte"}
+
+
+def scene_block(lines, start):
+    """A short animated film. Each shot: icon | chapter (may be empty) | subtitle | crew (optional)."""
+    title = lines[start][len("::scene "):].strip()
+    shots = []
+    for k in range(start + 1, len(lines)):
+        row = lines[k].strip()
+        if row == "::end":
+            if not shots:
+                sys.exit(f"::scene without shots (line {start + 1})")
+            items = "".join(
+                f'<li data-icon="{html.escape(icon, quote=True)}" data-chapter="{html.escape(chap, quote=True)}"'
+                + (f' data-crew="{crew}"' if crew else "") + f">{inline(text)}</li>"
+                for icon, chap, text, crew in shots)
+            return (f'<div class="vs-scene" data-title="{html.escape(title, quote=True)}">'
+                    f'<p class="vs-scene-title">🎬 {html.escape(title)}</p><ol class="vs-scene-shots">{items}</ol></div>'), k
+        if not row:
+            continue
+        parts = [x.strip() for x in row.split("|")]
+        if len(parts) not in (3, 4) or not parts[0] or not parts[2]:
+            sys.exit(f"Bad ::scene shot (icon | chapter | subtitle | crew): {row}")
+        crew = parts[3] if len(parts) == 4 else ""
+        if crew and crew not in CREW:
+            sys.exit(f"Unknown crew '{crew}' in ::scene (use {', '.join(sorted(CREW))})")
+        shots.append((parts[0], parts[1], parts[2], crew))
+    sys.exit(f"::scene without ::end (line {start + 1})")
+
+
 def markdown_to_blocks(body):
     lines = body.strip("\n").splitlines()
     out = []
@@ -229,6 +260,11 @@ def markdown_to_blocks(body):
         if line.startswith("::walk "):
             out.append(block("html", walk_block(lines, i)))
             i = walk_end(lines, i) + 1
+            continue
+        if line.startswith("::scene "):
+            html_, end = scene_block(lines, i)
+            out.append(block("html", html_))
+            i = end + 1
             continue
         if line.startswith("::tip "):
             out.append(block("html", f'<div class="vs-tip"><p>{inline(line[6:].strip())}</p></div>'))

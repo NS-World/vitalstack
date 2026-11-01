@@ -52,6 +52,7 @@
 			if (window.VSEnhanceCode) window.VSEnhanceCode();
 			if (window.VSViz && window.VSViz.init) window.VSViz.init();
 			if (window.VSWalk) window.VSWalk();
+			if (window.VSScene) window.VSScene();
 			document.dispatchEvent(new CustomEvent('vs:lesson-loaded'));
 		}).catch(problem);
 	}

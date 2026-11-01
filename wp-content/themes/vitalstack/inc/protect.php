@@ -229,6 +229,7 @@ add_action(
 			if ( function_exists( 'vitalstack_asset_url' ) ) {
 				wp_enqueue_script( 'vitalstack-viz', vitalstack_asset_url( 'assets/js/viz.js' ), array( 'vitalstack-fun' ), VITALSTACK_VERSION, array( 'in_footer' => true, 'strategy' => 'defer' ) );
 				wp_enqueue_script( 'vitalstack-walk', vitalstack_asset_url( 'assets/js/walk.js' ), array( 'vitalstack-fun' ), VITALSTACK_VERSION, array( 'in_footer' => true, 'strategy' => 'defer' ) );
+				wp_enqueue_script( 'vitalstack-scene', vitalstack_asset_url( 'assets/js/scene.js' ), array( 'vitalstack-fun' ), VITALSTACK_VERSION, array( 'in_footer' => true, 'strategy' => 'defer' ) );
 			}
 		}
 	},

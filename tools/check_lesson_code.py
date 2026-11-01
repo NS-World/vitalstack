@@ -29,6 +29,7 @@ import matplotlib.pyplot as plt  # noqa: E402
 
 plt.show = lambda *a, **k: None
 
+API_SDKS = {"anthropic", "openai", "google", "pydantic", "streamlit", "dotenv", "fastapi", "uvicorn"}
 BLOCK = re.compile(r"```(\w+)\n(.*?)```", re.S)
 FIGURES = pathlib.Path(__file__).resolve().parent.parent / "wp-content" / "themes" / "vitalstack" / "assets" / "lessons"
 SAVE = False
@@ -46,6 +47,14 @@ def check(path):
         try:
             with contextlib.redirect_stdout(out):
                 exec(compile(code, f"{path.name}#{i}", "exec"), ns)
+        except ModuleNotFoundError as exc:
+            # Calls to a real AI provider (or a web framework) need its SDK and an API key:
+            # they are examples to read, so they can't be run here. Everything else must run.
+            if exc.name and exc.name.split(".")[0] in API_SDKS:
+                continue
+            print(f"  ERROR {path.name} block {i}: {type(exc).__name__}: {exc}")
+            bad += 1
+            continue
         except Exception as exc:  # noqa: BLE001
             if "# raises" in code or "Error" in (blocks[i + 1][1] if i + 1 < len(blocks) else ""):
                 out.write(f"{type(exc).__name__}: {exc}\n")
@@ -96,7 +105,10 @@ def check_walks(path, text):
         with contextlib.redirect_stdout(io.StringIO()):
             for m in BLOCK.finditer(text[: offsets[k]]):
                 if m.group(1) in ("python", "py"):
-                    exec(compile(m.group(2), f"{path.name}#before-walk", "exec"), ns)
+                    try:  # blocks that need a real SDK or API key are only examples to read
+                        exec(compile(m.group(2), f"{path.name}#before-walk", "exec"), ns)
+                    except Exception:  # noqa: BLE001
+                        pass
         out = io.StringIO()
         try:
             with contextlib.redirect_stdout(out):

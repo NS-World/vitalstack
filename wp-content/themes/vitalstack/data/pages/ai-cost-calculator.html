@@ -1,0 +1,75 @@
+<!-- wp:heading -->
+<h2 class="wp-block-heading">How to use the AI API cost calculator</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>AI APIs from OpenAI (the GPT models behind ChatGPT), Anthropic (Claude), Google (Gemini) and xAI (Grok) charge <strong>per token</strong>: small pieces of text, roughly ¾ of an English word each. Enter:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Input tokens per request:</strong> your instructions, the user's message and any chat history or documents you send. Paste a typical prompt into the box and the calculator estimates this for you.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Output tokens per request:</strong> how long the model's answers usually are.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Requests per day:</strong> how many times your app calls the model.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>The result shows the cost per request, per day and per month for three model sizes, in dollars and rupees.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Why the three sizes differ so much</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Every provider offers big "frontier" models for hard reasoning and small, fast models for simple jobs like sorting emails or extracting fields. The small ones can cost <strong>dozens of times less</strong>. The prices pre-filled here are only examples: open the provider's pricing page and type in the current prices for the models you're comparing.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Why output costs more than input</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>The model reads your whole prompt in parallel, but writes its answer one token at a time. Generating is slower for the GPU, so providers charge several times more per output token. Asking for shorter answers is one of the easiest ways to save money.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Five ways to lower your AI bill</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Test a small model first.</strong> If it passes your examples, keep it.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Cap the answer length</strong> with the API's maximum-token setting.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Trim chat history.</strong> Long conversations resend every earlier message.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Use prompt caching</strong> when many requests share the same long instructions or documents.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Batch</strong> jobs that don't need an instant answer; several providers discount batch requests.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Learn more</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Our free course <a href="/tutorials/ai-models-life-of-a-model/">How AI Models Are Built</a> explains tokens, training and why serving costs what it does. The Gen AI Developer track shows how to get API keys from each provider and control costs in real code.</p>
+<!-- /wp:paragraph -->

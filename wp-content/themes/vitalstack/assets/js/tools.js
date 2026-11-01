@@ -669,6 +669,60 @@
 		build();
 	};
 
+	/* ── AI API cost calculator (4.10) ────────────────────────────────────── */
+	tools['ai-cost-calculator'] = function (host) {
+		// Example prices per million tokens (USD). Prices change: users edit them from the provider's pricing page.
+		var TIERS = [['small', 'Small, fast model', 0.10, 0.50], ['mid', 'Mid-size model', 2.00, 10.00], ['large', 'Frontier model', 4.00, 20.00]];
+		var f = {
+			text: (function () {
+				var l = el('label', 'tool-field'); l.appendChild(el('span', '', 'Paste a typical prompt (optional, to estimate tokens)'));
+				var t = el('textarea', 'tool-input'); t.rows = 4; t.placeholder = 'System prompt + a typical user message…';
+				l.appendChild(t); return { wrap: l, input: t };
+			})(),
+			inTok: field('Input tokens per request', '1200'), outTok: field('Output tokens per request', '300'),
+			perDay: field('Requests per day', '2000'), rate: field('₹ per US$ (for the rupee estimate)', '88')
+		};
+		var form = el('div', 'tool-form');
+		[f.text, f.inTok, f.outTok, f.perDay, f.rate].forEach(function (x) { form.appendChild(x.wrap); });
+		var priceBox = el('div', 'tool-form aic-prices');
+		var prices = TIERS.map(function (t) {
+			var a = field(t[1] + ': $ per 1M input', String(t[2])), b = field(t[1] + ': $ per 1M output', String(t[3]));
+			priceBox.appendChild(a.wrap); priceBox.appendChild(b.wrap); return { tier: t, inp: a.input, out: b.input };
+		});
+		var out = el('div', 'tool-result'); out.setAttribute('aria-live', 'polite');
+		host.appendChild(panel('Your usage', form));
+		host.appendChild(panel('Result', out));
+		host.appendChild(panel('Prices (edit from the provider’s pricing page)', priceBox));
+		function estimate(txt) {
+			// About 4 characters per token for English; scripts like Devanagari use more tokens per word.
+			var nonLatin = (txt.match(/[^\u0000-ɏ\s]/g) || []).length;
+			return Math.ceil((txt.length - nonLatin) / 4 + nonLatin * 0.9);
+		}
+		var lastText = '';
+		function money(v, sym) { return sym + (v < 1 ? v.toFixed(4) : v.toLocaleString('en-IN', { maximumFractionDigits: 2 })); }
+		function calc() {
+			var txt = f.text.input.value;
+			if (txt && txt !== lastText) { f.inTok.input.value = String(estimate(txt)); }
+			lastText = txt;
+			var tin = ST.num(f.inTok.input.value), tout = ST.num(f.outTok.input.value), n = ST.num(f.perDay.input.value), fx = ST.num(f.rate.input.value);
+			if (!(tin >= 0 && tout >= 0 && n >= 0 && fx > 0)) { out.innerHTML = '<p class="tool-err-msg">Enter numbers of 0 or more.</p>'; return; }
+			var rows = prices.map(function (p) {
+				var per = tin / 1e6 * ST.num(p.inp.value) + tout / 1e6 * ST.num(p.out.value);
+				return { name: p.tier[1], per: per, month: per * n * 30 };
+			});
+			var max = Math.max.apply(null, rows.map(function (r) { return r.month; })) || 1;
+			out.innerHTML = '<div class="aic-bars">' + rows.map(function (r) {
+				return '<div><span>' + esc(r.name) + '</span><i style="width:' + Math.max(2, r.month / max * 100) + '%"></i><b>' + money(r.month, '$') + '/mo</b></div>';
+			}).join('') + '</div>' +
+				'<table class="dt-table"><thead><tr><th>Model size</th><th>Per request</th><th>Per day</th><th>Per month (₹)</th></tr></thead><tbody>' +
+				rows.map(function (r) { return '<tr><td>' + esc(r.name) + '</td><td>' + money(r.per, '$') + '</td><td>' + money(r.per * n, '$') + '</td><td>' + money(r.month * fx, '₹') + '</td></tr>'; }).join('') +
+				'</tbody></table>' +
+				'<p class="tool-note">' + (txt ? 'Your text is about <b>' + estimate(txt).toLocaleString('en-IN') + '</b> tokens (a rough estimate; each provider counts slightly differently). ' : '') +
+				'Output tokens usually cost several times more than input. Try a smaller model first: if it passes your tests, the saving is huge.</p>';
+		}
+		host.addEventListener('input', calc); calc(); award('aicost');
+	};
+
 	document.querySelectorAll('.tool[data-tool]').forEach(function (host) {
 		var make = tools[host.getAttribute('data-tool')];
 		if (make) make(host);

@@ -197,7 +197,7 @@ function vitalstack_courses_panel() {
 		'web'  => array( __( 'Web development', 'vitalstack' ), '🌐', array( 'html', 'css', 'javascript', 'typescript', 'react', 'angular', 'node', 'nodejs', 'bootstrap', 'tailwind' ) ),
 		'code' => array( __( 'Programming & DSA', 'vitalstack' ), '💻', array( 'python', 'java', 'java-oop', 'c', 'cpp', 'sql', 'dsa', 'dsa-problems', 'git' ) ),
 		'java' => array( __( 'Java backend', 'vitalstack' ), '☕', array( 'servlet', 'jsp', 'jdbc', 'jpa', 'hibernate', 'spring', 'spring-boot', 'microservices', 'jmix' ) ),
-		'data' => array( __( 'Data & AI', 'vitalstack' ), '🤖', array( 'numpy', 'pandas', 'data-visualization', 'statistics', 'machine-learning', 'deep-learning', 'prompt-engineering', 'llm-basics', 'ai-agents', 'generative-ai' ) ),
+		'data' => array( __( 'Data & AI', 'vitalstack' ), '🤖', array( 'numpy', 'pandas', 'data-visualization', 'statistics', 'machine-learning', 'deep-learning', 'prompt-engineering', 'ai-models', 'llm-basics', 'llm-apis', 'ai-app-project', 'ai-agents', 'generative-ai' ) ),
 		'more' => array( __( 'More courses', 'vitalstack' ), '📚', array() ),
 	);
 	$sorted = array_fill_keys( array_keys( $groups ), array() );
@@ -503,6 +503,9 @@ function vitalstack_path_example( $term ) {
 		'spring'             => array( 'Java', "@Component\nclass EmailService {\n  void send(String to) { System.out.println(\"Mail to \" + to); }\n}\n\n@Component\nclass SignupService {\n  private final EmailService email;\n  SignupService(EmailService email) { this.email = email; }  // injected\n}", '' ),
 		'spring-boot'        => array( 'Java', "@RestController\npublic class HelloController {\n  @GetMapping(\"/hello\")\n  public String hello(@RequestParam String name) {\n    return \"Hello, \" + name + \"!\";\n  }\n}", '' ),
 		'jmix'               => array( 'Java', "@JmixEntity\n@Entity\npublic class Customer {\n  @Id @JmixGeneratedValue\n  private UUID id;\n  @InstanceName\n  private String name;\n  private String email;\n}", '' ),
+		'ai-models'          => array( 'Python', "w = 0.0   # the model's only parameter\n\nfor step in range(40):\n    guess = w * 2\n    error = guess - 30\n    w -= 0.01 * 2 * error * 2   # gradient descent\n\nprint(round(w, 2))   # learned: 15.0", '' ),
+		'llm-apis'           => array( 'Python', "import anthropic\n\nclient = anthropic.Anthropic()   # reads ANTHROPIC_API_KEY\nreply = client.messages.create(\n    model=\"claude-opus-5-5\", max_tokens=300,\n    messages=[{\"role\": \"user\", \"content\": \"Explain APIs in one line.\"}],\n)\nprint(reply.content[0].text)", '' ),
+		'ai-app-project'     => array( 'Python', "import streamlit as st\n\nst.title(\"📒 StudyBuddy\")\nnotes = st.text_area(\"Paste your notes\")\nif st.button(\"✨ Make my quiz\"):\n    quiz = make_quiz(llm, notes, 5)\n    st.success(f\"{len(quiz)} questions ready!\")", '' ),
 		'data-visualization' => array( 'Python', "import matplotlib.pyplot as plt\n\nmonths = [\"Jan\", \"Feb\", \"Mar\", \"Apr\"]\nsales = [120, 150, 135, 180]\n\nplt.bar(months, sales, color=\"#0a7d4f\")\nplt.title(\"Monthly sales\")\nplt.show()", '' ),
 	);
 	if ( $term && isset( $by_slug[ $term->slug ] ) ) {

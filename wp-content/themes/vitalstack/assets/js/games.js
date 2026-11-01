@@ -466,6 +466,73 @@
 		}
 	});
 
+	/* ── AI games (4.10) ─────────────────────────────────────────────────── */
+	var AI_MAKERS = [
+		['ChatGPT', 'OpenAI', 'ChatGPT runs on OpenAI\'s GPT models.'], ['Claude', 'Anthropic', 'Claude is made by Anthropic.'],
+		['Gemini', 'Google', 'Gemini is Google\'s model family (Gemma is its open-weight sibling).'], ['Grok', 'xAI', 'Grok is made by xAI and built into X.'],
+		['Llama', 'Meta', 'Llama is Meta\'s open-weight model family.'], ['Le Chat', 'Mistral AI', 'Le Chat is the assistant from France\'s Mistral AI.'],
+		['Gemma', 'Google', 'Gemma is Google\'s family of open-weight models.'], ['Qwen', 'Alibaba', 'Qwen is Alibaba\'s model family, with many open-weight sizes.'],
+		['GitHub Copilot', 'GitHub (Microsoft)', 'Copilot is GitHub\'s AI coding assistant.'], ['Claude Code', 'Anthropic', 'Claude Code is Anthropic\'s coding agent.'],
+		['DeepSeek-R1', 'DeepSeek', 'R1 is an open-weight reasoning model from DeepSeek.'], ['Meta AI', 'Meta', 'Meta AI is the assistant built on Llama.']
+	];
+	var AI_COMPANIES = ['OpenAI', 'Anthropic', 'Google', 'xAI', 'Meta', 'Mistral AI', 'Alibaba', 'GitHub (Microsoft)', 'DeepSeek'];
+	GAMES.push({
+		id: 'ai-makers', name: 'Who Made This AI?', emoji: '🤖', tag: 'AI tools',
+		desc: 'ChatGPT, Claude, Gemini, Grok, Llama… match each AI to the company behind it. 8 rounds.',
+		learn: ['AI model families', 'ai-models-families-compared'],
+		play: function (api) {
+			var items = shuffle(AI_MAKERS).slice(0, 8).map(function (r) {
+				return { q: 'Who makes ' + r[0] + '?', a: r[1], opts: shuffle(AI_COMPANIES.filter(function (c) { return c !== r[1]; })).slice(0, 3), e: r[2] };
+			});
+			choiceGame(api, items, { bot: 'happy', summary: function (r, t) { return r + ' of ' + t + ' correct. Knowing who builds what helps you read AI news like a pro.'; } });
+		}
+	});
+
+	var AI_TERMS = [
+		['A small piece of text a model reads and writes', 'Token'], ['A list of numbers that captures meaning', 'Embedding'],
+		['Higher means more random, creative answers', 'Temperature'], ['The most text a model can see at once', 'Context window'],
+		['Confident but false output', 'Hallucination'], ['Look up your documents, then let the model answer from them', 'RAG'],
+		['Learning from humans ranking two answers', 'RLHF'], ['Lets each token look at the other tokens', 'Attention'],
+		['Store weights with fewer bits to save memory', 'Quantization'], ['A model in a loop that uses tools', 'AI agent'],
+		['A secret string that lets your code call a model', 'API key'], ['Answers appear word by word as they are generated', 'Streaming'],
+		['Hidden instructions in a document trying to hijack the model', 'Prompt injection'], ['A standard way to connect AI apps to tools and data', 'MCP'],
+		['Further training on examples for one task', 'Fine-tuning'], ['The standing instructions for an assistant', 'System prompt']
+	];
+	GAMES.push({
+		id: 'ai-terms', name: 'AI Word Rush', emoji: '🧠', tag: 'Gen AI',
+		desc: 'Token, embedding, RAG, RLHF… name the AI term from its meaning. As many as you can in 60 seconds!',
+		learn: ['How LLMs work', 'llm-tokens-next-token'],
+		play: function (api) {
+			var all = AI_TERMS.map(function (r) { return r[1]; });
+			var items = shuffle(AI_TERMS).map(function (r) {
+				return { q: r[0], a: r[1], opts: shuffle(all.filter(function (x) { return x !== r[1]; })).slice(0, 3), e: '' };
+			});
+			choiceGame(api, items, { seconds: 60, bot: 'think', summary: function (r, t) { return r + ' correct out of ' + t + ' in 60 seconds. These words come up in every Gen AI interview.'; } });
+		}
+	});
+
+	var PROMPTS = [
+		['Summarise this article.', 'Summarise this article in 3 bullet points for a busy manager, keeping all numbers.', 'Say who it\'s for, how long, and what to keep.'],
+		['Write code for login.', 'Write a Python Flask login route that checks a hashed password with bcrypt and returns JSON errors.', 'Name the language, framework and exact behaviour.'],
+		['Is this review good or bad?', 'Classify this review as positive, negative or neutral. Reply with one word only.', 'Fixed labels and a strict format are easy for code to use.'],
+		['Make a quiz.', 'Make 5 multiple-choice questions from the notes below, 4 options each, and mark the answer.', 'Count, format and source make results consistent.'],
+		['Explain recursion.', 'Explain recursion to a 12-year-old using a real-life example, in under 100 words.', 'Audience, example and length shape the answer.'],
+		['Fix my bug.', 'This Python function should return the largest number but returns None for [3, 9, 2]. Find the bug and explain it.', 'Give the code, expected vs actual behaviour, and an example.'],
+		['Translate this.', 'Translate this message to simple Hindi for a shop customer. Keep the product names in English.', 'Tone, audience and what not to translate.'],
+		['Tell me about Python.', 'List 5 reasons beginners learn Python first, one line each, with a job that uses it.', 'A focused question beats an open one.']
+	];
+	GAMES.push({
+		id: 'prompt-duel', name: 'Prompt Duel', emoji: '🥊', tag: 'Prompting',
+		desc: 'Two prompts enter, one wins. Pick the prompt that gets the better AI answer. 6 rounds.',
+		learn: ['Writing clear prompts', 'prompt-clear-instructions'],
+		play: function (api) {
+			var items = shuffle(PROMPTS).slice(0, 6).map(function (r) {
+				return { q: 'Which prompt gets the better answer?', a: r[1], opts: [r[0]], e: r[2] };
+			});
+			choiceGame(api, items, { bot: 'wow', summary: function (r, t) { return r + ' of ' + t + ' duels won. Specific prompts (audience, format, length, examples) beat vague ones every time.'; } });
+		}
+	});
+
 	/* ── Menu, stage and results ─────────────────────────────────────────── */
 	var best = {};
 	try { best = JSON.parse(localStorage.getItem('vs-game-best') || '{}'); } catch (e) {}

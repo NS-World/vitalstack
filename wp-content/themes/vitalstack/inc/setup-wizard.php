@@ -546,9 +546,26 @@ function vitalstack_setup_paths() {
 			'description' => 'Get great answers from ChatGPT, Claude and Gemini: clear prompts, examples, roles, step-by-step thinking and safe use of AI tools.',
 		),
 		array(
+			'slug'        => 'ai-models',
+			'name'        => 'How AI Models Are Built',
+			'description' => 'How ChatGPT, Claude, Gemini and Grok are made: training data, tokens, pretraining, fine-tuning, RLHF and serving, explained for beginners with animated films and runnable Python.',
+		),
+		array(
 			'slug'        => 'llm-basics',
 			'name'        => 'How LLMs Work',
 			'description' => 'Tokens, embeddings, attention, temperature and hallucinations: how large language models really work, with runnable Python. Part of the Gen AI Developer premium track.',
+			'premium'     => 'gen-ai-developer',
+		),
+		array(
+			'slug'        => 'llm-apis',
+			'name'        => 'Working with LLM APIs',
+			'description' => 'Get API keys for OpenAI, Claude, Gemini and Grok, make your first calls in Python, and handle chat history, streaming, JSON output, errors, cost and security. Part of the Gen AI Developer premium track.',
+			'premium'     => 'gen-ai-developer',
+		),
+		array(
+			'slug'        => 'ai-app-project',
+			'name'        => 'Project: AI Study Buddy App',
+			'description' => 'Build, test, secure and deploy a real AI app with Python and Streamlit that turns notes into quizzes and answers questions from them. Part of the Gen AI Developer premium track.',
 			'premium'     => 'gen-ai-developer',
 		),
 		array(

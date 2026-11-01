@@ -54,8 +54,22 @@ function vitalstack_needs_walk() {
 	return false;
 }
 
+/**
+ * Whether the current request shows a lesson film (a ::scene block).
+ */
+function vitalstack_needs_scene() {
+	if ( is_singular() ) {
+		$post = get_queried_object();
+		return $post && false !== strpos( (string) $post->post_content, 'vs-scene' );
+	}
+	return false;
+}
+
 function vitalstack_fun_assets() {
 	wp_enqueue_script( 'vitalstack-fun', vitalstack_asset_url( 'assets/js/fun.js' ), array(), VITALSTACK_VERSION, array( 'in_footer' => true, 'strategy' => 'defer' ) );
+	if ( vitalstack_needs_scene() ) {
+		wp_enqueue_script( 'vitalstack-scene', vitalstack_asset_url( 'assets/js/scene.js' ), array( 'vitalstack-fun' ), VITALSTACK_VERSION, array( 'in_footer' => true, 'strategy' => 'defer' ) );
+	}
 	if ( vitalstack_needs_walk() ) {
 		wp_enqueue_script( 'vitalstack-walk', vitalstack_asset_url( 'assets/js/walk.js' ), array( 'vitalstack-fun' ), VITALSTACK_VERSION, array( 'in_footer' => true, 'strategy' => 'defer' ) );
 	}
