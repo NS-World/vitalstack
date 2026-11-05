@@ -69,13 +69,16 @@ function vitalstack_hub_descriptions() {
 	return array(
 		'tutorials'       => __( 'Free step-by-step programming tutorials: HTML, CSS, JavaScript, Python, Java, Spring Boot, React, Angular, SQL and DSA, with live animations, quizzes and exercises.', 'vitalstack' ),
 		'blog'            => __( 'Practical guides on AI tools, AI careers and programming, written for beginners and tested before they are published.', 'vitalstack' ),
-		'games'           => __( 'Free two-minute brain games for programmers: predict Java output, spot OOP pillars, sort, search and more. Practise and earn XP.', 'vitalstack' ),
+		'games'           => __( 'Free two-minute brain games: predict Java output, spot scam messages, find problems in data, type code fast, sort, search and more. Practise and earn XP.', 'vitalstack' ),
 		'dsa-problems'    => __( 'Classic coding interview problems with step-by-step solutions, complexity and animated walkthroughs, filterable by pattern and level.', 'vitalstack' ),
 		'daily-challenge' => __( 'One new coding question every day. Answer it, keep your streak going and climb the weekly leaderboard.', 'vitalstack' ),
 		'cheat-sheets'    => __( 'Free printable cheat sheets for Java, Python, JavaScript, SQL, HTML, CSS, Spring Boot, React, Angular, Git and Big O.', 'vitalstack' ),
-		'tools'           => __( 'Free online coding tools: Python compiler, SQL playground, JSON formatter, regex tester and HTML editor. Nothing to install.', 'vitalstack' ),
+		'tools'           => __( 'Free online tools: Python compiler, SQL playground, diagram maker, JSON formatter, regex tester, password generator, scam link checker and more. Nothing to install.', 'vitalstack' ),
 		'mock-tests'      => __( 'Free timed mock tests for Java, Python, SQL, JavaScript, Spring Boot, React, Angular, DSA and more, with every answer explained.', 'vitalstack' ),
 		'roadmaps'        => __( 'Free career roadmaps: Java full stack, frontend, Python and a 12-week DSA plan for placements, with lessons and mock tests for every stage.', 'vitalstack' ),
+		'datasets'        => __( 'Free practice datasets for data analysts: retail sales, HR, students, bank transactions, churn, weather and more, with CSV and JSON downloads and practice questions.', 'vitalstack' ),
+		'study-music'     => __( 'Free lo-fi study music, rain and brown noise made live in your browser, with a Pomodoro timer for focused study sessions.', 'vitalstack' ),
+		'ai-dictionary'   => __( 'AI terms explained in simple words: LLM, token, RAG, embeddings, agents, fine-tuning and more, with everyday examples.', 'vitalstack' ),
 		'contact-us'      => __( 'Contact VitalStack: report a mistake, suggest a lesson or ask a question. We usually reply within 2 working days.', 'vitalstack' ),
 	);
 }

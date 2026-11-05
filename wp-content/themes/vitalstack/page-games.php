@@ -28,6 +28,17 @@ get_header();
 </section>
 
 <div class="wrap games-wrap">
+	<div class="games-filter" data-games-filter role="group" aria-label="<?php esc_attr_e( 'Filter games', 'vitalstack' ); ?>" hidden>
+		<button type="button" data-cat="all" aria-pressed="true">✨ <?php esc_html_e( 'All', 'vitalstack' ); ?></button>
+		<button type="button" data-cat="dsa" aria-pressed="false">🧩 <?php esc_html_e( 'Algorithms', 'vitalstack' ); ?></button>
+		<button type="button" data-cat="code" aria-pressed="false">💻 <?php esc_html_e( 'Coding', 'vitalstack' ); ?></button>
+		<button type="button" data-cat="ai" aria-pressed="false">🤖 <?php esc_html_e( 'AI', 'vitalstack' ); ?></button>
+		<button type="button" data-cat="data" aria-pressed="false">📊 <?php esc_html_e( 'Data', 'vitalstack' ); ?></button>
+		<button type="button" data-cat="safe" aria-pressed="false">🛡️ <?php esc_html_e( 'Safety', 'vitalstack' ); ?></button>
+		<?php if ( function_exists( 'vitalstack_study_music_url' ) && vitalstack_study_music_url() ) : ?>
+			<a class="games-music-link" href="<?php echo esc_url( vitalstack_study_music_url() ); ?>">🎧 <?php esc_html_e( 'Study music', 'vitalstack' ); ?></a>
+		<?php endif; ?>
+	</div>
 	<div class="games-grid" data-games></div>
 
 	<div class="game-stage" id="game-stage" hidden>

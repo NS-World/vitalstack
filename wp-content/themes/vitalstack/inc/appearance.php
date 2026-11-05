@@ -148,6 +148,7 @@ function vitalstack_appearance_controls() {
 			<button type="button" data-set-accent="<?php echo esc_attr( $slug ); ?>" aria-pressed="false" aria-label="<?php echo esc_attr( $accent[0] ); ?>" title="<?php echo esc_attr( $accent[0] ); ?>" style="--sw: <?php echo esc_attr( $accent[1] ); ?>"></button>
 		<?php endforeach; ?>
 	</div>
+	<?php do_action( 'vitalstack_appearance_controls_end' ); ?>
 	<p class="appearance-note"><?php esc_html_e( 'Saved on this device.', 'vitalstack' ); ?></p>
 	<?php
 }

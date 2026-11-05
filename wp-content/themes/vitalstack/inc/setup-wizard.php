@@ -868,6 +868,12 @@ function vitalstack_setup_pages() {
 			'template' => 'page-datasets.php',
 			'content'  => '',
 		),
+		'study-music'      => array(
+			'title'    => 'Study Music and Pomodoro Timer',
+			'status'   => 'publish',
+			'template' => 'page-study-music.php',
+			'content'  => '',
+		),
 		'ai-dictionary'    => array(
 			'title'    => 'AI Dictionary',
 			'status'   => 'publish',

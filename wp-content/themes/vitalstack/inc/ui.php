@@ -166,6 +166,9 @@ function vitalstack_topic_links() {
 	if ( vitalstack_games_url() ) {
 		echo '<a class="topic-games' . ( is_page( 'games' ) ? ' is-active' : '' ) . '" href="' . esc_url( vitalstack_games_url() ) . '">🎮 ' . esc_html__( 'Games', 'vitalstack' ) . '</a>';
 	}
+	if ( function_exists( 'vitalstack_study_music_url' ) && vitalstack_study_music_url() ) {
+		echo '<a class="topic-games' . ( is_page( 'study-music' ) ? ' is-active' : '' ) . '" href="' . esc_url( vitalstack_study_music_url() ) . '">🎧 ' . esc_html__( 'Study Music', 'vitalstack' ) . '</a>';
+	}
 	foreach ( vitalstack_practice_links() as $l ) {
 		echo '<a class="topic-practice' . ( $l[3] ? ' is-active' : '' ) . '" href="' . esc_url( $l[0] ) . '">' . esc_html( $l[2] . ' ' . $l[1] ) . '</a>';
 	}

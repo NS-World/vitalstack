@@ -1,0 +1,206 @@
+/**
+ * VitalStack Brain Games, 5.0 additions: Scam or Safe?, Data Detective and
+ * Code Typer, plus the category filter above the game grid.
+ *
+ * Loaded before games.js, which picks up window.VSGamesExtra. All text is
+ * written with textContent; nothing here touches the network.
+ */
+(function () {
+	'use strict';
+
+	function rand(n) { return Math.floor(Math.random() * n); }
+	function pick(a, n) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = rand(i + 1); var t = a[i]; a[i] = a[j]; a[j] = t; } return a.slice(0, n); }
+	function mascot(m) { return window.VS ? window.VS.mascot(m, 'byte') : ''; }
+
+	var EXTRA = [];
+
+	/* ── Scam or Safe? ────────────────────────────────────────────────────── */
+	var MSGS = [
+		['VM-SBIBNK', 'Dear customer, your YONO account will be blocked today. Update PAN now: http://sbi-kyc-update.online', 1, 'Urgency + a link that is not sbi.co.in or onlinesbi.sbi. Banks never ask you to update KYC through an SMS link.'],
+		['+91 98xxxxxx21', 'Hi, I am from Amazon HR. Part-time job, earn ₹3,000/day by liking YouTube videos. Reply YES on WhatsApp.', 1, 'Task scams start with small "payouts" and then ask you to "invest" to unlock bigger tasks. Real jobs never pay you to like videos.'],
+		['AD-HDFCBK', 'Rs 2,500.00 debited from a/c XX4521 on 03-Nov by UPI. Not you? Call 1800-xxx-xxxx (number on the back of your card).', 0, 'A normal bank alert: no link, and it tells you to use the number on your own card, not one in the message.'],
+		['Unknown', 'Congratulations! You won ₹25 lakh in KBC lottery. Pay ₹12,500 processing fee to claim. Contact Rana Sir.', 1, 'You cannot win a lottery you never entered. "Pay a fee to receive a prize" is always a scam.'],
+		['Friend (new number)', 'Hey it is me, my phone broke. This is my new number. Can you send ₹8,000 urgently on UPI? Will return tonight.', 1, 'Call the old number or ask a question only your friend can answer. Scammers copy profile photos from social media.'],
+		['JD-SWIGGY', 'Your order #4821 from Tasty Biryani is out for delivery. Track in the Swiggy app.', 0, 'No link, no request for money or OTP, and it sends you to the official app. This is a normal update.'],
+		['+92 3xx xxxxxxx', 'This is Mumbai Cyber Police. A parcel in your name has drugs. Join a video call now or you will face digital arrest.', 1, '"Digital arrest" does not exist in Indian law. Police never question or arrest people on video calls or ask for money to "clear" your name.'],
+		['VK-EPFOHO', 'Your EPF passbook is updated. Check it on the UMANG app or epfindia.gov.in.', 0, 'It points to the official app and a .gov.in site and asks for nothing.'],
+		['Unknown', 'Your electricity will be disconnected tonight at 9:30 pm because the last bill was not updated. Call officer 98xxxxxx45 immediately.', 1, 'Electricity boards do not send personal mobile numbers or threaten same-night cut-offs by SMS. Pay only through the official app or website.'],
+		['Courier', 'Your parcel is held at the warehouse due to an incomplete address. Pay ₹25 to reschedule: http://indiapost.track-parcel.top', 1, 'A tiny fee is bait to steal card details. The real domain is track-parcel.top, not indiapost.gov.in.'],
+		['BZ-GOOGLE', 'G-482913 is your Google verification code. Don\'t share it with anyone.', 0, 'A real code you requested. Safe, as long as you never share it with anyone who calls asking for it.'],
+		['Unknown caller', 'Sir, I am from your bank. To stop a fraud transaction I need the OTP you just received.', 1, 'Nobody genuine ever needs your OTP. Hang up and call the number on the back of your card.'],
+		['WhatsApp group', 'Join our VIP stock tips group, 300% returns guaranteed in 30 days! SEBI registered (Reg. no. missing). Install this app: bit.ly/xx', 1, 'Guaranteed returns do not exist in the market. Check a SEBI registration on sebi.gov.in yourself and never install trading apps from links.'],
+		['AX-IRCTC', 'PNR 4521873390: your ticket is CONFIRMED. Coach B3, berth 42. Happy journey!', 0, 'A normal booking update with no link or request.'],
+		['Instagram DM', 'Your account will be deleted for copyright violation. Appeal within 24 hours: meta-support-appeal.com/login', 1, 'Fake "copyright" warnings steal passwords. Meta sends account notices inside the app, under Settings, not through DMs.'],
+		['Unknown', 'Mom, I am in trouble, don\'t call, just send money to this account. Will explain later.', 1, '"Don\'t call" is the red flag. Always call the person directly on the number you already know before sending money.'],
+		['VM-JIOINF', 'Your Jio plan expires in 2 days. Recharge in the MyJio app to continue services.', 0, 'A plain reminder that sends you to the official app. No link, no OTP request.'],
+		['Telegram', 'Earn by rating hotels! ₹150 per review. First 3 tasks free, then deposit ₹5,000 for premium tasks.', 1, 'The classic task scam: small early payouts build trust, then the "deposit" disappears.'],
+		['UIDAI (fake)', 'Your Aadhaar is linked to illegal activity. Press 9 to speak to an officer.', 1, 'UIDAI does not make threatening robocalls. Report such calls on Chakshu in the Sanchar Saathi portal.'],
+		['College portal email', 'Exam timetable for Semester 5 is published. Log in to the college portal you normally use to view it.', 0, 'No link to click and nothing urgent: you go to the portal you already know.']
+	];
+	EXTRA.push({
+		id: 'scam-or-safe', name: 'Scam or Safe?', emoji: '🚨', tag: 'Cyber safety', cat: 'safe',
+		desc: 'Real-looking SMS, calls and DMs. Spot the scams before they spot you.',
+		learn: ['Spot phishing', 'cyber-phishing'],
+		play: function (api) {
+			var h = api.h, list = pick(MSGS, 10), i = 0, right = 0;
+			var from = h('p', { class: 'scam-from' }), bubble = h('p', { class: 'scam-bubble' });
+			var why = h('p', { class: 'game-msg' });
+			var bScam = h('button', { class: 'btn game-no', type: 'button', text: '🚩 Scam' });
+			var bSafe = h('button', { class: 'btn game-yes', type: 'button', text: '✅ Safe' });
+			var next = h('button', { class: 'btn btn-primary', type: 'button', text: 'Next ❯', hidden: '' });
+			var card = h('div', { class: 'game-card scam-card' }, [h('div', { class: 'scam-phone' }, [from, bubble]), h('div', { class: 'game-row' }, [bScam, bSafe]), why, h('div', { class: 'game-row' }, [next])]);
+			api.body.appendChild(card);
+			function show() {
+				var m = list[i];
+				from.textContent = m[0]; bubble.textContent = m[1]; why.textContent = '';
+				bScam.disabled = bSafe.disabled = false; next.hidden = true;
+				api.stats((i + 1) + ' / ' + list.length + ' · ✔ ' + right);
+			}
+			function answer(saidScam) {
+				var m = list[i], good = (saidScam ? 1 : 0) === m[2];
+				if (good) right++;
+				bScam.disabled = bSafe.disabled = true;
+				why.textContent = (good ? '✅ Correct! ' : '❌ Not quite. ') + (m[2] ? 'Scam. ' : 'Safe. ') + m[3];
+				card.classList.remove('is-good', 'is-bad'); void card.offsetWidth; card.classList.add(good ? 'is-good' : 'is-bad');
+				api.stats((i + 1) + ' / ' + list.length + ' · ✔ ' + right);
+				next.hidden = false; next.focus();
+			}
+			bScam.addEventListener('click', function () { answer(true); });
+			bSafe.addEventListener('click', function () { answer(false); });
+			next.addEventListener('click', function () { i++; if (i < list.length) show(); else api.finish(right * 10, right + ' of ' + list.length + ' spotted correctly. Remember: in India, call 1930 or report at cybercrime.gov.in if you lose money.'); });
+			show();
+		}
+	});
+
+	/* ── Data Detective ───────────────────────────────────────────────────── */
+	var NAMES = ['Asha', 'Rohan', 'Meera', 'Kabir', 'Isha', 'Arjun', 'Diya', 'Vivaan', 'Sara', 'Neel', 'Tara', 'Aarav'];
+	var CITIES = ['Pune', 'Delhi', 'Surat', 'Kochi', 'Jaipur', 'Indore', 'Mumbai', 'Nagpur'];
+	var PROBLEMS = [
+		['missing', 'Missing value', 'One cell is empty. In pandas, find it with df.isna().sum() and decide: fill it (median, a default) or drop the row.'],
+		['duplicate', 'Duplicate row', 'Two rows are exactly the same. df.duplicated().sum() counts them and df.drop_duplicates() removes them.'],
+		['outlier', 'Outlier', 'One number is far outside the rest. Check it with df.describe() or a box plot before deciding if it is an error.'],
+		['type', 'Wrong format', 'A number was typed as text (like "52k" or "fifty"). pd.to_numeric(col, errors="coerce") turns bad values into NaN so you can fix them.']
+	];
+	EXTRA.push({
+		id: 'data-detective', name: 'Data Detective', emoji: '🔎', tag: 'Data cleaning', cat: 'data',
+		desc: 'Every table hides one problem: missing, duplicate, outlier or wrong format. Find it fast.',
+		learn: ['Cleaning data with pandas', 'pandas-cleaning-data'],
+		play: function (api) {
+			var h = api.h, round = 0, total = 8, right = 0, t0 = Date.now();
+			var table = h('table', { class: 'dt-table det-table' });
+			var q = h('p', { class: 'game-q', text: 'What is wrong with this data?' });
+			var opts = h('div', { class: 'game-row game-options' }), why = h('p', { class: 'game-msg' });
+			var next = h('button', { class: 'btn btn-primary', type: 'button', text: 'Next table ❯', hidden: '' });
+			var card = h('div', { class: 'game-card' }, [q, h('div', { class: 'tool-scroll det-scroll' }, [table]), opts, why, h('div', { class: 'game-row' }, [next])]);
+			api.body.appendChild(card);
+			var current;
+			function build() {
+				var names = pick(NAMES, 5), rows = names.map(function (n) { return [n, CITIES[rand(CITIES.length)], String(22 + rand(18)), String(30 + rand(50)) + '000']; });
+				var p = PROBLEMS[rand(PROBLEMS.length)], r = rand(5), mark = [r, -1];
+				if (p[0] === 'missing') { var c = 1 + rand(3); rows[r][c] = ''; mark = [r, c]; }
+				else if (p[0] === 'duplicate') { var d = r === 0 ? 1 : r - 1; rows[r] = rows[d].slice(); mark = [r, -1]; }
+				else if (p[0] === 'outlier') { if (rand(2)) { rows[r][2] = String([3, 142, 230][rand(3)]); mark = [r, 2]; } else { rows[r][3] = String(30 + rand(50)) + '00000'; mark = [r, 3]; } }
+				else { var opt = [['52k', 3], ['fifty', 3], ['twenty-six', 2], ['31 yrs', 2]][rand(4)]; rows[r][opt[1]] = opt[0]; mark = [r, opt[1]]; }
+				current = { p: p, mark: mark };
+				table.textContent = '';
+				var th = h('thead', {}, [h('tr', {}, ['name', 'city', 'age', 'salary'].map(function (x) { return h('th', { text: x }); }))]);
+				var tb = h('tbody');
+				rows.forEach(function (row, ri) { tb.appendChild(h('tr', { 'data-r': String(ri) }, row.map(function (v, ci) { return h('td', { 'data-c': String(ci), text: v === '' ? '' : v }); }))); });
+				table.appendChild(th); table.appendChild(tb);
+				opts.textContent = '';
+				PROBLEMS.forEach(function (pp) { opts.appendChild(h('button', { class: 'btn btn-ghost', type: 'button', text: pp[1], onclick: function () { answer(pp, this); } })); });
+				why.textContent = ''; next.hidden = true;
+				api.stats('Table ' + (round + 1) + ' / ' + total + ' · ✔ ' + right);
+			}
+			function answer(pp, b) {
+				var good = pp[0] === current.p[0];
+				if (good) right++;
+				Array.prototype.forEach.call(opts.children, function (x) { x.disabled = true; if (x.textContent === current.p[1]) x.classList.add('is-right'); });
+				var tr = table.querySelector('tr[data-r="' + current.mark[0] + '"]');
+				if (tr) { if (current.mark[1] < 0) tr.classList.add('is-hit'); else tr.children[current.mark[1]].classList.add('is-hit'); }
+				why.textContent = (good ? '✅ Nice catch! ' : '❌ It was: ' + current.p[1] + '. ') + current.p[2];
+				card.classList.remove('is-good', 'is-bad'); void card.offsetWidth; card.classList.add(good ? 'is-good' : 'is-bad');
+				api.stats('Table ' + (round + 1) + ' / ' + total + ' · ✔ ' + right);
+				next.hidden = false; next.focus();
+			}
+			next.addEventListener('click', function () {
+				round++;
+				if (round < total) return build();
+				var secs = Math.round((Date.now() - t0) / 1000);
+				api.finish(right / total * 100, right + ' of ' + total + ' problems found in ' + secs + ' seconds. Practise on real messy data in the free Datasets Hub.');
+			});
+			build();
+		}
+	});
+
+	/* ── Code Typer ───────────────────────────────────────────────────────── */
+	var SNIPPETS = [
+		'name = input("Your name: ")', 'print(f"Hello, {name}!")', 'for i in range(1, 6):', 'total = sum(prices) / len(prices)',
+		'df = pd.read_csv("sales.csv")', 'df.groupby("city")["amount"].sum()', 'SELECT name, city FROM users;', 'WHERE age >= 18 ORDER BY name;',
+		'const items = data.filter(x => x.ok);', 'let count = 0;', 'if (score > best) best = score;', 'return a + b;',
+		'def area(r): return 3.14 * r * r', 'nums.sort(reverse=True)', 'git commit -m "fix login bug"', 'npm run build',
+		'public static void main(String[] args)', 'System.out.println("Hi");', 'import numpy as np', 'arr = np.array([1, 2, 3])'
+	];
+	EXTRA.push({
+		id: 'code-typer', name: 'Code Typer', emoji: '⌨️', tag: 'Typing speed', cat: 'code',
+		desc: 'Type real Python, SQL, Java and Git lines as fast and accurately as you can in 60 seconds.',
+		learn: ['Python variables', 'python-variables'],
+		play: function (api) {
+			var h = api.h, lines = pick(SNIPPETS, SNIPPETS.length), li = 0, typed = 0, errors = 0, done = 0, left = 60, started = false;
+			var target = h('p', { class: 'typer-target', 'aria-live': 'polite' });
+			var inp = h('input', { type: 'text', class: 'game-input typer-input', autocomplete: 'off', autocapitalize: 'off', spellcheck: 'false', 'aria-label': 'Type the line shown above' });
+			var msg = h('p', { class: 'game-msg', text: 'Start typing to begin the 60-second timer. The next line appears as soon as you type the current one exactly.' });
+			api.body.appendChild(h('div', { class: 'game-card typer-card' }, [target, inp, msg]));
+			function paint() {
+				var want = lines[li % lines.length], got = inp.value;
+				target.textContent = '';
+				for (var k = 0; k < want.length; k++) {
+					var cls = k < got.length ? (got[k] === want[k] ? 'is-ok' : 'is-bad') : (k === got.length ? 'is-cur' : '');
+					target.appendChild(h('span', { class: cls, text: want[k] }));
+				}
+			}
+			function stat() { var mins = (60 - left) / 60 || 1 / 60; api.stats('⏱ ' + left + 's · ' + Math.round(typed / 5 / mins) + ' WPM · ' + done + ' lines'); }
+			inp.addEventListener('input', function (e) {
+				if (!started) {
+					started = true;
+					api.every(function () {
+						left--; stat();
+						if (left <= 0) {
+							var wpm = Math.round(typed / 5), acc = typed + errors ? typed / (typed + errors) : 0;
+							api.finish(Math.min(100, wpm * 2.5) * acc, wpm + ' words per minute at ' + Math.round(acc * 100) + '% accuracy, ' + done + ' lines. Developers average 35 to 50 WPM on code.');
+						}
+					}, 1000);
+				}
+				var want = lines[li % lines.length], got = inp.value;
+				if (e.inputType && e.inputType.indexOf('insert') === 0) { if (got[got.length - 1] === want[got.length - 1]) typed++; else errors++; }
+				if (got === want) { done++; li++; inp.value = ''; }
+				paint(); stat();
+			});
+			paint(); stat();
+			setTimeout(function () { try { inp.focus({ preventScroll: true }); } catch (x) {} }, 300);
+		}
+	});
+
+	window.VSGamesExtra = EXTRA;
+
+	/* ── Category filter ──────────────────────────────────────────────────── */
+	var CAT = {
+		'binary-hunt': 'dsa', 'bracket-blitz': 'dsa', 'big-o-snap': 'dsa', 'sort-sprint': 'dsa', 'hanoi': 'dsa', 'pattern-detective': 'dsa',
+		'memory-match': 'code', 'java-output': 'code', 'oop-pillars': 'code', 'framework-flash': 'code',
+		'ai-makers': 'ai', 'ai-terms': 'ai', 'prompt-duel': 'ai'
+	};
+	EXTRA.forEach(function (g) { CAT[g.id] = g.cat; });
+	document.addEventListener('DOMContentLoaded', function () {
+		var bar = document.querySelector('[data-games-filter]'), grid = document.querySelector('[data-games]');
+		if (!bar || !grid) return;
+		var cur = 'all';
+		function apply() {
+			Array.prototype.forEach.call(grid.querySelectorAll('[data-game]'), function (t) { t.hidden = cur !== 'all' && CAT[t.getAttribute('data-game')] !== cur; });
+			Array.prototype.forEach.call(bar.querySelectorAll('button'), function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-cat') === cur ? 'true' : 'false'); });
+		}
+		bar.addEventListener('click', function (e) { var b = e.target.closest('button[data-cat]'); if (b) { cur = b.getAttribute('data-cat'); apply(); } });
+		new MutationObserver(apply).observe(grid, { childList: true });
+		new MutationObserver(function () { bar.hidden = grid.hidden; }).observe(grid, { attributes: true, attributeFilter: ['hidden'] });
+		bar.hidden = false; apply();
+	});
+})();

@@ -18,15 +18,20 @@ $vs_signin = vitalstack_account_url(
 	)
 );
 $vs_track_ids = array_keys( array_filter( $vs_plans, function ( $p ) { return ! empty( $p['track'] ); } ) );
-$vs_order     = array( 'all-month', 'track', 'all-year', 'lifetime' );
+$vs_combo_ids = array_keys( array_filter( $vs_plans, function ( $p ) { return ! empty( $p['combo'] ); } ) );
+$vs_order     = $vs_combo_ids ? array( 'all-month', 'track', 'combo', 'all-year', 'lifetime' ) : array( 'all-month', 'track', 'all-year', 'lifetime' );
 $vs_lifeleft  = vitalstack_pay_lifetime_left();
 $vs_ntracks   = count( $vs_tracks );
 $vs_feats     = array(
 	'all-month' => array( sprintf( /* translators: %d: tracks */ __( 'All %d career tracks', 'vitalstack' ), $vs_ntracks ), __( 'Every premium lesson, quiz and project', 'vitalstack' ), __( 'No ads anywhere on the site', 'vitalstack' ) ),
 	'track'     => array( __( 'One career track for 12 months', 'vitalstack' ), __( 'Its projects + certificate', 'vitalstack' ), __( 'No ads anywhere on the site', 'vitalstack' ) ),
+	'combo'     => array( __( 'Two career tracks for 12 months', 'vitalstack' ), __( 'All their projects + both certificates', 'vitalstack' ), __( 'Premium themes · no ads', 'vitalstack' ) ),
 	'all-year'  => array( sprintf( /* translators: %d: tracks */ __( 'All %d career tracks for 12 months', 'vitalstack' ), $vs_ntracks ), __( 'Every new track and module added this year', 'vitalstack' ), __( 'All certificates · no ads', 'vitalstack' ) ),
 	'lifetime'  => array( __( 'Every current and future track, for life', 'vitalstack' ), __( 'Pay once, never again', 'vitalstack' ), __( 'Founder badge on your profile', 'vitalstack' ) ),
 );
+foreach ( array( 'all-month', 'track', 'all-year', 'lifetime' ) as $vs_k ) {
+	$vs_feats[ $vs_k ][] = __( '6 premium colour themes', 'vitalstack' );
+}
 // The yearly plan is only called cheaper when the prices really make it so.
 $vs_monthly12 = $vs_plans['all-month']['inr'] * 12;
 if ( $vs_plans['all-year']['inr'] < $vs_monthly12 ) {
@@ -66,7 +71,8 @@ if ( $vs_plans['all-year']['inr'] < $vs_monthly12 ) {
 		<div class="pricing-grid">
 			<?php
 			foreach ( $vs_order as $vs_id ) :
-				$vs_buy = 'track' === $vs_id ? $vs_track_ids[0] : $vs_id;
+				$vs_pick = 'track' === $vs_id ? $vs_track_ids : ( 'combo' === $vs_id ? $vs_combo_ids : array() );
+				$vs_buy  = $vs_pick ? $vs_pick[0] : $vs_id;
 				$vs_p   = $vs_plans[ $vs_buy ];
 				$vs_out = 'lifetime' === $vs_id && $vs_lifeleft < 1;
 				$vs_btn = empty( $vs_p['best'] ) ? 'btn-ghost' : 'btn-primary';
@@ -77,12 +83,12 @@ if ( $vs_plans['all-year']['inr'] < $vs_monthly12 ) {
 					<?php elseif ( 'lifetime' === $vs_id ) : ?>
 						<p class="plan-ribbon is-gold"><?php echo esc_html( $vs_out ? __( 'Sold out', 'vitalstack' ) : sprintf( /* translators: %d: places */ __( 'Only %d places', 'vitalstack' ), $vs_lifeleft ) ); ?></p>
 					<?php endif; ?>
-					<h2><?php echo esc_html( 'track' === $vs_id ? __( 'Career Track', 'vitalstack' ) : $vs_p['title'] ); ?></h2>
-					<?php if ( 'track' === $vs_id ) : ?>
+					<h2><?php echo esc_html( 'track' === $vs_id ? __( 'Career Track', 'vitalstack' ) : ( 'combo' === $vs_id ? __( 'Combo Pack', 'vitalstack' ) : $vs_p['title'] ) ); ?></h2>
+					<?php if ( $vs_pick ) : ?>
 						<label class="plan-pick"><span class="screen-reader-text"><?php esc_html_e( 'Choose a track', 'vitalstack' ); ?></span>
 							<select data-plan-pick>
-								<?php foreach ( $vs_track_ids as $vs_t ) : ?>
-									<option value="<?php echo esc_attr( $vs_t ); ?>" data-inr="<?php echo esc_attr( vitalstack_pay_price_label( $vs_plans[ $vs_t ]['inr'], 'inr' ) ); ?>" data-usd="<?php echo esc_attr( vitalstack_pay_price_label( $vs_plans[ $vs_t ]['usd'], 'usd' ) ); ?>" data-blurb="<?php echo esc_attr( $vs_plans[ $vs_t ]['blurb'] ); ?>" data-track="<?php echo esc_attr( $vs_plans[ $vs_t ]['tracks'][0] ); ?>"<?php echo is_user_logged_in() ? ' data-wl-nonce="' . esc_attr( wp_create_nonce( 'vs_waitlist_' . $vs_plans[ $vs_t ]['tracks'][0] ) ) . '"' : ''; ?>><?php echo esc_html( $vs_tracks[ $vs_plans[ $vs_t ]['tracks'][0] ]['icon'] . ' ' . $vs_tracks[ $vs_plans[ $vs_t ]['tracks'][0] ]['title'] ); ?></option>
+								<?php foreach ( $vs_pick as $vs_t ) : ?>
+									<option value="<?php echo esc_attr( $vs_t ); ?>" data-inr="<?php echo esc_attr( vitalstack_pay_price_label( $vs_plans[ $vs_t ]['inr'], 'inr' ) ); ?>" data-usd="<?php echo esc_attr( vitalstack_pay_price_label( $vs_plans[ $vs_t ]['usd'], 'usd' ) ); ?>" data-blurb="<?php echo esc_attr( $vs_plans[ $vs_t ]['blurb'] ); ?>" data-track="<?php echo esc_attr( $vs_plans[ $vs_t ]['tracks'][0] ); ?>"<?php echo is_user_logged_in() ? ' data-wl-nonce="' . esc_attr( wp_create_nonce( 'vs_waitlist_' . $vs_plans[ $vs_t ]['tracks'][0] ) ) . '"' : ''; ?>><?php echo esc_html( 'combo' === $vs_id ? '🎁 ' . $vs_plans[ $vs_t ]['title'] : $vs_tracks[ $vs_plans[ $vs_t ]['tracks'][0] ]['icon'] . ' ' . $vs_tracks[ $vs_plans[ $vs_t ]['tracks'][0] ]['title'] ); ?></option>
 								<?php endforeach; ?>
 							</select>
 						</label>

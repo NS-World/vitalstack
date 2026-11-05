@@ -57,6 +57,8 @@ require VITALSTACK_DIR . '/inc/ui.php';
 require VITALSTACK_DIR . '/inc/contact.php';
 require VITALSTACK_DIR . '/inc/ads.php';
 require VITALSTACK_DIR . '/inc/datasets.php';
+require VITALSTACK_DIR . '/inc/study-music.php';
+require VITALSTACK_DIR . '/inc/premium-skins.php';
 require VITALSTACK_DIR . '/inc/ai-dictionary.php';
 require VITALSTACK_DIR . '/inc/ai-city.php';
 require VITALSTACK_DIR . '/inc/learn-helpers.php';

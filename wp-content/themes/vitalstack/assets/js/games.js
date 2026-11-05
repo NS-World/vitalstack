@@ -538,7 +538,7 @@
 	try { best = JSON.parse(localStorage.getItem('vs-game-best') || '{}'); } catch (e) {}
 
 	function cardFor(g) {
-		var c = h('button', { class: 'game-tile', type: 'button', onclick: function () { start(g); } }, [
+		var c = h('button', { class: 'game-tile', type: 'button', 'data-game': g.id, onclick: function () { start(g); } }, [
 			h('span', { class: 'game-tile-emoji', text: g.emoji }),
 			h('span', { class: 'game-tile-tag', text: g.tag }),
 			h('strong', { text: g.name }),
@@ -561,6 +561,7 @@
 		var api = {
 			body: body,
 			stats: setStats,
+			every: every, later: later, onKey: onKey, h: h, shuffle: shuffle,
 			finish: function (score, summary) { if (finished) return; finished = true; clearTimers(); onKey(null); results(g, score, summary); }
 		};
 		g.play(api);
@@ -594,6 +595,9 @@
 
 	function back() { clearTimers(); onKey(null); stage.hidden = true; grid.hidden = false; menu(); grid.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
 	stage.querySelector('[data-game-back]').addEventListener('click', back);
+
+	// 5.0: extra games from games-plus.js (loaded first).
+	(window.VSGamesExtra || []).forEach(function (g) { if (g && g.id && g.play) GAMES.push(g); });
 
 	menu();
 
