@@ -2,7 +2,7 @@
 /**
  * Plugin Name: VitalStack AdSense Helper
  * Description: Tools → AdSense Helper. Publish your scheduled lessons now (or N per day) and run an AdSense readiness check: policy pages, placeholders, thin pages, links to unpublished lessons, empty categories, ads.txt and more. Works with any theme; changes nothing until you press a button.
- * Version: 1.0.0
+ * Version: 1.1.0
  * Requires at least: 6.0
  * Requires PHP: 7.4
  * Author: VitalStack
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'VSAH_VERSION', '1.0.0' );
+define( 'VSAH_VERSION', '1.1.0' );
 
 /* ── Content helpers ───────────────────────────────────────────────────── */
 
@@ -124,6 +124,116 @@ function vsah_word_count( $content ) {
 	return count( preg_split( '/\s+/u', trim( $text ), -1, PREG_SPLIT_NO_EMPTY ) );
 }
 
+/**
+ * Post content without code: <pre>/<code> blocks and code-block comments.
+ * Lesson code such as `const [todos, setTodos]` or `<a href="...">` is
+ * example text, not a placeholder or a real link.
+ */
+function vsah_strip_code( $content ) {
+	$content = preg_replace( '#<pre\b[^>]*>.*?</pre>#is', ' ', (string) $content );
+	$content = preg_replace( '#<code\b[^>]*>.*?</code>#is', ' ', $content );
+	return preg_replace( '#<!--\s*wp:(?:code|preformatted|html)\b.*?<!--\s*/wp:(?:code|preformatted|html)\s*-->#is', ' ', $content );
+}
+
+/**
+ * The publisher ID as "pub-1234567890123456" from the theme setting, Site
+ * Kit, or the saved ads.txt field, or '' if none is known.
+ */
+function vsah_publisher_id() {
+	$candidates = array(
+		(string) get_option( 'vsah_publisher_id', '' ),
+		(string) get_theme_mod( 'vitalstack_adsense_client', '' ),
+	);
+	$sitekit = get_option( 'googlesitekit_adsense_settings' );
+	if ( is_array( $sitekit ) ) {
+		$candidates[] = isset( $sitekit['clientID'] ) ? (string) $sitekit['clientID'] : '';
+		$candidates[] = isset( $sitekit['accountID'] ) ? (string) $sitekit['accountID'] : '';
+	}
+	foreach ( $candidates as $c ) {
+		if ( preg_match( '/pub-(\d{10,20})/', $c, $m ) ) {
+			return 'pub-' . $m[1];
+		}
+	}
+	return '';
+}
+
+/**
+ * Current /ads.txt text: the real file if there is one, otherwise what the
+ * site answers over HTTP (the theme can serve it virtually).
+ */
+function vsah_read_ads_txt() {
+	$file = ABSPATH . 'ads.txt';
+	if ( file_exists( $file ) ) {
+		return (string) file_get_contents( $file ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- local file
+	}
+	$res = wp_remote_get(
+		add_query_arg( 'vsah', time(), home_url( '/ads.txt' ) ),
+		array(
+			'timeout'   => 8,
+			'sslverify' => false, // Loopback request to this same site.
+		)
+	);
+	if ( ! is_wp_error( $res ) && 200 === (int) wp_remote_retrieve_response_code( $res ) ) {
+		return (string) wp_remote_retrieve_body( $res );
+	}
+	return '';
+}
+
+/**
+ * Writes the google.com line into the real ads.txt in the site root,
+ * keeping any other lines already there.
+ *
+ * @return bool|string True on success, or an error message.
+ */
+function vsah_write_ads_txt( $pub ) {
+	$file    = ABSPATH . 'ads.txt';
+	$line    = 'google.com, ' . $pub . ', DIRECT, f08c47fec0942fa0';
+	$current = file_exists( $file ) ? (string) file_get_contents( $file ) : ''; // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+	$lines   = preg_split( '/\r\n|\r|\n/', $current );
+	$lines   = array_filter(
+		$lines,
+		function ( $l ) {
+			return '' !== trim( $l ) && ! preg_match( '/^\s*google\.com\s*,/i', $l );
+		}
+	);
+	array_unshift( $lines, $line );
+	$ok = @file_put_contents( $file, implode( "\n", $lines ) . "\n" ); // phpcs:ignore WordPress.WP.AlternativeFunctions,WordPress.PHP.NoSilencedErrors -- one small file in the site root
+	return false === $ok ? __( 'Could not write ads.txt in the site root (no permission). Create it in Hostinger → File Manager → public_html instead.', 'vitalstack-adsense-helper' ) : true;
+}
+
+/**
+ * Refreshed lessons shipped with the plugin (updates.json).
+ *
+ * @return array<int, array{slug:string,title:string,content:string}>
+ */
+function vsah_bundled_updates() {
+	$file = __DIR__ . '/updates.json';
+	if ( ! file_exists( $file ) ) {
+		return array();
+	}
+	$data = json_decode( (string) file_get_contents( $file ), true ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+	return isset( $data['items'] ) && is_array( $data['items'] ) ? $data['items'] : array();
+}
+
+/**
+ * Bundled updates whose published post is shorter than the bundled version.
+ *
+ * @return array<int, array{0:WP_Post,1:array}>
+ */
+function vsah_pending_updates() {
+	$out = array();
+	foreach ( vsah_bundled_updates() as $item ) {
+		if ( empty( $item['slug'] ) || empty( $item['content'] ) ) {
+			continue;
+		}
+		$post = get_page_by_path( $item['slug'], OBJECT, vsah_content_types() );
+		if ( $post && vsah_word_count( $post->post_content ) < vsah_word_count( $item['content'] ) ) {
+			$out[] = array( $post, $item );
+		}
+	}
+	return $out;
+}
+
 /* ── Readiness checks ──────────────────────────────────────────────────── */
 
 /**
@@ -229,10 +339,11 @@ function vsah_checks() {
 		)
 	);
 	$placeholders = array();
-	$patterns     = array( '/\[(your|one honest|add |insert|todo|tbd)[^\]]{0,80}\]/i', '/lorem ipsum/i', '/\bcoming soon\b/i', '/under construction/i', '/this is an example page/i', '/welcome to wordpress\. this is your first post/i' );
+	$patterns     = array( '/\[(your\b|one honest|add |insert\b|todo\b|tbd\b)[^\]]{0,80}\]/i', '/lorem ipsum/i', '/\bcoming soon\b/i', '/under construction/i', '/this is an example page/i', '/welcome to wordpress\. this is your first post/i' );
 	foreach ( $published as $p ) {
+		$prose = $p->post_title . ' ' . vsah_strip_code( $p->post_content );
 		foreach ( $patterns as $re ) {
-			if ( preg_match( $re, $p->post_title . ' ' . $p->post_content, $m ) ) {
+			if ( preg_match( $re, $prose, $m ) ) {
 				$placeholders[] = array( get_the_title( $p ) . ' — “' . wp_strip_all_tags( $m[0] ) . '”', get_edit_post_link( $p->ID, 'raw' ) );
 				break;
 			}
@@ -281,7 +392,7 @@ function vsah_checks() {
 		__( 'No thin articles (under 300 words)', 'vitalstack-adsense-helper' ),
 		$thin ? sprintf( /* translators: %d: count */ __( '%d published items have under 300 words. "Low value content" is the most common AdSense rejection.', 'vitalstack-adsense-helper' ), count( $thin ) ) : __( 'Every published article has at least 300 words.', 'vitalstack-adsense-helper' ),
 		array_slice( $thin, 0, 40 ),
-		$thin ? __( 'Expand these with explanation and examples, merge them into a related lesson, or switch them to Draft until they are complete.', 'vitalstack-adsense-helper' ) : '',
+		$thin ? ( vsah_pending_updates() ? __( 'Press "Update thin lessons" above: the plugin has longer versions of some of these. Expand the rest with explanation and examples, or switch them to Draft until they are complete.', 'vitalstack-adsense-helper' ) : __( 'Expand these with explanation and examples, merge them into a related lesson, or switch them to Draft until they are complete.', 'vitalstack-adsense-helper' ) ) : '',
 	);
 
 	// 8. Links to content that is not published yet (drip-publishing problem).
@@ -289,7 +400,7 @@ function vsah_checks() {
 	$broken = array();
 	$seen   = array();
 	foreach ( $published as $p ) {
-		if ( ! preg_match_all( '/href=["\']([^"\'#?]+)/i', $p->post_content, $mm ) ) {
+		if ( ! preg_match_all( '/href=["\']([^"\'#?]+)/i', vsah_strip_code( $p->post_content ), $mm ) ) {
 			continue;
 		}
 		foreach ( $mm[1] as $url ) {
@@ -301,12 +412,16 @@ function vsah_checks() {
 			if ( '' === $path || preg_match( '#^(wp-|category/|tag/|tutorial-category/|author/|feed|page/)#', $path ) ) {
 				continue;
 			}
-			$slug   = basename( $path );
+			$slug = basename( $path );
+			if ( '' === sanitize_title( $slug ) ) {
+				continue; // "...", "./" and similar: nothing a post could be called.
+			}
 			$target = get_page_by_path( $slug, OBJECT, $types );
 			if ( ! $target ) {
 				$target = get_page_by_path( $path, OBJECT, $types );
 			}
-			if ( $target && 'publish' !== $target->post_status ) {
+			// Only content a visitor could have expected: auto-drafts and trash are never linked on purpose.
+			if ( $target && in_array( $target->post_status, array( 'future', 'draft', 'pending', 'private' ), true ) ) {
 				$key = $p->ID . '>' . $target->ID;
 				if ( isset( $seen[ $key ] ) ) {
 					continue;
@@ -354,26 +469,24 @@ function vsah_checks() {
 	);
 
 	// 10. AdSense code and ads.txt.
-	$client = trim( (string) get_theme_mod( 'vitalstack_adsense_client', '' ) );
-	$sitekit = defined( 'GOOGLESITEKIT_VERSION' );
-	$adstxt  = '';
-	$file    = ABSPATH . 'ads.txt';
-	if ( file_exists( $file ) ) {
-		$adstxt = (string) file_get_contents( $file ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- local file
-	} else {
-		$res = wp_remote_get( home_url( '/ads.txt' ), array( 'timeout' => 8 ) );
-		if ( ! is_wp_error( $res ) && 200 === (int) wp_remote_retrieve_response_code( $res ) ) {
-			$adstxt = (string) wp_remote_retrieve_body( $res );
-		}
-	}
-	$has_ads_txt = (bool) preg_match( '/google\.com,\s*pub-\d+/i', $adstxt );
+	$client      = trim( (string) get_theme_mod( 'vitalstack_adsense_client', '' ) );
+	$sitekit     = defined( 'GOOGLESITEKIT_VERSION' );
+	$pub         = vsah_publisher_id();
+	$has_ads_txt = (bool) preg_match( '/google\.com\s*,\s*pub-\d+/i', vsah_read_ads_txt() );
 	$has_code    = '' !== $client || $sitekit;
-	$out[]       = array(
+	if ( $has_code && $has_ads_txt ) {
+		$fix = '';
+	} elseif ( ! $has_code ) {
+		$fix = __( 'Appearance → Customize → VitalStack: Google AdSense: paste your ca-pub-… ID (or connect Site Kit). Then use "Create ads.txt" above and purge the cache.', 'vitalstack-adsense-helper' );
+	} else {
+		$fix = __( 'Use "Create ads.txt" above: it writes a real ads.txt file in the site root with your publisher ID. Then LiteSpeed Cache → Purge All and open yoursite/ads.txt to confirm.', 'vitalstack-adsense-helper' );
+	}
+	$out[] = array(
 		$has_code && $has_ads_txt ? 'pass' : 'fail',
 		__( 'AdSense code and ads.txt', 'vitalstack-adsense-helper' ),
-		( $has_code ? __( 'The AdSense code is set up.', 'vitalstack-adsense-helper' ) : __( 'No AdSense publisher ID found.', 'vitalstack-adsense-helper' ) ) . ' ' . ( $has_ads_txt ? __( '/ads.txt lists your publisher ID.', 'vitalstack-adsense-helper' ) : __( '/ads.txt was not found or has no google.com line.', 'vitalstack-adsense-helper' ) ),
+		( $has_code ? ( $sitekit && '' === $client ? __( 'The AdSense code is placed by Site Kit.', 'vitalstack-adsense-helper' ) : __( 'The AdSense code is set up.', 'vitalstack-adsense-helper' ) ) : __( 'No AdSense publisher ID found.', 'vitalstack-adsense-helper' ) ) . ' ' . ( $has_ads_txt ? __( '/ads.txt lists your publisher ID.', 'vitalstack-adsense-helper' ) : __( '/ads.txt was not found or has no google.com line.', 'vitalstack-adsense-helper' ) ) . ( $pub ? ' ' . sprintf( /* translators: %s: publisher ID */ __( 'Publisher ID: %s.', 'vitalstack-adsense-helper' ), $pub ) : '' ),
 		array(),
-		$has_code && $has_ads_txt ? '' : __( 'Appearance → Customize → AdSense: paste your ca-pub-… ID (or connect Site Kit). The theme then serves /ads.txt automatically. Then purge the cache.', 'vitalstack-adsense-helper' ),
+		$fix,
 	);
 
 	// 11. Maintenance / coming-soon plugins.
@@ -425,6 +538,33 @@ function vsah_handle() {
 		list( $b, $last ) = vsah_reschedule( $later, $per );
 		/* translators: 1: published now, 2: rescheduled, 3: per day, 4: last date */
 		$msg = sprintf( __( 'Published %1$d now and rescheduled %2$d at %3$d a day (last one on %4$s).', 'vitalstack-adsense-helper' ), $a, $b, max( 1, min( 50, $per ) ), $last ? $last : '—' );
+	} elseif ( 'ads_txt' === $action ) {
+		$raw = isset( $_POST['vsah_pub'] ) ? sanitize_text_field( wp_unslash( $_POST['vsah_pub'] ) ) : '';
+		if ( preg_match( '/pub-(\d{10,20})/', $raw, $m ) ) {
+			update_option( 'vsah_publisher_id', 'pub-' . $m[1], false );
+			$res = vsah_write_ads_txt( 'pub-' . $m[1] );
+			/* translators: %s: URL of ads.txt */
+			$msg = true === $res ? sprintf( __( 'ads.txt saved. Check it at %s', 'vitalstack-adsense-helper' ), home_url( '/ads.txt' ) ) : $res;
+		} else {
+			$msg = __( 'That is not a publisher ID. It looks like pub-1234567890123456 (AdSense → Account → Settings → Account information).', 'vitalstack-adsense-helper' );
+		}
+	} elseif ( 'update_thin' === $action ) {
+		$n = 0;
+		foreach ( vsah_pending_updates() as $pair ) {
+			list( $post, $item ) = $pair;
+			$result = wp_update_post(
+				array(
+					'ID'           => $post->ID,
+					'post_content' => wp_slash( $item['content'] ),
+				),
+				true
+			);
+			if ( ! is_wp_error( $result ) ) {
+				$n++;
+			}
+		}
+		/* translators: %d: count */
+		$msg = sprintf( __( 'Updated %d lessons with their longer versions. The old text is kept in each post\'s Revisions.', 'vitalstack-adsense-helper' ), $n );
 	}
 	if ( function_exists( 'do_action' ) ) {
 		do_action( 'litespeed_purge_all' ); // LiteSpeed Cache: refresh pages and sitemaps.
@@ -501,7 +641,33 @@ function vsah_page() {
 			</details>
 		<?php endif; ?>
 
-		<h2 style="margin-top:28px"><?php esc_html_e( '2. AdSense readiness check', 'vitalstack-adsense-helper' ); ?></h2>
+		<h2 style="margin-top:28px"><?php esc_html_e( '2. Quick fixes', 'vitalstack-adsense-helper' ); ?></h2>
+		<?php $updates = vsah_pending_updates(); ?>
+		<?php if ( $updates ) : ?>
+			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="margin:8px 0 16px">
+				<?php wp_nonce_field( 'vsah_action' ); ?>
+				<input type="hidden" name="action" value="vsah">
+				<input type="hidden" name="vsah_do" value="update_thin">
+				<p style="margin:0 0 6px">
+					<?php
+					/* translators: %s: list of lesson titles */
+					echo esc_html( sprintf( __( 'Longer versions are ready for: %s.', 'vitalstack-adsense-helper' ), implode( ', ', array_map( 'get_the_title', wp_list_pluck( $updates, 0 ) ) ) ) );
+					?>
+				</p>
+				<button type="submit" class="button button-primary"><?php echo esc_html( sprintf( /* translators: %d: count */ __( 'Update thin lessons (%d)', 'vitalstack-adsense-helper' ), count( $updates ) ) ); ?></button>
+			</form>
+		<?php endif; ?>
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="margin:8px 0 16px">
+			<?php wp_nonce_field( 'vsah_action' ); ?>
+			<input type="hidden" name="action" value="vsah">
+			<input type="hidden" name="vsah_do" value="ads_txt">
+			<label for="vsah_pub"><?php esc_html_e( 'AdSense publisher ID for ads.txt:', 'vitalstack-adsense-helper' ); ?></label>
+			<input type="text" id="vsah_pub" name="vsah_pub" value="<?php echo esc_attr( vsah_publisher_id() ); ?>" placeholder="pub-1234567890123456" style="width:240px">
+			<button type="submit" class="button"><?php esc_html_e( 'Create ads.txt', 'vitalstack-adsense-helper' ); ?></button>
+			<br><span class="description"><?php esc_html_e( 'Writes a real ads.txt file in the site root (other lines in it are kept). Find the ID in AdSense → Account → Settings → Account information.', 'vitalstack-adsense-helper' ); ?></span>
+		</form>
+
+		<h2 style="margin-top:28px"><?php esc_html_e( '3. AdSense readiness check', 'vitalstack-adsense-helper' ); ?></h2>
 		<p><?php echo $fails ? esc_html( sprintf( /* translators: %d: count */ _n( '%d item must be fixed before you apply.', '%d items must be fixed before you apply.', $fails, 'vitalstack-adsense-helper' ), $fails ) ) : esc_html__( 'No blocking problems found. You are ready to apply (or request a review).', 'vitalstack-adsense-helper' ); ?></p>
 		<table class="widefat" style="max-width:1100px">
 			<tbody>

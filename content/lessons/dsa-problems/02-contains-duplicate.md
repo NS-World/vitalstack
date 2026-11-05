@@ -78,6 +78,31 @@ A one-line version: `len(set(nums)) != len(nums)`. It's neat, but the loop stops
 
 Mentioning this trade-off (time vs memory) is exactly what interviewers want to hear.
 
+## Walkthrough: the set solution step by step
+
+Take `nums = [4, 1, 7, 1]` and follow the loop:
+
+| step | x | seen before the check | x in seen? | action |
+|---|---|---|---|---|
+| 1 | 4 | `{}` | no | add 4 |
+| 2 | 1 | `{4}` | no | add 1 |
+| 3 | 7 | `{4, 1}` | no | add 7 |
+| 4 | 1 | `{4, 1, 7}` | **yes** | return True |
+
+The loop stopped at the fourth item. On a list of a million numbers where the duplicate sits near the start, the loop version finishes almost instantly, while `len(set(nums))` always builds the whole set first.
+
+## Common mistakes
+
+- **Using a list instead of a set** for `seen`. `x in some_list` scans the whole list, so the "fast" solution quietly becomes O(n²) again.
+- **Sorting in place** with `nums.sort()` when the caller still needs the original order. `sorted(nums)` makes a copy; mention which one you chose and why.
+- **Forgetting the empty list.** No values means no duplicates, so the answer is `False`. All three solutions above already handle it.
+
+## Follow-ups interviewers ask
+
+- *What if memory is very limited?* Use the sorting solution: it needs no extra set, at the cost of O(n log n) time.
+- *What if duplicates only count when they are at most k positions apart?* Keep a set of just the last k values, a sliding window. That is Contains Duplicate II.
+- *What if the numbers are in the range 1 to n?* You can mark visited values inside the list itself and use O(1) extra space.
+
 ## Similar problems
 
 Contains Duplicate II (within k positions), Valid Anagram, Single Number, Find the Duplicate Number.
