@@ -1,0 +1,67 @@
+<!-- wp:heading -->
+<h2 class="wp-block-heading">What is a JWT?</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>A <strong>JSON Web Token</strong> is a compact string that apps use to say "this user is logged in" without asking the database on every request. It has three parts separated by dots:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-plaintext">header.payload.signature</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Header</strong>: which algorithm signed it, for example <code>HS256</code> or <code>RS256</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Payload</strong>: the *claims*, such as the user id (<code>sub</code>), when it was issued (<code>iat</code>) and when it expires (<code>exp</code>).</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Signature</strong>: proves the server created the token and nobody changed it.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>The header and payload are only <strong>Base64URL-encoded, not encrypted</strong>. Anyone who has the token can read them, which is exactly what this tool does.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">How to use the decoder</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Paste a token. The tool shows the header and payload as formatted JSON and turns <code>iat</code>, <code>nbf</code> and <code>exp</code> into readable dates, telling you if the token has already expired.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>It does <strong>not</strong> verify the signature, because that needs the server's secret or public key. A decoded token is not proof that it is genuine.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Security tips for developers</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Never put secrets in the payload</strong> (passwords, card numbers, Aadhaar numbers). It is readable by anyone.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Keep tokens short-lived</strong> (minutes to hours) and use refresh tokens for longer sessions.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Always verify the signature on the server</strong> and reject <code>alg: none</code>.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Do not paste real production tokens into online tools</strong> you do not trust. This one runs only in your browser, but the habit protects you everywhere.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Prefer <strong>HttpOnly cookies</strong> over localStorage for tokens in web apps, so injected scripts cannot steal them.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->

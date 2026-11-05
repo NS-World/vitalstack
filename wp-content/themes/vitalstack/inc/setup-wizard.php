@@ -766,6 +766,16 @@ function vitalstack_setup_paths() {
 			'description' => 'Research, customer support, coding and browser agents, with animated films and runnable Python. Part of the Agentic AI Engineer premium track.',
 			'premium'     => 'agentic-ai-engineer',
 		),
+		array(
+			'slug'        => 'cyber-safety',
+			'name'        => 'Cyber Safety for Everyone',
+			'description' => 'A free course for everyone, tech or not: strong passwords and two-step verification, phishing, UPI and OTP scams, fake calls and digital arrest, safe browsing, phone security, privacy, malware and backups, and exactly what to do if you are scammed.',
+		),
+		array(
+			'slug'        => 'social-media-truth',
+			'name'        => 'Social Media: The Hidden Side',
+			'description' => 'A free, balanced series on how social media really works: feeds designed to hook you, the data apps collect, algorithms and fake news, mental health, scams and fake influencers, and a 7-day plan to take back control.',
+		),
 	);
 }
 
@@ -850,6 +860,12 @@ function vitalstack_setup_pages() {
 			'title'    => 'AI City: Gen AI and Agents in 3D',
 			'status'   => 'publish',
 			'template' => 'page-ai-city.php',
+			'content'  => '',
+		),
+		'datasets'         => array(
+			'title'    => 'Free Datasets for Data Analysts',
+			'status'   => 'publish',
+			'template' => 'page-datasets.php',
 			'content'  => '',
 		),
 		'ai-dictionary'    => array(

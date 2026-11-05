@@ -1,0 +1,66 @@
+<!-- wp:heading -->
+<h2 class="wp-block-heading">What is a Unix timestamp?</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>A <strong>Unix timestamp</strong> is the number of seconds since <strong>1 January 1970, 00:00 UTC</strong> (called "the epoch"). Computers love it because it is one simple number with no time zones or date formats to argue about. Databases, logs, APIs and JWTs all use it.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><code>1700000000</code> is a timestamp in <strong>seconds</strong> (10 digits today).</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>1700000000000</code> is the same moment in <strong>milliseconds</strong> (13 digits), the format JavaScript's <code>Date.now()</code> returns.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>The tool spots which one you pasted and shows the date in <strong>IST (UTC+5:30)</strong>, <strong>UTC</strong>, ISO 8601 format and as "how long ago".</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">How to use it</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Paste a timestamp, or pick a date and time (in your own time zone) to get its timestamp. Press <strong>Now</strong> to see the current time.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Code you will use again and again</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-python">from datetime import datetime, timezone, timedelta
+ts = 1700000000
+utc = datetime.fromtimestamp(ts, tz=timezone.utc)
+ist = utc.astimezone(timezone(timedelta(hours=5, minutes=30)))
+print(utc.isoformat())
+print(ist.isoformat())</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-javascript">const d = new Date(1700000000 * 1000);
+console.log(d.toISOString());
+console.log(d.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }));</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Common bugs</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li>Mixing seconds and milliseconds: a date in 1970 or in the year 55,000 means you used the wrong one.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Storing local time without the zone. Store UTC, convert to IST only when you show it.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>32-bit systems overflow on 19 January 2038. Use 64-bit integers for timestamps.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->

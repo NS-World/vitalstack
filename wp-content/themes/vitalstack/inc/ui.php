@@ -50,6 +50,7 @@ function vitalstack_practice_links() {
 	$links = array();
 	$pages = array(
 		'ai-city'      => array( __( 'AI City 3D', 'vitalstack' ), '🏙️' ),
+		'datasets'     => array( __( 'Datasets', 'vitalstack' ), '📊' ),
 		'mock-tests'   => array( __( 'Mock Tests', 'vitalstack' ), '📝' ),
 		'roadmaps'     => array( __( 'Roadmaps', 'vitalstack' ), '🗺️' ),
 		'cheat-sheets' => array( __( 'Cheat Sheets', 'vitalstack' ), '📄' ),
@@ -201,6 +202,7 @@ function vitalstack_courses_panel() {
 		'data' => array( __( 'Data & AI', 'vitalstack' ), '🤖', array( 'numpy', 'pandas', 'data-visualization', 'statistics', 'machine-learning', 'deep-learning', 'prompt-engineering', 'ai-models', 'llm-basics', 'llm-apis', 'ai-app-project', 'ai-agents', 'generative-ai' ) ),
 		'ds'   => array( __( 'Data Science track', 'vitalstack' ), '📊', array( 'eda', 'ml-in-depth', 'mongodb', 'power-bi', 'time-series', 'spark', 'nlp', 'computer-vision', 'reinforcement-learning', 'mlops', 'ds-projects' ) ),
 		'genai' => array( __( 'Gen AI & Agents', 'vitalstack' ), '🦾', array( 'rag', 'langchain', 'llm-agents', 'multimodal-ai', 'generative-models', 'fine-tuning', 'ai-safety', 'ai-coding-assistants', 'deploy-ai-apps', 'genai-capstones', 'agent-tools', 'agent-memory', 'agent-reasoning', 'mcp', 'agent-frameworks', 'multi-agent', 'agent-evals', 'agent-safety', 'agent-production', 'agent-capstones' ) ),
+		'safe' => array( __( 'Safety & digital life (free)', 'vitalstack' ), '🛡️', array( 'cyber-safety', 'social-media-truth' ) ),
 		'more' => array( __( 'More courses', 'vitalstack' ), '📚', array() ),
 	);
 	$sorted = array_fill_keys( array_keys( $groups ), array() );
@@ -515,6 +517,8 @@ function vitalstack_path_example( $term ) {
 		'llm-apis'           => array( 'Python', "import anthropic\n\nclient = anthropic.Anthropic()   # reads ANTHROPIC_API_KEY\nreply = client.messages.create(\n    model=\"claude-opus-5-5\", max_tokens=300,\n    messages=[{\"role\": \"user\", \"content\": \"Explain APIs in one line.\"}],\n)\nprint(reply.content[0].text)", '' ),
 		'ai-app-project'     => array( 'Python', "import streamlit as st\n\nst.title(\"📒 StudyBuddy\")\nnotes = st.text_area(\"Paste your notes\")\nif st.button(\"✨ Make my quiz\"):\n    quiz = make_quiz(llm, notes, 5)\n    st.success(f\"{len(quiz)} questions ready!\")", '' ),
 		'deep-learning'      => array( 'Python', "from tensorflow import keras\n\nmodel = keras.Sequential([\n    keras.layers.Dense(64, activation=\"relu\"),\n    keras.layers.Dense(10, activation=\"softmax\"),\n])\nmodel.compile(optimizer=\"adam\", loss=\"sparse_categorical_crossentropy\")", '' ),
+		'cyber-safety'       => array( 'Checklist', "✅ Never share OTP or UPI PIN\n✅ PIN means PAYING, never receiving\n✅ Two-step verification on email + WhatsApp\n✅ Read the link's real domain (from the right)\n✅ Hang up and call back on an official number\n☎️ Scammed? Call 1930 within the first hour", '' ),
+		'social-media-truth' => array( 'Checklist', "📊 Day 1  Check your screen time\n🔕 Day 2  Turn off non-essential notifications\n🧹 Day 3  Unfollow accounts that make you feel small\n🔒 Day 4  Private profile, location tags off\n⏱️ Day 5  Daily limits, apps off the home screen\n🌱 Day 6  Replace scrolling with learning", '' ),
 		'eda'                => array( 'Python', "df = pd.read_csv(\"sales.csv\")\n\nprint(df.shape)\nprint(df.isna().sum())\nprint(df.describe())", '' ),
 		'ml-in-depth'        => array( 'Python', "from sklearn.ensemble import RandomForestClassifier\n\nmodel = RandomForestClassifier(n_estimators=200)\nmodel.fit(X_train, y_train)\nprint(model.score(X_test, y_test))", '' ),
 		'mongodb'            => array( 'Python', "orders = db.orders.find(\n    {\"city\": \"Pune\", \"total\": {\"\$gt\": 500}}\n).sort(\"total\", -1).limit(5)\n\nfor o in orders:\n    print(o[\"_id\"], o[\"total\"])", '' ),

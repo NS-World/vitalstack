@@ -1,0 +1,75 @@
+<!-- wp:heading -->
+<h2 class="wp-block-heading">How to compare two texts</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Paste the <strong>original</strong> on the left and the <strong>changed</strong> version on the right. Below, every line is marked:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><code>+</code> in green: added in the changed version</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><code>-</code> in red: removed from the original</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>no mark: the same in both</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>The summary counts how many lines were added and removed. Everything runs in your browser, so you can safely compare private notes or code.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Where diffs are used</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>A <strong>diff</strong> is how developers review each other's work. Every pull request on GitHub, every <code>git diff</code> in a terminal and every "track changes" view in a document editor shows the same idea: what changed between version A and version B.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Use this tool to:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li>Check what changed between two versions of a config file before deploying.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Compare a teacher's answer with yours, line by line.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Spot the one changed row in two exported CSV files.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>See what an AI assistant actually changed when it "fixed" your code.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">How it works</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>The tool finds the <strong>longest common subsequence</strong>: the biggest set of lines that appear in both texts in the same order. Whatever is not part of it was added or removed. This is the classic algorithm behind the Unix <code>diff</code> command, and a great dynamic programming exercise.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-python">import difflib
+a = ["name = 'Asha'", "city = 'Pune'"]
+b = ["name = 'Asha'", "city = 'Mumbai'"]
+for line in difflib.unified_diff(a, b, lineterm=""):
+    print(line)</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>Tip: a change in spaces or line endings also counts as a change. If two lines look the same but are marked different, look for trailing spaces or tabs.</p>
+<!-- /wp:paragraph -->

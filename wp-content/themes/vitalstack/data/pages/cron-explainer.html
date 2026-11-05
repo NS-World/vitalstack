@@ -1,0 +1,59 @@
+<!-- wp:heading -->
+<h2 class="wp-block-heading">What is cron?</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p><strong>Cron</strong> is the scheduler on Linux servers. Backups, daily emails, report jobs, WordPress scheduled posts and many cloud schedulers (GitHub Actions, Kubernetes CronJobs) use the same five-field format:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-plaintext">┌ minute (0-59)
+│ ┌ hour (0-23)
+│ │ ┌ day of month (1-31)
+│ │ │ ┌ month (1-12)
+│ │ │ │ ┌ day of week (0-6, Sunday = 0)
+│ │ │ │ │
+30 9 * * 1-5</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>That example means <strong>at 9:30, Monday to Friday</strong>.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Symbols</h2>
+<!-- /wp:heading -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>Symbol</th><th>Meaning</th><th>Example</th></tr></thead><tbody><tr><td><code>*</code></td><td>every value</td><td><code>* * * * *</code> every minute</td></tr><tr><td><code>,</code></td><td>a list</td><td><code>0 9,18 * * *</code> at 9:00 and 18:00</td></tr><tr><td><code>-</code></td><td>a range</td><td><code>0 9 * * 1-5</code> weekdays at 9:00</td></tr><tr><td><code>/</code></td><td>a step</td><td><code>*/15 * * * *</code> every 15 minutes</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">How to use the explainer</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Type an expression or tap a preset. The tool explains it in a sentence and lists the next five times it would run, in your own time zone. An error message tells you which field is wrong.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Gotchas</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Time zone</strong>: most servers run cron in <strong>UTC</strong>. 9:30 UTC is 15:00 in India. Check your server's zone before scheduling.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Day of month and day of week together</strong>: when both are set (not <code>*</code>), classic cron runs when *either* matches, not both.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Overlapping runs</strong>: if a job takes longer than its interval, two copies can run at once. Use a lock.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Names like <code>MON</code> or <code>JAN</code> and special strings like <code>@daily</code> work in many cron versions, but this explainer sticks to numbers so the meaning is always clear.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->

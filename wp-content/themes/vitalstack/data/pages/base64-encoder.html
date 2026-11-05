@@ -1,0 +1,48 @@
+<!-- wp:heading -->
+<h2 class="wp-block-heading">When do you need Base64?</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p><strong>Base64</strong> turns any bytes into plain letters, digits, <code>+</code> and <code>/</code>, so binary data can travel safely through systems built for text: email attachments, JSON APIs, data URLs for small images and the parts of a JWT.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>It grows the data by about a third (every 3 bytes become 4 characters), and it is <strong>not encryption</strong>. Anyone can decode it, so never use it to "hide" a password.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p><strong>Base64URL</strong> swaps <code>+</code> and <code>/</code> for <code>-</code> and <code>_</code> and drops the <code>=</code> padding, so the result is safe inside web addresses.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p><strong>URL encoding</strong> (percent encoding) replaces characters such as spaces, <code>&amp;</code> and <code>?</code> with codes like <code>%20</code>, so they do not break a link.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">How to use the tool</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Type or paste text on the left and press <strong>Base64 encode</strong>, <strong>Base64 decode</strong>, <strong>URL encode</strong> or <strong>URL decode</strong>. The result appears on the right; <strong>Copy output</strong> puts it on your clipboard. Unicode text such as <code>नमस्ते 👋</code> is encoded as UTF-8 first, so it decodes back exactly.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Try it in code</h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-python">import base64
+s = "नमस्ते"
+b = base64.b64encode(s.encode("utf-8")).decode()
+print(b)
+print(base64.b64decode(b).decode("utf-8"))</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-javascript">const b = btoa(String.fromCharCode(...new TextEncoder().encode("नमस्ते")));
+console.log(b);</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>A common bug: calling <code>btoa("नमस्ते")</code> directly throws an error, because <code>btoa</code> only accepts characters below 256. Encode to UTF-8 bytes first, as above.</p>
+<!-- /wp:paragraph -->

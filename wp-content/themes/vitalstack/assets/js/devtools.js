@@ -1,0 +1,567 @@
+/*
+ * Free developer, AI and safety tools (5.0). Each runs fully in the browser:
+ * nothing typed here is sent anywhere. All user text is written with
+ * textContent or SVG text nodes, never as HTML.
+ *
+ *   diagram-maker           text → flowchart, drag boxes, export SVG/PNG/Mermaid
+ *   password-generator      strong passwords and passphrases + strength meter
+ *   jwt-decoder             read a JWT's header and payload, check expiry
+ *   base64-encoder          Base64 and URL encode/decode (Unicode-safe)
+ *   hash-generator          SHA-1/256/384/512 of text
+ *   timestamp-converter     Unix time ↔ date (IST and UTC)
+ *   cron-explainer          cron expression → plain English + next runs
+ *   text-diff               compare two texts line by line
+ *   token-counter           words, characters and estimated AI tokens and cost
+ *   color-contrast-checker  WCAG contrast ratio for text and background
+ *   uuid-generator          random UUID v4s
+ *   link-safety-checker     red flags in a link before you click it
+ */
+(function () {
+	'use strict';
+	function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined && text !== null) e.textContent = text; return e; }
+	function btn(label, cls) { var b = el('button', 'btn ' + (cls || 'btn-ghost') + ' btn-sm', label); b.type = 'button'; return b; }
+	function field(label, input) { var l = el('label', 'tool-field'); l.appendChild(el('span', '', label)); l.appendChild(input); return l; }
+	function input(type, value, attrs) { var i = el('input'); i.type = type || 'text'; if (value !== undefined) i.value = value; for (var k in (attrs || {})) i.setAttribute(k, attrs[k]); return i; }
+	function area(value, rows, label) { var t = el('textarea', 'tool-code'); t.value = value || ''; t.rows = rows || 8; t.spellcheck = false; t.setAttribute('autocapitalize', 'off'); if (label) t.setAttribute('aria-label', label); return t; }
+	function panel(title, body, extra) { var p = el('div', 'tool-panel'); var h = el('div', 'tool-panel-head'); h.appendChild(el('span', '', title)); if (extra) h.appendChild(extra); p.appendChild(h); p.appendChild(body); return p; }
+	function store(key, val) { try { if (val === undefined) return localStorage.getItem('vs-dt-' + key); localStorage.setItem('vs-dt-' + key, val); } catch (e) { return null; } }
+	function copy(text, b) { var done = function () { var o = b.textContent; b.textContent = '✓ Copied'; setTimeout(function () { b.textContent = o; }, 1400); }; if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, function () {}); }
+	function save(name, blob) { var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1000); }
+	function award(ref) { if (window.VS && window.VS.addXP) window.VS.addXP('viz', 'tool-' + ref); }
+	function rows(table, data, head) {
+		table.textContent = '';
+		if (head) { var th = el('thead'), tr = el('tr'); head.forEach(function (h) { tr.appendChild(el('th', '', h)); }); th.appendChild(tr); table.appendChild(th); }
+		var tb = el('tbody');
+		data.forEach(function (r) { var tr = el('tr'); r.forEach(function (c) { tr.appendChild(el('td', '', c)); }); tb.appendChild(tr); });
+		table.appendChild(tb);
+	}
+	var tools = {};
+
+	/* ── Diagram maker ─────────────────────────────────────────────────── */
+	var TEMPLATES = {
+		'Login flow': '# One arrow per line:  From -> To: label\n((Start)) -> Open website\nOpen website -> Logged in?\nLogged in? -> Dashboard: yes\nLogged in? -> Login page: no\nLogin page -> Check password\nCheck password -> [[Users DB]]: lookup\nCheck password -> Dashboard: correct\nCheck password -> Login page: wrong\nDashboard -> ((End))',
+		'RAG pipeline': 'Documents -> Chunking\nChunking -> Embeddings\nEmbeddings -> [[Vector DB]]\nQuestion -> Embed question\nEmbed question -> [[Vector DB]]: search\n[[Vector DB]] -> Top chunks\nTop chunks -> LLM\nQuestion -> LLM\nLLM -> Answer with sources',
+		'AI agent loop': '((Goal)) -> Plan next step\nPlan next step -> Done?\nDone? -> ((Final answer)): yes\nDone? -> Call a tool: no\nCall a tool -> Observe result\nObserve result -> Plan next step',
+		'ML workflow': 'Collect data -> Clean data\nClean data -> Explore (EDA)\nExplore (EDA) -> Features\nFeatures -> Train model\nTrain model -> Good enough?\nGood enough? -> Deploy: yes\nGood enough? -> Features: no\nDeploy -> Monitor\nMonitor -> Collect data: drift',
+		'Git workflow': 'main -> Create branch\nCreate branch -> Commit changes\nCommit changes -> Push\nPush -> Pull request\nPull request -> Review OK?\nReview OK? -> Merge to main: yes\nReview OK? -> Commit changes: changes requested\nMerge to main -> main'
+	};
+	var THEMES = {
+		Mint: { fill: '#e3f3eb', stroke: '#0a7d4f', text: '#0f172a', line: '#475569', dec: '#fef3c7', decS: '#d97706', db: '#e0e7ff', dbS: '#4f46e5', bg: '#ffffff' },
+		Ocean: { fill: '#dbeafe', stroke: '#1d4ed8', text: '#0f172a', line: '#334155', dec: '#fce7f3', decS: '#be185d', db: '#ccfbf1', dbS: '#0f766e', bg: '#ffffff' },
+		Night: { fill: '#1e293b', stroke: '#38bdf8', text: '#f1f5f9', line: '#94a3b8', dec: '#3b0764', decS: '#c084fc', db: '#064e3b', dbS: '#34d399', bg: '#0b1120' },
+		Paper: { fill: '#fffbeb', stroke: '#78350f', text: '#1c1917', line: '#57534e', dec: '#fef2f2', decS: '#b91c1c', db: '#f5f5f4', dbS: '#44403c', bg: '#fffdf7' }
+	};
+	function parseDiagram(src) {
+		var nodes = {}, order = [], edges = [], errors = [];
+		function node(raw) {
+			var t = raw.trim(), shape = 'box', label = t;
+			if (/^\(\(.*\)\)$/.test(t)) { shape = 'round'; label = t.slice(2, -2).trim(); }
+			else if (/^\[\[.*\]\]$/.test(t)) { shape = 'db'; label = t.slice(2, -2).trim(); }
+			else if (/\?$/.test(t)) { shape = 'dec'; }
+			label = label.slice(0, 60);
+			if (!label) return null;
+			if (!nodes[label]) { nodes[label] = { id: label, label: label, shape: shape }; order.push(label); }
+			else if (shape !== 'box') nodes[label].shape = shape;
+			return nodes[label];
+		}
+		src.split('\n').slice(0, 200).forEach(function (line, i) {
+			var l = line.trim();
+			if (!l || l[0] === '#') return;
+			var m = l.match(/^(.+?)\s*-+>\s*(.+?)(?:\s*:\s*(.*))?$/);
+			if (!m) { var n = node(l); if (!n) errors.push(i + 1); return; }
+			var a = node(m[1]), b = node(m[2]);
+			if (a && b) edges.push({ from: a.id, to: b.id, label: (m[3] || '').trim().slice(0, 40) }); else errors.push(i + 1);
+		});
+		return { nodes: nodes, order: order, edges: edges, errors: errors };
+	}
+	function layout(g, dir) {
+		var layer = {}, indeg = {}, out = {};
+		g.order.forEach(function (id) { indeg[id] = 0; out[id] = []; });
+		// Ignore edges that point back to an earlier node (loops) when ranking.
+		var pos = {}; g.order.forEach(function (id, i) { pos[id] = i; });
+		g.edges.forEach(function (e) { if (pos[e.to] > pos[e.from]) { indeg[e.to]++; out[e.from].push(e.to); } });
+		var queue = g.order.filter(function (id) { return !indeg[id]; });
+		queue.forEach(function (id) { layer[id] = 0; });
+		while (queue.length) {
+			var id = queue.shift();
+			out[id].forEach(function (to) { layer[to] = Math.max(layer[to] || 0, layer[id] + 1); if (--indeg[to] === 0) queue.push(to); });
+		}
+		var layers = [];
+		g.order.forEach(function (id) { var l = layer[id] || 0; (layers[l] = layers[l] || []).push(id); });
+		// One barycenter pass to reduce crossings.
+		for (var li = 1; li < layers.length; li++) {
+			var prev = {}; (layers[li - 1] || []).forEach(function (id, k) { prev[id] = k; });
+			var score = {};
+			(layers[li] || []).forEach(function (id) {
+				var ps = g.edges.filter(function (e) { return e.to === id && prev[e.from] !== undefined; }).map(function (e) { return prev[e.from]; });
+				score[id] = ps.length ? ps.reduce(function (a, b) { return a + b; }, 0) / ps.length : 999;
+			});
+			if (layers[li]) layers[li].sort(function (a, b) { return score[a] - score[b]; });
+		}
+		var W = 170, H = 56, GX = 50, GY = 70;
+		var maxN = Math.max.apply(null, layers.map(function (l) { return l ? l.length : 0; }).concat([1]));
+		layers.forEach(function (l, li) {
+			(l || []).forEach(function (id, k) {
+				var n = g.nodes[id];
+				var offset = (maxN - l.length) / 2;
+				if (dir === 'LR') { n.x = 30 + li * (W + GY + 20); n.y = 30 + (k + offset) * (H + GX); }
+				else { n.x = 30 + (k + offset) * (W + GX); n.y = 30 + li * (H + GY); }
+				n.w = W; n.h = H;
+			});
+		});
+	}
+	var NS = 'http://www.w3.org/2000/svg';
+	function svgEl(tag, attrs, text) { var e = document.createElementNS(NS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); if (text !== undefined) e.textContent = text; return e; }
+	function wrapText(label, max) {
+		var words = label.split(/\s+/), lines = [], cur = '';
+		words.forEach(function (w) { if ((cur + ' ' + w).trim().length > max && cur) { lines.push(cur); cur = w; } else cur = (cur + ' ' + w).trim(); });
+		if (cur) lines.push(cur);
+		return lines.slice(0, 3);
+	}
+	function drawDiagram(svg, g, theme) {
+		var T = THEMES[theme] || THEMES.Mint;
+		svg.textContent = '';
+		var defs = svgEl('defs');
+		var mk = svgEl('marker', { id: 'dm-arrow', viewBox: '0 0 10 10', refX: '9', refY: '5', markerWidth: '8', markerHeight: '8', orient: 'auto-start-reverse' });
+		mk.appendChild(svgEl('path', { d: 'M0,0 L10,5 L0,10 z', fill: T.line }));
+		defs.appendChild(mk); svg.appendChild(defs);
+		var bg = svgEl('rect', { x: 0, y: 0, width: '100%', height: '100%', fill: T.bg }); svg.appendChild(bg);
+		var edgeLayer = svgEl('g'), nodeLayer = svgEl('g');
+		svg.appendChild(edgeLayer); svg.appendChild(nodeLayer);
+		function center(n) { return { x: n.x + n.w / 2, y: n.y + n.h / 2 }; }
+		function border(n, toward) {
+			var c = center(n), dx = toward.x - c.x, dy = toward.y - c.y;
+			if (!dx && !dy) return c;
+			var sx = (n.w / 2) / Math.abs(dx || 1e-9), sy = (n.h / 2) / Math.abs(dy || 1e-9), s = Math.min(sx, sy);
+			return { x: c.x + dx * s, y: c.y + dy * s };
+		}
+		function drawEdges() {
+			edgeLayer.textContent = '';
+			g.edges.forEach(function (e) {
+				var a = g.nodes[e.from], b = g.nodes[e.to];
+				var p1 = border(a, center(b)), p2 = border(b, center(a));
+				var d;
+				if (a === b) { d = 'M' + (a.x + a.w) + ',' + (a.y + 14) + ' c40,-30 40,50 0,' + (a.h - 28); }
+				else { var mx = (p1.x + p2.x) / 2, my = (p1.y + p2.y) / 2; d = 'M' + p1.x + ',' + p1.y + ' Q' + (mx + (p2.y - p1.y) * 0.08) + ',' + (my - (p2.x - p1.x) * 0.08) + ' ' + p2.x + ',' + p2.y; }
+				edgeLayer.appendChild(svgEl('path', { d: d, fill: 'none', stroke: T.line, 'stroke-width': '2', 'marker-end': 'url(#dm-arrow)' }));
+				if (e.label) {
+					var lx = (p1.x + p2.x) / 2, ly = (p1.y + p2.y) / 2;
+					var t = svgEl('text', { x: lx, y: ly + 4, 'text-anchor': 'middle', 'font-size': '12', 'font-family': 'system-ui, sans-serif', fill: T.text, 'font-weight': '600' }, e.label);
+					var w = Math.min(220, e.label.length * 7 + 12);
+					edgeLayer.appendChild(svgEl('rect', { x: lx - w / 2, y: ly - 10, width: w, height: 20, rx: 6, fill: T.bg, stroke: T.line, 'stroke-width': '1' }));
+					edgeLayer.appendChild(t);
+				}
+			});
+		}
+		g.order.forEach(function (id) {
+			var n = g.nodes[id], grp = svgEl('g', { class: 'dm-node', tabindex: '0', transform: 'translate(' + n.x + ',' + n.y + ')' });
+			grp.setAttribute('aria-label', n.label);
+			var fill = n.shape === 'dec' ? T.dec : n.shape === 'db' ? T.db : T.fill;
+			var stroke = n.shape === 'dec' ? T.decS : n.shape === 'db' ? T.dbS : T.stroke;
+			if (n.shape === 'dec') grp.appendChild(svgEl('polygon', { points: [n.w / 2, 0, n.w, n.h / 2, n.w / 2, n.h, 0, n.h / 2].join(','), fill: fill, stroke: stroke, 'stroke-width': '2' }));
+			else if (n.shape === 'round') grp.appendChild(svgEl('rect', { x: 0, y: 0, width: n.w, height: n.h, rx: n.h / 2, fill: fill, stroke: stroke, 'stroke-width': '2' }));
+			else if (n.shape === 'db') { grp.appendChild(svgEl('path', { d: 'M0,10 v' + (n.h - 20) + ' a' + n.w / 2 + ',10 0 0,0 ' + n.w + ',0 v-' + (n.h - 20) + ' a' + n.w / 2 + ',10 0 0,0 -' + n.w + ',0 a' + n.w / 2 + ',10 0 0,0 ' + n.w + ',0', fill: fill, stroke: stroke, 'stroke-width': '2' })); }
+			else grp.appendChild(svgEl('rect', { x: 0, y: 0, width: n.w, height: n.h, rx: 10, fill: fill, stroke: stroke, 'stroke-width': '2' }));
+			var lines = wrapText(n.label, n.shape === 'dec' ? 14 : 20);
+			lines.forEach(function (ln, i) {
+				grp.appendChild(svgEl('text', { x: n.w / 2, y: n.h / 2 + 5 + (i - (lines.length - 1) / 2) * 15, 'text-anchor': 'middle', 'font-size': '13', 'font-family': 'system-ui, sans-serif', 'font-weight': '600', fill: T.text }, ln));
+			});
+			nodeLayer.appendChild(grp);
+			// Drag to move.
+			var start = null;
+			grp.addEventListener('pointerdown', function (ev) {
+				var pt = svg.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
+				var p = pt.matrixTransform(svg.getScreenCTM().inverse());
+				start = { x: p.x - n.x, y: p.y - n.y }; grp.setPointerCapture(ev.pointerId); grp.classList.add('is-drag');
+			});
+			grp.addEventListener('pointermove', function (ev) {
+				if (!start) return;
+				var pt = svg.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
+				var p = pt.matrixTransform(svg.getScreenCTM().inverse());
+				n.x = Math.max(0, p.x - start.x); n.y = Math.max(0, p.y - start.y);
+				grp.setAttribute('transform', 'translate(' + n.x + ',' + n.y + ')'); drawEdges();
+			});
+			grp.addEventListener('pointerup', function () { start = null; grp.classList.remove('is-drag'); fit(); });
+			grp.addEventListener('keydown', function (ev) {
+				var step = { ArrowLeft: [-10, 0], ArrowRight: [10, 0], ArrowUp: [0, -10], ArrowDown: [0, 10] }[ev.key];
+				if (!step) return; ev.preventDefault();
+				n.x = Math.max(0, n.x + step[0]); n.y = Math.max(0, n.y + step[1]);
+				grp.setAttribute('transform', 'translate(' + n.x + ',' + n.y + ')'); drawEdges(); fit();
+			});
+		});
+		function fit() {
+			var w = 200, h = 120;
+			g.order.forEach(function (id) { var n = g.nodes[id]; w = Math.max(w, n.x + n.w + 60); h = Math.max(h, n.y + n.h + 40); });
+			svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
+			svg.setAttribute('width', w); svg.setAttribute('height', h);
+		}
+		drawEdges(); fit();
+	}
+	function toMermaid(g, dir) {
+		var ids = {}; g.order.forEach(function (id, i) { ids[id] = 'n' + i; });
+		var q = function (s) { return s.replace(/"/g, "'"); };
+		var lines = ['flowchart ' + (dir === 'LR' ? 'LR' : 'TD')];
+		g.order.forEach(function (id) {
+			var n = g.nodes[id], L = q(n.label);
+			lines.push('  ' + ids[id] + (n.shape === 'dec' ? '{"' + L + '"}' : n.shape === 'round' ? '(["' + L + '"])' : n.shape === 'db' ? '[("' + L + '")]' : '["' + L + '"]'));
+		});
+		g.edges.forEach(function (e) { lines.push('  ' + ids[e.from] + ' -->' + (e.label ? '|"' + q(e.label) + '"|' : '') + ' ' + ids[e.to]); });
+		return lines.join('\n');
+	}
+	tools['diagram-maker'] = function (host) {
+		var src = area(store('diagram') || TEMPLATES['Login flow'], 14, 'Diagram text');
+		var tpl = el('select'); tpl.setAttribute('aria-label', 'Template');
+		tpl.appendChild(el('option', '', 'Templates…'));
+		Object.keys(TEMPLATES).forEach(function (k) { tpl.appendChild(el('option', '', k)); });
+		var theme = el('select'); theme.setAttribute('aria-label', 'Colour theme');
+		Object.keys(THEMES).forEach(function (k) { theme.appendChild(el('option', '', k)); });
+		theme.value = store('diagram-theme') || 'Mint';
+		var dir = el('select'); dir.setAttribute('aria-label', 'Direction');
+		[['TB', 'Top → bottom'], ['LR', 'Left → right']].forEach(function (d) { var o = el('option', '', d[1]); o.value = d[0]; dir.appendChild(o); });
+		var bPng = btn('⬇ PNG', 'btn-primary'), bSvg = btn('⬇ SVG'), bMer = btn('📋 Mermaid code'), bRe = btn('↺ Re-arrange');
+		var bar = el('div', 'tool-bar'); [tpl, theme, dir, bRe, bPng, bSvg, bMer].forEach(function (x) { bar.appendChild(x); });
+		var msg = el('p', 'tool-note');
+		var wrap = el('div', 'dm-canvas'); var svg = svgEl('svg', { role: 'img', 'aria-label': 'Your diagram' }); wrap.appendChild(svg);
+		var help = el('p', 'tool-note', 'Write one arrow per line: "A -> B" or "A -> B: label". End a name with ? for a decision diamond, wrap it in (( )) for start/end, or [[ ]] for a database. Drag boxes to move them (or focus one and use the arrow keys).');
+		var grid = el('div', 'dm-grid');
+		grid.appendChild(panel('Diagram text', src));
+		grid.appendChild(panel('Preview', wrap));
+		host.appendChild(bar); host.appendChild(grid); host.appendChild(msg); host.appendChild(help);
+		var g = null, timer = 0;
+		function render() {
+			g = parseDiagram(src.value);
+			layout(g, dir.value);
+			drawDiagram(svg, g, theme.value);
+			msg.textContent = g.order.length + ' boxes · ' + g.edges.length + ' arrows' + (g.errors.length ? ' · could not read line ' + g.errors.slice(0, 3).join(', ') : '');
+			store('diagram', src.value); store('diagram-theme', theme.value);
+		}
+		src.addEventListener('input', function () { clearTimeout(timer); timer = setTimeout(render, 250); });
+		[theme, dir].forEach(function (s) { s.addEventListener('change', render); });
+		bRe.addEventListener('click', render);
+		tpl.addEventListener('change', function () { if (TEMPLATES[tpl.value]) { src.value = TEMPLATES[tpl.value]; render(); } tpl.selectedIndex = 0; });
+		function svgText() { var c = svg.cloneNode(true); c.setAttribute('xmlns', NS); return '<?xml version="1.0" encoding="UTF-8"?>\n' + new XMLSerializer().serializeToString(c); }
+		bSvg.addEventListener('click', function () { save('diagram.svg', new Blob([svgText()], { type: 'image/svg+xml' })); award('diagram'); });
+		bPng.addEventListener('click', function () {
+			var img = new Image(), url = URL.createObjectURL(new Blob([svgText()], { type: 'image/svg+xml' }));
+			img.onload = function () {
+				var scale = 2, c = document.createElement('canvas');
+				c.width = svg.viewBox.baseVal.width * scale; c.height = svg.viewBox.baseVal.height * scale;
+				var ctx = c.getContext('2d'); ctx.scale(scale, scale); ctx.drawImage(img, 0, 0);
+				URL.revokeObjectURL(url);
+				c.toBlob(function (b) { if (b) save('diagram.png', b); }, 'image/png');
+				award('diagram');
+			};
+			img.src = url;
+		});
+		bMer.addEventListener('click', function () { if (g) copy(toMermaid(g, dir.value), bMer); });
+		render();
+	};
+
+	/* ── Password generator ────────────────────────────────────────────── */
+	var WORDS = 'apple river tiger mango cloud pencil rocket garden silver monsoon chai bridge orbit candle desert falcon guitar harbor island jungle kettle lantern meadow nectar ocean pepper quartz rainbow saffron temple umbrella valley walnut yogurt zebra comet planet coral ember fable glacier honey ivory jasmine kite lotus marble nimbus olive pixel quiver rose spice thunder velvet willow lemon tulip cricket bamboo cactus dolphin eagle ferry ginger hammer igloo jacket koala ladder magnet noodle opal parrot quilt raven salt'.split(' ');
+	function rand(n) { var a = new Uint32Array(1); crypto.getRandomValues(a); return a[0] % n; }
+	function strength(pw) {
+		var pool = 0;
+		if (/[a-z]/.test(pw)) pool += 26; if (/[A-Z]/.test(pw)) pool += 26; if (/\d/.test(pw)) pool += 10; if (/[^A-Za-z0-9]/.test(pw)) pool += 33;
+		var bits = pw.length * Math.log2(pool || 1);
+		if (/(.)\1{2,}/.test(pw) || /^(?:password|qwerty|123456|admin|welcome|iloveyou)/i.test(pw)) bits *= 0.4;
+		if (/^[A-Z]?[a-z]+[@#!$]?\d{2,4}[@#!$]?$/.test(pw)) bits = Math.min(bits, 30); // Name@1998 style
+		return bits;
+	}
+	function crackTime(bits) {
+		var secs = Math.pow(2, bits) / 1e10 / 2; // 10 billion guesses per second, on average half the space
+		if (secs > 31536000 * 1e10) return 'longer than the age of the universe';
+		var units = [[31536000 * 1e6, 'million years'], [31536000 * 1000, 'thousand years'], [31536000, 'years'], [86400, 'days'], [3600, 'hours'], [60, 'minutes'], [1, 'seconds']];
+		for (var i = 0; i < units.length; i++) if (secs >= units[i][0]) return Math.round(secs / units[i][0]).toLocaleString('en-IN') + ' ' + units[i][1];
+		return 'instantly';
+	}
+	tools['password-generator'] = function (host) {
+		var mode = el('select'); [['phrase', 'Passphrase (words)'], ['chars', 'Random characters']].forEach(function (m) { var o = el('option', '', m[1]); o.value = m[0]; mode.appendChild(o); });
+		var len = input('range', '5', { min: '3', max: '40' }), lenOut = el('span', 'tool-status');
+		var opts = el('div', 'tool-bar');
+		var cU = input('checkbox'), cD = input('checkbox'), cS = input('checkbox'); cU.checked = cD.checked = cS.checked = true;
+		[[cU, 'A–Z'], [cD, '0–9'], [cS, '!@#']].forEach(function (p) { var l = el('label', 'dt-check'); l.appendChild(p[0]); l.appendChild(document.createTextNode(' ' + p[1])); opts.appendChild(l); });
+		var out = el('output', 'dt-pass'); out.setAttribute('aria-live', 'polite');
+		var gen = btn('🎲 Generate', 'btn-primary'), cp = btn('📋 Copy');
+		var bar = el('div', 'tool-bar'); [mode, len, lenOut, gen, cp].forEach(function (x) { bar.appendChild(x); });
+		var test = input('text', '', { placeholder: 'Or type a password to test its strength (it never leaves this page)', autocomplete: 'off', 'aria-label': 'Password to test' });
+		var meter = el('div', 'dt-meter'), meterBar = el('span'); meter.appendChild(meterBar);
+		var verdict = el('p', 'tool-note');
+		host.appendChild(bar); host.appendChild(opts); host.appendChild(out); host.appendChild(field('Test a password', test)); host.appendChild(meter); host.appendChild(verdict);
+		function make() {
+			var n = +len.value, pw;
+			if (mode.value === 'phrase') { var w = []; for (var i = 0; i < n; i++) w.push(WORDS[rand(WORDS.length)]); if (cD.checked) w.push(String(rand(90) + 10)); pw = w.join(cS.checked ? '-' : ' '); if (cU.checked) pw = pw.charAt(0).toUpperCase() + pw.slice(1); }
+			else { var set = 'abcdefghijkmnopqrstuvwxyz' + (cU.checked ? 'ABCDEFGHJKLMNPQRSTUVWXYZ' : '') + (cD.checked ? '23456789' : '') + (cS.checked ? '!@#$%^&*-_=+?' : ''); pw = ''; for (var k = 0; k < n; k++) pw += set[rand(set.length)]; }
+			out.textContent = pw; show(pw);
+		}
+		function show(pw) {
+			var bits = strength(pw), pct = Math.min(100, bits / 1.2);
+			meterBar.style.width = pct + '%'; meterBar.className = bits < 40 ? 'is-weak' : bits < 70 ? 'is-ok' : 'is-strong';
+			verdict.textContent = pw ? (bits < 40 ? '❌ Weak' : bits < 70 ? '⚠️ OK' : '✅ Strong') + ' · about ' + Math.round(bits) + ' bits · a fast cracking rig would need ' + crackTime(bits) + '.' : '';
+		}
+		function syncLen() { if (mode.value === 'phrase') { len.min = 3; len.max = 10; if (+len.value > 10) len.value = 5; lenOut.textContent = len.value + ' words'; } else { len.min = 8; len.max = 40; if (+len.value < 8) len.value = 16; lenOut.textContent = len.value + ' characters'; } }
+		mode.addEventListener('change', function () { syncLen(); make(); }); len.addEventListener('input', function () { syncLen(); make(); });
+		[cU, cD, cS].forEach(function (c) { c.addEventListener('change', make); });
+		gen.addEventListener('click', make); cp.addEventListener('click', function () { copy(out.textContent, cp); });
+		test.addEventListener('input', function () { show(test.value); });
+		syncLen(); make(); award('password');
+	};
+
+	/* ── JWT decoder ───────────────────────────────────────────────────── */
+	function b64urlDecode(s) { s = s.replace(/-/g, '+').replace(/_/g, '/'); while (s.length % 4) s += '='; var bin = atob(s), bytes = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i); return new TextDecoder().decode(bytes); }
+	// A made-up example token (its signature is fake on purpose).
+	var SAMPLE_JWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyXzQyIiwibmFtZSI6IkFzaGEiLCJyb2xlIjoic3R1ZGVudCIsImlhdCI6MTc2NzIyNTYwMCwiZXhwIjoxODkzNDU2MDAwfQ.c2FtcGxlLXNpZ25hdHVyZS1ub3QtcmVhbA';
+	tools['jwt-decoder'] = function (host) {
+		var src = area('', 5, 'JWT'); src.placeholder = 'Paste a JWT (eyJ…). It is decoded only in your browser.';
+		var head = el('pre', 'dt-out'), body = el('pre', 'dt-out'), info = el('p', 'tool-note');
+		var g = el('div', 'tool-grid'); g.appendChild(panel('Header', head)); g.appendChild(panel('Payload', body));
+		host.appendChild(panel('Token', src)); host.appendChild(info); host.appendChild(g);
+		function run() {
+			var t = src.value.trim(); head.textContent = body.textContent = ''; info.textContent = '';
+			if (!t) return;
+			var parts = t.split('.');
+			if (parts.length !== 3) { info.textContent = '❌ A JWT has three parts separated by dots.'; return; }
+			try {
+				var h = JSON.parse(b64urlDecode(parts[0])), p = JSON.parse(b64urlDecode(parts[1]));
+				head.textContent = JSON.stringify(h, null, 2); body.textContent = JSON.stringify(p, null, 2);
+				var notes = ['Algorithm: ' + (h.alg || '?')];
+				if (h.alg === 'none') notes.push('⚠️ alg "none" means unsigned: never accept such tokens.');
+				if (p.exp) { var d = new Date(p.exp * 1000); notes.push((d < new Date() ? '❌ Expired ' : '✅ Expires ') + d.toLocaleString('en-IN')); }
+				if (p.iat) notes.push('Issued ' + new Date(p.iat * 1000).toLocaleString('en-IN'));
+				notes.push('The signature is not checked here: decoding is not verifying.');
+				info.textContent = notes.join(' · ');
+			} catch (e) { info.textContent = '❌ This does not look like a valid JWT.'; }
+		}
+		var sample = btn('Try a sample token'); sample.addEventListener('click', function () { src.value = SAMPLE_JWT; run(); });
+		info.parentNode.insertBefore(sample, info);
+		src.value = SAMPLE_JWT; src.addEventListener('input', run); run(); award('jwt');
+	};
+
+	/* ── Base64 and URL encoder ────────────────────────────────────────── */
+	function toB64(s) { var bytes = new TextEncoder().encode(s), bin = ''; bytes.forEach(function (b) { bin += String.fromCharCode(b); }); return btoa(bin); }
+	function fromB64(s) { var bin = atob(s.replace(/\s+/g, '')), bytes = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i); return new TextDecoder().decode(bytes); }
+	tools['base64-encoder'] = function (host) {
+		var src = area('नमस्ते VitalStack! 👋', 6, 'Input'), out = area('', 6, 'Output'); out.readOnly = true;
+		var bar = el('div', 'tool-bar'), msg = el('p', 'tool-note');
+		var acts = { 'Base64 encode': toB64, 'Base64 decode': fromB64, 'URL encode': encodeURIComponent, 'URL decode': decodeURIComponent };
+		Object.keys(acts).forEach(function (k, i) { var b = btn(k, i ? 'btn-ghost' : 'btn-primary'); b.addEventListener('click', function () { try { out.value = acts[k](src.value); msg.textContent = ''; } catch (e) { msg.textContent = '❌ That input cannot be ' + k.split(' ')[1] + 'd. Check it is complete.'; } }); bar.appendChild(b); });
+		var cp = btn('📋 Copy output'); cp.addEventListener('click', function () { copy(out.value, cp); }); bar.appendChild(cp);
+		var g = el('div', 'tool-grid'); g.appendChild(panel('Input', src)); g.appendChild(panel('Output', out));
+		host.appendChild(bar); host.appendChild(g); host.appendChild(msg);
+		out.value = toB64(src.value); award('base64');
+	};
+
+	/* ── Hash generator ────────────────────────────────────────────────── */
+	tools['hash-generator'] = function (host) {
+		var src = area('hello', 5, 'Text to hash'); var t = el('table', 'dt-table dt-hash');
+		host.appendChild(panel('Text', src)); host.appendChild(el('div', 'tool-scroll')).appendChild(t);
+		host.appendChild(el('p', 'tool-note', 'Hashes are one-way fingerprints: the same input always gives the same hash, and a tiny change gives a completely different one. Passwords must be stored with slow, salted algorithms (bcrypt, Argon2), not plain SHA.'));
+		function hex(buf) { return Array.prototype.map.call(new Uint8Array(buf), function (b) { return ('0' + b.toString(16)).slice(-2); }).join(''); }
+		function run() {
+			if (!window.crypto || !crypto.subtle) { rows(t, [['Hashing needs a secure (https) page.', '']]); return; }
+			var data = new TextEncoder().encode(src.value);
+			Promise.all(['SHA-1', 'SHA-256', 'SHA-384', 'SHA-512'].map(function (a) { return crypto.subtle.digest(a, data).then(function (h) { return [a, hex(h)]; }); })).then(function (r) { rows(t, r, ['Algorithm', 'Hash (hex)']); });
+		}
+		src.addEventListener('input', run); run(); award('hash');
+	};
+
+	/* ── Timestamp converter ───────────────────────────────────────────── */
+	tools['timestamp-converter'] = function (host) {
+		var ts = input('text', String(Math.floor(Date.now() / 1000)), { inputmode: 'numeric', 'aria-label': 'Unix timestamp' });
+		var dtIn = input('datetime-local', '', { 'aria-label': 'Date and time' });
+		var now = btn('Now', 'btn-primary'), t = el('table', 'dt-table');
+		var f = el('div', 'tool-form'); f.appendChild(field('Unix timestamp (seconds or milliseconds)', ts)); f.appendChild(field('Or pick a date and time (your local time)', dtIn));
+		var bar = el('div', 'tool-bar'); bar.appendChild(now);
+		host.appendChild(bar); host.appendChild(panel('Convert', f)); host.appendChild(el('div', 'tool-scroll')).appendChild(t);
+		function show(ms) {
+			if (!isFinite(ms)) { rows(t, [['❌ Not a valid time', '']]); return; }
+			var d = new Date(ms);
+			rows(t, [
+				['Unix seconds', String(Math.floor(ms / 1000))], ['Unix milliseconds', String(ms)],
+				['India (IST)', d.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'full', timeStyle: 'long' })],
+				['UTC', d.toUTCString()], ['ISO 8601', d.toISOString()],
+				['Relative', (function () { var s = Math.round((ms - Date.now()) / 1000), a = Math.abs(s), u = a < 60 ? [a, 'seconds'] : a < 3600 ? [Math.round(a / 60), 'minutes'] : a < 86400 ? [Math.round(a / 3600), 'hours'] : [Math.round(a / 86400), 'days']; return s >= 0 ? 'in ' + u[0] + ' ' + u[1] : u[0] + ' ' + u[1] + ' ago'; })()]
+			], ['Format', 'Value']);
+		}
+		ts.addEventListener('input', function () { var v = ts.value.trim(); if (!/^-?\d+$/.test(v)) { rows(t, [['❌ Digits only', '']]); return; } var n = +v; show(Math.abs(n) > 1e11 ? n : n * 1000); });
+		dtIn.addEventListener('input', function () { var ms = new Date(dtIn.value).getTime(); ts.value = String(Math.floor(ms / 1000)); show(ms); });
+		now.addEventListener('click', function () { var ms = Date.now(); ts.value = String(Math.floor(ms / 1000)); show(ms); });
+		show(Date.now()); award('timestamp');
+	};
+
+	/* ── Cron explainer ────────────────────────────────────────────────── */
+	var DOW = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], MON = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+	function cronField(f, min, max) {
+		var set = {};
+		f.split(',').forEach(function (part) {
+			var m = part.match(/^(\*|\d+(?:-\d+)?)(?:\/(\d+))?$/);
+			if (!m) throw new Error('bad');
+			var lo = min, hi = max, step = m[2] ? +m[2] : 1;
+			if (m[1] !== '*') { var r = m[1].split('-'); lo = +r[0]; hi = r[1] !== undefined ? +r[1] : (m[2] ? max : lo); }
+			if (lo < min || hi > max || lo > hi || step < 1) throw new Error('range');
+			for (var v = lo; v <= hi; v += step) set[v] = 1;
+		});
+		return Object.keys(set).map(Number);
+	}
+	function describe(f, unit, names) {
+		if (f === '*') return 'every ' + unit;
+		if (/^\*\/\d+$/.test(f)) return 'every ' + f.slice(2) + ' ' + unit + 's';
+		return unit + ' ' + f.split(',').map(function (x) { return names ? x.split('-').map(function (y) { return names[+y] || y; }).join(' to ') : x; }).join(', ');
+	}
+	tools['cron-explainer'] = function (host) {
+		var src = input('text', '30 9 * * 1-5', { 'aria-label': 'Cron expression', spellcheck: 'false' });
+		var presets = el('div', 'tool-bar');
+		[['30 9 * * 1-5', 'Weekdays 9:30'], ['0 * * * *', 'Every hour'], ['*/15 * * * *', 'Every 15 min'], ['0 0 1 * *', 'Monthly'], ['0 22 * * 0', 'Sunday night']].forEach(function (p) { var b = btn(p[1]); b.addEventListener('click', function () { src.value = p[0]; run(); }); presets.appendChild(b); });
+		var say = el('p', 'tool-big dt-cron-say'), list = el('ol', 'dt-list');
+		host.appendChild(field('Cron expression (minute hour day month weekday)', src)); host.appendChild(presets); host.appendChild(say);
+		host.appendChild(el('h3', '', 'Next 5 runs (your local time)')); host.appendChild(list);
+		function run() {
+			var p = src.value.trim().split(/\s+/); list.textContent = '';
+			if (p.length !== 5) { say.textContent = '❌ A cron expression has 5 parts.'; return; }
+			try {
+				var mi = cronField(p[0], 0, 59), h = cronField(p[1], 0, 23), dom = cronField(p[2], 1, 31), mon = cronField(p[3], 1, 12), dow = cronField(p[4].replace(/\b7\b/g, '0'), 0, 6);
+				var at = (p[0] !== '*' && !/[,\/-]/.test(p[0]) && p[1] !== '*' && !/[,\/-]/.test(p[1])) ? 'At ' + ('0' + p[1]).slice(-2) + ':' + ('0' + p[0]).slice(-2) : 'At ' + describe(p[0], 'minute') + ', ' + describe(p[1], 'hour');
+				var parts = [at];
+				if (p[2] !== '*') parts.push('on ' + describe(p[2], 'day-of-month'));
+				if (p[3] !== '*') parts.push('in ' + describe(p[3], 'month', MON).replace(/^month /, ''));
+				if (p[4] !== '*') parts.push('on ' + describe(p[4].replace(/\b7\b/g, '0'), 'day', DOW).replace(/^day /, ''));
+				say.textContent = parts.join(' ') + '.';
+				var d = new Date(); d.setSeconds(0, 0); d.setMinutes(d.getMinutes() + 1);
+				var found = 0, guard = 0;
+				while (found < 5 && guard++ < 200000) {
+					var domOk = p[2] === '*' || dom.indexOf(d.getDate()) > -1, dowOk = p[4] === '*' || dow.indexOf(d.getDay()) > -1;
+					var dayOk = (p[2] !== '*' && p[4] !== '*') ? (domOk || dowOk) : (domOk && dowOk);
+					// Jump a whole day or hour when it cannot match, so rare schedules stay fast.
+					if (mon.indexOf(d.getMonth() + 1) < 0 || !dayOk) { d.setDate(d.getDate() + 1); d.setHours(0, 0, 0, 0); continue; }
+					if (h.indexOf(d.getHours()) < 0) { d.setHours(d.getHours() + 1, 0, 0, 0); continue; }
+					if (mi.indexOf(d.getMinutes()) > -1) { list.appendChild(el('li', '', d.toLocaleString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }))); found++; }
+					d.setMinutes(d.getMinutes() + 1);
+				}
+				if (!found) list.appendChild(el('li', '', 'No run found in the next few years: check the day and month (for example, 31 February never happens).'));
+			} catch (e) { say.textContent = '❌ One part is not valid. Use numbers, *, ranges like 1-5, lists like 1,15 and steps like */10.'; }
+		}
+		src.addEventListener('input', run); run(); award('cron');
+	};
+
+	/* ── Text diff ─────────────────────────────────────────────────────── */
+	function diffLines(a, b) {
+		var n = a.length, m = b.length;
+		if (n * m > 4e6) return null;
+		var L = []; for (var i = 0; i <= n; i++) { L.push(new Uint16Array(m + 1)); }
+		for (i = n - 1; i >= 0; i--) for (var j = m - 1; j >= 0; j--) L[i][j] = a[i] === b[j] ? L[i + 1][j + 1] + 1 : Math.max(L[i + 1][j], L[i][j + 1]);
+		var out = []; i = 0; j = 0;
+		while (i < n && j < m) { if (a[i] === b[j]) { out.push([' ', a[i]]); i++; j++; } else if (L[i + 1][j] >= L[i][j + 1]) { out.push(['-', a[i]]); i++; } else { out.push(['+', b[j]]); j++; } }
+		while (i < n) out.push(['-', a[i++]]); while (j < m) out.push(['+', b[j++]]);
+		return out;
+	}
+	tools['text-diff'] = function (host) {
+		var a = area('name = "Asha"\ncity = "Pune"\nprint(name)', 8, 'Original'), b = area('name = "Asha"\ncity = "Mumbai"\nprint(name, city)', 8, 'Changed');
+		var g = el('div', 'tool-grid'); g.appendChild(panel('Original', a)); g.appendChild(panel('Changed', b));
+		var out = el('div', 'dt-diff'), sum = el('p', 'tool-note');
+		host.appendChild(g); host.appendChild(sum); host.appendChild(out);
+		function run() {
+			var d = diffLines(a.value.split('\n'), b.value.split('\n')); out.textContent = '';
+			if (!d) { sum.textContent = '❌ The texts are too long to compare here.'; return; }
+			var add = 0, del = 0;
+			d.forEach(function (x) { var ln = el('div', 'dt-dl ' + (x[0] === '+' ? 'is-add' : x[0] === '-' ? 'is-del' : '')); ln.appendChild(el('span', 'dt-dl-s', x[0])); ln.appendChild(el('span', '', x[1] || ' ')); out.appendChild(ln); if (x[0] === '+') add++; if (x[0] === '-') del++; });
+			sum.textContent = add + ' lines added · ' + del + ' lines removed';
+		}
+		[a, b].forEach(function (t) { t.addEventListener('input', run); }); run(); award('diff');
+	};
+
+	/* ── Token counter ─────────────────────────────────────────────────── */
+	function estTokens(s) { var words = (s.match(/\S+/g) || []).length, chars = s.length; var nonLatin = (s.match(/[^\u0000-ɏ\s]/g) || []).length; return Math.round(Math.max(words * 1.3, chars / 4) + nonLatin * 0.8); }
+	tools['token-counter'] = function (host) {
+		var src = area('Explain retrieval-augmented generation to a beginner in five bullet points, with one real-life example.', 8, 'Prompt');
+		var price = input('number', '3', { min: '0', step: '0.01', 'aria-label': 'Input price per million tokens in dollars' });
+		var t = el('table', 'dt-table');
+		host.appendChild(panel('Your prompt or text', src)); host.appendChild(field('Example input price ($ per million tokens)', price)); host.appendChild(el('div', 'tool-scroll')).appendChild(t);
+		host.appendChild(el('p', 'tool-note', 'Token counts are an estimate: each AI provider splits text slightly differently, and Hindi and other non-Latin scripts usually use more tokens per word. Use your provider\'s own counter for exact numbers.'));
+		function run() {
+			var s = src.value, tok = estTokens(s), p = +price.value || 0;
+			rows(t, [['Characters', s.length.toLocaleString('en-IN')], ['Words', ((s.match(/\S+/g) || []).length).toLocaleString('en-IN')], ['Estimated tokens', '≈ ' + tok.toLocaleString('en-IN')], ['Cost for 1 request', '$' + (tok / 1e6 * p).toFixed(6)], ['Cost for 10,000 requests', '$' + (tok / 1e6 * p * 10000).toFixed(2)]], ['Measure', 'Value']);
+		}
+		[src, price].forEach(function (x) { x.addEventListener('input', run); }); run(); award('tokens');
+	};
+
+	/* ── Colour contrast checker ───────────────────────────────────────── */
+	function lum(hex) { var c = hex.replace('#', ''); if (c.length === 3) c = c.split('').map(function (x) { return x + x; }).join(''); var v = [0, 2, 4].map(function (i) { var x = parseInt(c.substr(i, 2), 16) / 255; return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4); }); return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2]; }
+	tools['color-contrast-checker'] = function (host) {
+		var fg = input('color', '#1b1f27', { 'aria-label': 'Text colour' }), bg = input('color', '#ffffff', { 'aria-label': 'Background colour' });
+		var f = el('div', 'tool-form'); f.appendChild(field('Text colour', fg)); f.appendChild(field('Background colour', bg));
+		var sample = el('div', 'dt-contrast'); sample.appendChild(el('p', 'dt-contrast-big', 'Large heading text')); sample.appendChild(el('p', '', 'Normal body text: can everyone read this comfortably?'));
+		var big = el('p', 'tool-big'), t = el('table', 'dt-table');
+		host.appendChild(panel('Colours', f)); host.appendChild(sample); host.appendChild(big); host.appendChild(t);
+		function run() {
+			var a = lum(fg.value), b = lum(bg.value), r = (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+			sample.style.color = fg.value; sample.style.background = bg.value;
+			big.textContent = r.toFixed(2) + ' : 1';
+			rows(t, [['Normal text, AA (4.5:1)', r >= 4.5 ? '✅ Pass' : '❌ Fail'], ['Large text, AA (3:1)', r >= 3 ? '✅ Pass' : '❌ Fail'], ['Normal text, AAA (7:1)', r >= 7 ? '✅ Pass' : '❌ Fail'], ['Large text, AAA (4.5:1)', r >= 4.5 ? '✅ Pass' : '❌ Fail']], ['WCAG check', 'Result']);
+		}
+		[fg, bg].forEach(function (x) { x.addEventListener('input', run); }); run(); award('contrast');
+	};
+
+	/* ── UUID generator ────────────────────────────────────────────────── */
+	function uuid() { if (crypto.randomUUID) return crypto.randomUUID(); var b = new Uint8Array(16); crypto.getRandomValues(b); b[6] = (b[6] & 15) | 64; b[8] = (b[8] & 63) | 128; var h = Array.prototype.map.call(b, function (x) { return ('0' + x.toString(16)).slice(-2); }).join(''); return h.slice(0, 8) + '-' + h.slice(8, 12) + '-' + h.slice(12, 16) + '-' + h.slice(16, 20) + '-' + h.slice(20); }
+	tools['uuid-generator'] = function (host) {
+		var n = input('number', '5', { min: '1', max: '100', 'aria-label': 'How many' }), up = input('checkbox');
+		var out = area('', 8, 'UUIDs'); out.readOnly = true;
+		var gen = btn('🎲 Generate', 'btn-primary'), cp = btn('📋 Copy all');
+		var bar = el('div', 'tool-bar'); bar.appendChild(field('How many', n)); var l = el('label', 'dt-check'); l.appendChild(up); l.appendChild(document.createTextNode(' UPPERCASE')); bar.appendChild(l); bar.appendChild(gen); bar.appendChild(cp);
+		host.appendChild(bar); host.appendChild(panel('UUID v4', out));
+		function run() { var k = Math.max(1, Math.min(100, +n.value || 1)), list = []; for (var i = 0; i < k; i++) list.push(up.checked ? uuid().toUpperCase() : uuid()); out.value = list.join('\n'); }
+		gen.addEventListener('click', run); up.addEventListener('change', run); cp.addEventListener('click', function () { copy(out.value, cp); }); run(); award('uuid');
+	};
+
+	/* ── Link safety checker ───────────────────────────────────────────── */
+	var BRANDS = ['sbi', 'hdfc', 'icici', 'axis', 'kotak', 'paytm', 'phonepe', 'gpay', 'google', 'amazon', 'flipkart', 'netflix', 'instagram', 'facebook', 'whatsapp', 'apple', 'microsoft', 'irctc', 'incometax', 'uidai', 'epfo', 'npci', 'bhim', 'jio', 'airtel'];
+	var SHORT = ['bit.ly', 'tinyurl.com', 'cutt.ly', 't.co', 'is.gd', 'rb.gy', 'shorturl.at', 'tiny.cc', 'ow.ly', 's.id'];
+	function checkLink(raw) {
+		var flags = [], good = [], u;
+		var s = raw.trim();
+		if (!/^[a-z][a-z0-9+.-]*:/i.test(s)) s = 'http://' + s;
+		try { u = new URL(s); } catch (e) { return { error: true }; }
+		var host = u.hostname.toLowerCase(), parts = host.split('.');
+		var reg = parts.slice(-2).join('.');
+		if (/\.(co|gov|nic|ac|org|net|edu)\.in$/.test(host)) reg = parts.slice(-3).join('.');
+		if (u.protocol !== 'https:') flags.push(['Not HTTPS: the connection is not encrypted.', 2]); else good.push('Uses HTTPS (encrypted, though scam sites can have it too).');
+		if (/^\d+\.\d+\.\d+\.\d+$/.test(host) || host.indexOf(':') > -1) flags.push(['The address is a raw IP number, not a name. Real companies use names.', 3]);
+		if (u.username || /@/.test(raw.split('?')[0])) flags.push(['Contains "@": everything before it is ignored by the browser, a classic trick.', 3]);
+		if (host.indexOf('xn--') > -1) flags.push(['Uses look-alike international letters (punycode): it may imitate a famous name.', 3]);
+		if (SHORT.indexOf(host) > -1) flags.push(['A link shortener hides the real destination. Expand it before trusting it.', 2]);
+		if (parts.length > 4) flags.push(['Many sub-domains (' + parts.length + ' parts): the real site is "' + reg + '", not what appears first.', 2]);
+		var hit = BRANDS.filter(function (b) { return host.indexOf(b) > -1; })[0];
+		if (hit && reg.indexOf(hit) === -1) flags.push(['Mentions "' + hit + '" but the real domain is "' + reg + '". This is how fake bank and shopping links look.', 3]);
+		if (/[0-9]/.test(reg.split('.')[0]) && hit === undefined && /[a-z]/.test(reg)) {
+			var swapped = reg.replace(/0/g, 'o').replace(/1/g, 'l').replace(/3/g, 'e').replace(/5/g, 's');
+			if (BRANDS.some(function (b) { return swapped.indexOf(b) > -1; })) flags.push(['Numbers swapped for letters (like amaz0n): a look-alike domain.', 3]);
+		}
+		if (/\.(xyz|top|online|site|click|shop|live|buzz|icu|monster|rest|cam|work|loan)$/.test(host)) flags.push(['The ending ".' + parts[parts.length - 1] + '" is cheap and popular with scam sites. Be extra careful.', 1]);
+		if (/(kyc|verify|update|refund|reward|bonus|prize|lottery|free|claim|blocked|suspend)/i.test(host + u.pathname)) flags.push(['Words like KYC, refund, reward or blocked are common in scam links.', 1]);
+		if (/\.(apk|exe|scr|bat|msi)$/i.test(u.pathname)) flags.push(['The link downloads an app or program file (' + u.pathname.split('.').pop() + '). Never install files from messages.', 3]);
+		var score = flags.reduce(function (a, f) { return a + f[1]; }, 0);
+		return { host: host, reg: reg, flags: flags, good: good, score: score };
+	}
+	tools['link-safety-checker'] = function (host) {
+		var src = input('text', 'https://onlinesbi.sbi.kyc-update.online/login', { 'aria-label': 'Link to check', spellcheck: 'false', autocomplete: 'off' });
+		var verdict = el('p', 'tool-big dt-verdict'), real = el('p', 'tool-note'), list = el('ul', 'dt-flags');
+		host.appendChild(field('Paste a link from an SMS, email or WhatsApp (it is NOT opened)', src)); host.appendChild(verdict); host.appendChild(real); host.appendChild(list);
+		function run() {
+			list.textContent = ''; var r = checkLink(src.value);
+			if (!src.value.trim()) { verdict.textContent = ''; real.textContent = ''; return; }
+			if (r.error) { verdict.textContent = '❌ That is not a valid link.'; real.textContent = ''; return; }
+			verdict.textContent = r.score >= 3 ? '🚩 Dangerous: do not open' : r.score >= 1 ? '⚠️ Suspicious: verify first' : '✅ No common red flags found';
+			verdict.className = 'tool-big dt-verdict ' + (r.score >= 3 ? 'is-bad' : r.score >= 1 ? 'is-warn' : 'is-good');
+			real.textContent = 'Real domain (the part that matters): ' + r.reg;
+			r.flags.forEach(function (f) { list.appendChild(el('li', 'is-flag', '🚩 ' + f[0])); });
+			r.good.forEach(function (g) { list.appendChild(el('li', '', '✔️ ' + g)); });
+		}
+		src.addEventListener('input', run); run(); award('linkcheck');
+	};
+
+	window.VSDevTools = { parseDiagram: parseDiagram, checkLink: checkLink, strength: strength, diffLines: diffLines, estTokens: estTokens, cronField: cronField };
+	document.querySelectorAll('.tool[data-tool]').forEach(function (host) {
+		var make = tools[host.getAttribute('data-tool')];
+		if (make && !host.hasAttribute('data-ready')) { host.setAttribute('data-ready', '1'); make(host); }
+	});
+})();

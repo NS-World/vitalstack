@@ -92,6 +92,7 @@ function vitalstack_pay_plans() {
 			'limit'  => 200,
 		),
 	);
+	$plans = apply_filters( 'vitalstack_pay_plans', $plans, $all );
 	$saved = vitalstack_pay_settings()['prices'];
 	foreach ( $plans as $id => $p ) {
 		foreach ( array( 'inr', 'usd' ) as $cur ) {

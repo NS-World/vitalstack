@@ -1,0 +1,64 @@
+<!-- wp:heading -->
+<h2 class="wp-block-heading">What is a hash?</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>A <strong>hash function</strong> turns any input into a fixed-length fingerprint. Three properties make it useful:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Same input, same hash</strong>, every time, on every computer.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Tiny change, totally different hash.</strong> Change one letter and about half the bits flip.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>One-way.</strong> You cannot work back from the hash to the input.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Type in the box and watch all four hashes change as you type. The tool uses <code>crypto.subtle.digest</code>, built into every modern browser, so your text never leaves the page.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Where hashes are used</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Downloads</strong>: websites publish the SHA-256 of a file so you can check your copy was not corrupted or tampered with.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Git</strong>: every commit id is a hash of its content.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Caching and de-duplication</strong>: two files with the same hash are almost certainly identical.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Blockchains</strong> chain blocks together using hashes.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Hashes and passwords</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Never store passwords as plain SHA-256. Attackers can test billions of guesses per second against a fast hash. Use a slow, salted password hashing function instead: <strong>bcrypt</strong>, <strong>scrypt</strong> or <strong>Argon2</strong>. A *salt* is random data added to each password so two users with the same password get different hashes.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p><strong>SHA-1</strong> is shown for learning and for old systems only. Researchers have produced real SHA-1 collisions, so do not use it for anything security-related.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-python">import hashlib
+print(hashlib.sha256("hello".encode()).hexdigest())</code></pre>
+<!-- /wp:code -->

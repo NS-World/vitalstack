@@ -1,0 +1,61 @@
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Why contrast matters</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>About one in twelve men and one in two hundred women have some form of colour vision deficiency, and almost everyone reads a phone in bright sunlight at some point. Low-contrast text (light grey on white, for example) is hard or impossible to read for many people. Good contrast is part of <strong>accessibility</strong>, and it also simply makes a site feel more professional.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">How to use the checker</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Pick a <strong>text colour</strong> and a <strong>background colour</strong>. The preview updates instantly, the big number shows the <strong>contrast ratio</strong>, and the table tells you which WCAG levels pass.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>Level</th><th>Normal text</th><th>Large text (about 24px, or 19px bold)</th></tr></thead><tbody><tr><td><strong>AA</strong> (the usual target)</td><td>4.5 : 1</td><td>3 : 1</td></tr><tr><td><strong>AAA</strong> (enhanced)</td><td>7 : 1</td><td>4.5 : 1</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:paragraph -->
+<p>Ratios go from <strong>1 : 1</strong> (same colour, invisible) to <strong>21 : 1</strong> (black on white).</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">How the ratio is calculated</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Each colour is converted to its <strong>relative luminance</strong>: how bright it looks to the human eye, where green counts much more than blue. The ratio is <code>(lighter + 0.05) / (darker + 0.05)</code>.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-python">def channel(c):
+    c = c / 255
+    return c / 12.92 if c &lt;= 0.03928 else ((c + 0.055) / 1.055) ** 2.4
+
+def luminance(r, g, b):
+    return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b)
+
+ratio = (luminance(255, 255, 255) + 0.05) / (luminance(27, 31, 39) + 0.05)
+print(round(ratio, 2))</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Design tips</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li>Never use colour alone to show meaning (like red for errors): add an icon or text.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Check buttons, links and placeholder text, not only body text.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Check dark mode separately; it has its own pairs of colours.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->

@@ -115,6 +115,8 @@ function vitalstack_site_page_cards( $parent ) {
 function vitalstack_site_pages_assets() {
 	if ( is_page_template( 'page-tool.php' ) ) {
 		wp_enqueue_script( 'vitalstack-tools', vitalstack_asset_url( 'assets/js/tools.js' ), array(), VITALSTACK_VERSION, array( 'in_footer' => true, 'strategy' => 'defer' ) );
+		// 5.0: more free tools (diagram maker, password generator, link checker…).
+		wp_enqueue_script( 'vitalstack-devtools', vitalstack_asset_url( 'assets/js/devtools.js' ), array( 'vitalstack-tools' ), VITALSTACK_VERSION, array( 'in_footer' => true, 'strategy' => 'defer' ) );
 	}
 }
 add_action( 'wp_enqueue_scripts', 'vitalstack_site_pages_assets', 25 );

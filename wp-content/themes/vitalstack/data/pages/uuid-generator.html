@@ -1,0 +1,63 @@
+<!-- wp:heading -->
+<h2 class="wp-block-heading">What is a UUID?</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>A <strong>UUID</strong> (universally unique identifier) is a 128-bit id written as 32 hex characters in five groups:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code class="language-plaintext">3f2b8c1e-7a4d-4e9b-b1c2-9d8e7f6a5b4c</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p><strong>Version 4</strong> UUIDs are almost entirely random (122 random bits). The chance of two ever colliding is so small that systems around the world create them independently without checking with each other.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">How to use the generator</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Choose how many you need (1 to 100), tick <strong>UPPERCASE</strong> if your system expects it, and press <strong>Generate</strong>. <strong>Copy all</strong> copies the list, one per line. The ids come from <code>crypto.randomUUID</code> or <code>crypto.getRandomValues</code>, the browser's cryptographically secure random generator.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">When to use UUIDs</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Database primary keys</strong> when records are created in many places (mobile apps working offline, several servers).</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Public ids in URLs</strong>, so people cannot guess the next record by adding 1 (<code>/order/1001</code>, <code>/order/1002</code>…).</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Idempotency keys</strong> for payments, so a retried request is not charged twice.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>File names</strong> for uploads, so two users uploading <code>photo.jpg</code> do not overwrite each other.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Things to know</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li>A UUID is unique, <strong>not secret</strong>. Do not use one as a password-reset token or API key on its own; use a dedicated secure token.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Random UUIDs make database indexes a little slower than sequential ids. Newer formats such as UUID v7 start with a timestamp to fix this.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>In Python: <code>import uuid; print(uuid.uuid4())</code>. In JavaScript: <code>crypto.randomUUID()</code>.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->

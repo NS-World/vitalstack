@@ -1,0 +1,67 @@
+<!-- wp:heading -->
+<h2 class="wp-block-heading">What is a token?</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>AI language models do not read letters or whole words. They read <strong>tokens</strong>: common chunks of text. In English, one token is roughly <strong>four characters</strong> or <strong>three quarters of a word</strong>, so 100 words is about 130 tokens. Hindi, Gujarati and other non-Latin scripts usually need more tokens for the same meaning.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Everything about using an AI model is measured in tokens:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Price</strong>: providers charge per million input tokens and per million output tokens. Output usually costs several times more than input.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Context window</strong>: the maximum tokens the model can consider at once, including your prompt, any documents and its own answer.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Speed</strong>: longer outputs take longer to generate.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">How to use the counter</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Paste your prompt or document. The table shows characters, words and an <strong>estimated</strong> token count. Enter an example input price in dollars per million tokens (check your provider's current pricing page) to see the cost of one request and of 10,000 requests. Small numbers grow quickly at scale.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>The count is an estimate. Each provider splits text slightly differently; use your provider's own token counting API when you need the exact number.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Five ways to cut AI costs</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Shorter system prompts.</strong> Remove repeated instructions and examples the model does not need.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Send only relevant context.</strong> Retrieval (RAG) sends the top few chunks, not the whole book.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Cap output length</strong> with a maximum tokens setting and clear instructions like "answer in 3 bullets".</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Use a smaller model first</strong>, and only escalate hard questions to a bigger one.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>Cache repeated prefixes</strong> when your provider supports prompt caching.</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Want the full picture? Try the <a href="/tools/ai-cost-calculator/">AI cost calculator</a> and the free lessons in the <a href="/tutorial-category/prompt-engineering/">Gen AI path</a>.</p>
+<!-- /wp:paragraph -->

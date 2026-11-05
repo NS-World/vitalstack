@@ -135,6 +135,9 @@ add_action( 'customize_register', 'vitalstack_ads_slot_customizer', 20 );
  * Whether manual ads may appear on the current page at all.
  */
 function vitalstack_ads_allowed() {
+	if ( function_exists( 'vitalstack_is_staging' ) && vitalstack_is_staging() ) {
+		return false; // UAT/DEV copies never show ads
+	}
 	if ( ! vitalstack_adsense_client() || is_admin() || is_404() || is_search() || is_preview() ) {
 		return false;
 	}
