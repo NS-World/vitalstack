@@ -1,6 +1,6 @@
 /**
- * Bug Runner: an endless runner starring Byte, the crew's orange cat with
- * green headphones. Run along a glowing line of code at night, jump over
+ * Bug Runner: an endless runner starring Dev, the crew's student coder, as
+ * a chunky pixel hero with a green cap, orange hoodie and laptop bag. Run along a glowing line of code at night, jump over
  * bugs and 500-error server racks, dodge flying glitches and collect coffee
  * and { } coins. Space / ↑ / tap to jump (hold for higher, tap again in the
  * air for a double jump), ↓ to drop faster, Esc to pause.
@@ -14,14 +14,14 @@
 	'use strict';
 
 	var JOKES = [
-		'Byte tripped over a NullPointerException.',
+		'Dev tripped over a NullPointerException.',
 		'Uncaught BugError: runner hit a bug at line 404.',
-		'Segmentation fault (cat dumped).',
-		'Error 500: Byte needs more coffee.',
+		'Segmentation fault (core dumped).',
+		'Error 500: Dev needs more coffee.',
 		'Merge conflict with a server rack.',
 		'Stack overflow: too many bugs on the stack.',
 		'Infinite loop detected. Just kidding, you crashed.',
-		'"It works on my machine," said Byte.'
+		'"It works on my machine," said Dev.'
 	];
 	var TIPS = [
 		'Tip: hold jump to go higher.',
@@ -29,7 +29,7 @@
 		'Tip: press ↓ to land faster.',
 		'Tip: ☕ = +25 points, { } = +10.'
 	];
-	var CHEERS = ['Nice streak!', 'Byte is on fire.', 'Bugs fear you.', 'Senior runner energy.', 'Zero downtime!', 'Ship it!'];
+	var CHEERS = ['Nice streak!', 'Dev is on fire.', 'Bugs fear you.', 'Senior runner energy.', 'Zero downtime!', 'Ship it!'];
 	var GROUND_WORDS = ['if', '{ }', '0101', 'for', '=>', 'def', '</>', 'SELECT', 'npm', '[]', '&&', 'git', '++', 'null'];
 
 	// Fixed "night terminal" palette: the game looks the same in every theme.
@@ -178,7 +178,7 @@
 			spawnIn -= dt; if (spawnIn <= 0) spawn();
 			coinIn -= dt;
 			if (coinIn <= 0) { coins.push({ x: W + 20, y: GROUND - 34 - Math.random() * 70, w: 16, h: 16, k: Math.random() < 0.22 ? 'cup' : 'coin' }); coinIn = 0.9 + Math.random() * 1.5; }
-			var me = { x: cat.x + 6, y: cat.y - 26, w: 28, h: 26 };
+			var me = { x: cat.x + 8, y: cat.y - 42, w: 24, h: 42 };
 			obs.forEach(function (o) { o.x -= speed * dt; if (o.k === 'glitch') o.y += Math.sin(frameT * 6 + o.wob) * 0.7; });
 			obs = obs.filter(function (o) { return o.x > -60; });
 			coins.forEach(function (c) { c.x -= speed * dt; });
@@ -196,28 +196,48 @@
 		// One sprite pixel = U world units; (gx, gy) are sprite grid cells.
 		function sp(ox, oy, gx, gy, gw, gh, c) { px(ox + gx * U, oy + gy * U, gw * U, gh * U, c); }
 
-		function drawCat(x, y, dead) {
-			var o = C.cat, d = C.catDark, k = C.catOut, top = y - 30, ox = x;
-			var run = cat.onGround && state === 'run' ? Math.floor(frameT * 14) % 2 : -1;
-			// tail (curls up)
-			sp(ox, top, 0, 3, 1, 3, o); sp(ox, top, 1, 2, 1, 1, o); sp(ox, top, 1, 6, 2, 1, o);
-			// body
-			sp(ox, top, 2, 6, 10, 6, o); sp(ox, top, 2, 11, 10, 1, d);
-			sp(ox, top, 4, 6, 1, 2, d); sp(ox, top, 6, 6, 1, 2, d); sp(ox, top, 8, 6, 1, 2, d);
-			sp(ox, top, 7, 9, 5, 2, C.belly);
-			// head
-			sp(ox, top, 10, 2, 7, 6, o); sp(ox, top, 10, 7, 7, 1, d);
-			sp(ox, top, 10, 0, 2, 2, o); sp(ox, top, 15, 0, 2, 2, o); sp(ox, top, 10, 0, 1, 1, k); sp(ox, top, 16, 0, 1, 1, k);
-			// headphones
-			sp(ox, top, 11, 1, 5, 1, C.phonesDark); sp(ox, top, 9, 2, 2, 4, C.phones); sp(ox, top, 17, 2, 1, 4, C.phones);
-			// face
-			if (dead) { sp(ox, top, 12, 3, 1, 1, k); sp(ox, top, 13, 4, 1, 1, k); sp(ox, top, 13, 3, 1, 1, k); sp(ox, top, 12, 4, 1, 1, k); sp(ox, top, 15, 3, 1, 2, k); }
-			else { sp(ox, top, 12, 3, 1, 2, k); sp(ox, top, 15, 3, 1, 2, k); }
-			sp(ox, top, 14, 5, 1, 1, C.nose); sp(ox, top, 16, 5, 1, 1, C.belly);
-			// legs
-			if (run === -1) { sp(ox, top, 3, 12, 2, 2, d); sp(ox, top, 10, 12, 2, 2, d); }
-			else if (run) { sp(ox, top, 2, 12, 2, 3, d); sp(ox, top, 6, 12, 2, 2, d); sp(ox, top, 9, 12, 2, 2, d); sp(ox, top, 11, 12, 2, 3, d); }
-			else { sp(ox, top, 4, 12, 2, 2, d); sp(ox, top, 5, 12, 2, 3, d); sp(ox, top, 8, 12, 2, 3, d); sp(ox, top, 10, 12, 2, 2, d); }
+		// Dev, the crew's student coder, as a chunky pixel hero (16 x 20 cells).
+		var UH = 2.3;
+		var HERO_PAL = { K: '#1b1f27', R: '#0a7d4f', w: '#ffffff', H: '#3a2618', S: '#f4c7a1', s: '#dca27c', E: '#1b1f27', M: '#b9534a', O: '#f97316', o: '#c2410c', J: '#2563eb', W: '#ffffff', B: '#64748b' };
+		var HERO_TOP = [
+			'......KKKKK.....',
+			'....KKRRRRRKK...',
+			'...KRRRwwwRRRK..',
+			'...KRRRRRRRRRRK.',
+			'...KRRRRRRRRRRRK',
+			'...KHHSSSSESSK..',
+			'...KHSsSSSESSSK.',
+			'...KHSSSSSSSSSSK',
+			'....KSSSSSMMSSK.',
+			'.....KKSSSSSKK..',
+			'....KOOOOOOOOK..',
+			'...BKOOOOOOOOOK.',
+			'...BKOOOOwOOSSK.',
+			'...BKOOOOwOOOOK.',
+			'...BKoooooooooK.',
+			'....KJJJJJJJJK..'
+		];
+		var HERO_LEGS = {
+			a: ['....KJJJKKJJJK..', '...KJJJK..KJJJK.', '..KWWWK....KWWWK', '..KKKKK....KKKKK'],
+			b: ['....KJJJJJJK....', '.....KJJJJK.....', '.....KWWWWK.....', '.....KKKKKK.....'],
+			c: ['....KJJJKJJJK...', '....KJJJKKJJJK..', '...KWWWK..KWWWK.', '...KKKKK..KKKKK.'],
+			jump: ['...KJJJJJJJJK...', '..KWWWKJJKWWWK..', '..KKKKK..KKKKK..', '................']
+		};
+		function drawRows(rows, ox, oy, pal) {
+			for (var r = 0; r < rows.length; r++) {
+				var row = rows[r];
+				for (var c = 0; c < row.length; c++) { var ch = row.charAt(c); if (ch !== '.' && pal[ch]) { ctx.fillStyle = pal[ch]; ctx.fillRect(ox + c * UH, oy + r * UH, UH + 0.05, UH + 0.05); } }
+			}
+		}
+		function drawHero(x, y, dead) {
+			var top = y - 20 * UH;
+			var legs = !cat.onGround ? 'jump' : state !== 'run' ? 'b' : ['a', 'b', 'c', 'b'][Math.floor(frameT * 12) % 4];
+			var bob = state === 'run' && cat.onGround && legs !== 'b' ? -UH / 2 : 0;
+			drawRows(HERO_TOP, x, top + bob, HERO_PAL);
+			drawRows(HERO_LEGS[legs], x, top + 16 * UH, HERO_PAL);
+			var ex = x + 10 * UH, ey = top + 5 * UH + bob;
+			if (dead) { ctx.fillStyle = '#ef4444'; ctx.fillRect(ex - UH * 0.5, ey, UH * 2, UH * 0.6); ctx.fillRect(ex, ey - UH * 0.5, UH * 0.6, UH * 2); }
+			else if (Math.floor(frameT * 2.5) % 9 === 0 && state === 'run') { ctx.fillStyle = HERO_PAL.S; ctx.fillRect(ex, ey, UH, UH * 2); ctx.fillStyle = HERO_PAL.K; ctx.fillRect(ex, ey + UH, UH, 1); }
 		}
 		function drawBug(o) {
 			var leg = Math.floor(frameT * 16) % 2, x = o.x, y = o.y;
@@ -304,7 +324,7 @@
 			drawScene();
 			coins.forEach(drawCoin);
 			obs.forEach(function (o) { if (o.k === 'bug') drawBug(o); else if (o.k === 'rack') drawRack(o); else drawGlitch(o); });
-			drawCat(cat.x, cat.y, state === 'over');
+			drawHero(cat.x, cat.y, state === 'over');
 			sparks.forEach(function (s) { px(s.x, s.y, 3, 3, s.c); });
 			hud();
 			ctx.restore();

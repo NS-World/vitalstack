@@ -11,8 +11,8 @@ get_header();
 	<div class="container narrow">
 		<div class="empty-state">
 			<div class="nf-hero">
-				<div class="nf-bot" aria-hidden="true"><?php echo function_exists( 'vitalstack_mascot' ) ? vitalstack_mascot( 'think', 132, '', 'byte' ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- fixed SVG ?></div>
-				<p class="nf-bubble"><?php esc_html_e( 'Meow… I searched every folder. This page is not here.', 'vitalstack' ); ?></p>
+				<div class="nf-bot"><?php echo function_exists( 'vitalstack_runner_hero_svg' ) ? vitalstack_runner_hero_svg( 150 ) : ( function_exists( 'vitalstack_mascot' ) ? vitalstack_mascot( 'think', 132, '', 'dev' ) : '' ); // phpcs:ignore WordPress.Security.EscapeOutput -- fixed SVG built from constants ?></div>
+				<p class="nf-bubble"><?php esc_html_e( 'Hmm… I checked every folder. This page is not here.', 'vitalstack' ); ?></p>
 			</div>
 			<p class="error-code">404</p>
 			<h1><?php esc_html_e( 'This page wandered off', 'vitalstack' ); ?></h1>

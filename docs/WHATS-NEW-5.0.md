@@ -94,9 +94,9 @@ below it, which also gives AdSense more content.
 
 ### 🏃 Bug Runner (also in 4.12.1)
 
-An original endless runner starring Byte, the crew's orange cat with green headphones:
+An original endless runner starring Dev, the crew's student coder, as a chunky pixel hero (green cap, orange hoodie, jeans, sneakers and a laptop bag):
 
-- Byte runs along a glowing line of code at night, past a parallax skyline of server towers.
+- Dev runs along a glowing line of code at night, past a parallax skyline of server towers.
 - Jump over 🐞 bugs and **500** server racks, dodge purple flying glitches, and collect ☕
   (+25) and `{ }` (+10).
 - **Controls:** tap, Space or ↑ to jump. Hold to jump higher, tap again in the air for a double
@@ -105,7 +105,7 @@ An original endless runner starring Byte, the crew's orange cat with green headp
   is hidden.
 - **Where it appears:**
   - **Games page:** featured at the top. Scores give XP.
-  - **404 page:** Byte says "Meow… I searched every folder", with "Lost? Play while you are here"
+  - **404 page:** the same hero, puzzled under a "?", says "Hmm… I checked every folder", with "Lost? Play while you are here"
     below.
 - **Phones and laptops:** works from 320 to 1920px, with touch and keyboard.
 

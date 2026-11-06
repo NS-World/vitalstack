@@ -3048,6 +3048,7 @@ a.why-card:hover { border-color: #f5b301; text-decoration: none; transform: tran
 .nf-hero { display: flex; flex-direction: column; align-items: center; gap: 6px; margin-bottom: 4px; }
 .nf-bot { animation: nf-bob 3s ease-in-out infinite; }
 .nf-bot svg { max-width: 132px; height: auto; }
+.nf-bot .vs-hero { max-width: none; width: auto; height: 150px; image-rendering: pixelated; }
 .nf-bubble { position: relative; margin: 0; padding: 10px 16px; border-radius: 16px; background: var(--brand-soft); color: var(--brand-ink); font-weight: 700; max-width: 360px; text-align: center; }
 .nf-bubble::before { content: ""; position: absolute; top: -8px; left: 50%; margin-left: -8px; border: 8px solid transparent; border-top: 0; border-bottom-color: var(--brand-soft); }
 .nf-game { margin-top: 32px; }
