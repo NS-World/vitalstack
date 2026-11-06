@@ -3090,7 +3090,14 @@ a.why-card:hover { border-color: #f5b301; text-decoration: none; transform: tran
 @media (min-width: 720px) {
 	.courses-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 	.courses-group.is-data, .courses-group.is-ds, .courses-group.is-genai, .courses-group.is-safe, .courses-group.is-more { grid-column: 1 / -1; }
-	.courses-group.is-data ul, .courses-group.is-ds ul, .courses-group.is-genai ul, .courses-group.is-safe ul, .courses-group.is-more ul { grid-template-columns: repeat(auto-fill, minmax(min(100%, 270px), 1fr)); column-gap: 18px; }
+	.courses-group.is-data ul, .courses-group.is-ds ul, .courses-group.is-genai ul, .courses-group.is-safe ul, .courses-group.is-more ul { grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); column-gap: 28px; }
+	.courses-group.is-data a span, .courses-group.is-ds a span, .courses-group.is-genai a span, .courses-group.is-safe a span, .courses-group.is-more a span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+}
+/* Tablets: three boxes in a row are too narrow, so every group gets a full
+   row with its courses side by side. */
+@media (min-width: 720px) and (max-width: 1023px) {
+	.courses-grid { grid-template-columns: minmax(0, 1fr); }
+	.courses-group ul { grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); column-gap: 28px; }
 }
 /* Phones: long course names in the topic bar wrap onto two lines instead of
    filling the whole bar. */
