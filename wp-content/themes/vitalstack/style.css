@@ -3079,3 +3079,8 @@ a.why-card:hover { border-color: #f5b301; text-decoration: none; transform: tran
 /* Search with no results: the same friendly Byte box as the 404 page. */
 .search-empty { margin-top: 28px; text-align: center; }
 .search-empty .nf-hero { margin-bottom: 18px; }
+/* Homepage subject sections: long code lines in the example made the two
+   columns wider than laptops between about 960 and 1250px. */
+@media (min-width: 901px) { .subject-inner { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+.subject-inner > * { min-width: 0; }
+.subject-example pre, .subject-example .example-code { max-width: 100%; overflow-x: auto; }

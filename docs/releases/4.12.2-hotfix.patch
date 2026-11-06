@@ -522,7 +522,7 @@ index f44c214..98ab80a 100644
  	</div>
  </section>
 diff --git a/wp-content/themes/vitalstack/style.css b/wp-content/themes/vitalstack/style.css
-index 386a0b8..f8d2b82 100644
+index 386a0b8..c8cce08 100644
 --- a/wp-content/themes/vitalstack/style.css
 +++ b/wp-content/themes/vitalstack/style.css
 @@ -4,7 +4,7 @@ Theme URI: https://vitalstack.co.in/
@@ -556,7 +556,7 @@ index 386a0b8..f8d2b82 100644
  @media (min-width: 960px) and (max-width: 1179px) {
  	.topbar-inner { gap: 12px; }
  	.topbar-nav a { padding: 8px 7px; font-size: 14px; }
-@@ -2684,3 +2694,101 @@ a.why-card:hover { border-color: #f5b301; text-decoration: none; transform: tran
+@@ -2684,3 +2694,106 @@ a.why-card:hover { border-color: #f5b301; text-decoration: none; transform: tran
  	.mascot-nudge { left: 10px; right: 10px; max-width: none; }
  	.celebrate .confetti, .celebrate [class*="confetti"] { z-index: -1; }
  }
@@ -658,3 +658,8 @@ index 386a0b8..f8d2b82 100644
 +/* Search with no results: the same friendly Byte box as the 404 page. */
 +.search-empty { margin-top: 28px; text-align: center; }
 +.search-empty .nf-hero { margin-bottom: 18px; }
++/* Homepage subject sections: long code lines in the example made the two
++   columns wider than laptops between about 960 and 1250px. */
++@media (min-width: 901px) { .subject-inner { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
++.subject-inner > * { min-width: 0; }
++.subject-example pre, .subject-example .example-code { max-width: 100%; overflow-x: auto; }
