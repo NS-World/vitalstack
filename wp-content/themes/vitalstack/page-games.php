@@ -28,6 +28,9 @@ get_header();
 </section>
 
 <div class="wrap games-wrap">
+	<?php if ( function_exists( 'vitalstack_runner_box' ) ) : ?>
+		<div class="games-featured"><?php vitalstack_runner_box( 'games' ); ?></div>
+	<?php endif; ?>
 	<div class="games-filter" data-games-filter role="group" aria-label="<?php esc_attr_e( 'Filter games', 'vitalstack' ); ?>">
 		<button type="button" data-cat="all" aria-pressed="true">✨ <?php esc_html_e( 'All', 'vitalstack' ); ?></button>
 		<button type="button" data-cat="dsa" aria-pressed="false">🧩 <?php esc_html_e( 'Algorithms', 'vitalstack' ); ?></button>

@@ -92,6 +92,23 @@ below it, which also gives AdSense more content.
 - a guide to studying with music;
 - linked from the topic bar (🎧 Study Music) and from the Games page.
 
+### 🏃 Bug Runner (also in 4.12.1)
+
+An original endless runner starring Byte, the crew's orange cat with green headphones:
+
+- Byte runs along a glowing line of code at night, past a parallax skyline of server towers.
+- Jump over 🐞 bugs and **500** server racks, dodge purple flying glitches, and collect ☕
+  (+25) and `{ }` (+10).
+- **Controls:** tap, Space or ↑ to jump. Hold to jump higher, tap again in the air for a double
+  jump, press ↓ to land fast and Esc to pause.
+- Sound is off by default. The best score is kept on the device, and the game pauses when the tab
+  is hidden.
+- **Where it appears:**
+  - **Games page:** featured at the top. Scores give XP.
+  - **404 page:** Byte says "Meow… I searched every folder", with "Lost? Play while you are here"
+    below.
+- **Phones and laptops:** works from 320 to 1920px, with touch and keyboard.
+
 ## 6. Premium: combo packs and premium themes
 
 - **Combo Pack** card on the pricing page with two packs at ₹2,499 / $49 for 12 months:
