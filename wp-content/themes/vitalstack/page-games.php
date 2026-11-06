@@ -28,7 +28,7 @@ get_header();
 </section>
 
 <div class="wrap games-wrap">
-	<div class="games-filter" data-games-filter role="group" aria-label="<?php esc_attr_e( 'Filter games', 'vitalstack' ); ?>" hidden>
+	<div class="games-filter" data-games-filter role="group" aria-label="<?php esc_attr_e( 'Filter games', 'vitalstack' ); ?>">
 		<button type="button" data-cat="all" aria-pressed="true">✨ <?php esc_html_e( 'All', 'vitalstack' ); ?></button>
 		<button type="button" data-cat="dsa" aria-pressed="false">🧩 <?php esc_html_e( 'Algorithms', 'vitalstack' ); ?></button>
 		<button type="button" data-cat="code" aria-pressed="false">💻 <?php esc_html_e( 'Coding', 'vitalstack' ); ?></button>

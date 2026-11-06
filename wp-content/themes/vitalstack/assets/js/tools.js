@@ -725,6 +725,6 @@
 
 	document.querySelectorAll('.tool[data-tool]').forEach(function (host) {
 		var make = tools[host.getAttribute('data-tool')];
-		if (make) make(host);
+		if (make) { make(host); host.setAttribute('data-ready', '1'); }
 	});
 })();

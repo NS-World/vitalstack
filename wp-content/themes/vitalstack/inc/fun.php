@@ -186,3 +186,18 @@ function vitalstack_hero_card() {
 	</div>
 	<?php
 }
+
+/**
+ * Guests who already have XP see the header chip from the first paint, so
+ * the header does not jump when fun.js fills it in (layout shift).
+ */
+function vitalstack_xp_chip_bootstrap() {
+	if ( is_user_logged_in() ) {
+		return;
+	}
+	?>
+	<script>(function(){try{var x=JSON.parse(localStorage.getItem('vs-xp')||'null');if(x&&x.xp>0){document.documentElement.setAttribute('data-has-xp','1');}}catch(e){}})();</script>
+	<?php
+}
+add_action( 'wp_head', 'vitalstack_xp_chip_bootstrap', 2 );
+

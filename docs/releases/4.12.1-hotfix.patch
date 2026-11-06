@@ -1,0 +1,137 @@
+diff --git a/wp-content/themes/vitalstack/assets/js/tools.js b/wp-content/themes/vitalstack/assets/js/tools.js
+index cec90e6..1691969 100644
+--- a/wp-content/themes/vitalstack/assets/js/tools.js
++++ b/wp-content/themes/vitalstack/assets/js/tools.js
+@@ -725,6 +725,6 @@
+ 
+ 	document.querySelectorAll('.tool[data-tool]').forEach(function (host) {
+ 		var make = tools[host.getAttribute('data-tool')];
+-		if (make) make(host);
++		if (make) { make(host); host.setAttribute('data-ready', '1'); }
+ 	});
+ })();
+diff --git a/wp-content/themes/vitalstack/functions.php b/wp-content/themes/vitalstack/functions.php
+index 925c116..a1f2266 100644
+--- a/wp-content/themes/vitalstack/functions.php
++++ b/wp-content/themes/vitalstack/functions.php
+@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
+ 	exit;
+ }
+ 
+-define( 'VITALSTACK_VERSION', '4.12.0' );
++define( 'VITALSTACK_VERSION', '4.12.1' );
+ define( 'VITALSTACK_DIR', get_template_directory() );
+ define( 'VITALSTACK_URI', get_template_directory_uri() );
+ 
+diff --git a/wp-content/themes/vitalstack/inc/fun.php b/wp-content/themes/vitalstack/inc/fun.php
+index 8ece6b0..3d87ea2 100644
+--- a/wp-content/themes/vitalstack/inc/fun.php
++++ b/wp-content/themes/vitalstack/inc/fun.php
+@@ -185,3 +185,18 @@ function vitalstack_hero_card() {
+ 	</div>
+ 	<?php
+ }
++
++/**
++ * Guests who already have XP see the header chip from the first paint, so
++ * the header does not jump when fun.js fills it in (layout shift).
++ */
++function vitalstack_xp_chip_bootstrap() {
++	if ( is_user_logged_in() ) {
++		return;
++	}
++	?>
++	<script>(function(){try{var x=JSON.parse(localStorage.getItem('vs-xp')||'null');if(x&&x.xp>0){document.documentElement.setAttribute('data-has-xp','1');}}catch(e){}})();</script>
++	<?php
++}
++add_action( 'wp_head', 'vitalstack_xp_chip_bootstrap', 2 );
++
+diff --git a/wp-content/themes/vitalstack/style.css b/wp-content/themes/vitalstack/style.css
+index 386a0b8..274f586 100644
+--- a/wp-content/themes/vitalstack/style.css
++++ b/wp-content/themes/vitalstack/style.css
+@@ -4,7 +4,7 @@ Theme URI: https://vitalstack.co.in/
+ Author: VitalStack
+ Author URI: https://vitalstack.co.in/
+ Description: Tutorial-site theme for VitalStack: 17 learning paths (web, Python, Java, Spring Boot, React, Angular, DSA), live animated visualizers, quizzes, certificates, daily challenge and leaderboard, brain games, cheat sheets, free coding tools, reader accounts with XP and progress sync, PWA, and AdSense-ready ad slots.
+-Version: 4.12.0
++Version: 4.12.1
+ Requires at least: 6.3
+ Tested up to: 6.8
+ Requires PHP: 8.0
+@@ -407,10 +407,20 @@ body.courses-open .install-app, body.courses-open .cookie-note { display: none;
+ .topbar-nav a:hover { background: var(--bg-soft); color: var(--text); text-decoration: none; }
+ .topbar-nav a.is-active { color: var(--brand-ink); background: var(--brand-soft); }
+ @media (min-width: 960px) {
+-	.topbar-nav { display: flex; }
+ 	.topbar-search { max-width: 380px; min-width: 180px; }
++}
++/* 4.12.1: the practice links only sit in the top bar where they all fit; on
++   smaller laptops they stay in the topic bar below (which scrolls). Between
++   960 and 1380px they pushed the Sign up button off the screen. */
++@media (min-width: 1380px) {
++	.topbar-nav { display: flex; }
+ 	.topicbar .topic-practice { display: none; }
+ }
++@media (min-width: 1380px) and (max-width: 1519px) {
++	.topbar-nav a { padding: 8px 8px; font-size: 14px; }
++	.topbar-search { min-width: 160px; }
++	.topbar-search kbd { display: none; }
++}
+ @media (min-width: 960px) and (max-width: 1179px) {
+ 	.topbar-inner { gap: 12px; }
+ 	.topbar-nav a { padding: 8px 7px; font-size: 14px; }
+@@ -2684,3 +2694,53 @@ a.why-card:hover { border-color: #f5b301; text-decoration: none; transform: tran
+ 	.mascot-nudge { left: 10px; right: 10px; max-width: none; }
+ 	.celebrate .confetti, .celebrate [class*="confetti"] { z-index: -1; }
+ }
++
++/* ── 4.12.1 layout-shift fixes ─────────────────────────────────────────── */
++/* Phones: the tool status (Loading…, Ready, errors) gets its own line, so a
++   longer message never re-wraps the buttons and moves the page. */
++@media (max-width: 599px) { .tool-bar > .tool-status { flex: 1 1 100%; margin-left: 0; min-height: 1.5em; } }
++/* Tools are drawn by JavaScript: reserve about their height first so the
++   guide text below does not jump (layout shift). Heights are measured per
++   tool; the reservation ends once the tool is ready (data-ready). */
++.tool[data-tool="python-online-compiler"]:not([data-ready]) { min-height: 940px; }
++.tool[data-tool="sql-playground"]:not([data-ready]) { min-height: 580px; }
++.tool[data-tool="json-formatter"]:not([data-ready]) { min-height: 910px; }
++.tool[data-tool="regex-tester"]:not([data-ready]) { min-height: 980px; }
++.tool[data-tool="html-online-editor"]:not([data-ready]) { min-height: 1650px; }
++.tool[data-tool="ab-test-calculator"]:not([data-ready]) { min-height: 990px; }
++.tool[data-tool="sample-size-calculator"]:not([data-ready]) { min-height: 820px; }
++.tool[data-tool="ai-cost-calculator"]:not([data-ready]) { min-height: 1680px; }
++.tool[data-tool="csv-data-explorer"]:not([data-ready]) { min-height: 2310px; }
++.tool[data-tool="prompt-builder"]:not([data-ready]) { min-height: 1220px; }
++@media (min-width: 600px) {
++	.tool[data-tool="python-online-compiler"]:not([data-ready]) { min-height: 870px; }
++	.tool[data-tool="sql-playground"]:not([data-ready]) { min-height: 510px; }
++	.tool[data-tool="json-formatter"]:not([data-ready]) { min-height: 870px; }
++	.tool[data-tool="regex-tester"]:not([data-ready]) { min-height: 900px; }
++	.tool[data-tool="html-online-editor"]:not([data-ready]) { min-height: 1620px; }
++	.tool[data-tool="ab-test-calculator"]:not([data-ready]) { min-height: 680px; }
++	.tool[data-tool="sample-size-calculator"]:not([data-ready]) { min-height: 640px; }
++	.tool[data-tool="ai-cost-calculator"]:not([data-ready]) { min-height: 960px; }
++	.tool[data-tool="csv-data-explorer"]:not([data-ready]) { min-height: 1600px; }
++	.tool[data-tool="prompt-builder"]:not([data-ready]) { min-height: 1180px; }
++}
++@media (min-width: 1024px) {
++	.tool[data-tool="python-online-compiler"]:not([data-ready]) { min-height: 620px; }
++	.tool[data-tool="sql-playground"]:not([data-ready]) { min-height: 430px; }
++	.tool[data-tool="json-formatter"]:not([data-ready]) { min-height: 470px; }
++	.tool[data-tool="regex-tester"]:not([data-ready]) { min-height: 550px; }
++	.tool[data-tool="html-online-editor"]:not([data-ready]) { min-height: 1230px; }
++	.tool[data-tool="ab-test-calculator"]:not([data-ready]) { min-height: 570px; }
++	.tool[data-tool="sample-size-calculator"]:not([data-ready]) { min-height: 580px; }
++	.tool[data-tool="ai-cost-calculator"]:not([data-ready]) { min-height: 750px; }
++	.tool[data-tool="csv-data-explorer"]:not([data-ready]) { min-height: 1300px; }
++	.tool[data-tool="prompt-builder"]:not([data-ready]) { min-height: 730px; }
++}
++/* Guests with XP: show the chip before fun.js runs (no header jump). */
++:root[data-has-xp] .xp-chip[hidden] { display: inline-flex; }
++/* Games: the grid and "game of the day" are drawn by games.js; keep their space. */
++.games-daily[hidden] { display: inline-flex; visibility: hidden; }
++.games-grid[data-games]:empty { min-height: 3500px; }
++@media (min-width: 600px) { .games-grid[data-games]:empty { min-height: 1900px; } }
++@media (min-width: 1000px) { .games-grid[data-games]:empty { min-height: 1400px; } }
++@media (min-width: 1240px) { .games-grid[data-games]:empty { min-height: 1100px; } }
