@@ -1,0 +1,660 @@
+diff --git a/wp-content/themes/vitalstack/404.php b/wp-content/themes/vitalstack/404.php
+index 81fc8b4..5966f5c 100644
+--- a/wp-content/themes/vitalstack/404.php
++++ b/wp-content/themes/vitalstack/404.php
+@@ -10,12 +10,22 @@ get_header();
+ <section class="section">
+ 	<div class="container narrow">
+ 		<div class="empty-state">
++			<div class="nf-hero">
++				<div class="nf-bot" aria-hidden="true"><?php echo function_exists( 'vitalstack_mascot' ) ? vitalstack_mascot( 'think', 132, '', 'byte' ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- fixed SVG ?></div>
++				<p class="nf-bubble"><?php esc_html_e( 'Meow… I searched every folder. This page is not here.', 'vitalstack' ); ?></p>
++			</div>
+ 			<p class="error-code">404</p>
+ 			<h1><?php esc_html_e( 'This page wandered off', 'vitalstack' ); ?></h1>
+ 			<p><?php esc_html_e( 'The link may be old or mistyped. Search for what you were looking for, or start from a learning path.', 'vitalstack' ); ?></p>
+ 			<?php get_search_form(); ?>
+ 			<p><a class="btn btn-primary" href="<?php echo esc_url( vitalstack_tutorials_url() ); ?>"><?php esc_html_e( 'Browse tutorials', 'vitalstack' ); ?></a></p>
+ 		</div>
++		<?php if ( function_exists( 'vitalstack_runner_box' ) ) : ?>
++			<div class="nf-game">
++				<h2 class="nf-game-title"><?php esc_html_e( 'Lost? Play while you are here', 'vitalstack' ); ?></h2>
++				<?php vitalstack_runner_box( '404' ); ?>
++			</div>
++		<?php endif; ?>
+ 	</div>
+ </section>
+ <?php
+diff --git a/wp-content/themes/vitalstack/assets/js/runner.js b/wp-content/themes/vitalstack/assets/js/runner.js
+new file mode 100644
+index 0000000..afb4d46
+--- /dev/null
++++ b/wp-content/themes/vitalstack/assets/js/runner.js
+@@ -0,0 +1,328 @@
++/**
++ * Bug Runner: an endless runner starring Byte, the crew's orange cat with
++ * green headphones. Run along a glowing line of code at night, jump over
++ * bugs and 500-error server racks, dodge flying glitches and collect coffee
++ * and { } coins. Space / ↑ / tap to jump (hold for higher, tap again in the
++ * air for a double jump), ↓ to drop faster, Esc to pause.
++ *
++ * Mounts on every [data-runner] box (games page and the 404 page). Pixel art
++ * is drawn on a canvas, sharp on any screen. The best score is kept on this
++ * device only. Nothing is sent anywhere, except XP through window.VS on the
++ * games page when the site provides it.
++ */
++(function () {
++	'use strict';
++
++	var JOKES = [
++		'Byte tripped over a NullPointerException.',
++		'Uncaught BugError: runner hit a bug at line 404.',
++		'Segmentation fault (cat dumped).',
++		'Error 500: Byte needs more coffee.',
++		'Merge conflict with a server rack.',
++		'Stack overflow: too many bugs on the stack.',
++		'Infinite loop detected. Just kidding, you crashed.',
++		'"It works on my machine," said Byte.'
++	];
++	var TIPS = [
++		'Tip: hold jump to go higher.',
++		'Tip: tap again in the air for a double jump.',
++		'Tip: press ↓ to land faster.',
++		'Tip: ☕ = +25 points, { } = +10.'
++	];
++	var CHEERS = ['Nice streak!', 'Byte is on fire.', 'Bugs fear you.', 'Senior runner energy.', 'Zero downtime!', 'Ship it!'];
++	var GROUND_WORDS = ['if', '{ }', '0101', 'for', '=>', 'def', '</>', 'SELECT', 'npm', '[]', '&&', 'git', '++', 'null'];
++
++	// Fixed "night terminal" palette: the game looks the same in every theme.
++	var C = {
++		sky1: '#0d1020', sky2: '#1c1f3d', star: '#c7d2fe', far: '#1f2547', farWin: '#3b4687', mid: '#272d5a',
++		ground: '#0a0c16', line: '#7c6cff', lineGlow: 'rgba(124,108,255,.35)', token: '#3a4070',
++		hud: '#c7cbe0', hudDim: '#7d84a8', white: '#ffffff',
++		cat: '#f59e0b', catDark: '#c2410c', catOut: '#1f1300', belly: '#fff7ed', phones: '#10b981', phonesDark: '#047857', nose: '#f472b6',
++		bug: '#ef4444', bugDark: '#7f1d1d', bugSpot: '#fde68a',
++		rack: '#cbd5e1', rackDark: '#334155', rackLine: '#64748b', led1: '#ef4444', led2: '#f59e0b',
++		glitch: '#a855f7', glitch2: '#22d3ee', coin: '#34d399', cup: '#f5f5f4', coffee: '#78350f', spark: '#a5b4fc'
++	};
++
++	function best(v) {
++		try { if (v === undefined) return +(localStorage.getItem('vs-runner-best') || 0) || 0; localStorage.setItem('vs-runner-best', String(v)); } catch (e) { return 0; }
++		return v;
++	}
++
++	function mount(box) {
++		if (box.getAttribute('data-ready')) return;
++		box.setAttribute('data-ready', '1');
++		var canvas = box.querySelector('canvas'), ctx = canvas.getContext('2d');
++		var scoreEl = box.querySelector('[data-runner-score]'), msgEl = box.querySelector('[data-runner-msg]');
++		var playBtn = box.querySelector('[data-runner-play]'), soundBtn = box.querySelector('[data-runner-sound]');
++		var context = box.getAttribute('data-context') || 'games';
++		var H = 200, W = 600, scale = 1, dpr = 1; // world units: 200 tall, width follows the box
++		var GROUND = 162, U = 2;                   // U: size of one sprite pixel in world units
++		var state = 'idle', raf = 0, last = 0, speed = 0, dist = 0, bonus = 0, hiscore = best(), shake = 0, cheers = 0, awarded = false;
++		var cat, obs, coins, sparks, stars, towers, hills, spawnIn, coinIn, frameT = 0;
++		var keyDown = false, sound = false, audio = null;
++
++		/* ── Size: fill the box width; taller on phones ── */
++		function resize() {
++			var w = Math.max(240, box.clientWidth);
++			var h = Math.round(Math.min(280, Math.max(190, w < 600 ? w * 0.62 : w * 0.3)));
++			dpr = Math.min(2, window.devicePixelRatio || 1);
++			canvas.style.height = h + 'px';
++			canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
++			scale = h / H; W = w / scale;
++			scenery();
++			if (state !== 'run') draw();
++		}
++		function scenery() {
++			var i;
++			stars = []; for (i = 0; i < Math.round(W / 14); i++) stars.push({ x: Math.random() * W, y: Math.random() * 95, s: Math.random() < 0.2 ? 2 : 1, p: Math.random() * 6 });
++			towers = []; for (var x = 0; x < W + 120; x += 34 + Math.random() * 30) towers.push({ x: x, w: 22 + Math.random() * 18, h: 34 + Math.random() * 46 });
++			hills = []; for (var hx = 0; hx < W + 200; hx += 90 + Math.random() * 60) hills.push({ x: hx, w: 120 + Math.random() * 90, h: 16 + Math.random() * 18 });
++		}
++
++		function reset() {
++			speed = 270; dist = 0; bonus = 0; spawnIn = 1.0; coinIn = 1.4; awarded = false; cheers = 0;
++			cat = { x: 40, y: GROUND, vy: 0, jumps: 0, onGround: true, hold: 0 };
++			obs = []; coins = []; sparks = [];
++		}
++
++		/* ── Sound: tiny bleeps, off until the reader turns them on ── */
++		function beep(f, d, type) {
++			if (!sound) return;
++			try {
++				audio = audio || new (window.AudioContext || window.webkitAudioContext)();
++				var o = audio.createOscillator(), g = audio.createGain(), t = audio.currentTime;
++				o.type = type || 'square'; o.frequency.setValueAtTime(f, t); o.frequency.exponentialRampToValueAtTime(f * 1.5, t + d);
++				g.gain.setValueAtTime(0.05, t); g.gain.exponentialRampToValueAtTime(0.0001, t + d);
++				o.connect(g); g.connect(audio.destination); o.start(t); o.stop(t + d + 0.02);
++			} catch (e) {}
++		}
++		function burst(x, y, n, c, sp) { for (var i = 0; i < n; i++) sparks.push({ x: x, y: y, vx: (Math.random() - 0.5) * sp, vy: -Math.random() * sp * 0.7, t: 0.45, c: c }); }
++
++		/* ── Input ── */
++		function jump() {
++			if (state === 'idle' || state === 'over') { start(); return; }
++			if (state === 'paused') { resume(); return; }
++			if (cat.onGround || cat.jumps < 2) {
++				var first = cat.onGround;
++				cat.vy = first ? -600 : -500; cat.onGround = false; cat.jumps++; cat.hold = 0.17;
++				beep(first ? 420 : 640, 0.09);
++				burst(cat.x + 10, cat.y, 5, C.spark, 140);
++			}
++		}
++		function release() { keyDown = false; if (cat) cat.hold = 0; }
++		function drop() { if (state === 'run' && !cat.onGround) cat.vy = Math.max(cat.vy, 760); }
++		function ours() { return box.contains(document.activeElement) || state === 'run'; }
++		document.addEventListener('keydown', function (e) {
++			var t = e.target, typing = t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName));
++			if (typing || !ours()) return;
++			if (e.key === ' ' || e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
++				e.preventDefault(); if (!keyDown) { keyDown = true; jump(); }
++			} else if ((e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') && state === 'run') { e.preventDefault(); drop(); }
++			else if (e.key === 'Escape' && state === 'run') pause();
++		});
++		document.addEventListener('keyup', function (e) { if (e.key === ' ' || e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') release(); });
++		canvas.addEventListener('pointerdown', function (e) { e.preventDefault(); try { canvas.focus({ preventScroll: true }); } catch (x) {} keyDown = true; jump(); });
++		canvas.addEventListener('pointerup', release);
++		canvas.addEventListener('pointercancel', release);
++		playBtn.addEventListener('click', function () { try { canvas.focus({ preventScroll: true }); } catch (x) {} if (state === 'paused') resume(); else start(); });
++		if (soundBtn) soundBtn.addEventListener('click', function () { sound = !sound; soundBtn.setAttribute('aria-pressed', sound ? 'true' : 'false'); soundBtn.textContent = sound ? '🔊' : '🔇'; if (sound) beep(520, 0.08); });
++		// Clicking elsewhere on the page (another game, a link) pauses the run.
++		document.addEventListener('pointerdown', function (e) { if (state === 'run' && !box.contains(e.target)) pause(); }, true);
++		document.addEventListener('visibilitychange', function () { if (document.hidden && state === 'run') pause(); });
++		window.addEventListener('blur', function () { if (state === 'run') pause(); });
++
++		function say(t) { msgEl.textContent = t; }
++		function score() { return Math.floor(dist / 12) + bonus; }
++		function paintScore() { scoreEl.textContent = 'Score ' + score() + ' · Best ' + hiscore; }
++		function start() {
++			reset(); state = 'run'; box.classList.add('is-running'); playBtn.hidden = true;
++			say(TIPS[Math.floor(Math.random() * TIPS.length)]);
++			last = performance.now(); cancelAnimationFrame(raf); raf = requestAnimationFrame(loop);
++		}
++		function pause() { state = 'paused'; box.classList.remove('is-running'); playBtn.hidden = false; playBtn.textContent = '▶ Resume'; say('Paused.'); draw(); }
++		function resume() { state = 'run'; box.classList.add('is-running'); playBtn.hidden = true; say(''); last = performance.now(); raf = requestAnimationFrame(loop); }
++		function over() {
++			state = 'over'; box.classList.remove('is-running'); shake = 0.3; beep(140, 0.35, 'sawtooth');
++			burst(cat.x + 18, cat.y - 14, 14, C.bug, 260);
++			var s = score(), isBest = s > hiscore;
++			if (isBest) { hiscore = s; best(s); }
++			say((isBest ? '🏆 New best! ' : '') + JOKES[Math.floor(Math.random() * JOKES.length)]);
++			playBtn.hidden = false; playBtn.textContent = '↻ Play again';
++			if (context === 'games' && !awarded && window.VS && window.VS.addXP) { awarded = true; try { window.VS.addXP('game', 'bug-runner', Math.min(100, Math.round(s / 6))); } catch (e) {} }
++			paintScore();
++			(function settle() { draw(); if (shake > 0 || sparks.length) { shake -= 0.016; step(0.016, true); requestAnimationFrame(settle); } })();
++		}
++
++		/* ── World ── */
++		function spawn() {
++			var lvl = Math.min(1, dist / 9000), r = Math.random(), o;
++			if (dist > 1800 && r < 0.18 + lvl * 0.12) o = { k: 'glitch', w: 30, h: 18, y: GROUND - 52 - Math.random() * 26, wob: Math.random() * 6 };
++			else if (r < 0.55) o = { k: 'bug', w: 30, h: 18, y: GROUND - 18 };
++			else { var n = Math.random() < 0.3 + lvl * 0.3 ? 2 : 1; o = { k: 'rack', w: 24, h: 24 * n, y: GROUND - 24 * n, n: n }; }
++			o.x = W + 20; obs.push(o);
++			if (o.k === 'bug' && Math.random() < 0.2 + lvl * 0.2) obs.push({ k: 'bug', w: 30, h: 18, y: GROUND - 18, x: W + 20 + 36 });
++			var gap = 0.8 + Math.random() * 0.9 - lvl * 0.25;
++			spawnIn = Math.max(0.6, gap) * (300 / speed) * 1.25;
++		}
++		function hit(a, b, pad) { return a.x + pad < b.x + b.w && a.x + a.w - pad > b.x && a.y + pad < b.y + b.h && a.y + a.h - pad > b.y; }
++		function step(dt, after) {
++			sparks.forEach(function (s) { s.x += s.vx * dt; s.y += s.vy * dt; s.vy += 500 * dt; s.t -= dt; });
++			sparks = sparks.filter(function (s) { return s.t > 0; });
++			if (after) return;
++			frameT += dt;
++			speed = Math.min(660, speed + dt * 9);
++			dist += speed * dt;
++			var g = cat.hold > 0 && keyDown && cat.vy < 0 ? 1150 : 2300;
++			cat.hold -= dt; cat.vy += g * dt; cat.y += cat.vy * dt;
++			if (cat.y >= GROUND) { if (!cat.onGround && cat.vy > 300) burst(cat.x + 18, GROUND, 5, C.spark, 120); cat.y = GROUND; cat.vy = 0; cat.onGround = true; cat.jumps = 0; }
++			spawnIn -= dt; if (spawnIn <= 0) spawn();
++			coinIn -= dt;
++			if (coinIn <= 0) { coins.push({ x: W + 20, y: GROUND - 34 - Math.random() * 70, w: 16, h: 16, k: Math.random() < 0.22 ? 'cup' : 'coin' }); coinIn = 0.9 + Math.random() * 1.5; }
++			var me = { x: cat.x + 6, y: cat.y - 26, w: 28, h: 26 };
++			obs.forEach(function (o) { o.x -= speed * dt; if (o.k === 'glitch') o.y += Math.sin(frameT * 6 + o.wob) * 0.7; });
++			obs = obs.filter(function (o) { return o.x > -60; });
++			coins.forEach(function (c) { c.x -= speed * dt; });
++			coins = coins.filter(function (c) {
++				if (hit(me, c, 0)) { bonus += c.k === 'cup' ? 25 : 10; beep(c.k === 'cup' ? 880 : 760, 0.07, 'triangle'); burst(c.x + 8, c.y + 8, 8, c.k === 'cup' ? C.cup : C.coin, 200); return false; }
++				return c.x > -30;
++			});
++			for (var k = 0; k < obs.length; k++) if (hit(me, obs[k], 5)) { over(); return; }
++			var sc = score();
++			if (sc >= (cheers + 1) * 250) { cheers++; say('🔥 ' + sc + '! ' + CHEERS[cheers % CHEERS.length]); beep(990, 0.12, 'triangle'); }
++		}
++
++		/* ── Drawing ── */
++		function px(x, y, w, h, c) { ctx.fillStyle = c; ctx.fillRect(Math.round(x), Math.round(y), Math.max(1, Math.round(w)), Math.max(1, Math.round(h))); }
++		// One sprite pixel = U world units; (gx, gy) are sprite grid cells.
++		function sp(ox, oy, gx, gy, gw, gh, c) { px(ox + gx * U, oy + gy * U, gw * U, gh * U, c); }
++
++		function drawCat(x, y, dead) {
++			var o = C.cat, d = C.catDark, k = C.catOut, top = y - 30, ox = x;
++			var run = cat.onGround && state === 'run' ? Math.floor(frameT * 14) % 2 : -1;
++			// tail (curls up)
++			sp(ox, top, 0, 3, 1, 3, o); sp(ox, top, 1, 2, 1, 1, o); sp(ox, top, 1, 6, 2, 1, o);
++			// body
++			sp(ox, top, 2, 6, 10, 6, o); sp(ox, top, 2, 11, 10, 1, d);
++			sp(ox, top, 4, 6, 1, 2, d); sp(ox, top, 6, 6, 1, 2, d); sp(ox, top, 8, 6, 1, 2, d);
++			sp(ox, top, 7, 9, 5, 2, C.belly);
++			// head
++			sp(ox, top, 10, 2, 7, 6, o); sp(ox, top, 10, 7, 7, 1, d);
++			sp(ox, top, 10, 0, 2, 2, o); sp(ox, top, 15, 0, 2, 2, o); sp(ox, top, 10, 0, 1, 1, k); sp(ox, top, 16, 0, 1, 1, k);
++			// headphones
++			sp(ox, top, 11, 1, 5, 1, C.phonesDark); sp(ox, top, 9, 2, 2, 4, C.phones); sp(ox, top, 17, 2, 1, 4, C.phones);
++			// face
++			if (dead) { sp(ox, top, 12, 3, 1, 1, k); sp(ox, top, 13, 4, 1, 1, k); sp(ox, top, 13, 3, 1, 1, k); sp(ox, top, 12, 4, 1, 1, k); sp(ox, top, 15, 3, 1, 2, k); }
++			else { sp(ox, top, 12, 3, 1, 2, k); sp(ox, top, 15, 3, 1, 2, k); }
++			sp(ox, top, 14, 5, 1, 1, C.nose); sp(ox, top, 16, 5, 1, 1, C.belly);
++			// legs
++			if (run === -1) { sp(ox, top, 3, 12, 2, 2, d); sp(ox, top, 10, 12, 2, 2, d); }
++			else if (run) { sp(ox, top, 2, 12, 2, 3, d); sp(ox, top, 6, 12, 2, 2, d); sp(ox, top, 9, 12, 2, 2, d); sp(ox, top, 11, 12, 2, 3, d); }
++			else { sp(ox, top, 4, 12, 2, 2, d); sp(ox, top, 5, 12, 2, 3, d); sp(ox, top, 8, 12, 2, 3, d); sp(ox, top, 10, 12, 2, 2, d); }
++		}
++		function drawBug(o) {
++			var leg = Math.floor(frameT * 16) % 2, x = o.x, y = o.y;
++			px(x + 4, y + 2, 20, 12, C.bug); px(x + 4, y + 12, 20, 2, C.bugDark); px(x + 13, y + 2, 2, 12, C.bugDark);
++			px(x + 22, y + 4, 7, 8, C.bugDark); px(x + 25, y, 1, 4, C.bugDark); px(x + 28, y - 1, 1, 5, C.bugDark);
++			px(x + 7, y + 5, 3, 3, C.bugSpot); px(x + 17, y + 8, 3, 3, C.bugSpot);
++			for (var i = 0; i < 3; i++) px(x + 6 + i * 6 + (leg ? 2 : 0), y + 14, 2, 4, C.bugDark);
++		}
++		function drawRack(o) {
++			for (var i = 0; i < o.n; i++) {
++				var y = o.y + i * 24;
++				px(o.x, y, o.w, 23, C.rackDark); px(o.x + 2, y + 2, o.w - 4, 19, C.rack);
++				px(o.x + 4, y + 6, o.w - 8, 3, C.rackLine); px(o.x + 4, y + 12, o.w - 8, 3, C.rackLine);
++				px(o.x + o.w - 8, y + 17, 3, 2, Math.floor(frameT * 4 + i) % 2 ? C.led1 : C.led2);
++			}
++			ctx.fillStyle = C.led1; ctx.font = 'bold 9px ui-monospace, monospace'; ctx.textAlign = 'center';
++			ctx.fillText('500', o.x + o.w / 2, o.y - 4);
++		}
++		function drawGlitch(o) {
++			var f = Math.floor(frameT * 10) % 2, x = o.x, y = o.y;
++			px(x + 9, y + 4, 12, 10, C.glitch); px(x + 12, y + 7, 2, 2, C.white); px(x + 17, y + 7, 2, 2, C.white);
++			if (f) { px(x, y, 10, 4, C.glitch); px(x + 20, y, 10, 4, C.glitch); } else { px(x, y + 10, 10, 4, C.glitch); px(x + 20, y + 10, 10, 4, C.glitch); }
++			px(x + 4 + (f ? 3 : 0), y + 15, 4, 2, C.glitch2); px(x + 20 - (f ? 3 : 0), y + 2, 4, 2, C.glitch2);
++		}
++		function drawCoin(c) {
++			var bob = Math.sin(frameT * 5 + c.x * 0.05) * 2;
++			ctx.save(); ctx.shadowColor = c.k === 'cup' ? 'rgba(255,255,255,.6)' : 'rgba(52,211,153,.8)'; ctx.shadowBlur = 8;
++			if (c.k === 'cup') {
++				px(c.x + 2, c.y + 5 + bob, 11, 11, C.cup); px(c.x + 2, c.y + 5 + bob, 11, 3, C.coffee); px(c.x + 13, c.y + 8 + bob, 3, 5, C.cup);
++				px(c.x + 5, c.y + bob, 1, 3, C.hudDim); px(c.x + 9, c.y - 1 + bob, 1, 3, C.hudDim);
++			} else {
++				ctx.fillStyle = C.coin; ctx.font = 'bold 14px ui-monospace, monospace'; ctx.textAlign = 'center';
++				ctx.fillText('{ }', c.x + 8, c.y + 13 + bob);
++			}
++			ctx.restore();
++		}
++		function drawScene() {
++			var g = ctx.createLinearGradient(0, 0, 0, GROUND);
++			g.addColorStop(0, C.sky1); g.addColorStop(1, C.sky2);
++			ctx.fillStyle = g; ctx.fillRect(-10, 0, W + 20, GROUND);
++			// moon
++			ctx.save(); ctx.shadowColor = 'rgba(224,231,255,.7)'; ctx.shadowBlur = 14; ctx.fillStyle = '#e0e7ff'; ctx.beginPath(); ctx.arc(W - 160, 34, 10, 0, Math.PI * 2); ctx.fill(); ctx.restore();
++			ctx.fillStyle = C.sky1; ctx.beginPath(); ctx.arc(W - 155, 30, 9, 0, Math.PI * 2); ctx.fill();
++			// stars twinkle
++			stars.forEach(function (s) { if ((Math.sin(frameT * 2 + s.p) + 1) > 0.4) px(s.x, s.y, s.s, s.s, C.star); });
++			// far skyline: server towers with lit windows (slow parallax)
++			var fo = (dist * 0.12) % (W + 120);
++			towers.forEach(function (t) {
++				var x = ((t.x - fo) % (W + 120) + W + 120) % (W + 120) - 60;
++				px(x, GROUND - t.h, t.w, t.h, C.far);
++				for (var wy = GROUND - t.h + 6; wy < GROUND - 6; wy += 8) for (var wx = x + 4; wx < x + t.w - 4; wx += 6) if (((wx * 7 + wy * 3) | 0) % 5 === 0) px(wx, wy, 2, 3, C.farWin);
++			});
++			// mid hills (faster parallax)
++			var mo = (dist * 0.35) % (W + 200);
++			hills.forEach(function (h) {
++				var x = ((h.x - mo) % (W + 200) + W + 200) % (W + 200) - 100;
++				for (var i = 0; i < 6; i++) px(x + i * h.w / 12, GROUND - h.h + i * h.h / 6, h.w - i * h.w / 6, h.h / 6 + 1, C.mid);
++			});
++			// ground: glowing line of code
++			px(-10, GROUND, W + 20, H - GROUND, C.ground);
++			px(-10, GROUND - 1, W + 20, 3, C.lineGlow); px(-10, GROUND, W + 20, 1, C.line);
++			ctx.font = '10px ui-monospace, monospace'; ctx.textAlign = 'left'; ctx.fillStyle = C.token;
++			var off = dist % 70;
++			for (var i = 0, x2 = -off; x2 < W + 70; x2 += 70, i++) ctx.fillText(GROUND_WORDS[(i + Math.floor(dist / 70)) % GROUND_WORDS.length], x2, GROUND + 18);
++			var off2 = (dist * 1.3) % 26;
++			for (var x3 = -off2; x3 < W; x3 += 26) px(x3, GROUND + 28, 8, 2, C.token);
++		}
++		function hud() {
++			ctx.font = '600 12px ui-monospace, monospace'; ctx.textAlign = 'right'; ctx.fillStyle = C.hud;
++			ctx.fillText('SCORE ' + String(score()).padStart(5, '0'), W - 12, 20);
++			ctx.fillStyle = C.hudDim; ctx.fillText('BEST ' + String(hiscore).padStart(5, '0'), W - 12, 36);
++			if (state !== 'run') {
++				ctx.textAlign = 'center'; ctx.fillStyle = C.white; ctx.font = 'bold 18px ui-monospace, monospace';
++				ctx.fillText(state === 'over' ? 'GAME OVER' : state === 'paused' ? 'PAUSED' : 'BUG RUNNER', W / 2, H * 0.34);
++				ctx.font = '12px ui-monospace, monospace'; ctx.fillStyle = C.hud;
++				ctx.fillText(state === 'paused' ? 'Tap or press space to go on' : 'Tap or press space to ' + (state === 'over' ? 'restart' : 'start'), W / 2, H * 0.34 + 20);
++			}
++		}
++		function draw() {
++			if (!cat) reset();
++			ctx.setTransform(dpr * scale, 0, 0, dpr * scale, 0, 0);
++			ctx.imageSmoothingEnabled = false;
++			ctx.save(); if (shake > 0) ctx.translate((Math.random() - 0.5) * 6, 0);
++			drawScene();
++			coins.forEach(drawCoin);
++			obs.forEach(function (o) { if (o.k === 'bug') drawBug(o); else if (o.k === 'rack') drawRack(o); else drawGlitch(o); });
++			drawCat(cat.x, cat.y, state === 'over');
++			sparks.forEach(function (s) { px(s.x, s.y, 3, 3, s.c); });
++			hud();
++			ctx.restore();
++		}
++		function loop(now) {
++			if (state !== 'run') return;
++			var dt = Math.min(0.033, (now - last) / 1000); last = now;
++			step(dt);
++			if (state === 'run') { draw(); paintScore(); raf = requestAnimationFrame(loop); }
++		}
++
++		reset(); resize(); paintScore();
++		if (window.ResizeObserver) new ResizeObserver(function () { resize(); }).observe(box);
++		else window.addEventListener('resize', resize);
++		box.classList.add('is-ready');
++	}
++
++	function init() { document.querySelectorAll('[data-runner]').forEach(mount); }
++	if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
++	window.VSRunner = { mount: mount };
++})();
+diff --git a/wp-content/themes/vitalstack/assets/js/tools.js b/wp-content/themes/vitalstack/assets/js/tools.js
+index cec90e6..1691969 100644
+--- a/wp-content/themes/vitalstack/assets/js/tools.js
++++ b/wp-content/themes/vitalstack/assets/js/tools.js
+@@ -725,6 +725,6 @@
+ 
+ 	document.querySelectorAll('.tool[data-tool]').forEach(function (host) {
+ 		var make = tools[host.getAttribute('data-tool')];
+-		if (make) make(host);
++		if (make) { make(host); host.setAttribute('data-ready', '1'); }
+ 	});
+ })();
+diff --git a/wp-content/themes/vitalstack/functions.php b/wp-content/themes/vitalstack/functions.php
+index 925c116..7d22fe8 100644
+--- a/wp-content/themes/vitalstack/functions.php
++++ b/wp-content/themes/vitalstack/functions.php
+@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
+ 	exit;
+ }
+ 
+-define( 'VITALSTACK_VERSION', '4.12.0' );
++define( 'VITALSTACK_VERSION', '4.12.2' );
+ define( 'VITALSTACK_DIR', get_template_directory() );
+ define( 'VITALSTACK_URI', get_template_directory_uri() );
+ 
+@@ -58,5 +58,6 @@ require VITALSTACK_DIR . '/inc/ads.php';
+ require VITALSTACK_DIR . '/inc/ai-dictionary.php';
+ require VITALSTACK_DIR . '/inc/ai-city.php';
+ require VITALSTACK_DIR . '/inc/learn-helpers.php';
++require VITALSTACK_DIR . '/inc/runner.php';
+ require VITALSTACK_DIR . '/inc/setup-wizard.php';
+ require VITALSTACK_DIR . '/inc/starter-content.php';
+diff --git a/wp-content/themes/vitalstack/inc/fun.php b/wp-content/themes/vitalstack/inc/fun.php
+index 8ece6b0..3d87ea2 100644
+--- a/wp-content/themes/vitalstack/inc/fun.php
++++ b/wp-content/themes/vitalstack/inc/fun.php
+@@ -185,3 +185,18 @@ function vitalstack_hero_card() {
+ 	</div>
+ 	<?php
+ }
++
++/**
++ * Guests who already have XP see the header chip from the first paint, so
++ * the header does not jump when fun.js fills it in (layout shift).
++ */
++function vitalstack_xp_chip_bootstrap() {
++	if ( is_user_logged_in() ) {
++		return;
++	}
++	?>
++	<script>(function(){try{var x=JSON.parse(localStorage.getItem('vs-xp')||'null');if(x&&x.xp>0){document.documentElement.setAttribute('data-has-xp','1');}}catch(e){}})();</script>
++	<?php
++}
++add_action( 'wp_head', 'vitalstack_xp_chip_bootstrap', 2 );
++
+diff --git a/wp-content/themes/vitalstack/inc/runner.php b/wp-content/themes/vitalstack/inc/runner.php
+new file mode 100644
+index 0000000..9867c18
+--- /dev/null
++++ b/wp-content/themes/vitalstack/inc/runner.php
+@@ -0,0 +1,71 @@
++<?php
++/**
++ * Bug Runner: an endless runner game with Byte (assets/js/runner.js),
++ * featured on the games page and on the 404 page.
++ *
++ * @package VitalStack
++ */
++
++defined( 'ABSPATH' ) || exit;
++
++function vitalstack_runner_assets() {
++	if ( is_404() || is_page_template( 'page-games.php' ) || vitalstack_search_is_empty() ) {
++		wp_enqueue_script( 'vitalstack-runner', vitalstack_asset_url( 'assets/js/runner.js' ), array(), VITALSTACK_VERSION, array( 'in_footer' => true, 'strategy' => 'defer' ) );
++	}
++}
++add_action( 'wp_enqueue_scripts', 'vitalstack_runner_assets', 32 );
++
++/**
++ * The game box.
++ *
++ * @param string $context games|404.
++ */
++function vitalstack_runner_box( $context = 'games' ) {
++	$context = '404' === $context ? '404' : 'games';
++	?>
++	<section class="vs-runner" data-runner data-context="<?php echo esc_attr( $context ); ?>" aria-label="<?php esc_attr_e( 'Bug Runner game', 'vitalstack' ); ?>">
++		<div class="vs-runner-head">
++			<strong class="vs-runner-title">🏃 <?php esc_html_e( 'Bug Runner', 'vitalstack' ); ?></strong>
++			<span class="vs-runner-score" data-runner-score aria-live="off"></span>
++			<button type="button" class="vs-runner-sound" data-runner-sound aria-pressed="false" aria-label="<?php esc_attr_e( 'Sound', 'vitalstack' ); ?>">🔇</button>
++		</div>
++		<div class="vs-runner-stage">
++			<canvas tabindex="0" role="img" aria-label="<?php esc_attr_e( 'Byte the cat runs along a line of code. Jump over bugs and 500 errors, collect coffee and code coins.', 'vitalstack' ); ?>"></canvas>
++			<button type="button" class="btn btn-primary vs-runner-play" data-runner-play>▶ <?php esc_html_e( 'Play', 'vitalstack' ); ?></button>
++		</div>
++		<p class="vs-runner-msg" data-runner-msg aria-live="polite"><?php esc_html_e( 'Tap the game or press Space / ↑ to jump. Tap again in the air for a double jump.', 'vitalstack' ); ?></p>
++		<noscript><p class="vs-runner-msg"><?php esc_html_e( 'This game needs JavaScript.', 'vitalstack' ); ?></p></noscript>
++	</section>
++	<?php
++}
++
++/**
++ * A search that found nothing.
++ */
++function vitalstack_search_is_empty() {
++	global $wp_query;
++	return is_search() && $wp_query && 0 === (int) $wp_query->found_posts;
++}
++
++/**
++ * Search with no results: Byte, a speech bubble with the search words, and
++ * the Bug Runner game, like the 404 page.
++ */
++function vitalstack_search_empty_fun() {
++	$query = get_search_query( false );
++	?>
++	<div class="search-empty">
++		<div class="nf-hero">
++			<div class="nf-bot" aria-hidden="true"><?php echo function_exists( 'vitalstack_mascot' ) ? vitalstack_mascot( 'think', 132, '', 'byte' ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- fixed SVG ?></div>
++			<p class="nf-bubble">
++				<?php
++				/* translators: %s: the search words */
++				echo esc_html( sprintf( __( 'Meow… I searched every folder for “%s” but found nothing. Try a shorter word, or play while you think!', 'vitalstack' ), wp_html_excerpt( trim( $query ), 60, '…' ) ) );
++				?>
++			</p>
++		</div>
++		<?php vitalstack_runner_box( '404' ); ?>
++	</div>
++	<?php
++}
++
+diff --git a/wp-content/themes/vitalstack/page-games.php b/wp-content/themes/vitalstack/page-games.php
+index 48bff44..a886e26 100644
+--- a/wp-content/themes/vitalstack/page-games.php
++++ b/wp-content/themes/vitalstack/page-games.php
+@@ -28,6 +28,9 @@ get_header();
+ </section>
+ 
+ <div class="wrap games-wrap">
++	<?php if ( function_exists( 'vitalstack_runner_box' ) ) : ?>
++		<div class="games-featured"><?php vitalstack_runner_box( 'games' ); ?></div>
++	<?php endif; ?>
+ 	<div class="games-grid" data-games></div>
+ 
+ 	<div class="game-stage" id="game-stage" hidden>
+diff --git a/wp-content/themes/vitalstack/search.php b/wp-content/themes/vitalstack/search.php
+index f44c214..98ab80a 100644
+--- a/wp-content/themes/vitalstack/search.php
++++ b/wp-content/themes/vitalstack/search.php
+@@ -42,6 +42,11 @@ global $wp_query;
+ 			<?php vitalstack_pagination(); ?>
+ 		<?php else : ?>
+ 			<?php get_template_part( 'template-parts/none' ); ?>
++			<?php
++			if ( function_exists( 'vitalstack_search_empty_fun' ) ) {
++				vitalstack_search_empty_fun();
++			}
++			?>
+ 		<?php endif; ?>
+ 	</div>
+ </section>
+diff --git a/wp-content/themes/vitalstack/style.css b/wp-content/themes/vitalstack/style.css
+index 386a0b8..f8d2b82 100644
+--- a/wp-content/themes/vitalstack/style.css
++++ b/wp-content/themes/vitalstack/style.css
+@@ -4,7 +4,7 @@ Theme URI: https://vitalstack.co.in/
+ Author: VitalStack
+ Author URI: https://vitalstack.co.in/
+ Description: Tutorial-site theme for VitalStack: 17 learning paths (web, Python, Java, Spring Boot, React, Angular, DSA), live animated visualizers, quizzes, certificates, daily challenge and leaderboard, brain games, cheat sheets, free coding tools, reader accounts with XP and progress sync, PWA, and AdSense-ready ad slots.
+-Version: 4.12.0
++Version: 4.12.2
+ Requires at least: 6.3
+ Tested up to: 6.8
+ Requires PHP: 8.0
+@@ -407,10 +407,20 @@ body.courses-open .install-app, body.courses-open .cookie-note { display: none;
+ .topbar-nav a:hover { background: var(--bg-soft); color: var(--text); text-decoration: none; }
+ .topbar-nav a.is-active { color: var(--brand-ink); background: var(--brand-soft); }
+ @media (min-width: 960px) {
+-	.topbar-nav { display: flex; }
+ 	.topbar-search { max-width: 380px; min-width: 180px; }
++}
++/* 4.12.1: the practice links only sit in the top bar where they all fit; on
++   smaller laptops they stay in the topic bar below (which scrolls). Between
++   960 and 1380px they pushed the Sign up button off the screen. */
++@media (min-width: 1380px) {
++	.topbar-nav { display: flex; }
+ 	.topicbar .topic-practice { display: none; }
+ }
++@media (min-width: 1380px) and (max-width: 1519px) {
++	.topbar-nav a { padding: 8px 8px; font-size: 14px; }
++	.topbar-search { min-width: 160px; }
++	.topbar-search kbd { display: none; }
++}
+ @media (min-width: 960px) and (max-width: 1179px) {
+ 	.topbar-inner { gap: 12px; }
+ 	.topbar-nav a { padding: 8px 7px; font-size: 14px; }
+@@ -2684,3 +2694,101 @@ a.why-card:hover { border-color: #f5b301; text-decoration: none; transform: tran
+ 	.mascot-nudge { left: 10px; right: 10px; max-width: none; }
+ 	.celebrate .confetti, .celebrate [class*="confetti"] { z-index: -1; }
+ }
++
++/* ── 4.12.1 layout-shift fixes ─────────────────────────────────────────── */
++/* Phones: the tool status (Loading…, Ready, errors) gets its own line, so a
++   longer message never re-wraps the buttons and moves the page. */
++@media (max-width: 599px) { .tool-bar > .tool-status { flex: 1 1 100%; margin-left: 0; min-height: 1.5em; } }
++/* Tools are drawn by JavaScript: reserve about their height first so the
++   guide text below does not jump (layout shift). Heights are measured per
++   tool; the reservation ends once the tool is ready (data-ready). */
++.tool[data-tool="python-online-compiler"]:not([data-ready]) { min-height: 940px; }
++.tool[data-tool="sql-playground"]:not([data-ready]) { min-height: 580px; }
++.tool[data-tool="json-formatter"]:not([data-ready]) { min-height: 910px; }
++.tool[data-tool="regex-tester"]:not([data-ready]) { min-height: 980px; }
++.tool[data-tool="html-online-editor"]:not([data-ready]) { min-height: 1650px; }
++.tool[data-tool="ab-test-calculator"]:not([data-ready]) { min-height: 990px; }
++.tool[data-tool="sample-size-calculator"]:not([data-ready]) { min-height: 820px; }
++.tool[data-tool="ai-cost-calculator"]:not([data-ready]) { min-height: 1680px; }
++.tool[data-tool="csv-data-explorer"]:not([data-ready]) { min-height: 2310px; }
++.tool[data-tool="prompt-builder"]:not([data-ready]) { min-height: 1220px; }
++@media (min-width: 600px) {
++	.tool[data-tool="python-online-compiler"]:not([data-ready]) { min-height: 870px; }
++	.tool[data-tool="sql-playground"]:not([data-ready]) { min-height: 510px; }
++	.tool[data-tool="json-formatter"]:not([data-ready]) { min-height: 870px; }
++	.tool[data-tool="regex-tester"]:not([data-ready]) { min-height: 900px; }
++	.tool[data-tool="html-online-editor"]:not([data-ready]) { min-height: 1620px; }
++	.tool[data-tool="ab-test-calculator"]:not([data-ready]) { min-height: 680px; }
++	.tool[data-tool="sample-size-calculator"]:not([data-ready]) { min-height: 640px; }
++	.tool[data-tool="ai-cost-calculator"]:not([data-ready]) { min-height: 960px; }
++	.tool[data-tool="csv-data-explorer"]:not([data-ready]) { min-height: 1600px; }
++	.tool[data-tool="prompt-builder"]:not([data-ready]) { min-height: 1180px; }
++}
++@media (min-width: 1024px) {
++	.tool[data-tool="python-online-compiler"]:not([data-ready]) { min-height: 620px; }
++	.tool[data-tool="sql-playground"]:not([data-ready]) { min-height: 430px; }
++	.tool[data-tool="json-formatter"]:not([data-ready]) { min-height: 470px; }
++	.tool[data-tool="regex-tester"]:not([data-ready]) { min-height: 550px; }
++	.tool[data-tool="html-online-editor"]:not([data-ready]) { min-height: 1230px; }
++	.tool[data-tool="ab-test-calculator"]:not([data-ready]) { min-height: 570px; }
++	.tool[data-tool="sample-size-calculator"]:not([data-ready]) { min-height: 580px; }
++	.tool[data-tool="ai-cost-calculator"]:not([data-ready]) { min-height: 750px; }
++	.tool[data-tool="csv-data-explorer"]:not([data-ready]) { min-height: 1300px; }
++	.tool[data-tool="prompt-builder"]:not([data-ready]) { min-height: 730px; }
++}
++/* Guests with XP: show the chip before fun.js runs (no header jump). */
++:root[data-has-xp] .xp-chip[hidden] { display: inline-flex; }
++/* Games: the grid and "game of the day" are drawn by games.js; keep their space. */
++.games-daily[hidden] { display: inline-flex; visibility: hidden; }
++.games-grid[data-games]:empty { min-height: 3500px; }
++@media (min-width: 600px) { .games-grid[data-games]:empty { min-height: 1900px; } }
++@media (min-width: 1000px) { .games-grid[data-games]:empty { min-height: 1400px; } }
++@media (min-width: 1240px) { .games-grid[data-games]:empty { min-height: 1100px; } }
++
++/* ── Bug Runner game (games page and 404) ──────────────────────────────── */
++.vs-runner { max-width: 960px; margin: 0 auto; border: 1px solid var(--border); border-radius: 18px; background: var(--surface); box-shadow: var(--shadow-md); overflow: hidden; }
++.vs-runner-head { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(--border); background: var(--bg-soft); }
++.vs-runner-title { font-size: 16px; }
++.vs-runner-score { margin-left: auto; font: 600 13px var(--font-mono); color: var(--muted); font-variant-numeric: tabular-nums; }
++.vs-runner-sound { min-width: 40px; min-height: 36px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); cursor: pointer; font-size: 16px; }
++.vs-runner-stage { position: relative; }
++.vs-runner canvas { display: block; width: 100%; height: clamp(190px, calc(62vw - 20px), 280px); touch-action: manipulation; cursor: pointer; outline: none; -webkit-tap-highlight-color: transparent; user-select: none; }
++.vs-runner canvas:focus-visible { box-shadow: inset 0 0 0 3px var(--focus); }
++.vs-runner-play { position: absolute; left: 50%; bottom: 18%; transform: translateX(-50%); min-height: 44px; border-radius: 999px; padding: 8px 22px; }
++.vs-runner-play[hidden] { display: none; }
++.vs-runner-msg { margin: 0; padding: 10px 14px; font-size: 14px; color: var(--text-2); border-top: 1px solid var(--border); min-height: 1.5em; overflow-wrap: anywhere; }
++.games-featured { margin-bottom: 26px; }
++.nf-hero { display: flex; flex-direction: column; align-items: center; gap: 6px; margin-bottom: 4px; }
++.nf-bot { animation: nf-bob 3s ease-in-out infinite; }
++.nf-bot svg { max-width: 132px; height: auto; }
++.nf-bubble { position: relative; margin: 0; padding: 10px 16px; border-radius: 16px; background: var(--brand-soft); color: var(--brand-ink); font-weight: 700; max-width: 360px; text-align: center; }
++.nf-bubble::before { content: ""; position: absolute; top: -8px; left: 50%; margin-left: -8px; border: 8px solid transparent; border-top: 0; border-bottom-color: var(--brand-soft); }
++.nf-game { margin-top: 32px; }
++.nf-game-title { text-align: center; font-size: 20px; margin: 0 0 12px; }
++@keyframes nf-bob { 50% { transform: translateY(-6px) rotate(-2deg); } }
++@media (prefers-reduced-motion: reduce) { .nf-bot { animation: none; } }
++@media (min-width: 600px) { .vs-runner canvas { height: clamp(190px, 27vw, 280px); } }
++@media (max-width: 480px) { .vs-runner { border-radius: 14px; } .vs-runner-title { font-size: 15px; } }
++
++/* ── 4.12.2 UAT fixes ──────────────────────────────────────────────────── */
++/* All-courses panel: it sits inside the topic bar, whose links never wrap.
++   Course names must wrap inside their cards (laptop columns and phone tiles). */
++.courses-panel a, .courses-panel span { white-space: normal; }
++.courses-group ul { grid-template-columns: minmax(0, 1fr); }
++.courses-group li { min-width: 0; }
++.courses-group a span { min-width: 0; overflow-wrap: anywhere; }
++.courses-group small { white-space: nowrap; }
++@media (max-width: 719px) {
++	.courses-group ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
++	.courses-premium ul { grid-template-columns: minmax(0, 1fr); }
++}
++/* Topic bar arrows: a solid block under the arrow and a fade beside it, so
++   course names never show through the arrow button. */
++.topic-arrow { width: 44px; background: var(--dark); }
++.topic-arrow.is-next { background: var(--dark); }
++.topic-arrow::after { content: ""; position: absolute; top: 0; bottom: 0; width: 28px; pointer-events: none; }
++.topic-arrow.is-prev::after { left: 100%; background: linear-gradient(90deg, var(--dark), rgba(0, 0, 0, 0)); }
++.topic-arrow.is-next::after { right: 100%; background: linear-gradient(270deg, var(--dark), rgba(0, 0, 0, 0)); }
++/* Search with no results: the same friendly Byte box as the 404 page. */
++.search-empty { margin-top: 28px; text-align: center; }
++.search-empty .nf-hero { margin-bottom: 18px; }

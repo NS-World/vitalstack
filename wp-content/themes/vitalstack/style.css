@@ -3056,3 +3056,26 @@ a.why-card:hover { border-color: #f5b301; text-decoration: none; transform: tran
 @media (prefers-reduced-motion: reduce) { .nf-bot { animation: none; } }
 @media (min-width: 600px) { .vs-runner canvas { height: clamp(190px, 27vw, 280px); } }
 @media (max-width: 480px) { .vs-runner { border-radius: 14px; } .vs-runner-title { font-size: 15px; } }
+
+/* ── 4.12.2 UAT fixes ──────────────────────────────────────────────────── */
+/* All-courses panel: it sits inside the topic bar, whose links never wrap.
+   Course names must wrap inside their cards (laptop columns and phone tiles). */
+.courses-panel a, .courses-panel span { white-space: normal; }
+.courses-group ul { grid-template-columns: minmax(0, 1fr); }
+.courses-group li { min-width: 0; }
+.courses-group a span { min-width: 0; overflow-wrap: anywhere; }
+.courses-group small { white-space: nowrap; }
+@media (max-width: 719px) {
+	.courses-group ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.courses-premium ul { grid-template-columns: minmax(0, 1fr); }
+}
+/* Topic bar arrows: a solid block under the arrow and a fade beside it, so
+   course names never show through the arrow button. */
+.topic-arrow { width: 44px; background: var(--dark); }
+.topic-arrow.is-next { background: var(--dark); }
+.topic-arrow::after { content: ""; position: absolute; top: 0; bottom: 0; width: 28px; pointer-events: none; }
+.topic-arrow.is-prev::after { left: 100%; background: linear-gradient(90deg, var(--dark), rgba(0, 0, 0, 0)); }
+.topic-arrow.is-next::after { right: 100%; background: linear-gradient(270deg, var(--dark), rgba(0, 0, 0, 0)); }
+/* Search with no results: the same friendly Byte box as the 404 page. */
+.search-empty { margin-top: 28px; text-align: center; }
+.search-empty .nf-hero { margin-bottom: 18px; }

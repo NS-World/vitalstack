@@ -9,7 +9,7 @@
 defined( 'ABSPATH' ) || exit;
 
 function vitalstack_runner_assets() {
-	if ( is_404() || is_page_template( 'page-games.php' ) ) {
+	if ( is_404() || is_page_template( 'page-games.php' ) || vitalstack_search_is_empty() ) {
 		wp_enqueue_script( 'vitalstack-runner', vitalstack_asset_url( 'assets/js/runner.js' ), array(), VITALSTACK_VERSION, array( 'in_footer' => true, 'strategy' => 'defer' ) );
 	}
 }
@@ -38,3 +38,34 @@ function vitalstack_runner_box( $context = 'games' ) {
 	</section>
 	<?php
 }
+
+/**
+ * A search that found nothing.
+ */
+function vitalstack_search_is_empty() {
+	global $wp_query;
+	return is_search() && $wp_query && 0 === (int) $wp_query->found_posts;
+}
+
+/**
+ * Search with no results: Byte, a speech bubble with the search words, and
+ * the Bug Runner game, like the 404 page.
+ */
+function vitalstack_search_empty_fun() {
+	$query = get_search_query( false );
+	?>
+	<div class="search-empty">
+		<div class="nf-hero">
+			<div class="nf-bot" aria-hidden="true"><?php echo function_exists( 'vitalstack_mascot' ) ? vitalstack_mascot( 'think', 132, '', 'byte' ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- fixed SVG ?></div>
+			<p class="nf-bubble">
+				<?php
+				/* translators: %s: the search words */
+				echo esc_html( sprintf( __( 'Meow… I searched every folder for “%s” but found nothing. Try a shorter word, or play while you think!', 'vitalstack' ), wp_html_excerpt( trim( $query ), 60, '…' ) ) );
+				?>
+			</p>
+		</div>
+		<?php vitalstack_runner_box( '404' ); ?>
+	</div>
+	<?php
+}
+

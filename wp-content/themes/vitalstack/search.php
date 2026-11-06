@@ -42,6 +42,11 @@ global $wp_query;
 			<?php vitalstack_pagination(); ?>
 		<?php else : ?>
 			<?php get_template_part( 'template-parts/none' ); ?>
+			<?php
+			if ( function_exists( 'vitalstack_search_empty_fun' ) ) {
+				vitalstack_search_empty_fun();
+			}
+			?>
 		<?php endif; ?>
 	</div>
 </section>
