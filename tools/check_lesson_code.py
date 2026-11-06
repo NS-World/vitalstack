@@ -42,6 +42,21 @@ API_SDKS = {"anthropic", "openai", "google", "pydantic", "streamlit", "dotenv", 
             "guardrails", "presidio_analyzer", "agents", "autogen", "smolagents", "ragas", "deepeval",
             "langsmith", "litellm", "redis", "pyspark", "e2b", "playwright_stealth", "claude_agent_sdk",
             "langfuse", "opentelemetry", "pypdf", "playwright"}
+# Signature projects read the Datasets Hub CSVs by URL; here they come from the theme folder.
+DATASETS = pathlib.Path(__file__).resolve().parent.parent / "wp-content" / "themes" / "vitalstack" / "data" / "datasets"
+try:
+    import pandas as _pd
+
+    _read_csv = _pd.read_csv
+
+    def _local_csv(src, *a, **k):
+        if isinstance(src, str) and "/data/datasets/" in src and src.startswith("http"):
+            src = DATASETS / src.rsplit("/", 1)[-1]
+        return _read_csv(src, *a, **k)
+
+    _pd.read_csv = _local_csv
+except ImportError:
+    pass
 BLOCK = re.compile(r"```(\w+)\n(.*?)```", re.S)
 FIGURES = pathlib.Path(__file__).resolve().parent.parent / "wp-content" / "themes" / "vitalstack" / "assets" / "lessons"
 SAVE = False

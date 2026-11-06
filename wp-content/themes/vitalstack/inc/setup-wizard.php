@@ -767,6 +767,18 @@ function vitalstack_setup_paths() {
 			'premium'     => 'agentic-ai-engineer',
 		),
 		array(
+			'slug'        => 'ds-signature',
+			'name'        => 'Signature Data Projects (India data)',
+			'description' => 'Four original projects on VitalStack\'s Indian datasets: UPI fraud radar, food-delivery ETA promise, clean-air alert and a fair-pay audit, with runnable, tested Python. Part of the Data Scientist premium track.',
+			'premium'     => 'data-scientist',
+		),
+		array(
+			'slug'        => 'ai-signature',
+			'name'        => 'Signature AI Projects',
+			'description' => 'A scam-SMS shield with Claude and a kirana restock agent with tool use and owner approval, with runnable, tested Python. Part of the Gen AI Developer premium track.',
+			'premium'     => 'gen-ai-developer',
+		),
+		array(
 			'slug'        => 'cyber-safety',
 			'name'        => 'Cyber Safety for Everyone',
 			'description' => 'A free course for everyone, tech or not: strong passwords and two-step verification, phishing, UPI and OTP scams, fake calls and digital arrest, safe browsing, phone security, privacy, malware and backups, and exactly what to do if you are scammed.',

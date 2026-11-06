@@ -122,6 +122,60 @@ An original endless runner starring Byte, the crew's orange cat with green headp
   motion. Any premium reader can switch theme from the palette button. Free readers can preview
   a theme for 20 seconds, with an "Unlock" link to pricing.
 
+## 6b. Signature Projects: premium projects you won't find elsewhere
+
+The existing portfolio projects (churn, house prices, chat with PDFs) are useful, but similar
+projects are everywhere. **Signature Projects** are new, unique to VitalStack, built on our own
+Indian datasets, and every code output is checked by the lesson checker.
+
+**Data Scientist track: `ds-signature`, 4 projects**
+
+1. **UPI Fraud Radar:**
+   - 3,000 payments, 1.4% fraud. Shows why accuracy lies on rare events.
+   - The alert threshold is chosen by rupee cost: ₹1.75 lakh lost becomes ₹15,699 total cost.
+2. **The 30-Minute Promise:**
+   - Cleans impossible delivery times.
+   - An explainable ETA model: +3.2 min per km, +10 min in rain, +8 min in peak hour.
+   - An ETA buffer chosen from past errors.
+3. **Clean-Air Alert:**
+   - Fills missing AQI readings per city and maps them to the national AQI bands.
+   - Explains the winter pattern.
+   - Shows honestly that a model does not beat the "same as last reading" baseline, then designs
+     an early warning that misses only 5 of 103 bad-air readings.
+4. **Fair Pay and Attrition Audit:**
+   - Fills missing salaries by peer group.
+   - Adjusted pay gap: remote staff are paid fairly. Pay is not linked to performance.
+   - Overtime triples attrition.
+   - Compares two retention options in rupees, with every assumption written down.
+
+**Gen AI Developer track: `ai-signature`, 2 projects**
+
+5. **Scam SMS Shield with Claude:**
+   - Explainable rules score perfectly on their own messages but catch 0 of 4 new Hinglish scams,
+     which proves the need for a held-out test set.
+   - Personal data is masked before any API call.
+   - Claude gives a JSON verdict, with "unsure" as an option and a safe fallback.
+6. **Kirana Restock Agent:**
+   - Restock maths with lead time and safety stock.
+   - Claude gets read-only tools; ordering needs the owner's approval and a budget limit, both
+     enforced in code.
+   - A dry run without a model to compare against.
+
+Both premium tracks list the new modules. Quizzes are included (1,431 questions; no lesson is
+without a quiz). The Claude code was also run end to end against the real `anthropic` SDK using a
+local mock server.
+
+## 6c. AdSense readiness notice (admins only)
+
+The Dashboard and Pages screens now list any page AdSense reviewers expect that is:
+
+- missing;
+- still a draft;
+- still contains a `[your …]` placeholder.
+
+Each item links straight to the page. Legal pages are still created as drafts on purpose, so read
+them before publishing. The notice only reminds you; it never publishes anything.
+
 ## 7. Fixes
 
 - **Header on laptops (960–1380px)**: the six practice links pushed the header 35–290px past
@@ -133,11 +187,12 @@ An original endless runner starring Byte, the crew's orange cat with green headp
 
 1. Upload `vitalstack-theme-v5.0.0-dev.zip` (Appearance → Themes → Add New → Upload).
 2. Customize → Site Identity → set **This copy of the site is: DEV**.
-3. Appearance → VitalStack Setup → run it, which creates these pages:
+3. Appearance → VitalStack Setup → run it, which creates these pages and paths:
    - `datasets`
    - `study-music`
    - the 12 new tool pages
    - the two free course paths
+   - the two Signature Projects paths (`ds-signature`, `ai-signature`)
 4. Import `content/import/vitalstack-all-content.xml` (Tools → Import → WordPress) for the 16 new
    lessons.
 5. Check: the ribbon shows **DEV · 5.0.0-dev** and the page source contains `noindex`.
