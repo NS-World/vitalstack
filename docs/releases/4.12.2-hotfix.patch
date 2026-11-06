@@ -522,7 +522,7 @@ index f44c214..98ab80a 100644
  	</div>
  </section>
 diff --git a/wp-content/themes/vitalstack/style.css b/wp-content/themes/vitalstack/style.css
-index 386a0b8..c8cce08 100644
+index 386a0b8..fa6e947 100644
 --- a/wp-content/themes/vitalstack/style.css
 +++ b/wp-content/themes/vitalstack/style.css
 @@ -4,7 +4,7 @@ Theme URI: https://vitalstack.co.in/
@@ -556,7 +556,7 @@ index 386a0b8..c8cce08 100644
  @media (min-width: 960px) and (max-width: 1179px) {
  	.topbar-inner { gap: 12px; }
  	.topbar-nav a { padding: 8px 7px; font-size: 14px; }
-@@ -2684,3 +2694,106 @@ a.why-card:hover { border-color: #f5b301; text-decoration: none; transform: tran
+@@ -2684,3 +2694,119 @@ a.why-card:hover { border-color: #f5b301; text-decoration: none; transform: tran
  	.mascot-nudge { left: 10px; right: 10px; max-width: none; }
  	.celebrate .confetti, .celebrate [class*="confetti"] { z-index: -1; }
  }
@@ -663,3 +663,16 @@ index 386a0b8..c8cce08 100644
 +@media (min-width: 901px) { .subject-inner { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
 +.subject-inner > * { min-width: 0; }
 +.subject-example pre, .subject-example .example-code { max-width: 100%; overflow-x: auto; }
++/* All-courses panel layout: the three short groups share the first row; the
++   groups with long course names get a full row each, with their courses in
++   as many columns as fit, so every name reads in full. */
++@media (min-width: 720px) {
++	.courses-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
++	.courses-group.is-data, .courses-group.is-ds, .courses-group.is-genai, .courses-group.is-safe, .courses-group.is-more { grid-column: 1 / -1; }
++	.courses-group.is-data ul, .courses-group.is-ds ul, .courses-group.is-genai ul, .courses-group.is-safe ul, .courses-group.is-more ul { grid-template-columns: repeat(auto-fill, minmax(min(100%, 270px), 1fr)); column-gap: 18px; }
++}
++/* Phones: long course names in the topic bar wrap onto two lines instead of
++   filling the whole bar. */
++@media (max-width: 719px) {
++	.topicbar-inner > a:not(.topic-home) { flex: 0 0 auto; white-space: normal; max-width: 200px; font-size: 13.5px; line-height: 1.2; text-align: center; padding: 0 12px; }
++}
