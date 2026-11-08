@@ -264,7 +264,8 @@ function vitalstack_handle_waitlist() {
 	}
 	$back = vitalstack_premium_url( $track );
 	if ( ! is_user_logged_in() ) {
-		wp_safe_redirect( vitalstack_account_url( array( 'tab' => 'register', 'redirect_to' => $back ) ) );
+		// After signing up they land back on the track with a "one last tap" nudge (4.12.3).
+		wp_safe_redirect( vitalstack_account_url( array( 'tab' => 'register', 'redirect_to' => add_query_arg( 'vs_join', '1', $back ) ) ) );
 		exit;
 	}
 	if ( ! isset( $_POST['_vsnonce'] ) || ! wp_verify_nonce( sanitize_key( $_POST['_vsnonce'] ), 'vs_waitlist_' . $track ) ) {

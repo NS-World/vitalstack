@@ -182,6 +182,13 @@ them before publishing. The notice only reminds you; it never publishes anything
   the screen edge. They now appear in the top bar only from 1380px; on smaller screens they stay
   in the scrolling topic bar.
 - Cron explainer stays fast for rare schedules (it skips whole days and hours that cannot match).
+- **From the 8 Nov pre-PROD audit (also in 4.12.3):**
+  - Draft legal pages are no longer linked, so there are no 404 links.
+  - The admin login name is no longer shown in author links, oEmbed or RSS.
+  - The theme's REST routes refuse cross-site CORS.
+  - The AI City island fits 320px phones.
+  - After signing up from "Join the waitlist", the track page nudges "one last tap".
+  - See `docs/releases/PREPROD-AUDIT-2026-11-08.md`.
 
 ## After installing on the DEV site
 

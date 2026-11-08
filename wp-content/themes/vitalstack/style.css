@@ -3104,3 +3104,12 @@ a.why-card:hover { border-color: #f5b301; text-decoration: none; transform: tran
 @media (max-width: 719px) {
 	.topicbar-inner > a:not(.topic-home) { flex: 0 0 auto; white-space: normal; max-width: 200px; font-size: 13.5px; line-height: 1.2; text-align: center; padding: 0 12px; }
 }
+
+/* ── 4.12.3 ─────────────────────────────────────────────────────────────
+   AI City island stays inside its card on small phones; waitlist nudge after sign-up. */
+.home-aic-inner { overflow-x: clip; }
+@media (max-width: 760px) { .home-aic-isle { width: min(300px, 80%); } .hai-b { font-size: 28px; } }
+.premium-nudge { margin: 0 0 10px; font-weight: 700; color: var(--brand-ink); }
+.btn.is-nudge { box-shadow: 0 0 0 4px var(--brand-soft); }
+@media (prefers-reduced-motion: no-preference) { .btn.is-nudge { animation: vsNudge 1.6s ease-in-out 3; } }
+@keyframes vsNudge { 50% { box-shadow: 0 0 0 10px var(--brand-soft); } }

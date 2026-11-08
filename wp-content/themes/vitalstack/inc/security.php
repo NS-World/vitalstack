@@ -243,6 +243,114 @@ add_filter(
 	}
 );
 
+/* ── Administrator login names stay private (4.12.3) ─────────────────── */
+
+/**
+ * True when this user's author archive address would show the login name of
+ * an account that can manage the site (WordPress uses the login as the
+ * archive slug unless it was changed).
+ */
+function vitalstack_author_reveals_login( $user_id ) {
+	$user = get_userdata( (int) $user_id );
+	if ( ! $user || ! user_can( $user, 'manage_options' ) ) {
+		return false;
+	}
+	return strtolower( $user->user_nicename ) === sanitize_title( $user->user_login );
+}
+
+/** Where author links for such accounts go instead: About Us, or the home page. */
+function vitalstack_public_author_url() {
+	$about = function_exists( 'vitalstack_published_page_url' ) ? vitalstack_published_page_url( 'about-us' ) : '';
+	return $about ? $about : home_url( '/' );
+}
+
+add_filter(
+	'author_link',
+	function ( $link, $author_id ) {
+		return vitalstack_author_reveals_login( $author_id ) ? vitalstack_public_author_url() : $link;
+	},
+	10,
+	2
+);
+
+/** /author/<login>/ itself goes to the same place for visitors. */
+function vitalstack_block_admin_author_archive() {
+	if ( ! is_author() || is_user_logged_in() ) {
+		return;
+	}
+	$user = get_queried_object();
+	if ( $user instanceof WP_User && vitalstack_author_reveals_login( $user->ID ) ) {
+		wp_safe_redirect( vitalstack_public_author_url(), 301 );
+		exit;
+	}
+}
+add_action( 'template_redirect', 'vitalstack_block_admin_author_archive', 1 );
+
+/**
+ * If an administrator's public display name is still the login name (the
+ * WordPress default), show "<Site> Team" on the public site instead. Set a
+ * display name in Users → Profile to show your own name.
+ */
+add_filter(
+	'get_the_author_display_name',
+	function ( $name, $user_id ) {
+		if ( is_admin() ) {
+			return $name;
+		}
+		$user = get_userdata( (int) $user_id );
+		if ( $user && user_can( $user, 'manage_options' ) && 0 === strcasecmp( trim( (string) $name ), $user->user_login ) ) {
+			/* translators: %s: site name */
+			return sprintf( __( '%s Team', 'vitalstack' ), get_bloginfo( 'name' ) );
+		}
+		return $name;
+	},
+	10,
+	2
+);
+
+// Feeds and other the_author() output use the same public name.
+add_filter(
+	'the_author',
+	function ( $name ) {
+		global $authordata;
+		return ( ! is_admin() && $authordata instanceof WP_User ) ? get_the_author_meta( 'display_name', $authordata->ID ) : $name;
+	}
+);
+
+// oEmbed reads the display name straight from the user record.
+add_filter(
+	'oembed_response_data',
+	function ( $data, $post ) {
+		if ( isset( $data['author_name'] ) && $post ) {
+			$data['author_name'] = get_the_author_meta( 'display_name', $post->post_author );
+		}
+		return $data;
+	},
+	10,
+	2
+);
+
+/**
+ * The theme's own REST routes answer cross-site requests without CORS
+ * permission. WordPress echoes any Origin by default; the routes already need
+ * a nonce, so this is defence in depth. Razorpay's webhook is server-to-server
+ * and sends no Origin.
+ */
+add_filter(
+	'rest_pre_serve_request',
+	function ( $served, $result, $request ) {
+		$origin = get_http_origin();
+		if ( $origin && 0 === strpos( (string) $request->get_route(), '/vitalstack/' )
+			&& strtolower( (string) wp_parse_url( $origin, PHP_URL_HOST ) ) !== strtolower( (string) wp_parse_url( home_url(), PHP_URL_HOST ) ) ) {
+			header_remove( 'Access-Control-Allow-Origin' );
+			header_remove( 'Access-Control-Allow-Credentials' );
+		}
+		return $served;
+	},
+	11,
+	3
+);
+
 /* ── Smaller things ───────────────────────────────────────────────────── */
 
 // Don't advertise the WordPress version in feeds either.

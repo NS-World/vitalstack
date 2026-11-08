@@ -30,15 +30,19 @@
 			?>
 		</div>
 
+		<?php if ( vitalstack_footer_page_items( 'company' ) ) : ?>
 		<div class="footer-col">
 			<h2 class="footer-title"><?php esc_html_e( 'VitalStack', 'vitalstack' ); ?></h2>
 			<?php vitalstack_footer_pages( 'company' ); ?>
 		</div>
+		<?php endif; ?>
 
+		<?php if ( vitalstack_footer_page_items( 'legal' ) ) : ?>
 		<div class="footer-col">
 			<h2 class="footer-title"><?php esc_html_e( 'Legal', 'vitalstack' ); ?></h2>
 			<?php vitalstack_footer_pages( 'legal' ); ?>
 		</div>
+		<?php endif; ?>
 	</div>
 
 	<div class="wrap footer-bottom">

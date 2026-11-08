@@ -358,8 +358,11 @@ function vitalstack_author_box() {
 				<p class="author-box-bio"><?php echo esc_html( $bio ); ?></p>
 			<?php endif; ?>
 			<p class="author-box-links">
-				<a href="<?php echo esc_url( vitalstack_page_url( 'editorial-policy' ) ); ?>"><?php esc_html_e( 'How we write and fact-check', 'vitalstack' ); ?></a>
-				<span aria-hidden="true">·</span>
+				<?php $vs_editorial = vitalstack_published_page_url( 'editorial-policy' ); ?>
+				<?php if ( $vs_editorial ) : ?>
+					<a href="<?php echo esc_url( $vs_editorial ); ?>"><?php esc_html_e( 'How we write and fact-check', 'vitalstack' ); ?></a>
+					<span aria-hidden="true">·</span>
+				<?php endif; ?>
 				<a href="<?php echo esc_url( vitalstack_page_url( 'contact-us' ) ); ?>"><?php esc_html_e( 'Report an error', 'vitalstack' ); ?></a>
 			</p>
 		</div>
@@ -464,6 +467,27 @@ function vitalstack_social_links() {
 function vitalstack_page_url( $slug ) {
 	$page = get_page_by_path( $slug );
 	return $page ? get_permalink( $page ) : home_url( '/' . $slug . '/' );
+}
+
+/**
+ * A trust page's address only while it is published, otherwise '' (4.12.3).
+ * A draft would link to ?page_id=N, which visitors and AdSense reviewers see as a 404.
+ */
+function vitalstack_published_page_url( $slug ) {
+	$label = '';
+	foreach ( vitalstack_footer_page_sets() as $pages ) {
+		if ( isset( $pages[ $slug ] ) ) {
+			$label = $pages[ $slug ];
+		}
+	}
+	$page = vitalstack_find_published_page( $slug, $label );
+	return $page ? get_permalink( $page ) : '';
+}
+
+/** A link to a published trust page, or just its name while it isn't published. */
+function vitalstack_page_link_or_text( $slug, $label ) {
+	$url = vitalstack_published_page_url( $slug );
+	return $url ? '<a href="' . esc_url( $url ) . '">' . esc_html( $label ) . '</a>' : esc_html( $label );
 }
 
 function vitalstack_tutorials_url() {
@@ -599,6 +623,11 @@ function vitalstack_find_published_page( $slug, $title ) {
  * @param string $set "company" or "legal".
  */
 function vitalstack_footer_pages( $set ) {
+	vitalstack_menu_list( vitalstack_footer_page_items( $set ) );
+}
+
+/** The published pages of a footer set, as [url, label] pairs. */
+function vitalstack_footer_page_items( $set ) {
 	$items = array();
 	foreach ( vitalstack_footer_page_sets()[ $set ] as $slug => $label ) {
 		$page = vitalstack_find_published_page( $slug, $label );
@@ -606,7 +635,7 @@ function vitalstack_footer_pages( $set ) {
 			$items[] = array( get_permalink( $page ), $label );
 		}
 	}
-	vitalstack_menu_list( $items );
+	return $items;
 }
 
 /**

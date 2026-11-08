@@ -92,8 +92,8 @@ get_header();
 								printf(
 									/* translators: 1: terms link, 2: privacy link */
 									esc_html__( 'By creating an account you agree to our %1$s and %2$s.', 'vitalstack' ),
-									'<a href="' . esc_url( vitalstack_page_url( 'terms-of-service' ) ) . '">' . esc_html__( 'Terms', 'vitalstack' ) . '</a>',
-									'<a href="' . esc_url( vitalstack_page_url( 'privacy-policy' ) ) . '">' . esc_html__( 'Privacy Policy', 'vitalstack' ) . '</a>'
+									vitalstack_page_link_or_text( 'terms-of-service', __( 'Terms', 'vitalstack' ) ), // phpcs:ignore WordPress.Security.EscapeOutput -- escaped inside
+									vitalstack_page_link_or_text( 'privacy-policy', __( 'Privacy Policy', 'vitalstack' ) ) // phpcs:ignore WordPress.Security.EscapeOutput -- escaped inside
 								);
 								?>
 							</p>

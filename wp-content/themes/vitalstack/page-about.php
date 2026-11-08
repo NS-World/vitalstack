@@ -49,7 +49,9 @@ while ( have_posts() ) :
 				<h2><?php esc_html_e( 'How we create content', 'vitalstack' ); ?></h2>
 				<p><?php esc_html_e( 'Every guide is planned around a real question a beginner has. Code examples are run before they are published. We use AI tools to help with research and first drafts, and a person reviews, tests, edits and takes responsibility for every article before it goes live.', 'vitalstack' ); ?></p>
 				<p><?php esc_html_e( 'When tools or best practices change, we update the guide and show the new “Updated” date at the top. If you spot a mistake, tell us and we will fix it.', 'vitalstack' ); ?></p>
-				<p><a href="<?php echo esc_url( vitalstack_page_url( 'editorial-policy' ) ); ?>"><?php esc_html_e( 'Read the full editorial policy →', 'vitalstack' ); ?></a></p>
+				<?php if ( vitalstack_published_page_url( 'editorial-policy' ) ) : ?>
+					<p><a href="<?php echo esc_url( vitalstack_published_page_url( 'editorial-policy' ) ); ?>"><?php esc_html_e( 'Read the full editorial policy →', 'vitalstack' ); ?></a></p>
+				<?php endif; ?>
 			</div>
 
 			<?php if ( $vs_owner ) : ?>
@@ -58,7 +60,7 @@ while ( have_posts() ) :
 					<div class="author-box">
 						<?php echo vitalstack_monogram( $vs_owner->ID, 'lg' ); // phpcs:ignore ?>
 						<div>
-							<p class="author-box-name"><a href="<?php echo esc_url( get_author_posts_url( $vs_owner->ID ) ); ?>"><?php echo esc_html( $vs_owner->display_name ); ?></a></p>
+							<p class="author-box-name"><a href="<?php echo esc_url( get_author_posts_url( $vs_owner->ID ) ); ?>"><?php echo esc_html( get_the_author_meta( 'display_name', $vs_owner->ID ) ); ?></a></p>
 							<?php if ( $vs_owner->description ) : ?>
 								<p class="author-box-bio"><?php echo esc_html( $vs_owner->description ); ?></p>
 							<?php endif; ?>

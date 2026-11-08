@@ -52,13 +52,17 @@ foreach ( $t['modules'] as $vs_m ) {
 				<?php elseif ( $vs_waiting ) : ?>
 					<p class="premium-has">✅ <?php esc_html_e( 'You’re on the waitlist. We’ll email you when it opens.', 'vitalstack' ); ?></p>
 				<?php else : ?>
+					<?php $vs_nudge = is_user_logged_in() && isset( $_GET['vs_join'] ); // phpcs:ignore WordPress.Security.NonceVerification -- display only ?>
+					<?php if ( $vs_nudge ) : ?>
+						<p class="premium-nudge">👉 <?php esc_html_e( 'One last tap: join the waitlist to save your early-bird spot.', 'vitalstack' ); ?></p>
+					<?php endif; ?>
 					<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 						<input type="hidden" name="action" value="vs_waitlist">
 						<input type="hidden" name="track" value="<?php echo esc_attr( $slug ); ?>">
 						<?php if ( is_user_logged_in() ) : ?>
 							<?php wp_nonce_field( 'vs_waitlist_' . $slug, '_vsnonce' ); ?>
 						<?php endif; ?>
-						<button type="submit" class="btn btn-primary btn-lg"><?php esc_html_e( 'Join the waitlist (free)', 'vitalstack' ); ?></button>
+						<button type="submit" class="btn btn-primary btn-lg<?php echo $vs_nudge ? ' is-nudge' : ''; ?>"><?php esc_html_e( 'Join the waitlist (free)', 'vitalstack' ); ?></button>
 					</form>
 					<p class="premium-small"><?php esc_html_e( 'Get the early-bird price when it opens. Start the free modules today.', 'vitalstack' ); ?></p>
 					<?php if ( function_exists( 'vitalstack_pricing_url' ) ) : ?>
