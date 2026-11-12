@@ -275,7 +275,7 @@ function vitalstack_ref_orders( $user_id ) {
 	if ( ! vitalstack_ref_is_code( $code ) ) {
 		return $out;
 	}
-	$wait = max( 0, (int) vitalstack_pay_settings()['refund_days'] ) * DAY_IN_SECONDS;
+	$wait = max( 3, (int) vitalstack_pay_settings()['refund_days'] ) * DAY_IN_SECONDS; // at least 3 days (4.13.2)
 	$ids  = get_posts(
 		array(
 			'post_type'   => 'vs_order',

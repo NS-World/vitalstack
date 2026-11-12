@@ -102,6 +102,7 @@ if ( $vs_plans['all-year']['inr'] < $vs_monthly12 ) {
 						<span class="plan-amount" data-inr="<?php echo esc_attr( vitalstack_pay_price_label( $vs_p['inr'], 'inr' ) ); ?>" data-usd="<?php echo esc_attr( vitalstack_pay_price_label( $vs_p['usd'], 'usd' ) ); ?>"><?php echo esc_html( vitalstack_pay_price_label( $vs_p['inr'], 'inr' ) ); ?></span>
 						<span class="plan-period">/ <?php echo esc_html( $vs_p['period'] ); ?></span>
 					</p>
+					<?php echo function_exists( 'vitalstack_plan_offer' ) ? vitalstack_plan_offer( $vs_buy, $vs_p ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- escaped inside ?>
 					<p class="plan-alt muted small"<?php echo ( function_exists( 'vitalstack_pay_page_currency' ) && vitalstack_pay_page_currency() ) ? ' hidden' : ''; ?> data-alt-inr="<?php echo esc_attr( sprintf( /* translators: %s: price */ __( '%s outside India', 'vitalstack' ), vitalstack_pay_price_label( $vs_p['usd'], 'usd' ) ) ); ?>" data-alt-usd="<?php echo esc_attr( sprintf( /* translators: %s: price */ __( '%s in India', 'vitalstack' ), vitalstack_pay_price_label( $vs_p['inr'], 'inr' ) ) ); ?>"><?php echo esc_html( sprintf( /* translators: %s: price */ __( '%s outside India', 'vitalstack' ), vitalstack_pay_price_label( $vs_p['usd'], 'usd' ) ) ); ?></p>
 					<ul class="plan-feats">
 						<?php foreach ( $vs_feats[ $vs_id ] as $vs_f ) : ?>
@@ -145,6 +146,9 @@ if ( $vs_plans['all-year']['inr'] < $vs_monthly12 ) {
 			<span>🔒 <?php esc_html_e( 'Secure checkout by Razorpay', 'vitalstack' ); ?></span>
 			<span>💳 <?php esc_html_e( 'We never see your card or UPI PIN', 'vitalstack' ); ?></span>
 			<span>🔁 <?php esc_html_e( 'One-time payment, no auto-renewal', 'vitalstack' ); ?></span>
+			<?php if ( ! $vs_refund ) : ?>
+				<span>✅ <?php esc_html_e( 'All sales are final: try the free modules of every track first', 'vitalstack' ); ?></span>
+			<?php endif; ?>
 			<?php if ( $vs_refund ) : ?>
 				<?php $vs_refund_page = function_exists( 'vitalstack_find_published_page' ) ? vitalstack_find_published_page( 'refund-policy', 'Refund and Cancellation Policy' ) : null; ?>
 				<span>↩️ <?php if ( $vs_refund_page ) : ?><a href="<?php echo esc_url( get_permalink( $vs_refund_page ) ); ?>"><?php endif; ?><?php echo esc_html( sprintf( /* translators: %d: days */ _n( '%d-day refund if it’s not for you', '%d-day refund if it’s not for you', $vs_refund, 'vitalstack' ), $vs_refund ) ); ?><?php if ( $vs_refund_page ) : ?></a><?php endif; ?></span>
@@ -204,6 +208,9 @@ if ( $vs_plans['all-year']['inr'] < $vs_monthly12 ) {
 			<details><summary><?php esc_html_e( 'When do I get access?', 'vitalstack' ); ?></summary><p><?php esc_html_e( 'Right after the payment succeeds. We also email you a receipt. Your access is shown on your account page.', 'vitalstack' ); ?></p></details>
 			<?php if ( $vs_refund ) : ?>
 				<details><summary><?php esc_html_e( 'What if it’s not for me?', 'vitalstack' ); ?></summary><p><?php echo esc_html( sprintf( /* translators: %d: days */ __( 'Write to us within %d days of paying and, if you have opened less than 30%% of the premium lessons, we refund you in full. No long forms.', 'vitalstack' ), $vs_refund ) ); ?></p></details>
+			<?php endif; ?>
+			<?php if ( ! $vs_refund ) : ?>
+				<details><summary><?php esc_html_e( 'Can I get a refund?', 'vitalstack' ); ?></summary><p><?php esc_html_e( 'No. Access starts the moment you pay, so all sales are final. Every track has free modules: open them first and buy only when you are sure. If a payment goes through but your plan isn’t active, write to us and we fix it.', 'vitalstack' ); ?></p></details>
 			<?php endif; ?>
 			<details><summary><?php esc_html_e( 'Do I need to know coding already?', 'vitalstack' ); ?></summary><p><?php esc_html_e( 'No. Both tracks start from zero with our free Python lessons, and every step builds on the one before.', 'vitalstack' ); ?></p></details>
 			<details><summary><?php esc_html_e( 'Will free lessons stay free?', 'vitalstack' ); ?></summary><p><?php esc_html_e( 'Yes. Everything that is free today stays free. Premium adds the deeper career material on top.', 'vitalstack' ); ?></p></details>

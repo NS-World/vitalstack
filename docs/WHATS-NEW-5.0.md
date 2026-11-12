@@ -201,6 +201,10 @@ them before publishing. The notice only reminds you; it never publishes anything
       (Settings → Currency);
     - USD prices $9 / $29 / $49 / $129 (combo $39);
     - on phones, every course name fits on one line.
+  - **4.13.2:**
+    - all sales final (refund window 0, with matching pricing and policy wording);
+    - days left on account and track pages, and a renewal note in the last 7 days;
+    - launch-offer line on plan cards (earlier price struck, Save %, per-month price).
   - See `docs/releases/4.13-PLANS-INVITES-RAZORPAY.md`.
 
 ## After installing on the DEV site

@@ -44,7 +44,7 @@ foreach ( $t['modules'] as $vs_m ) {
 			<?php vitalstack_flash(); ?>
 			<div class="premium-cta">
 				<?php if ( $vs_has ) : ?>
-					<p class="premium-has">✅ <?php esc_html_e( 'You have access to this track.', 'vitalstack' ); ?></p>
+					<p class="premium-has">✅ <?php esc_html_e( 'You have access to this track.', 'vitalstack' ); ?><?php if ( function_exists( 'vitalstack_premium_days_label' ) && ! current_user_can( 'edit_posts' ) && vitalstack_premium_days_label( get_current_user_id(), $slug ) ) : ?> <b class="days-left<?php echo is_int( vitalstack_premium_days_left( get_current_user_id(), $slug ) ) && vitalstack_premium_days_left( get_current_user_id(), $slug ) <= 7 ? ' is-soon' : ''; ?>"><?php echo esc_html( vitalstack_premium_days_label( get_current_user_id(), $slug ) ); ?></b><?php endif; ?></p>
 					<p class="premium-small"><?php echo esc_html( sprintf( /* translators: 1: ready modules, 2: all premium modules */ __( '%1$d of %2$d premium modules are ready now. New ones unlock for you automatically as they are published.', 'vitalstack' ), $vs_ready_mods, $vs_prem_mods ) ); ?></p>
 				<?php elseif ( function_exists( 'vitalstack_pay_ready' ) && vitalstack_pay_ready() ) : ?>
 					<a class="btn btn-primary btn-lg" href="<?php echo esc_url( vitalstack_pricing_url() . '#plan-' . $slug ); ?>"><?php esc_html_e( 'Unlock this track', 'vitalstack' ); ?></a>

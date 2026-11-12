@@ -190,7 +190,7 @@ function vitalstack_pay_settings() {
 			'live_secret' => '',
 			'webhook'     => '',
 			'prices'      => array(),
-			'refund_days' => 7,
+			'refund_days' => 0, // all sales final (4.13.2); set days to offer refunds
 			'cur_rule'    => 'auto', // auto: ₹ in India, $ elsewhere (4.13.1)
 			'demo'        => false,
 			'testers'     => '',
@@ -934,6 +934,7 @@ function vitalstack_pay_panel( $user_id ) {
 					<li>
 						<a href="<?php echo esc_url( vitalstack_premium_url( $slug ) ); ?>"><?php echo esc_html( $tracks[ $slug ]['icon'] . ' ' . $tracks[ $slug ]['title'] ); ?></a>
 						<span class="muted small"><?php echo 1 === $v ? esc_html__( 'No end date', 'vitalstack' ) : esc_html( sprintf( /* translators: %s: date */ __( 'Active until %s', 'vitalstack' ), wp_date( get_option( 'date_format' ), $v ) ) ); ?></span>
+						<?php if ( 1 !== $v && function_exists( 'vitalstack_premium_days_label' ) ) : ?><b class="days-left<?php echo vitalstack_premium_days_left( $user_id, $slug ) <= 7 ? ' is-soon' : ''; ?>"><?php echo esc_html( vitalstack_premium_days_label( $user_id, $slug ) ); ?></b><?php endif; ?>
 					</li>
 				<?php endforeach; ?>
 			</ul>

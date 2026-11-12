@@ -3160,3 +3160,18 @@ a.why-card:hover { border-color: #f5b301; text-decoration: none; transform: tran
 	.courses-group small i { display: none; }
 }
 .courses-group small i { font-style: normal; }
+
+/* ── 4.13.2: launch-offer line on plan cards, days left, renewal note ──── */
+.plan-offer { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin: 4px 0 10px; font-size: 14px; }
+.plan-offer s { color: var(--text-2); font-weight: 600; }
+.plan-save-x { padding: 3px 9px; border-radius: 999px; background: #ffe7a3; color: #6b4b00; font-size: 12px; font-weight: 800; letter-spacing: .02em; text-transform: uppercase; }
+.plan-per-x { color: var(--brand-ink); font-weight: 700; }
+.plan-price:has(.plan-was) + .plan-offer .plan-was-x { display: none; }
+.days-left { display: inline-block; margin-left: 6px; padding: 2px 8px; border-radius: 999px; background: var(--brand-soft); color: var(--brand-ink); font-size: 12px; font-weight: 800; white-space: nowrap; }
+.days-left.is-soon { background: #ffe1e1; color: #a12828; }
+.ref-welcome { bottom: calc(12px + var(--vs-cookie-h, 0px)); }
+.renew-note { position: fixed; left: 12px; right: 12px; bottom: calc(12px + var(--vs-cookie-h, 0px)); z-index: 61; display: flex; align-items: center; gap: 12px; max-width: 720px; margin: 0 auto; padding: 12px 14px; border-radius: 16px; background: var(--surface); border: 1px solid #f0b4b4; box-shadow: 0 12px 40px rgba(0, 0, 0, .25); }
+.renew-note p { margin: 0; flex: 1 1 auto; font-size: 14px; font-weight: 600; }
+.renew-note .btn { flex: 0 0 auto; }
+.renew-note-x { flex: 0 0 auto; width: 32px; height: 32px; border: 0; border-radius: 50%; background: var(--bg-soft); color: var(--text); font-size: 20px; line-height: 1; cursor: pointer; }
+@media (max-width: 480px) { .renew-note { flex-wrap: wrap; } }

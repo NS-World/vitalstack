@@ -118,4 +118,35 @@
 		window.addEventListener('resize', function () { clearTimeout(fitTimer); fitTimer = setTimeout(fitNames, 150); });
 		if (!coursesPanel.hidden && coursesPanel.offsetParent) fitNames();
 	}
+
+	/* Bottom notes sit above the cookie banner while it is open (4.13.2). */
+	var cookieNote = document.getElementById('cookie-note');
+	var liftNotes = function () {
+		var h = cookieNote && !cookieNote.hidden && getComputedStyle(cookieNote).display !== 'none' ? Math.ceil(cookieNote.getBoundingClientRect().height) + 12 : 0; // fixed elements have no offsetParent
+		document.documentElement.style.setProperty('--vs-cookie-h', h + 'px');
+	};
+	if (cookieNote) {
+		liftNotes();
+		new MutationObserver(liftNotes).observe(cookieNote, { attributes: true, attributeFilter: ['hidden', 'class', 'style'] });
+		window.addEventListener('resize', liftNotes);
+	}
+
+	/* Pricing offer line (4.13.2): follows the ₹/$ shown in each card. */
+	var payRoot = document.querySelector('[data-pay]');
+	if (payRoot) {
+		var syncOffer = function () {
+			payRoot.querySelectorAll('[data-plan-card]').forEach(function (card) {
+				var amt = card.querySelector('.plan-amount');
+				var cur = amt && /^\s*\$/.test(amt.textContent) ? 'usd' : 'inr';
+				card.querySelectorAll('[data-x-inr]').forEach(function (el) {
+					var t = el.getAttribute('data-x-' + cur) || '';
+					if (el.textContent !== t) el.textContent = t; // only real changes, so the observer settles
+					if (el.hidden !== !t) el.hidden = !t;
+				});
+			});
+		};
+		syncOffer();
+		payRoot.addEventListener('click', function (e) { if (e.target.closest('[data-cur]')) setTimeout(syncOffer, 30); });
+		new MutationObserver(syncOffer).observe(payRoot, { subtree: true, characterData: true, childList: true });
+	}
 })();
