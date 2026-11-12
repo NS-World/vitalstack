@@ -37,7 +37,7 @@ function vitalstack_pay_plans() {
 			'tracks' => $all,
 			'days'   => 31,
 			'inr'    => 199,
-			'usd'    => 5,
+			'usd'    => 9,
 			'period' => __( '1 month', 'vitalstack' ),
 			'blurb'  => __( 'Every premium track for a month. Cancel any time.', 'vitalstack' ),
 		),
@@ -46,7 +46,7 @@ function vitalstack_pay_plans() {
 			'tracks' => array( 'agentic-ai-engineer' ),
 			'days'   => 365,
 			'inr'    => 999,
-			'usd'    => 19,
+			'usd'    => 29,
 			'period' => __( '12 months', 'vitalstack' ),
 			'blurb'  => __( 'Build, test and ship AI agents, MCP servers and multi-agent systems.', 'vitalstack' ),
 			'track'  => true,
@@ -56,7 +56,7 @@ function vitalstack_pay_plans() {
 			'tracks' => array( 'data-scientist' ),
 			'days'   => 365,
 			'inr'    => 999,
-			'usd'    => 19,
+			'usd'    => 29,
 			'period' => __( '12 months', 'vitalstack' ),
 			'blurb'  => __( 'Statistics, machine learning, SQL, Power BI and 6 projects.', 'vitalstack' ),
 			'track'  => true,
@@ -66,7 +66,7 @@ function vitalstack_pay_plans() {
 			'tracks' => array( 'gen-ai-developer' ),
 			'days'   => 365,
 			'inr'    => 999,
-			'usd'    => 19,
+			'usd'    => 29,
 			'period' => __( '12 months', 'vitalstack' ),
 			'blurb'  => __( 'LLMs, RAG, AI agents and deploying real AI apps.', 'vitalstack' ),
 			'track'  => true,
@@ -76,7 +76,7 @@ function vitalstack_pay_plans() {
 			'tracks' => $all,
 			'days'   => 365,
 			'inr'    => 1499,
-			'usd'    => 29,
+			'usd'    => 49,
 			'period' => __( '12 months', 'vitalstack' ),
 			'blurb'  => __( 'Every track and everything we add this year.', 'vitalstack' ),
 			'best'   => true,
@@ -86,7 +86,7 @@ function vitalstack_pay_plans() {
 			'tracks' => $all,
 			'days'   => 0, // 0 = no end date
 			'inr'    => 3999,
-			'usd'    => 79,
+			'usd'    => 129,
 			'period' => __( 'once, for life', 'vitalstack' ),
 			'blurb'  => __( 'All current and future tracks, for life. First 200 buyers only.', 'vitalstack' ),
 			'limit'  => 200,
@@ -191,6 +191,7 @@ function vitalstack_pay_settings() {
 			'webhook'     => '',
 			'prices'      => array(),
 			'refund_days' => 7,
+			'cur_rule'    => 'auto', // auto: ₹ in India, $ elsewhere (4.13.1)
 			'demo'        => false,
 			'testers'     => '',
 			'coupons'     => '',
@@ -643,6 +644,7 @@ function vitalstack_pay_rest_order( WP_REST_Request $req ) {
 	$plans = vitalstack_pay_plans();
 	$plan  = sanitize_key( (string) $req->get_param( 'plan' ) );
 	$cur   = 'usd' === sanitize_key( (string) $req->get_param( 'currency' ) ) ? 'usd' : 'inr';
+	$cur   = function_exists( 'vitalstack_pay_locked_currency' ) && vitalstack_pay_locked_currency() ? vitalstack_pay_locked_currency() : $cur; // India ₹, elsewhere $ (4.13.1)
 	if ( ! isset( $plans[ $plan ] ) ) {
 		return vitalstack_pay_error( 'bad_plan', __( 'Please pick a plan.', 'vitalstack' ) );
 	}
@@ -709,7 +711,7 @@ function vitalstack_pay_rest_order( WP_REST_Request $req ) {
 		if ( $why ) {
 			error_log( 'VitalStack payments: Razorpay order failed: ' . sanitize_text_field( $why ) ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions
 		}
-		return vitalstack_pay_error( 'gateway', 'usd' === $cur ? __( 'Payments in US dollars are not available right now. Please try ₹ (INR) or try again later.', 'vitalstack' ) : __( 'The payment service is not responding. Please try again in a minute.', 'vitalstack' ), 502 );
+		return vitalstack_pay_error( 'gateway', 'usd' === $cur ? ( function_exists( 'vitalstack_pay_locked_currency' ) && vitalstack_pay_locked_currency() ? __( 'International card payments are not available right now. Please try again later or contact us.', 'vitalstack' ) : __( 'Payments in US dollars are not available right now. Please try ₹ (INR) or try again later.', 'vitalstack' ) ) : __( 'The payment service is not responding. Please try again in a minute.', 'vitalstack' ), 502 );
 	}
 	update_post_meta( $order, '_vs_rzp_order', $body['id'] );
 	update_post_meta( $order, '_vs_plan', $plan );
@@ -745,6 +747,7 @@ function vitalstack_pay_rest_quote( WP_REST_Request $req ) {
 	}
 	$plan = sanitize_key( (string) $req->get_param( 'plan' ) );
 	$cur  = 'usd' === sanitize_key( (string) $req->get_param( 'currency' ) ) ? 'usd' : 'inr';
+	$cur  = function_exists( 'vitalstack_pay_locked_currency' ) && vitalstack_pay_locked_currency() ? vitalstack_pay_locked_currency() : $cur;
 	if ( ! isset( vitalstack_pay_plans()[ $plan ] ) ) {
 		return vitalstack_pay_error( 'bad_plan', __( 'Please pick a plan.', 'vitalstack' ) );
 	}
@@ -1017,6 +1020,11 @@ function vitalstack_pay_settings_page() {
 					<?php endif; ?>
 					<p class="description"><?php echo esc_html( sprintf( /* translators: %d: places */ __( 'Founder Lifetime places left: %d', 'vitalstack' ), vitalstack_pay_lifetime_left() ) ); ?></p>
 				</td></tr>
+				<tr><th><?php esc_html_e( 'Currency', 'vitalstack' ); ?></th><td><select name="cur_rule">
+					<option value="auto" <?php selected( $s['cur_rule'] ?? 'auto', 'auto' ); ?>><?php esc_html_e( 'Automatic: ₹ for readers in India, $ for everyone else (recommended)', 'vitalstack' ); ?></option>
+					<option value="choose" <?php selected( $s['cur_rule'] ?? 'auto', 'choose' ); ?>><?php esc_html_e( 'Readers choose ₹ or $', 'vitalstack' ); ?></option>
+					<option value="inr" <?php selected( $s['cur_rule'] ?? 'auto', 'inr' ); ?>><?php esc_html_e( '₹ only, for everyone', 'vitalstack' ); ?></option>
+				</select><p class="description"><?php esc_html_e( 'Automatic uses the visitor’s country when your CDN sends it (Cloudflare does), otherwise the device time zone. The server applies it to every order.', 'vitalstack' ); ?></p></td></tr>
 				<tr><th><?php esc_html_e( 'Refund window', 'vitalstack' ); ?></th><td><input type="number" min="0" max="60" name="refund_days" value="<?php echo (int) $s['refund_days']; ?>" style="width:70px"> <?php esc_html_e( 'days (shown on the pricing page; 0 hides it)', 'vitalstack' ); ?></td></tr>
 			</table>
 			<?php submit_button(); ?>
@@ -1065,6 +1073,9 @@ function vitalstack_pay_save_settings() {
 				$s['prices'][ $id ][ $cur ] = $v;
 			}
 		}
+	}
+	if ( isset( $_POST['cur_rule'] ) ) {
+		$s['cur_rule'] = in_array( $_POST['cur_rule'], array( 'auto', 'choose', 'inr' ), true ) ? sanitize_key( $_POST['cur_rule'] ) : 'auto';
 	}
 	$s['refund_days'] = isset( $_POST['refund_days'] ) ? min( 60, absint( $_POST['refund_days'] ) ) : $s['refund_days'];
 	update_option( 'vs_pay', $s, false );

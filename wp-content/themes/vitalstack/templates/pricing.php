@@ -61,12 +61,15 @@ if ( $vs_plans['all-year']['inr'] < $vs_monthly12 ) {
 	<div class="wrap trailer-wrap"><?php vitalstack_premium_trailer( 'pricing' ); ?></div>
 </section>
 
-<section class="section pricing" data-pay data-action="<?php echo esc_attr( $vs_action ); ?>"<?php if ( 'buy' === $vs_action ) : ?> data-api="<?php echo esc_url( rest_url( 'vitalstack/v1/pay/' ) ); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'wp_rest' ) ); ?>"<?php endif; ?>>
+<section class="section pricing" data-pay data-cur-lock="<?php echo esc_attr( function_exists( 'vitalstack_pay_page_currency' ) ? vitalstack_pay_page_currency() : '' ); ?>" data-action="<?php echo esc_attr( $vs_action ); ?>"<?php if ( 'buy' === $vs_action ) : ?> data-api="<?php echo esc_url( rest_url( 'vitalstack/v1/pay/' ) ); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'wp_rest' ) ); ?>"<?php endif; ?>>
 	<div class="wrap">
+		<?php $vs_curlock = function_exists( 'vitalstack_pay_page_currency' ) ? vitalstack_pay_page_currency() : ''; ?>
+		<?php if ( '' === $vs_curlock ) : ?>
 		<div class="pricing-cur" role="radiogroup" aria-label="<?php esc_attr_e( 'Currency', 'vitalstack' ); ?>">
 			<button type="button" role="radio" aria-checked="true" data-cur="inr">🇮🇳 ₹ INR</button>
 			<button type="button" role="radio" aria-checked="false" data-cur="usd">🌍 $ USD</button>
 		</div>
+		<?php endif; ?>
 		<p class="pricing-cur-note muted small" data-cur-note><?php esc_html_e( 'Pay with UPI, cards, net banking or wallets.', 'vitalstack' ); ?></p>
 
 		<div class="pricing-grid">
@@ -99,7 +102,7 @@ if ( $vs_plans['all-year']['inr'] < $vs_monthly12 ) {
 						<span class="plan-amount" data-inr="<?php echo esc_attr( vitalstack_pay_price_label( $vs_p['inr'], 'inr' ) ); ?>" data-usd="<?php echo esc_attr( vitalstack_pay_price_label( $vs_p['usd'], 'usd' ) ); ?>"><?php echo esc_html( vitalstack_pay_price_label( $vs_p['inr'], 'inr' ) ); ?></span>
 						<span class="plan-period">/ <?php echo esc_html( $vs_p['period'] ); ?></span>
 					</p>
-					<p class="plan-alt muted small" data-alt-inr="<?php echo esc_attr( sprintf( /* translators: %s: price */ __( '%s outside India', 'vitalstack' ), vitalstack_pay_price_label( $vs_p['usd'], 'usd' ) ) ); ?>" data-alt-usd="<?php echo esc_attr( sprintf( /* translators: %s: price */ __( '%s in India', 'vitalstack' ), vitalstack_pay_price_label( $vs_p['inr'], 'inr' ) ) ); ?>"><?php echo esc_html( sprintf( /* translators: %s: price */ __( '%s outside India', 'vitalstack' ), vitalstack_pay_price_label( $vs_p['usd'], 'usd' ) ) ); ?></p>
+					<p class="plan-alt muted small"<?php echo ( function_exists( 'vitalstack_pay_page_currency' ) && vitalstack_pay_page_currency() ) ? ' hidden' : ''; ?> data-alt-inr="<?php echo esc_attr( sprintf( /* translators: %s: price */ __( '%s outside India', 'vitalstack' ), vitalstack_pay_price_label( $vs_p['usd'], 'usd' ) ) ); ?>" data-alt-usd="<?php echo esc_attr( sprintf( /* translators: %s: price */ __( '%s in India', 'vitalstack' ), vitalstack_pay_price_label( $vs_p['inr'], 'inr' ) ) ); ?>"><?php echo esc_html( sprintf( /* translators: %s: price */ __( '%s outside India', 'vitalstack' ), vitalstack_pay_price_label( $vs_p['usd'], 'usd' ) ) ); ?></p>
 					<ul class="plan-feats">
 						<?php foreach ( $vs_feats[ $vs_id ] as $vs_f ) : ?>
 							<li><?php echo esc_html( $vs_f ); ?></li>

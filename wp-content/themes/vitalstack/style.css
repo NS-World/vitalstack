@@ -3148,3 +3148,15 @@ a.why-card:hover { border-color: #f5b301; text-decoration: none; transform: tran
 .ref-welcome .btn { flex: 0 0 auto; }
 .ref-welcome-x { flex: 0 0 auto; width: 32px; height: 32px; border: 0; border-radius: 50%; background: var(--bg-soft); color: var(--text); font-size: 20px; line-height: 1; cursor: pointer; }
 @media (max-width: 480px) { .ref-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } .ref-welcome { flex-wrap: wrap; } }
+
+/* ── 4.13.1: All-courses panel on phones, every course on one line ─────
+   The lesson count becomes a small number pill, long names shrink a little
+   (share.js) and only the very longest end in "…" with the full name as a tooltip. */
+@media (max-width: 719px) {
+	.courses-group ul, .courses-premium ul { gap: 4px; }
+	.courses-group a, .courses-premium a { gap: 10px; min-height: 44px; padding: 9px 12px; }
+	.courses-group a span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 15px; line-height: 1.3; }
+	.courses-group small { min-width: 28px; padding: 3px 8px; text-align: center; font-size: 12px; font-weight: 700; line-height: 1.2; background: var(--surface); border: 1px solid var(--border); color: var(--text-2); }
+	.courses-group small i { display: none; }
+}
+.courses-group small i { font-style: normal; }

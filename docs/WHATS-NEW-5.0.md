@@ -196,6 +196,11 @@ them before publishing. The notice only reminds you; it never publishes anything
   - Temporary-email sign-ups are refused.
   - Copied lesson text carries a source link.
   - On phones, the All-courses panel shows one course per row.
+  - **4.13.1:**
+    - ₹ for India and $ elsewhere, set by the server from the CDN country or the device time zone
+      (Settings → Currency);
+    - USD prices $9 / $29 / $49 / $129 (combo $39);
+    - on phones, every course name fits on one line.
   - See `docs/releases/4.13-PLANS-INVITES-RAZORPAY.md`.
 
 ## After installing on the DEV site

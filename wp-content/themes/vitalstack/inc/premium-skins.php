@@ -108,7 +108,7 @@ function vitalstack_combo_plans( $plans ) {
 		$plans[ $id ] = $c + array(
 			'days'   => 365,
 			'inr'    => 1299,
-			'usd'    => 25,
+			'usd'    => 39,
 			'period' => __( '12 months', 'vitalstack' ),
 			'combo'  => true,
 		);

@@ -31,12 +31,19 @@
 		root.querySelectorAll('.plan-was').forEach(function (w) { w.remove(); });
 		if (window.__vsRequote) window.__vsRequote();
 	}
-	var saved = null;
-	try { saved = localStorage.getItem('vs-cur'); } catch (e) {}
-	if (!saved) {
+	var tzIndia = function () {
 		var tz = '';
 		try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) {}
-		saved = /^Asia\/(Kolkata|Calcutta)$/.test(tz) ? 'inr' : 'usd';
+		return /^Asia\/(Kolkata|Calcutta)$/.test(tz);
+	};
+	// 4.13.1: the server may fix the currency (₹ in India, $ elsewhere).
+	var lock = root.getAttribute('data-cur-lock') || '';
+	var saved = null;
+	if (lock === 'inr' || lock === 'usd') saved = lock;
+	else if (lock === 'tz') saved = tzIndia() ? 'inr' : 'usd';
+	else {
+		try { saved = localStorage.getItem('vs-cur'); } catch (e) {}
+		if (!saved) saved = tzIndia() ? 'inr' : 'usd';
 	}
 	setCur(saved);
 
