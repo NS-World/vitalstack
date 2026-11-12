@@ -351,6 +351,46 @@ add_filter(
 	3
 );
 
+/* ── AI training crawlers (4.13) ──────────────────────────────────────── */
+
+/**
+ * robots.txt asks AI *training* crawlers to stay out. Google Search, AdSense
+ * (Mediapartners-Google), Google Ads and Bing are named and allowed, so search
+ * traffic and ads are not affected. AI *search* bots that send visitors with a
+ * link (OAI-SearchBot, Claude-SearchBot) are left alone.
+ *
+ * robots.txt is a request, not a lock: well-known AI companies follow it.
+ * Premium lessons are protected on the server and never depend on it.
+ */
+function vitalstack_ai_crawlers() {
+	return apply_filters(
+		'vitalstack_blocked_ai_crawlers',
+		array( 'GPTBot', 'ChatGPT-User', 'ClaudeBot', 'Claude-Web', 'anthropic-ai', 'CCBot', 'Google-Extended', 'Applebot-Extended', 'Bytespider', 'Meta-ExternalAgent', 'Meta-ExternalFetcher', 'FacebookBot', 'Amazonbot', 'cohere-ai', 'cohere-training-data-crawler', 'Diffbot', 'ImagesiftBot', 'Omgilibot', 'Omgili', 'PerplexityBot', 'Timpibot', 'YouBot', 'AI2Bot', 'Ai2Bot-Dolma', 'PanguBot', 'Kangaroo Bot', 'Webzio-Extended', 'iaskspider/2.0', 'VelenPublicWebCrawler', 'Scrapy' )
+	);
+}
+
+add_filter(
+	'robots_txt',
+	function ( $output, $public ) {
+		if ( ! $public ) {
+			return $output; // "Discourage search engines" is on: leave WordPress's own rules
+		}
+		$lines = array( '', '# Search and ads: welcome', 'User-agent: Googlebot', 'User-agent: AdsBot-Google', 'User-agent: Bingbot', 'Disallow: /wp-admin/', 'Allow: /wp-admin/admin-ajax.php', '' );
+		// The AdSense crawler reads only its own group: it may see every page it shows ads on.
+		$lines[] = 'User-agent: Mediapartners-Google';
+		$lines[] = 'Allow: /';
+		$lines[] = '';
+		$lines[] = '# AI training crawlers: please do not copy this site';
+		foreach ( vitalstack_ai_crawlers() as $bot ) {
+			$lines[] = 'User-agent: ' . $bot;
+		}
+		$lines[] = 'Disallow: /';
+		return rtrim( $output ) . "\n" . implode( "\n", $lines ) . "\n";
+	},
+	20,
+	2
+);
+
 /* ── Smaller things ───────────────────────────────────────────────────── */
 
 // Don't advertise the WordPress version in feeds either.

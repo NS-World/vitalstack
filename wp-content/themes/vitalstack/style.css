@@ -3113,3 +3113,38 @@ a.why-card:hover { border-color: #f5b301; text-decoration: none; transform: tran
 .btn.is-nudge { box-shadow: 0 0 0 4px var(--brand-soft); }
 @media (prefers-reduced-motion: no-preference) { .btn.is-nudge { animation: vsNudge 1.6s ease-in-out 3; } }
 @keyframes vsNudge { 50% { box-shadow: 0 0 0 10px var(--brand-soft); } }
+
+/* ── 4.13 ──────────────────────────────────────────────────────────────── */
+/* 4.13: All-courses panel on phones: one course per row, name on the left and the
+   lesson count on the right, so names never sit at different heights. */
+@media (max-width: 719px) {
+	.courses-group ul, .courses-premium ul { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+	.courses-group a, .courses-premium a { flex-direction: row; align-items: center; justify-content: space-between; gap: 12px; min-height: 48px; padding: 10px 14px; }
+	.courses-group a span { flex: 1 1 auto; line-height: 1.3; overflow-wrap: normal; word-break: normal; }
+	.courses-group small { flex: 0 0 auto; }
+}
+
+/* 4.13: invite friends (account card, pricing note, welcome bar). */
+.ref-panel h2 { margin-bottom: 8px; }
+.ref-rules { margin: 0 0 14px; padding-left: 18px; font-size: 14px; color: var(--text-2); }
+.ref-rules li { margin: 2px 0; }
+.ref-label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+.ref-copy { display: flex; gap: 8px; }
+.ref-copy input { flex: 1 1 auto; min-width: 0; padding: 8px 10px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg-soft); color: var(--text); font-size: 14px; }
+.ref-share { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.ref-btn { display: inline-flex; align-items: center; padding: 7px 12px; border-radius: 999px; font-size: 13px; font-weight: 700; color: #fff; text-decoration: none; background: #475569; }
+.ref-btn:hover { text-decoration: none; filter: brightness(1.08); color: #fff; }
+.ref-btn.is-whatsapp { background: #128c4a; } .ref-btn.is-telegram { background: #1f7fbf; } .ref-btn.is-linkedin { background: #0a66c2; } .ref-btn.is-x { background: #111; } .ref-btn.is-email { background: #6b7280; }
+.ref-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 6px 0 10px; text-align: center; }
+.ref-stats div { padding: 8px 4px; border-radius: 12px; background: var(--bg-soft); }
+.ref-stats b { display: block; font-size: 20px; color: var(--brand-ink); }
+.ref-stats span { font-size: 12px; color: var(--text-2); }
+.ref-next { font-size: 13px; color: var(--text-2); margin: 0 0 6px; }
+.ref-bar { display: block; height: 8px; border-radius: 99px; background: var(--bg-soft); overflow: hidden; margin-bottom: 6px; }
+.ref-bar i { display: block; height: 100%; background: var(--brand); border-radius: 99px; }
+.pricing-soon.ref-offer a, .pricing-soon.ref-applied a { font-weight: 700; }
+.ref-welcome { position: fixed; left: 12px; right: 12px; bottom: 12px; z-index: 60; display: flex; align-items: center; gap: 12px; max-width: 720px; margin: 0 auto; padding: 12px 14px; border-radius: 16px; background: var(--surface); border: 1px solid var(--border); box-shadow: 0 12px 40px rgba(0, 0, 0, .25); }
+.ref-welcome p { margin: 0; flex: 1 1 auto; font-size: 14px; font-weight: 600; }
+.ref-welcome .btn { flex: 0 0 auto; }
+.ref-welcome-x { flex: 0 0 auto; width: 32px; height: 32px; border: 0; border-radius: 50%; background: var(--bg-soft); color: var(--text); font-size: 20px; line-height: 1; cursor: pointer; }
+@media (max-width: 480px) { .ref-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } .ref-welcome { flex-wrap: wrap; } }

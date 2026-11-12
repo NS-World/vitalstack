@@ -36,8 +36,8 @@ function vitalstack_pay_plans() {
 			'title'  => __( 'Pro Monthly', 'vitalstack' ),
 			'tracks' => $all,
 			'days'   => 31,
-			'inr'    => 399,
-			'usd'    => 9,
+			'inr'    => 199,
+			'usd'    => 5,
 			'period' => __( '1 month', 'vitalstack' ),
 			'blurb'  => __( 'Every premium track for a month. Cancel any time.', 'vitalstack' ),
 		),
@@ -45,8 +45,8 @@ function vitalstack_pay_plans() {
 			'title'  => __( 'Agentic AI Engineer Track', 'vitalstack' ),
 			'tracks' => array( 'agentic-ai-engineer' ),
 			'days'   => 365,
-			'inr'    => 1999,
-			'usd'    => 39,
+			'inr'    => 999,
+			'usd'    => 19,
 			'period' => __( '12 months', 'vitalstack' ),
 			'blurb'  => __( 'Build, test and ship AI agents, MCP servers and multi-agent systems.', 'vitalstack' ),
 			'track'  => true,
@@ -55,8 +55,8 @@ function vitalstack_pay_plans() {
 			'title'  => __( 'Data Scientist Track', 'vitalstack' ),
 			'tracks' => array( 'data-scientist' ),
 			'days'   => 365,
-			'inr'    => 1999,
-			'usd'    => 39,
+			'inr'    => 999,
+			'usd'    => 19,
 			'period' => __( '12 months', 'vitalstack' ),
 			'blurb'  => __( 'Statistics, machine learning, SQL, Power BI and 6 projects.', 'vitalstack' ),
 			'track'  => true,
@@ -65,8 +65,8 @@ function vitalstack_pay_plans() {
 			'title'  => __( 'Gen AI Developer Track', 'vitalstack' ),
 			'tracks' => array( 'gen-ai-developer' ),
 			'days'   => 365,
-			'inr'    => 1999,
-			'usd'    => 39,
+			'inr'    => 999,
+			'usd'    => 19,
 			'period' => __( '12 months', 'vitalstack' ),
 			'blurb'  => __( 'LLMs, RAG, AI agents and deploying real AI apps.', 'vitalstack' ),
 			'track'  => true,
@@ -75,8 +75,8 @@ function vitalstack_pay_plans() {
 			'title'  => __( 'Pro Yearly', 'vitalstack' ),
 			'tracks' => $all,
 			'days'   => 365,
-			'inr'    => 2999,
-			'usd'    => 69,
+			'inr'    => 1499,
+			'usd'    => 29,
 			'period' => __( '12 months', 'vitalstack' ),
 			'blurb'  => __( 'Every track and everything we add this year.', 'vitalstack' ),
 			'best'   => true,
@@ -85,8 +85,8 @@ function vitalstack_pay_plans() {
 			'title'  => __( 'Founder Lifetime', 'vitalstack' ),
 			'tracks' => $all,
 			'days'   => 0, // 0 = no end date
-			'inr'    => 6999,
-			'usd'    => 149,
+			'inr'    => 3999,
+			'usd'    => 79,
 			'period' => __( 'once, for life', 'vitalstack' ),
 			'blurb'  => __( 'All current and future tracks, for life. First 200 buyers only.', 'vitalstack' ),
 			'limit'  => 200,
@@ -141,6 +141,12 @@ function vitalstack_pay_price( $plan, $cur, $code = '' ) {
 	$all = vitalstack_pay_coupons();
 	$c   = isset( $all[ $code ] ) ? $all[ $code ] : null;
 	$used = (array) get_option( 'vs_pay_coupon_uses', array() );
+	if ( ! $c && function_exists( 'vitalstack_ref_price' ) ) {
+		$ref = vitalstack_ref_price( $code, $plan, $cur, $base ); // a friend's invite code (4.13)
+		if ( null !== $ref ) {
+			return $ref;
+		}
+	}
 	if ( ! $c || ( $c['expires'] && $c['expires'] < time() ) || ( $c['max'] && ( $used[ $code ] ?? 0 ) >= $c['max'] ) ) {
 		return new WP_Error( 'bad_coupon', __( 'That coupon is not valid or has expired.', 'vitalstack' ), array( 'status' => 400 ) );
 	}
@@ -424,7 +430,7 @@ function vitalstack_pay_complete( $order_id, $payment_id ) {
 		update_option( 'vs_pay_lifetime_sold', (int) get_option( 'vs_pay_lifetime_sold', 0 ) + 1, false );
 	}
 	$coupon = get_post_meta( $order_id, '_vs_coupon', true );
-	if ( $coupon ) {
+	if ( $coupon && ! ( function_exists( 'vitalstack_ref_is_code' ) && vitalstack_ref_is_code( $coupon ) && ! isset( vitalstack_pay_coupons()[ $coupon ] ) ) ) {
 		$uses            = (array) get_option( 'vs_pay_coupon_uses', array() );
 		$uses[ $coupon ] = ( isset( $uses[ $coupon ] ) ? (int) $uses[ $coupon ] : 0 ) + 1;
 		update_option( 'vs_pay_coupon_uses', $uses, false );

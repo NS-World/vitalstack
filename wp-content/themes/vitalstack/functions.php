@@ -60,6 +60,7 @@ require VITALSTACK_DIR . '/inc/datasets.php';
 require VITALSTACK_DIR . '/inc/study-music.php';
 require VITALSTACK_DIR . '/inc/premium-skins.php';
 require VITALSTACK_DIR . '/inc/runner.php';
+require VITALSTACK_DIR . '/inc/referral.php';
 require VITALSTACK_DIR . '/inc/adsense-readiness.php';
 require VITALSTACK_DIR . '/inc/ai-dictionary.php';
 require VITALSTACK_DIR . '/inc/ai-city.php';

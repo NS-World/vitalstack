@@ -1,0 +1,72 @@
+/* VitalStack 4.13: invite link sharing, the invited-friend welcome note and
+   source links on copied lesson text. */
+(function () {
+	'use strict';
+	var S = window.vitalstackShare || {};
+
+	/* Account page: copy and share the invite link. */
+	var panel = document.querySelector('[data-ref]');
+	if (panel) {
+		var input = panel.querySelector('[data-ref-link]');
+		var copyBtn = panel.querySelector('[data-ref-copy]');
+		if (copyBtn && input) {
+			copyBtn.addEventListener('click', function () {
+				var done = function () { var t = copyBtn.textContent; copyBtn.textContent = S.copied || 'Copied!'; setTimeout(function () { copyBtn.textContent = t; }, 1800); };
+				if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(input.value).then(done, function () { input.select(); document.execCommand('copy'); done(); });
+				else { input.select(); document.execCommand('copy'); done(); }
+			});
+			input.addEventListener('focus', function () { input.select(); });
+		}
+		var native = panel.querySelector('[data-ref-native]');
+		if (native && navigator.share && input) {
+			native.hidden = false;
+			native.addEventListener('click', function () { navigator.share({ title: S.site || document.title, text: native.getAttribute('data-text') || '', url: input.value }).catch(function () {}); });
+		}
+		if (location.hash === '#invite') panel.scrollIntoView({ block: 'start' });
+		panel.id = panel.id || 'invite';
+	}
+
+	/* /pricing/: fill in and apply the friend's invite code. */
+	var apply = document.querySelector('[data-ref-apply]');
+	if (apply) {
+		var code = apply.getAttribute('data-ref-apply');
+		var box = document.querySelector('[data-coupon]');
+		var go = document.querySelector('[data-coupon-apply]');
+		if (box && go && code) {
+			var details = box.closest('details');
+			if (details) details.open = true;
+			box.value = code;
+			setTimeout(function () { go.click(); }, 50);
+		}
+	}
+
+	/* Welcome note for someone who opened a friend's invite link (signed out). */
+	if (!S.loggedIn && S.welcome && /(?:^|;\s*)vs_ref_hi=1/.test(document.cookie) && !/[?&]tab=register/.test(location.search)) {
+		var bar = document.createElement('div');
+		bar.className = 'ref-welcome';
+		bar.setAttribute('role', 'status');
+		var p = document.createElement('p'); p.textContent = S.welcome;
+		var a = document.createElement('a'); a.className = 'btn btn-primary btn-sm'; a.href = S.joinUrl; a.textContent = S.join;
+		var x = document.createElement('button'); x.type = 'button'; x.className = 'ref-welcome-x'; x.setAttribute('aria-label', S.close || 'Close'); x.textContent = '×';
+		x.addEventListener('click', function () { bar.remove(); document.cookie = 'vs_ref_hi=; Max-Age=0; path=/'; });
+		bar.appendChild(p); bar.appendChild(a); bar.appendChild(x);
+		document.body.appendChild(bar);
+	}
+
+	/* Copied lesson text keeps a link back to where it came from. Code blocks,
+	   form fields and short snippets copy exactly as selected. */
+	var article = document.body.classList.contains('single') ? document.querySelector('main .prose') : null;
+	if (article) {
+		document.addEventListener('copy', function (e) {
+			var sel = window.getSelection();
+			if (!sel || sel.isCollapsed || !e.clipboardData) return;
+			var node = sel.anchorNode && (sel.anchorNode.nodeType === 1 ? sel.anchorNode : sel.anchorNode.parentElement);
+			if (!node || !article.contains(node) || node.closest('pre, code, input, textarea, [contenteditable], .tool, .vs-protected')) return;
+			var text = sel.toString();
+			if (text.length < 200) return;
+			var url = location.origin + location.pathname;
+			e.clipboardData.setData('text/plain', text + '\n\n' + (S.source || 'Source') + ': ' + (S.site ? S.site + ' · ' : '') + url);
+			e.preventDefault();
+		});
+	}
+})();

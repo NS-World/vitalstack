@@ -160,6 +160,9 @@ get_header();
 						if ( function_exists( 'vitalstack_pay_panel' ) ) {
 							vitalstack_pay_panel( $vs_user->ID );
 						}
+						if ( function_exists( 'vitalstack_ref_panel' ) ) {
+							vitalstack_ref_panel( $vs_user->ID );
+						}
 						if ( function_exists( 'vitalstack_2fa_panel' ) ) {
 							vitalstack_2fa_panel( $vs_user->ID );
 						}

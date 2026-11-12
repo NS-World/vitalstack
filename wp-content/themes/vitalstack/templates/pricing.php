@@ -46,6 +46,7 @@ if ( $vs_plans['all-year']['inr'] < $vs_monthly12 ) {
 			<h1><?php esc_html_e( 'Learn the skills companies are hiring for right now', 'vitalstack' ); ?></h1>
 			<p class="premium-lead"><?php esc_html_e( 'Data science and Gen AI, explained step by step with live animations you can play with. Build real projects, earn a certificate, and walk into interviews ready.', 'vitalstack' ); ?></p>
 			<?php vitalstack_flash(); ?>
+			<?php if ( function_exists( 'vitalstack_ref_pricing_note' ) ) { vitalstack_ref_pricing_note(); } ?>
 			<?php if ( vitalstack_pay_demo_for() ) : ?>
 				<p class="pricing-soon pricing-demo">🧪 <?php esc_html_e( 'Practice checkout is on: only you (and your test emails) see these Buy buttons. No real money moves.', 'vitalstack' ); ?></p>
 			<?php elseif ( 'waitlist' === $vs_action ) : ?>

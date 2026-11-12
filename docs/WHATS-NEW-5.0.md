@@ -111,12 +111,12 @@ An original endless runner starring Byte, the crew's orange cat with green headp
 
 ## 6. Premium: combo packs and premium themes
 
-- **Combo Pack** card on the pricing page with two packs at ₹2,499 / $49 for 12 months:
+- **Combo Pack** card on the pricing page with two packs at ₹1,299 / $25 for 12 months (₹2,499 before 4.13's lower prices):
   - AI Builder: Gen AI + Agentic;
   - Data + AI: Data Scientist + Gen AI.
 
   Buying a combo grants both tracks. You can change the price in Settings → VitalStack Payments
-  like any other plan. Pro Yearly (all tracks, ₹2,999) remains the best value.
+  like any other plan. Pro Yearly (all tracks, ₹1,499 from 4.13) remains the best value.
 - **6 premium colour themes**: Midnight Neon, Deep Ocean, Sakura, Forest, Sunset and Hacker
   Terminal. They have an animated header line, which stays still for readers who turn off
   motion. Any premium reader can switch theme from the palette button. Free readers can preview
@@ -189,6 +189,14 @@ them before publishing. The notice only reminds you; it never publishes anything
   - The AI City island fits 320px phones.
   - After signing up from "Join the waitlist", the track page nudges "one last tap".
   - See `docs/releases/PREPROD-AUDIT-2026-11-08.md`.
+- **From 4.13 (12 Nov):**
+  - Lower launch prices: Monthly ₹199, Track ₹999, Pro Yearly ₹1,499, Lifetime ₹3,999, Combo ₹1,299.
+  - Invite friends: friends get 10% off; the inviter earns Pro days.
+  - AI training crawlers are blocked in robots.txt, with Google and AdSense allowed.
+  - Temporary-email sign-ups are refused.
+  - Copied lesson text carries a source link.
+  - On phones, the All-courses panel shows one course per row.
+  - See `docs/releases/4.13-PLANS-INVITES-RAZORPAY.md`.
 
 ## After installing on the DEV site
 

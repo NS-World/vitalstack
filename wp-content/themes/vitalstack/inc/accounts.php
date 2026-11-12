@@ -301,6 +301,7 @@ function vitalstack_account_messages() {
 			'bad_nonce'      => array( 'error', __( 'Your session expired. Please try again.', 'vitalstack' ) ),
 			'missing'        => array( 'error', __( 'Please fill in all fields.', 'vitalstack' ) ),
 			'bad_email'      => array( 'error', __( 'Please enter a valid email address.', 'vitalstack' ) ),
+			'disposable'     => array( 'error', __( 'Please use your own email address, not a temporary inbox. We send your sign-in codes there.', 'vitalstack' ) ),
 			'email_exists'   => array( 'error', __( 'An account with this email already exists. Sign in instead.', 'vitalstack' ) ),
 			'weak_password'  => array( 'error', __( 'Use a password with at least 8 characters that is not a common one like 12345678 or password123.', 'vitalstack' ) ),
 			'closed'         => array( 'error', __( 'New sign-ups are closed right now.', 'vitalstack' ) ),
@@ -521,6 +522,9 @@ function vitalstack_handle_register() {
 	}
 	if ( ! is_email( $email ) ) {
 		vitalstack_account_redirect( 'bad_email', $back );
+	}
+	if ( function_exists( 'vitalstack_email_is_disposable' ) && vitalstack_email_is_disposable( $email ) ) {
+		vitalstack_account_redirect( 'disposable', $back ); // throw-away inboxes (4.13)
 	}
 	if ( email_exists( $email ) ) {
 		vitalstack_account_redirect(
