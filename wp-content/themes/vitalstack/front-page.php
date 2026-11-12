@@ -180,6 +180,8 @@ if ( function_exists( 'vitalstack_home_ai_city' ) ) {
 }
 ?>
 
+<?php if ( function_exists( 'vitalstack_offer_band' ) ) { vitalstack_offer_band(); } ?>
+
 <?php vitalstack_home_premium(); ?>
 
 <section class="home-editor">

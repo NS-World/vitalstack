@@ -83,7 +83,7 @@
 		function makeWorker() {
 			// Charts: plt.show() turns each figure into a PNG line that the page shows as an image.
 			var mplPrelude = 'import matplotlib\nmatplotlib.use("AGG")\nimport matplotlib.pyplot as _vs_plt, io as _vs_io, base64 as _vs_b64\n' +
-				'def _vs_show(*a, **k):\n    for n in _vs_plt.get_fignums():\n        b = _vs_io.BytesIO()\n        _vs_plt.figure(n).savefig(b, format="png", bbox_inches="tight", dpi=110)\n        print("\\x00IMG:" + _vs_b64.b64encode(b.getvalue()).decode())\n    _vs_plt.close("all")\n_vs_plt.show = _vs_show\n';
+				'def _vs_show(*a, **k):\n    for n in _vs_plt.get_fignums():\n        b = _vs_io.BytesIO()\n        _vs_plt.figure(n).savefig(b, format="png", bbox_inches="tight", dpi=110)\n        print("VSPLOT:" + _vs_b64.b64encode(b.getvalue()).decode())\n    _vs_plt.close("all")\n_vs_plt.show = _vs_show\n';
 			var src = "var MPL=" + JSON.stringify(mplPrelude) + ";importScripts('" + PYODIDE + "pyodide.js');" +
 				"var py=null;var boot=loadPyodide({indexURL:'" + PYODIDE + "'}).then(function(p){py=p;postMessage({type:'ready'});}).catch(function(e){postMessage({type:'fail',text:String(e)});});" +
 				"onmessage=function(e){boot.then(function(){var lines=e.data.stdin.split('\\n'),i=0;" +
@@ -98,8 +98,8 @@
 				var m = e.data;
 				if (m.type === 'ready') { ready = true; status.textContent = 'Python ready'; if (pending) { pending = false; send(); } }
 				else if (m.type === 'fail') { status.textContent = 'Could not load Python. Check your connection.'; finish(); }
-				else if (m.type === 'out' && m.text.indexOf('\u0000IMG:') === 0) {
-					var img = el('img', 'tool-plot'); img.alt = 'Chart from your code'; img.src = 'data:image/png;base64,' + m.text.slice(5).replace(/[^A-Za-z0-9+/=]/g, '');
+				else if (m.type === 'out' && /^\u0000?(?:VSPLOT|IMG):[A-Za-z0-9+\/=]{64,}\s*$/.test(m.text)) { // chart from plt.show() (4.13.3)
+					var img = el('img', 'tool-plot'); img.alt = 'Chart from your code'; img.src = 'data:image/png;base64,' + m.text.replace(/^\u0000?(?:VSPLOT|IMG):/, '').replace(/[^A-Za-z0-9+/=]/g, '');
 					out.appendChild(img);
 				}
 				else if (m.type === 'out') out.appendChild(document.createTextNode(m.text + '\n'));

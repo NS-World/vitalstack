@@ -149,4 +149,59 @@
 		payRoot.addEventListener('click', function (e) { if (e.target.closest('[data-cur]')) setTimeout(syncOffer, 30); });
 		new MutationObserver(syncOffer).observe(payRoot, { subtree: true, characterData: true, childList: true });
 	}
+
+	/* 4.13.3: offer banners follow ₹ (India) / $ (elsewhere), like /pricing/. */
+	document.querySelectorAll('[data-offer]').forEach(function (box) {
+		var rule = box.getAttribute('data-cur-rule') || 'auto';
+		var tz = '';
+		try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) {}
+		var cur = rule === 'inr' ? 'inr' : (/^Asia\/(Kolkata|Calcutta)$/.test(tz) ? 'inr' : 'usd');
+		box.querySelectorAll('[data-x-inr]').forEach(function (el) {
+			var t = el.getAttribute('data-x-' + cur) || '';
+			if (el.textContent !== t) el.textContent = t;
+			el.hidden = !t;
+		});
+	});
+
+	/* 4.13.3: topic bar never stops with a name half under the left arrow. */
+	var topicBar = document.querySelector('.topicbar-row .topicbar-inner');
+	if (topicBar) {
+		var alignTopics = function () {
+			var prevBtn = document.querySelector('[data-topic-scroll="-1"]');
+			if (!prevBtn || prevBtn.hidden || topicBar.scrollLeft <= 2) return;
+			var edge = topicBar.getBoundingClientRect().left + prevBtn.getBoundingClientRect().width + 4;
+			var links = topicBar.querySelectorAll(':scope > a');
+			for (var i = 0; i < links.length; i++) {
+				var r = links[i].getBoundingClientRect();
+				if (r.right > edge + 1) {
+					if (r.left < edge - 1) topicBar.scrollBy({ left: r.left - edge, behavior: 'smooth' });
+					break;
+				}
+			}
+		};
+		var topicTimer;
+		topicBar.addEventListener('scroll', function () { clearTimeout(topicTimer); topicTimer = setTimeout(alignTopics, 160); }, { passive: true });
+		setTimeout(alignTopics, 400);
+	}
+
+	/* 4.13.3: the footer course list starts short, with a button for the rest. */
+	document.querySelectorAll('.site-footer .footer-col').forEach(function (col) {
+		var list = col.querySelector('ul');
+		if (!list || list.children.length <= 14) return;
+		var more = list.children.length - 12;
+		col.classList.add('is-collapsed');
+		var btn = document.createElement('button');
+		btn.type = 'button';
+		btn.className = 'footer-more';
+		btn.setAttribute('aria-expanded', 'false');
+		var label = function () { btn.textContent = col.classList.contains('is-collapsed') ? '+' + more + ' more courses ▾' : 'Show fewer ▴'; };
+		label();
+		btn.addEventListener('click', function () {
+			col.classList.toggle('is-collapsed');
+			col.classList.toggle('is-expanded', !col.classList.contains('is-collapsed'));
+			btn.setAttribute('aria-expanded', col.classList.contains('is-collapsed') ? 'false' : 'true');
+			label();
+		});
+		list.parentNode.insertBefore(btn, list.nextSibling);
+	});
 })();

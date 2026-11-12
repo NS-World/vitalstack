@@ -442,6 +442,9 @@ function vitalstack_home_certs() {
 			</div>
 			<div class="home-certs-art">
 				<?php
+				if ( function_exists( 'vitalstack_cert_teaser' ) ) {
+					echo vitalstack_cert_teaser( $first->name ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped inside; a sample, not the real design (4.13.3)
+				} else {
 				vitalstack_cert_markup(
 					array(
 						'name'    => __( 'Your Name', 'vitalstack' ),
@@ -452,6 +455,7 @@ function vitalstack_home_certs() {
 						'sample'  => true,
 					)
 				);
+				}
 				?>
 				<ul class="home-certs-paths">
 					<?php foreach ( array_slice( $paths, 0, 10 ) as $path ) : ?>

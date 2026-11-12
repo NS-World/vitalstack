@@ -205,6 +205,12 @@ them before publishing. The notice only reminds you; it never publishes anything
     - all sales final (refund window 0, with matching pricing and policy wording);
     - days left on account and track pages, and a renewal note in the last 7 days;
     - launch-offer line on plan cards (earlier price struck, Save %, per-month price).
+  - **4.13.3:**
+    - fixes: long footer list folds to 12 with a "+N more" button; Python compiler charts show as
+      images; topic-bar names no longer cut under the arrow;
+    - launch-offer band on the home page and an offer card after free lessons (not for premium
+      readers or staff);
+    - the home page shows a sample certificate, not the real design.
   - See `docs/releases/4.13-PLANS-INVITES-RAZORPAY.md`.
 
 ## After installing on the DEV site
