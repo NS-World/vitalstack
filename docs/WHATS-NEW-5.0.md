@@ -211,6 +211,13 @@ them before publishing. The notice only reminds you; it never publishes anything
     - launch-offer band on the home page and an offer card after free lessons (not for premium
       readers or staff);
     - the home page shows a sample certificate, not the real design.
+  - **4.13.4:**
+    - 🎮 Break button in the header: games, focus music (4 stations made in the browser) with a
+      25 + 5 minute focus timer, and tools. It links to the Study Music room, and the two players
+      pause each other;
+    - 💬 "Ask" assistant: instant answers on prices, offers, invites, certificates, payments and
+      where to start, in ₹ or $. It runs in the browser only, with no AI service or endpoint;
+    - offers use the server's currency answer; the sample certificate fits 320px phones.
   - See `docs/releases/4.13-PLANS-INVITES-RAZORPAY.md`.
 
 ## After installing on the DEV site

@@ -155,7 +155,8 @@
 		var rule = box.getAttribute('data-cur-rule') || 'auto';
 		var tz = '';
 		try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) {}
-		var cur = rule === 'inr' ? 'inr' : (/^Asia\/(Kolkata|Calcutta)$/.test(tz) ? 'inr' : 'usd');
+		var srv = box.getAttribute('data-cur') || ''; // 4.13.4: the server's answer when it knows
+		var cur = srv === 'inr' || srv === 'usd' ? srv : (rule === 'inr' ? 'inr' : (/^Asia\/(Kolkata|Calcutta)$/.test(tz) ? 'inr' : 'usd'));
 		box.querySelectorAll('[data-x-inr]').forEach(function (el) {
 			var t = el.getAttribute('data-x-' + cur) || '';
 			if (el.textContent !== t) el.textContent = t;

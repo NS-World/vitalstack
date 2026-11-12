@@ -62,7 +62,7 @@ function vitalstack_offer_band() {
 	}
 	$rule = function_exists( 'vitalstack_pay_currency_rule' ) ? vitalstack_pay_currency_rule() : 'auto';
 	?>
-	<section class="offer-band" data-offer data-cur-rule="<?php echo esc_attr( $rule ); ?>" aria-label="<?php esc_attr_e( 'Launch offer', 'vitalstack' ); ?>">
+	<section class="offer-band" data-offer data-cur-rule="<?php echo esc_attr( $rule ); ?>" data-cur="<?php echo esc_attr( function_exists( 'vitalstack_pay_page_currency' ) ? vitalstack_pay_page_currency() : '' ); ?>" aria-label="<?php esc_attr_e( 'Launch offer', 'vitalstack' ); ?>">
 		<div class="wrap offer-band-inner">
 			<div class="offer-copy">
 				<p class="offer-chip">⭐ <?php esc_html_e( 'Pro Yearly · Launch price', 'vitalstack' ); ?></p>
@@ -96,7 +96,7 @@ function vitalstack_offer_card_html() {
 		return '';
 	}
 	$rule = function_exists( 'vitalstack_pay_currency_rule' ) ? vitalstack_pay_currency_rule() : 'auto';
-	return '<aside class="offer-card" data-offer data-cur-rule="' . esc_attr( $rule ) . '">'
+	return '<aside class="offer-card" data-offer data-cur-rule="' . esc_attr( $rule ) . '" data-cur="' . esc_attr( function_exists( 'vitalstack_pay_page_currency' ) ? vitalstack_pay_page_currency() : '' ) . '">'
 		. '<div class="offer-card-text"><p class="offer-chip">⭐ ' . esc_html__( 'Liked this lesson?', 'vitalstack' ) . '</p>'
 		. '<p class="offer-card-title">' . esc_html__( 'Go deeper with all 3 premium career tracks', 'vitalstack' ) . '</p>'
 		. '<p class="offer-card-sub">' . esc_html__( 'Data Scientist · Gen AI Developer · Agentic AI Engineer: projects and certificates.', 'vitalstack' ) . '</p></div>'

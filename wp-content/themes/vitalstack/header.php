@@ -31,6 +31,7 @@
 
 			<div class="topbar-actions">
 				<button type="button" class="icon-btn search-mobile" data-open-search aria-label="<?php esc_attr_e( 'Search', 'vitalstack' ); ?>"><?php echo vitalstack_icon( 'search' ); // phpcs:ignore ?></button>
+				<?php if ( function_exists( 'vitalstack_break_button' ) ) { vitalstack_break_button(); } ?>
 				<?php vitalstack_appearance_button(); ?>
 				<?php vitalstack_xp_chip(); ?>
 				<?php vitalstack_account_menu(); ?>
