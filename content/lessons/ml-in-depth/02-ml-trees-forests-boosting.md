@@ -111,6 +111,29 @@ most important features: [0, 3, 6]
 
 ::tip Default settings of a random forest are a strong baseline. For the last few percent, tune gradient boosting's `learning_rate`, `n_estimators` and `max_depth` with cross-validation (lesson 6).
 
+## See it as a diagram: the tree, drawn
+
+scikit-learn can draw the fitted tree. Each box shows the question, the Gini impurity, how many loans reached it and the vote; colour shows which class wins (darker means purer).
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.tree import DecisionTreeClassifier, plot_tree
+
+X = np.array([[3, 2], [4, 3], [12, 0], [8, 0], [5, 1], [15, 1], [2, 0], [9, 2], [7, 0], [3, 1]])
+y = np.array([1, 1, 0, 0, 1, 0, 1, 1, 0, 1])
+tree = DecisionTreeClassifier(max_depth=2, random_state=0).fit(X, y)
+
+fig, ax = plt.subplots(figsize=(8, 4.2))
+plot_tree(tree, feature_names=["income", "missed_emi"], class_names=["repaid", "defaulted"],
+          filled=True, rounded=True, impurity=True, fontsize=9, ax=ax)
+plt.show()
+```
+
+::figure mlid-decision-tree.svg | A drawn decision tree: the root splits on income, then on missed EMIs, ending in leaves labelled repaid or defaulted
+
+Read it like a flowchart from the top. This readability is the decision tree's superpower, and what you give up when you move to a forest of hundreds of trees.
+
 ## Summary
 
 - A decision tree asks yes/no questions; each split minimises impurity (Gini or entropy).

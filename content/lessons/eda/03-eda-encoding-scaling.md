@@ -122,6 +122,34 @@ Output:
 | `MinMaxScaler` | between 0 and 1 | Neural networks, image pixels, bounded features |
 | `RobustScaler` | uses median and IQR | Data with outliers |
 
+## See it as a chart: why scaling matters
+
+Salary is in lakhs and age is in tens, so on a raw scale age looks like a flat line next to salary. After standard scaling both are centred on 0 with similar spread, and distance-based models (k-NN, k-means, SVM) treat them fairly.
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+
+rng = np.random.default_rng(3)
+df = pd.DataFrame({"salary": rng.normal(900_000, 250_000, 200), "age": rng.normal(31, 6, 200)})
+scaled = pd.DataFrame(StandardScaler().fit_transform(df), columns=df.columns)
+
+fig, (left, right) = plt.subplots(1, 2, figsize=(9, 3.3))
+left.boxplot([df["salary"], df["age"]], tick_labels=["salary", "age"])
+left.set_title("Raw: salary dwarfs age")
+right.boxplot([scaled["salary"], scaled["age"]], tick_labels=["salary", "age"])
+right.axhline(0, color="#0a7d4f", lw=1, ls="--")
+right.set_title("Standard scaled: same footing")
+fig.tight_layout()
+plt.show()
+```
+
+::figure eda-scaling-before-after.svg | Two box plots: on the raw scale age is squashed flat next to salary; after standard scaling both boxes are centred on zero with similar size
+
+Scaling changes the units, not the shape of the data. Tree models don't need it; distance and gradient-based models do.
+
 ## Summary
 
 - One-hot for categories without order; ordinal codes (with your own order) for ordered ones.

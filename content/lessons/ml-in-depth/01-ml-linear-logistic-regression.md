@@ -113,6 +113,41 @@ A score of 0 means 50/50; big positive scores mean "almost certainly yes".
 
 ::tip Always scale features before logistic regression when they have very different ranges (lesson on scaling), and check the coefficients make business sense. A model that says "more complaints → less churn" has a data problem.
 
+## See it as a chart: a line for numbers, an S-curve for yes/no
+
+Linear regression fits a straight line to rent; logistic regression squeezes any score through the sigmoid, so its output is always a probability between 0 and 1.
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.linear_model import LinearRegression
+
+size = np.array([[450], [600], [750], [900], [1100], [1300]])
+rent = np.array([14000, 18000, 21500, 26000, 31000, 36500])
+model = LinearRegression().fit(size, rent)
+z = np.linspace(-8, 8, 200)
+
+fig, (left, right) = plt.subplots(1, 2, figsize=(10, 3.6))
+left.scatter(size, rent, s=60, color="#1b1f27", zorder=3)
+grid = np.linspace(400, 1350, 50).reshape(-1, 1)
+left.plot(grid, model.predict(grid), color="#0a7d4f", lw=2.5)
+left.set_xlabel("flat size (sq ft)")
+left.set_ylabel("rent (₹/month)")
+left.set_title("Linear regression")
+right.plot(z, 1 / (1 + np.exp(-z)), color="#2563eb", lw=2.5)
+right.axhline(0.5, color="#c2255c", ls="--", lw=1)
+right.text(-7.5, 0.55, "threshold 0.5", color="#c2255c")
+right.set_xlabel("score z = w·x + b")
+right.set_ylabel("P(churn)")
+right.set_title("Logistic regression: the sigmoid")
+fig.tight_layout()
+plt.show()
+```
+
+::figure mlid-line-and-sigmoid.svg | Left: rent rising in a straight line with flat size; right: the S-shaped sigmoid going from 0 to 1 with a dashed threshold at 0.5
+
+The sigmoid is steep in the middle and flat at the ends: a small change in score matters a lot for borderline customers and hardly at all for clear cases.
+
 ## Summary
 
 - Linear regression: number = intercept + coefficients × features, fitted by least squares.

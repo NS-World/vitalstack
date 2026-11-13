@@ -206,6 +206,34 @@ P(spam | 'lottery') = 0.938
 
 About 94% spam. A real Naive Bayes filter does exactly this for every word in the email and multiplies the evidence together.
 
+## See it as a chart: simulations settle on the true probability
+
+Roll a die again and again and track the share of fives so far. Early on it jumps around; with more rolls it settles on 1/6. This is the **law of large numbers**, and it is why simulation is a trustworthy way to check a probability.
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+
+rng = np.random.default_rng(42)
+rolls = rng.integers(1, 7, size=5_000)
+share_of_fives = np.cumsum(rolls == 5) / np.arange(1, len(rolls) + 1)
+
+fig, ax = plt.subplots(figsize=(8, 3.2))
+ax.plot(share_of_fives, color="#0a7d4f", lw=1.6, label="share of fives so far")
+ax.axhline(1 / 6, color="#c2255c", ls="--", label="exact 1/6 ≈ 0.167")
+ax.set_xscale("log")
+ax.set_ylim(0, 0.5)
+ax.set_xlabel("number of rolls (log scale)")
+ax.set_ylabel("P(5) estimate")
+ax.legend(frameon=False)
+fig.tight_layout()
+plt.show()
+```
+
+::figure stat-law-large-numbers.svg | The running share of fives jumps around for the first few rolls, then settles on the dashed line at one sixth
+
+After 10 rolls the estimate can easily be 0.3 or 0.0; after a few thousand it is within a hair of 0.167. Small samples lie, big samples don't.
+
 ## Summary
 
 - Probability = favourable ÷ all outcomes; simulate when in doubt.

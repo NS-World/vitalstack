@@ -130,6 +130,44 @@ digit accuracy: 0.973
 
 ::tip Use **data augmentation** (random flips, rotations, crops, brightness) so the model sees varied versions of each photo. It's one of the cheapest ways to improve image models.
 
+## See it as a chart: what a filter sees
+
+Top row: real 8×8 handwritten digits from scikit-learn. Bottom row: the same digits after sliding the vertical-edge filter from above over them. The bright and dark areas are where the strokes have vertical edges, exactly the kind of feature a CNN's first layer learns.
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.datasets import load_digits
+
+digits = load_digits()
+edge = np.array([[-1, 0, 1], [-1, 0, 1], [-1, 0, 1]], dtype=float)
+
+def convolve(img, kernel):
+    out = np.zeros((img.shape[0] - 2, img.shape[1] - 2))
+    for r in range(out.shape[0]):
+        for c in range(out.shape[1]):
+            out[r, c] = (img[r:r + 3, c:c + 3] * kernel).sum()
+    return out
+
+fig, axes = plt.subplots(2, 6, figsize=(9, 3.4))
+for i, col in enumerate(range(6)):
+    img = digits.images[i]
+    axes[0, col].imshow(img, cmap="gray_r")
+    axes[0, col].set_title(f"digit {digits.target[i]}", fontsize=9)
+    axes[1, col].imshow(convolve(img, edge), cmap="RdBu")
+    for ax in (axes[0, col], axes[1, col]):
+        ax.set_xticks([])
+        ax.set_yticks([])
+axes[0, 0].set_ylabel("input")
+axes[1, 0].set_ylabel("edge filter")
+fig.tight_layout()
+plt.show()
+```
+
+::figure dl-cnn-edge-filter.svg | Top row: six small handwritten digits 0 to 5; bottom row: the same digits after a vertical-edge filter, with red and blue marking the left and right edges of each stroke
+
+A CNN learns dozens of filters like this one by itself, then stacks layers so later filters combine edges into curves, loops and finally whole digits.
+
 ## Summary
 
 - Convolution slides learned filters over images to make feature maps.

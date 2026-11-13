@@ -138,6 +138,39 @@ held-out test AUC: 0.963
 
 ::tip Tune with cross-validation on the **training** set, then check once on the untouched test set. If you tune against the test set, your reported score is optimistic and won't hold up in production.
 
+## See it as a chart: the ROC curve
+
+The ROC curve shows every threshold at once: for each one, the share of positives caught (true positive rate) against the share of negatives wrongly flagged (false positive rate). The closer the curve hugs the top-left corner, the better; the area under it is the AUC.
+
+```python
+import matplotlib.pyplot as plt
+from sklearn.datasets import make_classification
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import roc_auc_score, roc_curve
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+
+X, y = make_classification(n_samples=2000, n_features=10, n_informative=4, random_state=7)
+a, b, ya, yb = train_test_split(X, y, test_size=0.3, random_state=0)
+models = {"logistic regression": LogisticRegression(max_iter=1000), "shallow tree": DecisionTreeClassifier(max_depth=2, random_state=0)}
+
+fig, ax = plt.subplots(figsize=(5.5, 4.8))
+for (name, m), color in zip(models.items(), ["#0a7d4f", "#f59e0b"]):
+    scores = m.fit(a, ya).predict_proba(b)[:, 1]
+    fpr, tpr, _ = roc_curve(yb, scores)
+    ax.plot(fpr, tpr, color=color, lw=2.2, label=f"{name} (AUC {roc_auc_score(yb, scores):.2f})")
+ax.plot([0, 1], [0, 1], color="#9ca3af", ls="--", label="random guess (AUC 0.50)")
+ax.set_xlabel("false positive rate")
+ax.set_ylabel("true positive rate (recall)")
+ax.legend(frameon=False, loc="lower right", fontsize=9)
+fig.tight_layout()
+plt.show()
+```
+
+::figure mlid-roc-curve.svg | Two ROC curves above the dashed diagonal: logistic regression bows closer to the top-left corner with a higher AUC than a shallow tree
+
+The dashed diagonal is a coin flip. Comparing curves like this is fairer than comparing accuracy at one threshold, especially on imbalanced data.
+
 ## Summary
 
 - Accuracy lies on imbalanced data; use the confusion matrix, precision, recall, F1 and ROC-AUC.

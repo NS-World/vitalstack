@@ -115,6 +115,35 @@ Each coefficient is that feature's effect **when the others stay the same**: abo
 
 ::tip Pass new data as a DataFrame with the same column names you trained on. scikit-learn checks them and warns you if they don't match, which catches many bugs.
 
+## See it as a chart: the line and its errors
+
+Plot the eight students, the fitted line, and a thin line from each dot to the line. Those thin lines are the **residuals**, the errors the model makes. Linear regression picks the line that makes the sum of their squares as small as possible.
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.linear_model import LinearRegression
+
+hours = np.array([1, 2, 3, 4, 5, 6, 7, 8]).reshape(-1, 1)
+score = np.array([42, 48, 51, 58, 63, 66, 74, 79])
+model = LinearRegression().fit(hours, score)
+predicted = model.predict(hours)
+
+fig, ax = plt.subplots(figsize=(7, 3.8))
+ax.vlines(hours.ravel(), predicted, score, color="#c2255c", lw=1.5, label="residuals (errors)")
+ax.plot(hours, predicted, color="#0a7d4f", lw=2.5, label=f"score = {model.coef_[0]:.2f} × hours + {model.intercept_:.2f}")
+ax.scatter(hours, score, s=60, color="#1b1f27", zorder=3, label="students")
+ax.set_xlabel("hours studied")
+ax.set_ylabel("exam score")
+ax.legend(frameon=False)
+fig.tight_layout()
+plt.show()
+```
+
+::figure ml-linear-regression-line.svg | Eight dots rising from left to right with a green fitted line through them and short pink lines showing each dot's error
+
+The residuals are small and go both up and down, so a straight line is a good fit here. If they curved in a pattern, a straight line would be the wrong model.
+
 ## Summary
 
 - Linear regression fits `y = slope × x + intercept` (one slope per feature).

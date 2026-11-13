@@ -82,6 +82,14 @@ function vitalstack_site_page_card_label( $parent ) {
 function vitalstack_site_page_cards( $parent ) {
 	?>
 	<div class="sp-grid">
+		<?php if ( 'tools' === $parent && function_exists( 'vitalstack_playground_url' ) ) : ?>
+			<a class="sp-card" href="<?php echo esc_url( vitalstack_playground_url() ); ?>">
+				<span class="sp-icon" aria-hidden="true">🧪</span>
+				<b class="sp-title"><?php esc_html_e( 'Website Builder (Playground)', 'vitalstack' ); ?></b>
+				<span class="sp-excerpt"><?php esc_html_e( 'Build a real multi-page website with HTML, CSS and JavaScript, see it live on phone, tablet and desktop, and download it. Starts from ready templates.', 'vitalstack' ); ?></span>
+				<span class="sp-go"><?php esc_html_e( 'Start building', 'vitalstack' ); ?> ❯</span>
+			</a>
+		<?php endif; ?>
 		<?php
 		foreach ( vitalstack_site_pages_in( $parent ) as $slug => $p ) :
 			$url = vitalstack_site_page_url( $slug );

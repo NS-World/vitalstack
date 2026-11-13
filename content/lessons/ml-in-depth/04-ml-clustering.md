@@ -113,6 +113,45 @@ Agglomerative clustering starts with every point alone and keeps merging the two
 | DBSCAN | No (needs eps) | Any shape | Yes | Medium |
 | Hierarchical | No (cut the tree) | Depends on linkage | No | Small-medium |
 
+## See it as a chart: the clusters and the elbow
+
+Left: the shoppers coloured by their k-means cluster, with each centre marked. Right: the elbow plot, inertia (how spread out the clusters are) for k = 1 to 8. The bend at k = 3 says three groups explain most of the structure.
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+
+rng = np.random.default_rng(3)
+spend = np.concatenate([rng.normal(800, 150, 60), rng.normal(3000, 400, 60), rng.normal(9000, 900, 30)])
+visits = np.concatenate([rng.normal(2, 0.7, 60), rng.normal(6, 1.2, 60), rng.normal(10, 2, 30)])
+X = np.column_stack([spend, visits])
+scaler = StandardScaler().fit(X)
+Xs = scaler.transform(X)
+km = KMeans(n_clusters=3, n_init=10, random_state=0).fit(Xs)
+centres = scaler.inverse_transform(km.cluster_centers_)
+inertia = [KMeans(n_clusters=k, n_init=10, random_state=0).fit(Xs).inertia_ for k in range(1, 9)]
+
+fig, (left, right) = plt.subplots(1, 2, figsize=(10, 3.8))
+colors = np.array(["#2563eb", "#0a7d4f", "#f59e0b"])
+left.scatter(spend, visits, c=colors[km.labels_], s=16)
+left.scatter(centres[:, 0], centres[:, 1], marker="X", s=200, color="#1b1f27", label="cluster centres")
+left.set_xlabel("monthly spend (₹)")
+left.set_ylabel("visits per month")
+left.legend(frameon=False)
+right.plot(range(1, 9), inertia, "o-", color="#0a7d4f")
+right.annotate("elbow at k = 3", (3, inertia[2]), (4.5, inertia[0] * 0.6), arrowprops={"arrowstyle": "->"})
+right.set_xlabel("k (number of clusters)")
+right.set_ylabel("inertia")
+fig.tight_layout()
+plt.show()
+```
+
+::figure mlid-kmeans-elbow.svg | Left: shoppers in three coloured clusters with black X centres; right: an elbow curve that drops steeply until k equals 3 and then flattens
+
+Always look at the clusters, not only the numbers. A chart shows at once whether the groups make business sense (budget, regular, premium shoppers here).
+
 ## Summary
 
 - Clustering finds groups without labels; scale features first.

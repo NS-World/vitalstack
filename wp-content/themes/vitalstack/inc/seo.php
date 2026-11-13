@@ -79,6 +79,7 @@ function vitalstack_hub_descriptions() {
 		'datasets'        => __( 'Free practice datasets for data analysts: retail sales, HR, students, bank transactions, churn, weather and more, with CSV and JSON downloads and practice questions.', 'vitalstack' ),
 		'study-music'     => __( 'Free lo-fi study music, rain and brown noise made live in your browser, with a Pomodoro timer for focused study sessions.', 'vitalstack' ),
 		'ai-dictionary'   => __( 'AI terms explained in simple words: LLM, token, RAG, embeddings, agents, fine-tuning and more, with everyday examples.', 'vitalstack' ),
+		'ai-city'         => __( 'A free 5-minute tour of a 3D city where every building is one AI idea (ChatGPT, RAG, agents, MCP and more), explained in simple words with real-life examples.', 'vitalstack' ),
 		'contact-us'      => __( 'Contact VitalStack: report a mistake, suggest a lesson or ask a question. We usually reply within 2 working days.', 'vitalstack' ),
 	);
 }

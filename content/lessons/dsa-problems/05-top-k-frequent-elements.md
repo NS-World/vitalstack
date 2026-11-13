@@ -95,6 +95,15 @@ print(top_k_buckets([5, 5, 6, 6, 6, 7, 5, 5], 1))  # [5]
 | Heap | O(n log k) | O(n) |
 | Buckets | O(n) | O(n) |
 
+## Common mistakes and edge cases
+
+- **Ties.** Two values can have the same count. Unless the problem says otherwise, any of them is a valid answer, so don't spend time breaking ties.
+- **k equal to the number of distinct values.** Then the answer is simply every distinct value. All three solutions handle it.
+- **Sorting the whole list by value.** Sort by **count**, not by the numbers themselves. A common slip is `sorted(counts)`, which sorts the keys.
+- **Choosing the right solution.** The heap is best when k is small and the data is large or streaming; bucket sort is best when you need strict O(n).
+
+**Where it shows up in real code:** trending hashtags, the most searched products, the most common error messages in server logs, and "top 10" lists in any dashboard.
+
 ## Similar problems
 
 Top K Frequent Words, Kth Largest Element, Sort Characters by Frequency, K Closest Points to Origin.

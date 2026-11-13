@@ -116,6 +116,37 @@ actual Nov 2025: 185.9
 
 ::tip Never shuffle time series when splitting into train and test. Train on the past, test on the future: otherwise the model "sees the future" and scores look unrealistically good.
 
+## See it as a chart: trend plus a festive bump
+
+Plot the 36 months of sales with the 12-month moving average on top. The moving average smooths away the season and shows the trend; the shaded months are October and November, where the festive bump appears every year.
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(1)
+months = pd.period_range("2023-01", periods=36, freq="M")
+trend = np.linspace(100, 160, 36)
+season = 25 * np.isin(months.month, [10, 11])
+sales = pd.Series(trend + season + rng.normal(0, 4, 36), index=months.to_timestamp())
+
+fig, ax = plt.subplots(figsize=(8.5, 3.6))
+for start in sales.index[sales.index.month == 10]:
+    ax.axvspan(start, start + pd.DateOffset(months=2), color="#f59e0b", alpha=0.15)
+ax.plot(sales, color="#0a7d4f", marker="o", ms=3, label="monthly sales")
+ax.plot(sales.rolling(12).mean(), color="#c2255c", lw=2.5, label="12-month moving average (trend)")
+ax.set_ylabel("units sold")
+ax.legend(frameon=False, loc="upper left")
+ax.set_title("Shaded: October–November every year")
+fig.tight_layout()
+plt.show()
+```
+
+::figure ts-trend-seasonality.svg | Three years of monthly sales rising steadily with a spike every October and November, and a smooth pink moving-average line showing the upward trend
+
+The three parts are all visible: the **trend** (the pink line climbs), the **seasonality** (the same bump in the same months) and the **noise** (small wiggles around both).
+
 ## Summary
 
 - Time series = trend + seasonality + noise.

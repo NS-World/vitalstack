@@ -102,6 +102,36 @@ pip install scikit-learn
 
 ::hint Quick check | Predicting whether a customer will cancel their subscription (yes/no): regression or classification? Classification, because the answer is a category, not a number.
 
+## The workflow as a diagram
+
+Every project in this course follows the same loop. Keep this picture in mind; each lesson zooms into one box.
+
+```python
+import matplotlib.pyplot as plt
+from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
+
+steps = ["Collect\ndata", "Pick features\nand label", "Split\ntrain / test", "Train\nthe model", "Evaluate\non test", "Predict\nnew cases"]
+fig, ax = plt.subplots(figsize=(9, 2.4))
+for i, text in enumerate(steps):
+    x = i * 1.6
+    ax.add_patch(FancyBboxPatch((x, 0), 1.25, 1, boxstyle="round,pad=0.05,rounding_size=0.15",
+                                fc="#e3f3eb" if i != 4 else "#fff4d6", ec="#0a7d4f", lw=1.5))
+    ax.text(x + 0.625, 0.5, text, ha="center", va="center", fontsize=10)
+    if i < len(steps) - 1:
+        ax.add_patch(FancyArrowPatch((x + 1.3, 0.5), (x + 1.55, 0.5), arrowstyle="-|>", mutation_scale=14, color="#1b1f27"))
+ax.add_patch(FancyArrowPatch((4 * 1.6 + 0.6, -0.08), (2 * 1.6 + 0.6, -0.08), connectionstyle="arc3,rad=-0.35",
+                             arrowstyle="-|>", mutation_scale=14, color="#c2255c", ls="--"))
+ax.text(3 * 1.6 + 0.6, -0.75, "not good enough? improve features or model", ha="center", color="#c2255c", fontsize=9)
+ax.set_xlim(-0.2, 9.4)
+ax.set_ylim(-1, 1.2)
+ax.axis("off")
+plt.show()
+```
+
+::figure ml-workflow-diagram.svg | Six boxes joined by arrows: collect data, pick features and label, split train and test, train, evaluate on test, predict; a dashed arrow loops from evaluate back to features
+
+The dashed arrow is where most real work happens: you evaluate, find the model is not good enough, and go back to improve the features or try another model.
+
 ## Summary
 
 - Machine learning finds rules from examples instead of you writing them.

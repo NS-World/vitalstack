@@ -78,6 +78,15 @@ A one-line version: `len(set(nums)) != len(nums)`. It's neat, but the loop stops
 
 Mentioning this trade-off (time vs memory) is exactly what interviewers want to hear.
 
+## Common mistakes and edge cases
+
+- **Empty or one-item lists.** There is nothing to compare, so the answer is `False`. The set solution handles this without a special case.
+- **Returning too late.** Building the whole set and comparing its size with the list (`len(set(nums)) != len(nums)`) is correct and short, but it always reads the full list. The loop version stops at the first repeat, which matters when the list is huge.
+- **Sorting the caller's list.** `nums.sort()` changes the original list. If the caller still needs the order, use `sorted(nums)` instead.
+- **Huge lists that don't fit in memory.** In interviews this is a common follow-up: sort on disk, or split the numbers into buckets by hash and check each bucket.
+
+**Where it shows up in real code:** rejecting duplicate sign-ups by email, spotting a double payment in a transaction log, and de-duplicating rows before a data analysis.
+
 ## Similar problems
 
 Contains Duplicate II (within k positions), Valid Anagram, Single Number, Find the Duplicate Number.

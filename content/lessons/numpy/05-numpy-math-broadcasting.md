@@ -134,6 +134,35 @@ Output:
 
 `data.min(axis=0)` gives the minimum of each column, shape (2,); broadcasting subtracts it from every row. Now height and salary are both between 0 and 1.
 
+## See it as a chart: what normalising does
+
+Min-max normalising with broadcasting squeezes every column into 0–1. The shape of the data stays the same; only the scale changes.
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+
+rng = np.random.default_rng(2)
+data = np.column_stack([rng.normal(170, 8, 300), rng.normal(65, 12, 300)])   # height cm, weight kg
+normalised = (data - data.min(axis=0)) / (data.max(axis=0) - data.min(axis=0))   # broadcasting
+
+fig, (left, right) = plt.subplots(1, 2, figsize=(9.5, 3.3))
+left.hist(data[:, 0], bins=25, alpha=0.75, color="#0a7d4f", label="height (cm)")
+left.hist(data[:, 1], bins=25, alpha=0.75, color="#2563eb", label="weight (kg)")
+left.set_title("Before: different scales")
+left.legend(frameon=False)
+right.hist(normalised[:, 0], bins=25, alpha=0.75, color="#0a7d4f", label="height")
+right.hist(normalised[:, 1], bins=25, alpha=0.75, color="#2563eb", label="weight")
+right.set_title("After: both 0 to 1")
+right.legend(frameon=False)
+fig.tight_layout()
+plt.show()
+```
+
+::figure numpy-normalise-before-after.svg | Left: height and weight histograms far apart on different scales; right: after normalising both histograms sit between 0 and 1 with the same shapes
+
+One line of broadcasting did this for all 300 rows and both columns at once, with no loop.
+
 ## Summary
 
 - Same shapes: maths is element by element.

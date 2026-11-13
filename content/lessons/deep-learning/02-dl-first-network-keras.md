@@ -100,6 +100,41 @@ Plot `history.history["loss"]` and `["val_loss"]`:
 
 ::tip Always scale inputs (StandardScaler or Normalization layer) for neural networks. Unscaled features make training slow and unstable: the most common beginner bug.
 
+## See it as a chart: the training curves
+
+Plot the training loss and the validation accuracy for each epoch of the scikit-learn network above. Training stops early once validation accuracy stops improving, which protects against overfitting.
+
+```python
+import matplotlib.pyplot as plt
+from sklearn.datasets import make_classification
+from sklearn.model_selection import train_test_split
+from sklearn.neural_network import MLPClassifier
+from sklearn.preprocessing import StandardScaler
+
+X, y = make_classification(n_samples=2000, n_features=20, n_informative=8, random_state=0)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+scaler = StandardScaler().fit(X_train)
+mlp = MLPClassifier(hidden_layer_sizes=(64, 32), early_stopping=True, validation_fraction=0.2,
+                    max_iter=300, random_state=0).fit(scaler.transform(X_train), y_train)
+
+fig, (left, right) = plt.subplots(1, 2, figsize=(10, 3.4))
+left.plot(mlp.loss_curve_, color="#c2255c", lw=2)
+left.set_title("Training loss")
+left.set_xlabel("epoch")
+right.plot(mlp.validation_scores_, color="#0a7d4f", lw=2)
+best = max(range(len(mlp.validation_scores_)), key=mlp.validation_scores_.__getitem__)
+right.axvline(best, color="#1b1f27", ls="--", lw=1)
+right.text(best + 0.5, min(mlp.validation_scores_), " best epoch", va="bottom")
+right.set_title("Validation accuracy")
+right.set_xlabel("epoch")
+fig.tight_layout()
+plt.show()
+```
+
+::figure dl-training-curves.svg | Left: training loss falling quickly then flattening; right: validation accuracy rising then levelling off, with a dashed line at the best epoch
+
+Healthy curves look like this: loss going down, validation accuracy going up and then flat. If training loss keeps falling while validation accuracy drops, the network is memorising.
+
 ## Summary
 
 - Keras: `Sequential` → `compile` → `fit` → `evaluate` → `save`.

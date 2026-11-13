@@ -106,6 +106,45 @@ Output:
 
 ::hint Quick check | Train R² = 0.99, test R² = 0.55. What's happening? Overfitting: the model memorised the training rows. Try a simpler model or more data.
 
+## See it as a chart: overfitting
+
+Train decision trees of growing depth on noisy data and score each one on the training set and on the test set. Deeper trees memorise the training data (training score climbs to 1.0) while the test score stops improving and then drops: that gap is **overfitting**.
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeRegressor
+
+rng = np.random.default_rng(1)
+X = rng.uniform(0, 10, (300, 1))
+y = np.sin(X).ravel() * 10 + rng.normal(0, 3, 300)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
+
+depths = range(1, 16)
+train_scores, test_scores = [], []
+for d in depths:
+    tree = DecisionTreeRegressor(max_depth=d, random_state=0).fit(X_train, y_train)
+    train_scores.append(tree.score(X_train, y_train))
+    test_scores.append(tree.score(X_test, y_test))
+
+fig, ax = plt.subplots(figsize=(7.5, 3.6))
+ax.plot(depths, train_scores, "o-", color="#2563eb", label="training score")
+ax.plot(depths, test_scores, "o-", color="#0a7d4f", label="test score")
+best = int(np.argmax(test_scores)) + 1
+ax.axvline(best, color="#c2255c", ls="--", lw=1)
+ax.text(best + 0.3, 0.3, f"best depth = {best}", color="#c2255c")
+ax.set_xlabel("tree depth (model complexity)")
+ax.set_ylabel("R² score")
+ax.legend(frameon=False)
+fig.tight_layout()
+plt.show()
+```
+
+::figure ml-overfitting-curve.svg | Training score keeps rising to 1.0 as tree depth grows, while the test score peaks at a small depth and then falls
+
+Only the test score tells you how the model will do on new data. Pick the complexity where the **test** score is highest, not the training score.
+
 ## Summary
 
 - Always evaluate on data the model never saw: `train_test_split`.

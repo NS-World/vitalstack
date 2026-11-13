@@ -174,6 +174,39 @@ Output:
 mean 2.31s, 95% CI 2.05s to 2.57s
 ```
 
+## See it as a chart: what "95% confident" really means
+
+Take 25 different samples of 400 customers, and draw each sample's 95% interval as a line. The dashed line is the true population mean. About 95% of the intervals catch it; here 24 of 25 do, and the one miss is drawn in pink.
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+
+rng = np.random.default_rng(1)
+population = rng.gamma(shape=2, scale=500, size=1_000_000)
+true_mean = population.mean()
+
+fig, ax = plt.subplots(figsize=(8, 4.6))
+for i in range(25):
+    sample = rng.choice(population, size=400)
+    se = sample.std(ddof=1) / np.sqrt(len(sample))
+    low, high = sample.mean() - 1.96 * se, sample.mean() + 1.96 * se
+    hit = low <= true_mean <= high
+    ax.plot([low, high], [i, i], color="#0a7d4f" if hit else "#c2255c", lw=3)
+    ax.plot(sample.mean(), i, "o", color="white", mec="#1b1f27", ms=4)
+ax.axvline(true_mean, color="#1b1f27", ls="--", label=f"true mean ≈ {true_mean:.0f}")
+ax.set_yticks([])
+ax.set_xlabel("average spend (₹)")
+ax.set_title("25 samples, 25 confidence intervals")
+ax.legend(frameon=False, loc="upper center", bbox_to_anchor=(0.5, -0.16))
+fig.tight_layout()
+plt.show()
+```
+
+::figure stat-confidence-intervals.svg | Twenty-five horizontal interval lines around a dashed true-mean line; 24 cross it and the one that misses is pink
+
+"95% confident" is a statement about the **method**: if you repeated the survey many times, 95% of the intervals you built would contain the truth. Any single interval either contains it or doesn't.
+
 ## Summary
 
 - Random samples avoid bias; how you sample matters more than how many.

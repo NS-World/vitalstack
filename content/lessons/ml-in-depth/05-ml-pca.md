@@ -107,6 +107,41 @@ Output:
 
 ::tip Always scale before PCA when columns have different units, otherwise the column with the biggest numbers (salary in rupees) dominates every component.
 
+## See it as a chart: the scree plot
+
+A scree plot shows how much of the variance each component explains (bars) and the running total (line). Here the first component alone carries most of the information, because three of the four features are really one thing: body size.
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+
+rng = np.random.default_rng(0)
+height_cm = rng.normal(165, 10, 200)
+height_in = height_cm / 2.54 + rng.normal(0, 0.5, 200)
+weight = 0.9 * height_cm - 85 + rng.normal(0, 6, 200)
+shoe = rng.normal(8, 1.5, 200)
+X = StandardScaler().fit_transform(np.column_stack([height_cm, height_in, weight, shoe]))
+ratio = PCA().fit(X).explained_variance_ratio_
+
+fig, ax = plt.subplots(figsize=(7, 3.6))
+parts = [f"PC{i}" for i in range(1, 5)]
+ax.bar(parts, ratio, color="#0a7d4f", label="explained by this component")
+ax.plot(parts, ratio.cumsum(), "o-", color="#c2255c", label="cumulative")
+ax.axhline(0.95, color="#9ca3af", ls="--", lw=1)
+ax.text(3.05, 0.9, "95%", color="#6b7280")
+ax.set_ylim(0, 1.05)
+ax.set_ylabel("share of variance")
+ax.legend(frameon=False, loc="center right")
+fig.tight_layout()
+plt.show()
+```
+
+::figure mlid-pca-scree.svg | Bar chart where the first principal component explains most of the variance, with a cumulative line passing 95% by the second or third component
+
+Keep enough components to pass a target such as 95% of the variance. Here 4 features shrink to 2 or 3 with almost no information lost.
+
 ## Summary
 
 - Many columns → sparse data, slow models: the curse of dimensionality.

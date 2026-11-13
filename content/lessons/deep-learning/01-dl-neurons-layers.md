@@ -118,6 +118,53 @@ print(pred, loss, grad, w)
 
 ::tip A network is only "deep" because it has many layers. More layers can learn richer patterns but need more data and compute. For small tabular datasets, gradient boosting usually beats neural networks.
 
+## See it as a chart: activations and learning XOR
+
+Left: the three activation functions you will meet most. Right: the loss of the small network above while it learns XOR, falling as backpropagation adjusts the weights.
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+
+z = np.linspace(-5, 5, 200)
+rng = np.random.default_rng(1)
+X = np.array([[0, 0], [0, 1], [1, 0], [1, 1]], dtype=float)
+y = np.array([[0], [1], [1], [0]], dtype=float)
+W1, b1 = rng.normal(0, 1, (2, 4)), np.zeros((1, 4))
+W2, b2 = rng.normal(0, 1, (4, 1)), np.zeros((1, 1))
+sigmoid = lambda v: 1 / (1 + np.exp(-v))
+losses = []
+for epoch in range(3001):
+    h = np.tanh(X @ W1 + b1)
+    out = sigmoid(h @ W2 + b2)
+    losses.append(float(np.mean((out - y) ** 2)))
+    d_out = (out - y) * out * (1 - out)
+    d_h = (d_out @ W2.T) * (1 - h ** 2)
+    W2 -= h.T @ d_out
+    b2 -= d_out.sum(axis=0, keepdims=True)
+    W1 -= X.T @ d_h
+    b1 -= d_h.sum(axis=0, keepdims=True)
+
+fig, (left, right) = plt.subplots(1, 2, figsize=(10, 3.5))
+left.plot(z, 1 / (1 + np.exp(-z)), color="#2563eb", lw=2, label="sigmoid")
+left.plot(z, np.tanh(z), color="#f59e0b", lw=2, label="tanh")
+left.plot(z, np.maximum(0, z), color="#0a7d4f", lw=2, label="ReLU")
+left.set_ylim(-1.2, 2.5)
+left.axhline(0, color="#9ca3af", lw=0.8)
+left.legend(frameon=False)
+left.set_title("Activation functions")
+right.plot(losses, color="#c2255c", lw=2)
+right.set_xlabel("epoch")
+right.set_ylabel("mean squared error")
+right.set_title("Learning XOR: the loss falls")
+fig.tight_layout()
+plt.show()
+```
+
+::figure dl-activations-xor-loss.svg | Left: sigmoid, tanh and ReLU curves; right: the training loss for XOR dropping from about 0.25 towards zero over 3000 epochs
+
+ReLU is the default inside modern networks because it is cheap and does not flatten out for big inputs. The falling loss is what "the network is learning" looks like.
+
 ## Summary
 
 - Neuron = weighted sum + bias + activation; layers stack neurons.

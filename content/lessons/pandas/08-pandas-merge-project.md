@@ -119,6 +119,35 @@ Average order: 935.71
 
 You've covered the core of Pandas: loading, selecting, filtering, cleaning, new columns, grouping and joining. Next, turn these numbers into charts in the **Data Visualization** course.
 
+## See it as a chart: revenue by city
+
+Finish the mini project with a chart: merge orders with customers, sum the amount per city and sort.
+
+```python
+import matplotlib.pyplot as plt
+import pandas as pd
+
+customers = pd.DataFrame({"customer_id": [1, 2, 3, 4], "name": ["Asha", "Rahul", "Meera", "Kabir"],
+                          "city": ["Pune", "Surat", "Delhi", "Pune"]})
+orders = pd.DataFrame({"order_id": [101, 102, 103, 104, 105, 106, 107],
+                       "customer_id": [1, 2, 1, 3, 4, 3, 1],
+                       "amount": [500, 1200, 300, 2200, 800, 650, 900]})
+revenue = pd.merge(orders, customers, on="customer_id").groupby("city")["amount"].sum().sort_values()
+
+fig, ax = plt.subplots(figsize=(7, 3))
+bars = ax.barh(revenue.index, revenue.values, color=["#cfd4dc"] * (len(revenue) - 1) + ["#0a7d4f"])
+ax.bar_label(bars, labels=[f"₹{v:,}" for v in revenue.values], padding=4)
+ax.set_xlim(0, revenue.max() * 1.2)
+ax.set_xlabel("revenue (₹)")
+ax.set_title("Which city brings the most revenue?")
+fig.tight_layout()
+plt.show()
+```
+
+::figure pandas-revenue-by-city.svg | Horizontal bar chart of revenue by city: Delhi highest at ₹2,850, then Pune at ₹2,500 and Surat at ₹1,200
+
+Two customers in Pune together bring less than Meera alone in Delhi: the kind of insight a merge plus one chart gives you in seconds.
+
 ## Summary
 
 - `pd.merge(a, b, on="key", how="inner|left|right|outer")` joins tables like SQL.

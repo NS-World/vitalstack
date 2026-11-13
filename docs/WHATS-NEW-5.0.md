@@ -244,6 +244,11 @@ them before publishing. The notice only reminds you; it never publishes anything
     - every interview problem's solution in **Python, Java, C++ and JavaScript** (tabs that
       remember the learner's language), all 153 programs tested against the Python answers;
     - see `docs/releases/4.17-INTERVIEW-SOLUTIONS-4-LANGUAGES.md`.
+  - **4.18.0:**
+    - real charts and diagrams in 32 more data science lessons (Statistics, ML, EDA, ML in Depth,
+      Time Series, Deep Learning, NumPy, pandas), shown on lessons already on the site;
+    - Website Builder in the header and on the Free Tools page; AdSense fixes and Helper 1.0.1;
+    - see `docs/releases/4.18-CHARTS-BUILDER-ADSENSE.md` and `docs/PROD-GO-LIVE-GUIDE.md`.
   - See `docs/releases/4.13-PLANS-INVITES-RAZORPAY.md`.
 
 ## After installing on the DEV site

@@ -135,6 +135,34 @@ Passed every subject: ['Asha' 'Rahul' 'Meera' 'Zoya']
 
 You now know the core of NumPy. Next, **Pandas** builds on these arrays and adds column names, missing-value handling and easy loading of CSV and Excel files.
 
+## See it as a chart: the week at a glance
+
+The same statistics, drawn: each bar is a day, the dashed line is the mean, and the best day (the `argmax`) is highlighted.
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+
+days = np.array(["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"])
+sales = np.array([120, 95, 180, 150, 95, 210, 170])
+colors = np.where(np.arange(len(sales)) == sales.argmax(), "#f59e0b", "#0a7d4f")
+
+fig, ax = plt.subplots(figsize=(7.5, 3.4))
+ax.bar(days, sales, color=colors)
+ax.axhline(sales.mean(), color="#c2255c", ls="--", label=f"mean {sales.mean():.1f}")
+ax.axhline(np.median(sales), color="#2563eb", ls=":", label=f"median {np.median(sales):.0f}")
+ax.text(sales.argmax(), sales.max() + 4, "best day", ha="center")
+ax.set_ylabel("sales")
+ax.set_ylim(0, 235)
+ax.legend(frameon=False, loc="upper left")
+fig.tight_layout()
+plt.show()
+```
+
+::figure numpy-week-sales.svg | Bar chart of sales for each day of the week with Saturday highlighted as the best day and dashed lines for the mean and median
+
+A chart makes the numbers easy to share: anyone can see Saturday is the peak and Tuesday and Friday are the slow days.
+
 ## Summary
 
 | Question | Code |

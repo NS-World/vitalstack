@@ -108,6 +108,38 @@ Output:
 - **SHAP values** (the `shap` library) split each single prediction into contributions from each feature: "income −0.3, missed EMIs +0.5", which is what you show a customer or a regulator.
 - For simple, regulated decisions, prefer inherently explainable models (logistic regression, small trees).
 
+## See it as a chart: permutation importance
+
+Shuffle one feature at a time and measure how much the model's score drops. Big drop = the model relies on that feature. The error bars show the spread over repeated shuffles.
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.datasets import make_classification
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.inspection import permutation_importance
+from sklearn.model_selection import train_test_split
+
+X, y = make_classification(n_samples=1500, n_features=8, n_informative=3, n_redundant=0, random_state=2)
+names = [f"feature_{i}" for i in range(8)]
+a, b, ya, yb = train_test_split(X, y, test_size=0.3, random_state=0)
+forest = RandomForestClassifier(n_estimators=100, random_state=0).fit(a, ya)
+result = permutation_importance(forest, b, yb, n_repeats=8, random_state=0)
+order = result.importances_mean.argsort()
+
+fig, ax = plt.subplots(figsize=(7, 3.8))
+ax.barh(np.array(names)[order], result.importances_mean[order], xerr=result.importances_std[order],
+        color=["#0a7d4f" if v > 0.02 else "#cfd4dc" for v in result.importances_mean[order]])
+ax.set_xlabel("drop in accuracy when shuffled")
+ax.set_title("Which features does the forest really use?")
+fig.tight_layout()
+plt.show()
+```
+
+::figure mlid-permutation-importance.svg | Horizontal bars: three features cause a clear accuracy drop when shuffled and are green, the other five are near zero and grey
+
+The data was built with exactly three useful features, and the chart finds them. On real projects this is how you check a model relies on sensible signals, not on a leak.
+
 ## Summary
 
 - Rare classes need class weights, training-set resampling or threshold tuning.

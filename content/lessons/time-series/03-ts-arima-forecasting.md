@@ -108,6 +108,41 @@ Use a **time-based split** (or rolling-origin evaluation, refitting as each mont
 
 ::tip Forecasts are ranges, not single numbers. Show the interval: "between 230 and 255 units, most likely 241" helps a planner far more than "241".
 
+## See it as a chart: a forecast against what really happened
+
+Fit the AR(1) model on the first 180 points, then forecast the last 20 one step at a time from the real previous value. Plotting forecast against actual is the honest test of any forecasting model.
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+
+rng = np.random.default_rng(5)
+x = [50.0]
+for _ in range(199):
+    x.append(10 + 0.8 * x[-1] + rng.normal(0, 2))
+s = pd.Series(x)
+frame = pd.DataFrame({"y": s, "lag1": s.shift(1)}).dropna()
+train, test = frame.iloc[:179], frame.iloc[179:]
+ar = LinearRegression().fit(train[["lag1"]], train["y"])
+forecast = ar.predict(test[["lag1"]])
+mae = np.mean(np.abs(test["y"] - forecast))
+
+fig, ax = plt.subplots(figsize=(8.5, 3.6))
+ax.plot(s.index[140:], s.iloc[140:], color="#1b1f27", lw=1.4, label="actual")
+ax.plot(test.index, forecast, color="#0a7d4f", lw=2.2, marker="o", ms=4, label=f"AR(1) one-step forecast (MAE {mae:.2f})")
+ax.axvspan(test.index[0], test.index[-1], color="#e3f3eb", label="test period")
+ax.set_xlabel("time step")
+ax.legend(frameon=False, loc="upper center", bbox_to_anchor=(0.5, -0.18), ncol=3)
+fig.tight_layout()
+plt.show()
+```
+
+::figure ts-ar-forecast.svg | A black actual series with a shaded test period at the end, where green forecast dots follow the actual line closely
+
+The forecast follows the shape but never catches the surprises: those are the random shocks no model can predict. Always compare against a simple baseline (like "same as last value") before trusting a model.
+
 ## Summary
 
 - AR uses past values, I differences for stationarity, MA uses past errors; SARIMA adds seasonal terms.

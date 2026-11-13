@@ -112,6 +112,34 @@ Output:
 
 ::tip For forecasting, compare an LSTM against ARIMA and gradient boosting on lag features. On small or medium datasets the simpler models often win, and they're much cheaper to train and explain.
 
+## See it as a diagram: turning a series into training windows
+
+Sequence models learn from **windows**: the last 12 values are the input and the next value is the target. Slide the window one step and you get the next training example.
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+
+series = 50 + 10 * np.sin(np.arange(30) / 3) + np.arange(30)
+fig, axes = plt.subplots(3, 1, figsize=(8.5, 4.4), sharex=True)
+for row, start in enumerate([0, 1, 2]):
+    ax = axes[row]
+    ax.plot(series, color="#cfd4dc", marker="o", ms=3)
+    window = np.arange(start, start + 12)
+    ax.plot(window, series[window], color="#2563eb", marker="o", ms=4, lw=2, label="input window (12 steps)")
+    ax.plot(start + 12, series[start + 12], "o", color="#c2255c", ms=9, label="target")
+    ax.set_yticks([])
+    ax.set_ylabel(f"example {row + 1}", rotation=0, ha="right", va="center")
+axes[0].legend(frameon=False, ncol=2, loc="upper left", fontsize=9)
+axes[-1].set_xlabel("time step")
+fig.tight_layout()
+plt.show()
+```
+
+::figure dl-sequence-windows.svg | Three copies of one series; in each a blue 12-step window slides one step to the right and the pink point after it is the value to predict
+
+This is the shape `(samples, timesteps, features)` the LSTM expects: each blue window is one sample of 12 timesteps with 1 feature.
+
 ## Summary
 
 - RNNs read sequences step by step with a hidden-state memory and shared weights.

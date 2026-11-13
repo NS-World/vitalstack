@@ -83,6 +83,15 @@ print(group_anagrams_counts(["abc", "bca", "xyz"]))  # [['abc', 'bca'], ['xyz']]
 - Count key: **O(n · k)** time.
 - Space **O(n · k)** to store the groups.
 
+## Common mistakes and edge cases
+
+- **Using a list as a dictionary key.** `sorted("eat")` returns a list, and lists can't be dictionary keys. Join it into a string (`"".join(sorted(w))`) or turn it into a tuple first.
+- **Empty strings.** `""` is a valid word and forms its own group (`[[""]]`). The sorted key of `""` is `""`, so the solution handles it.
+- **Very long words.** Sorting each word costs O(k log k). For long words, a key built from letter counts (26 numbers) is O(k) instead.
+- **Order of the output.** Most judges accept the groups in any order. If yours does not, sort the groups before comparing.
+
+**Where it shows up in real code:** finding near-duplicate records, building a "words with the same letters" index for search, and any task that groups items by a normalised signature.
+
 ## Similar problems
 
 Valid Anagram, Group Shifted Strings, Find All Anagrams in a String.

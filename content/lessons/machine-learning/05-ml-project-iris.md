@@ -149,6 +149,39 @@ The same six steps (explore, split, train, evaluate, explain, use) apply to ever
 
 ::hint Challenge | Replace the decision tree with `LogisticRegression(max_iter=1000)` and with `KNeighborsClassifier()`. Which model gets the best test accuracy?
 
+## See it as a chart: why petals win
+
+Plot every flower by petal length and width, coloured by species, next to the tree's feature importances. Setosa sits alone in the corner, and the other two separate well on petal size, which is exactly why the tree leans on the petal features.
+
+```python
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+from sklearn.tree import DecisionTreeClassifier
+
+iris = load_iris(as_frame=True)
+df = iris.frame
+tree = DecisionTreeClassifier(max_depth=3, random_state=42).fit(iris.data, iris.target)
+
+fig, (left, right) = plt.subplots(1, 2, figsize=(10, 3.8))
+for code, name, color in zip(range(3), iris.target_names, ["#2563eb", "#0a7d4f", "#f59e0b"]):
+    part = df[df["target"] == code]
+    left.scatter(part["petal length (cm)"], part["petal width (cm)"], s=18, color=color, label=name)
+left.set_xlabel("petal length (cm)")
+left.set_ylabel("petal width (cm)")
+left.legend(frameon=False)
+left.set_title("Each dot is one flower")
+order = tree.feature_importances_.argsort()
+right.barh([iris.feature_names[i] for i in order], tree.feature_importances_[order], color="#0a7d4f")
+right.set_xlabel("importance")
+right.set_title("What the tree uses")
+fig.tight_layout()
+plt.show()
+```
+
+::figure ml-iris-petals.svg | Left: three clear groups of flowers on a petal length versus petal width plot; right: bar chart where petal features have almost all the importance
+
+When one or two features separate the classes this cleanly in a chart, you can expect high accuracy before training anything. A quick plot like this is the best first step of any project.
+
 ## Summary
 
 - Explore → split → train → evaluate → explain → use.

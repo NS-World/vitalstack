@@ -173,6 +173,35 @@ The 0.05 threshold means you accept a 5% false-alarm rate when nothing is going 
 - **Peeking:** stopping an A/B test the moment p dips below 0.05. Fix the sample size in advance.
 - **Significant ≠ important:** with a million users, a ₹0.50 difference can be "significant" and still not worth anything. Always report the size of the effect too, ideally with a confidence interval.
 
+## See it as a chart: where the p-value comes from
+
+If the coin is fair, the number of heads in 100 flips follows a binomial distribution centred on 50. The p-value for seeing 61 heads is the area in **both tails**: results at least as far from 50 as 61 is (61 or more, or 39 or fewer).
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy import stats
+
+heads = np.arange(25, 76)
+prob = stats.binom.pmf(heads, n=100, p=0.5)
+extreme = np.abs(heads - 50) >= 11
+
+fig, ax = plt.subplots(figsize=(8, 3.4))
+ax.bar(heads[~extreme], prob[~extreme], color="#cfd4dc", width=0.9)
+ax.bar(heads[extreme], prob[extreme], color="#c2255c", width=0.9, label=f"as extreme as 61 (p ≈ {prob[extreme].sum():.3f})")
+ax.axvline(61, color="#1b1f27", ls="--", lw=1)
+ax.text(61.5, prob.max() * 0.9, "we saw 61")
+ax.set_xlabel("heads in 100 flips of a fair coin")
+ax.set_ylabel("probability")
+ax.legend(frameon=False, loc="upper left")
+fig.tight_layout()
+plt.show()
+```
+
+::figure stat-p-value-tails.svg | A bell-shaped bar chart of heads in 100 fair flips; the bars at 61 and above and 39 and below are pink and together make the p-value
+
+The pink bars add up to about 0.035, the same p-value `binomtest` printed. It is below 0.05, so 61 heads would be surprising for a fair coin.
+
 ## Summary
 
 | Question | Test | SciPy |

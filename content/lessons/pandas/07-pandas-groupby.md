@@ -120,6 +120,32 @@ Now it's easy to see Book sales dropped in February while Bag and Pen grew.
 
 ::hint Quick check | `df.groupby("city").size()` counts rows in each group, including rows with missing values; `count()` skips missing values. For "how many orders per city", `size()` is usually what you want.
 
+## See it as a chart: groupby, then plot
+
+A `groupby` result is a small table, and pandas can plot it straight away. Here are each city's average and best marks side by side.
+
+```python
+import matplotlib.pyplot as plt
+import pandas as pd
+
+df = pd.DataFrame({
+    "name": ["Asha", "Rahul", "Meera", "Kabir", "Zoya", "Dev"],
+    "city": ["Pune", "Surat", "Delhi", "Pune", "Delhi", "Surat"],
+    "marks": [82, 64, 91, 58, 77, 88],
+})
+summary = df.groupby("city")["marks"].agg(["mean", "max"]).sort_values("mean")
+ax = summary.plot.barh(figsize=(7, 3.2), color=["#0a7d4f", "#f59e0b"])
+ax.set_xlabel("marks")
+ax.set_ylabel("")
+ax.legend(["average", "best"], frameon=False, loc="lower right")
+plt.tight_layout()
+plt.show()
+```
+
+::figure pandas-groupby-chart.svg | Horizontal bars for Pune, Surat and Delhi showing each city's average and best marks, with Delhi highest on average
+
+`groupby` + `agg` + `.plot` is one of the most common three-step patterns in data work: summarise, then show.
+
 ## Summary
 
 - `df.groupby("col")["value"].sum()`: split, apply, combine.

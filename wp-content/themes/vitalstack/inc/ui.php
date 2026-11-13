@@ -65,6 +65,9 @@ function vitalstack_practice_links() {
 		$active  = $current && ( (int) $current->ID === (int) $page->ID || in_array( (int) $page->ID, array_map( 'intval', get_post_ancestors( $current ) ), true ) );
 		$links[] = array( get_permalink( $page ), $meta[0], $meta[1], $active );
 	}
+	if ( function_exists( 'vitalstack_playground_url' ) ) {
+		$links[] = array( vitalstack_playground_url(), __( 'Website Builder', 'vitalstack' ), '🧪', (bool) get_query_var( 'vs_playground' ) );
+	}
 	return $links;
 }
 

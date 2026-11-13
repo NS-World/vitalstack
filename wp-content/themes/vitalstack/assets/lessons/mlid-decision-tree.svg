@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="460.8pt" height="247.248pt" viewBox="0 0 460.8 247.248" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.2, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 247.248 
+L 460.8 247.248 
+L 460.8 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 216.846276 174.214996 
+Q 244.766352 149.942542 273.530191 124.93656 
+" style="fill: none; stroke: #000000; stroke-linecap: round"/>
+    <path d="M 220.744098 173.211509 
+L 216.846276 174.214996 
+L 218.38218 170.494646 
+" style="fill: none; stroke: #000000; stroke-linecap: round"/>
+   </g>
+   <g id="text_1">
+    <g id="patch_3">
+     <path d="M 155.898984 225.719297 
+L 215.621016 225.719297 
+Q 218.321016 225.719297 218.321016 223.019297 
+L 218.321016 179.460703 
+Q 218.321016 176.760703 215.621016 176.760703 
+L 155.898984 176.760703 
+Q 153.198984 176.760703 153.198984 179.460703 
+L 153.198984 223.019297 
+Q 153.198984 225.719297 155.898984 225.719297 
+z
+" style="fill: #e58139; stroke: #000000; stroke-linejoin: miter"/>
+    </g>
+    <text style="font-size: 9px; font-family: 'Inter', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif" transform="translate(165.906563 188.179453)">gini = 0.0</text>
+    <text style="font-size: 9px; font-family: 'Inter', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif" transform="translate(159.657187 199.069102)">samples = 4</text>
+    <text style="font-size: 9px; font-family: 'Inter', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif" transform="translate(157.405078 209.95875)">value = [4, 0]</text>
+    <text style="font-size: 9px; font-family: 'Inter', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif" transform="translate(155.898984 220.848398)">class = repaid</text>
+   </g>
+   <g id="patch_4">
+    <path d="M 333.233724 174.214996 
+Q 305.313648 149.942542 276.549809 124.93656 
+" style="fill: none; stroke: #000000; stroke-linecap: round"/>
+    <path d="M 331.69782 170.494646 
+L 333.233724 174.214996 
+L 329.335902 173.211509 
+" style="fill: none; stroke: #000000; stroke-linecap: round"/>
+   </g>
+   <g id="text_2">
+    <g id="patch_5">
+     <path d="M 327.748359 225.719297 
+L 400.891641 225.719297 
+Q 403.591641 225.719297 403.591641 223.019297 
+L 403.591641 179.460703 
+Q 403.591641 176.760703 400.891641 176.760703 
+L 327.748359 176.760703 
+Q 325.048359 176.760703 325.048359 179.460703 
+L 325.048359 223.019297 
+Q 325.048359 225.719297 327.748359 225.719297 
+z
+" style="fill: #399de5; stroke: #000000; stroke-linejoin: miter"/>
+    </g>
+    <text style="font-size: 9px; font-family: 'Inter', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif" transform="translate(344.466563 188.179453)">gini = 0.0</text>
+    <text style="font-size: 9px; font-family: 'Inter', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif" transform="translate(339.293672 199.069102)">samples = 1</text>
+    <text style="font-size: 9px; font-family: 'Inter', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif" transform="translate(337.003594 209.95875)">value = [0, 1]</text>
+    <text style="font-size: 9px; font-family: 'Inter', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif" transform="translate(327.748359 220.848398)">class = defaulted</text>
+   </g>
+   <g id="patch_6">
+    <path d="M 127.566276 96.598996 
+Q 155.486352 72.326542 184.250191 47.32056 
+" style="fill: none; stroke: #000000; stroke-linecap: round"/>
+    <path d="M 131.464098 95.595509 
+L 127.566276 96.598996 
+L 129.10218 92.878646 
+" style="fill: none; stroke: #000000; stroke-linecap: round"/>
+   </g>
+   <g id="text_3">
+    <g id="patch_7">
+     <path d="M 59.908359 148.103297 
+L 133.051641 148.103297 
+Q 135.751641 148.103297 135.751641 145.403297 
+L 135.751641 101.844703 
+Q 135.751641 99.144703 133.051641 99.144703 
+L 59.908359 99.144703 
+Q 57.208359 99.144703 57.208359 101.844703 
+L 57.208359 145.403297 
+Q 57.208359 148.103297 59.908359 148.103297 
+z
+" style="fill: #399de5; stroke: #000000; stroke-linejoin: miter"/>
+    </g>
+    <text style="font-size: 9px; font-family: 'Inter', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif" transform="translate(76.626563 110.563453)">gini = 0.0</text>
+    <text style="font-size: 9px; font-family: 'Inter', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif" transform="translate(70.548047 121.453102)">samples = 5</text>
+    <text style="font-size: 9px; font-family: 'Inter', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif" transform="translate(68.257969 132.34275)">value = [0, 5]</text>
+    <text style="font-size: 9px; font-family: 'Inter', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif" transform="translate(59.908359 143.232398)">class = defaulted</text>
+   </g>
+   <g id="text_4">
+    <text style="font-size: 9px; font-family: 'Inter', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" x="141.12" y="84.816" transform="rotate(-0 141.12 84.816)">True  </text>
+   </g>
+   <g id="patch_8">
+    <path d="M 237.691154 91.1546 
+Q 212.902812 69.604735 187.270708 47.321341 
+" style="fill: none; stroke: #000000; stroke-linecap: round"/>
+    <path d="M 236.15525 87.434251 
+L 237.691154 91.1546 
+L 233.793332 90.151114 
+" style="fill: none; stroke: #000000; stroke-linecap: round"/>
+   </g>
+   <g id="text_5">
+    <g id="patch_9">
+     <path d="M 235.887891 153.548121 
+L 314.192109 153.548121 
+Q 316.892109 153.548121 316.892109 150.848121 
+L 316.892109 96.399879 
+Q 316.892109 93.699879 314.192109 93.699879 
+L 235.887891 93.699879 
+Q 233.187891 93.699879 233.187891 96.399879 
+L 233.187891 150.848121 
+Q 233.187891 153.548121 235.887891 153.548121 
+z
+" style="fill: #eca06a; stroke: #000000; stroke-linejoin: miter"/>
+    </g>
+    <text style="font-size: 9px; font-family: 'Inter', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif" transform="translate(235.887891 105.118629)">missed_emi &lt;= 1.5</text>
+    <text style="font-size: 9px; font-family: 'Inter', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif" transform="translate(252.509062 116.008277)">gini = 0.32</text>
+    <text style="font-size: 9px; font-family: 'Inter', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif" transform="translate(249.108047 126.897926)">samples = 5</text>
+    <text style="font-size: 9px; font-family: 'Inter', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif" transform="translate(247.694062 137.787574)">value = [4, 1]</text>
+    <text style="font-size: 9px; font-family: 'Inter', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif" transform="translate(245.178984 148.677223)">class = repaid</text>
+   </g>
+   <g id="text_6">
+    <text style="font-size: 9px; font-family: 'Inter', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" x="230.4" y="84.816" transform="rotate(-0 230.4 84.816)">  False</text>
+   </g>
+   <g id="patch_10">
+    <path d="M 185.76 46.008 
+Q 185.76 46.008 185.76 46.008 
+" style="fill: none; stroke: #000000; stroke-linecap: round"/>
+   </g>
+   <g id="text_7">
+    <g id="patch_11">
+     <path d="M 149.188359 75.932121 
+L 222.331641 75.932121 
+Q 225.031641 75.932121 225.031641 73.232121 
+L 225.031641 18.783879 
+Q 225.031641 16.083879 222.331641 16.083879 
+L 149.188359 16.083879 
+Q 146.488359 16.083879 146.488359 18.783879 
+L 146.488359 73.232121 
+Q 146.488359 75.932121 149.188359 75.932121 
+z
+" style="fill: #bddef6; stroke: #000000; stroke-linejoin: miter"/>
+    </g>
+    <text style="font-size: 9px; font-family: 'Inter', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif" transform="translate(155.031328 27.502629)">income &lt;= 6.0</text>
+    <text style="font-size: 9px; font-family: 'Inter', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif" transform="translate(162.941484 38.392277)">gini = 0.48</text>
+    <text style="font-size: 9px; font-family: 'Inter', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif" transform="translate(157.894453 49.281926)">samples = 10</text>
+    <text style="font-size: 9px; font-family: 'Inter', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif" transform="translate(157.453594 60.171574)">value = [4, 6]</text>
+    <text style="font-size: 9px; font-family: 'Inter', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif" transform="translate(149.188359 71.061223)">class = defaulted</text>
+   </g>
+  </g>
+ </g>
+</svg>

@@ -200,6 +200,33 @@ Name: minutes, dtype: float64
 
 Read it like a sentence: "12 deliveries, typically 24 minutes (median), the middle half took between about 21.75 and 28.5 minutes, and at least one took 75." The mean (28.42) is pulled up by that one slow order.
 
+## See it as a chart: one big salary pulls the mean
+
+Plot the seven salaries as dots and mark the mean and the median. The box plot underneath shows the five-number summary, with the ₹150k salary drawn as a lone outlier dot.
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+
+salaries = np.array([22, 25, 25, 28, 30, 31, 150])
+fig, (top, bottom) = plt.subplots(2, 1, figsize=(8, 3.6), sharex=True, gridspec_kw={"height_ratios": [1.3, 1]})
+top.scatter(salaries, np.zeros_like(salaries), s=90, color="#0a7d4f", zorder=3)
+top.axvline(salaries.mean(), color="#c2255c", lw=2, label=f"mean {salaries.mean():.1f}")
+top.axvline(np.median(salaries), color="#2563eb", lw=2, ls="--", label=f"median {np.median(salaries):.0f}")
+top.set_yticks([])
+top.legend(loc="upper center", frameon=False, ncol=2)
+top.set_title("Salaries (₹ thousand per month)")
+bottom.boxplot(salaries, vert=False, widths=0.5)
+bottom.set_yticks([])
+bottom.set_xlabel("₹ thousand per month")
+fig.tight_layout()
+plt.show()
+```
+
+::figure stat-mean-vs-median.svg | Seven salaries as dots: the mean line sits far right of the median line because of one ₹150k salary, and the box plot shows it as an outlier
+
+Six of the seven people earn less than the mean. That is why reports about typical pay use the **median**: one huge value moves the mean a lot and the median hardly at all.
+
 ## Summary
 
 | Question | Robust to outliers | Sensitive to outliers |

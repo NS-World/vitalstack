@@ -95,6 +95,38 @@ The moon-shaped classes need a curved boundary, so the RBF kernel wins. **C** tr
 
 ::tip In an interview, "which model would you use?" is really "what are the trade-offs?". Mention data size, number of features, need for explanations and speed.
 
+## See it as a chart: the SVM's widest road
+
+A linear SVM picks the line with the widest empty "road" between the two classes. The circled points touching the road's edges are the **support vectors**; they alone decide where the line goes.
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.svm import SVC
+
+rng = np.random.default_rng(4)
+X = np.vstack([rng.normal([2, 2], 0.6, (25, 2)), rng.normal([5, 5], 0.6, (25, 2))])
+y = np.array([0] * 25 + [1] * 25)
+svm = SVC(kernel="linear", C=10).fit(X, y)
+
+xx, yy = np.meshgrid(np.linspace(0, 7, 200), np.linspace(0, 7, 200))
+score = svm.decision_function(np.column_stack([xx.ravel(), yy.ravel()])).reshape(xx.shape)
+fig, ax = plt.subplots(figsize=(5.5, 4.5))
+ax.contourf(xx, yy, score, levels=[-1, 1], colors=["#fff4d6"])
+ax.contour(xx, yy, score, levels=[-1, 0, 1], colors=["#f59e0b", "#1b1f27", "#f59e0b"], linestyles=["--", "-", "--"])
+ax.scatter(X[y == 0, 0], X[y == 0, 1], color="#2563eb", s=25, label="class A")
+ax.scatter(X[y == 1, 0], X[y == 1, 1], color="#0a7d4f", s=25, label="class B")
+ax.scatter(*svm.support_vectors_.T, s=140, facecolors="none", edgecolors="#c2255c", lw=2, label="support vectors")
+ax.legend(frameon=False, loc="upper left")
+ax.set_title("SVM: the widest road")
+fig.tight_layout()
+plt.show()
+```
+
+::figure mlid-svm-margin.svg | Two clusters of dots split by a solid line inside a shaded road with dashed edges; the few points on the edges are circled as support vectors
+
+Move any other point and the line stays put; move a support vector and the line moves. That is why SVMs are robust to points far from the boundary.
+
 ## Summary
 
 - **k-NN** votes among the closest training points; scale features first.

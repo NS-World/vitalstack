@@ -137,6 +137,44 @@ Same `fit` / `score` methods, a completely different algorithm. That consistency
 
 ::hint Quick check | A cancer test model has 99% accuracy, but the disease affects 1% of people. Is it good? Not necessarily: a model that always says "healthy" also scores 99%. Check the confusion matrix and recall.
 
+## See it as a chart: the decision boundary
+
+Logistic regression draws a straight boundary through the students. Above-right of the line it predicts "pass", below-left "fail". The background shade shows the predicted probability of passing.
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.linear_model import LogisticRegression
+
+rng = np.random.default_rng(5)
+n = 300
+hours = rng.uniform(0, 12, n)
+attendance = rng.uniform(40, 100, n)
+chance = 1 / (1 + np.exp(-(0.6 * hours + 0.08 * attendance - 8)))
+passed = (rng.random(n) < chance).astype(int)
+X = np.column_stack([hours, attendance])
+model = LogisticRegression().fit(X, passed)
+
+gh, ga = np.meshgrid(np.linspace(0, 12, 200), np.linspace(40, 100, 200))
+proba = model.predict_proba(np.column_stack([gh.ravel(), ga.ravel()]))[:, 1].reshape(gh.shape)
+
+fig, ax = plt.subplots(figsize=(7.5, 4.2))
+shade = ax.contourf(gh, ga, proba, levels=20, cmap="RdYlGn", alpha=0.35)
+ax.contour(gh, ga, proba, levels=[0.5], colors="#1b1f27", linewidths=2)
+ax.scatter(hours[passed == 1], attendance[passed == 1], s=14, color="#0a7d4f", label="passed")
+ax.scatter(hours[passed == 0], attendance[passed == 0], s=14, color="#c2255c", marker="x", label="failed")
+fig.colorbar(shade, ax=ax, label="P(pass)")
+ax.set_xlabel("hours studied per week")
+ax.set_ylabel("attendance %")
+ax.legend(loc="lower right", facecolor="white", framealpha=0.95, markerscale=2)
+fig.tight_layout()
+plt.show()
+```
+
+::figure ml-decision-boundary.svg | Green pass dots and pink fail crosses on a hours-versus-attendance plot, split by a black diagonal line where the pass probability is 50%
+
+Students near the line are the uncertain ones (probability close to 0.5); the model is confident far from it. The few dots on the "wrong" side are the mistakes counted in the confusion matrix.
+
 ## Summary
 
 - Classification predicts categories; logistic regression and k-NN are good first models.

@@ -187,6 +187,40 @@ Output:
 | 2 missing amounts, 1 missing rating | Decide in lesson 2 |
 | Longer wait → lower rating | Key business insight |
 
+## See it as a chart: the checklist at a glance
+
+Two quick plots answer two checklist steps at once: how many values are missing in each column, and whether any numbers are impossible or extreme.
+
+```python
+import matplotlib.pyplot as plt
+import pandas as pd
+
+df = pd.DataFrame({
+    "order_id": [101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 110, 111],
+    "minutes": [32, 41, 28, -5, 55, 38, 30, 47, 120, 35, 35, 44],
+    "amount": [250, 480, 199, 320, None, 610, 275, 390, 450, 300, 300, None],
+    "rating": [5, 4, None, 3, 2, 4, 5, 4, 1, 5, 5, 4],
+})
+fig, (left, right) = plt.subplots(1, 2, figsize=(9, 3.3))
+missing = df.isna().sum()
+left.bar(missing.index, missing.values, color=["#c2255c" if v else "#cfd4dc" for v in missing.values])
+left.set_title("Missing values per column")
+left.set_ylabel("count")
+right.boxplot(df["minutes"], vert=False, widths=0.5)
+right.scatter([-5], [1], s=90, facecolors="none", edgecolors="#c2255c", lw=2)
+right.annotate("-5 minutes: impossible", (-5, 1), (5, 1.3), arrowprops={"arrowstyle": "->"}, color="#c2255c")
+right.annotate("120: check it", (120, 1), (80, 1.3), arrowprops={"arrowstyle": "->"})
+right.set_yticks([])
+right.set_xlabel("delivery minutes")
+right.set_title("Spread and outliers")
+fig.tight_layout()
+plt.show()
+```
+
+::figure eda-checklist-at-a-glance.svg | Left: bar chart with gaps in amount and rating; right: box plot of delivery minutes with -5 circled as impossible and 120 marked as an outlier to check
+
+Make these two plots the first thing you do with any new table. They take seconds and catch the problems that silently break averages and models.
+
 ## Summary
 
 - EDA = walk around the data before modelling.

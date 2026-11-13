@@ -118,6 +118,39 @@ Output:
 87.1 <- capped at the 95th percentile
 ```
 
+## See it as a chart: the IQR fences
+
+The IQR method draws two fences: Q1 − 1.5×IQR and Q3 + 1.5×IQR. Anything outside is flagged for a closer look.
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+
+minutes = np.array([28, 30, 31, 32, 33, 35, 35, 36, 38, 40, 41, 44, 47, 52, 95, 120])
+q1, q3 = np.percentile(minutes, [25, 75])
+iqr = q3 - q1
+low, high = q1 - 1.5 * iqr, q3 + 1.5 * iqr
+outlier = (minutes < low) | (minutes > high)
+
+fig, ax = plt.subplots(figsize=(8, 2.8))
+ax.axvspan(q1, q3, color="#e3f3eb", label=f"middle 50% (Q1 {q1:.0f} to Q3 {q3:.0f})")
+ax.axvline(low, color="#f59e0b", ls="--", label=f"fences {low:.1f} and {high:.1f}")
+ax.axvline(high, color="#f59e0b", ls="--")
+jitter = np.random.default_rng(0).uniform(-0.2, 0.2, len(minutes))
+ax.scatter(minutes[~outlier], jitter[~outlier], s=50, color="#0a7d4f")
+ax.scatter(minutes[outlier], jitter[outlier], s=80, color="#c2255c", label="outliers")
+ax.set_ylim(-1, 1)
+ax.set_yticks([])
+ax.set_xlabel("delivery minutes")
+ax.legend(frameon=False, loc="upper right", fontsize=9)
+fig.tight_layout()
+plt.show()
+```
+
+::figure eda-iqr-fences.svg | Delivery times as dots with the middle 50% shaded and two dashed fences; the 95 and 120 minute deliveries sit beyond the upper fence in pink
+
+The method only **flags** values. Whether 95 minutes is an error or a real (very late) delivery is a question for the business, not for the formula.
+
 ## Summary
 
 - Know why data is missing: MCAR, MAR or MNAR.

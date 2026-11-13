@@ -124,6 +124,34 @@ raw x, y: 0.71   + radius feature: 0.98
 
 ::tip Keep a list of features you tried and how much each helped. Feature engineering is experiments, not guesswork.
 
+## See it as a chart: the hour hides two rush hours
+
+A raw "hour" number treats 13:00 and 20:00 as just numbers. A histogram of order times shows two clear peaks, lunch and dinner, which is why features like `dinner` (19–22) help a model far more than the raw hour.
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+
+rng = np.random.default_rng(11)
+hours = np.concatenate([rng.normal(13, 1.0, 400), rng.normal(20.5, 1.2, 600), rng.uniform(8, 23, 200)])
+hours = hours[(hours >= 8) & (hours < 24)]
+
+fig, ax = plt.subplots(figsize=(8, 3.2))
+ax.hist(hours, bins=np.arange(8, 25), color="#0a7d4f", edgecolor="white")
+ax.axvspan(19, 22, color="#f59e0b", alpha=0.18, label="dinner = 1 (19–22)")
+ax.axvspan(12, 14, color="#2563eb", alpha=0.12, label="lunch = 1 (12–14)")
+ax.set_xticks(range(8, 25, 2))
+ax.set_xlabel("hour of the order")
+ax.set_ylabel("orders")
+ax.legend(frameon=False, loc="upper left")
+fig.tight_layout()
+plt.show()
+```
+
+::figure eda-order-hours.svg | Histogram of order hours with a lunch peak around 13:00 and a bigger dinner peak around 20:00, both shaded as engineered features
+
+Charts like this are where feature ideas come from: whenever a plot shows peaks, cycles or thresholds, turn them into a feature.
+
 ## Summary
 
 - Better features often beat a fancier algorithm.

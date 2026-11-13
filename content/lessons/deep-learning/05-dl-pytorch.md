@@ -107,6 +107,34 @@ with torch.no_grad():                # no gradient tracking: faster, less memory
 
 ::tip Always call `model.train()` before training and `model.eval()` before evaluating. Dropout and batch-norm layers behave differently in each mode, and mixing them up silently gives wrong results.
 
+## See it as a chart: the learning rate
+
+The training loop is the same in every framework: predict, measure the loss, step the weight against the gradient. The size of that step, the **learning rate**, decides everything. Here is the loop for one weight with three learning rates, plotting the weight itself as it moves towards the best value, 1.5.
+
+```python
+import matplotlib.pyplot as plt
+
+x, target = 2.0, 3.0                   # we want w * 2 = 3, so the best w is 1.5
+fig, ax = plt.subplots(figsize=(7.5, 3.6))
+for lr, color in ((0.02, "#2563eb"), (0.1, "#0a7d4f"), (0.22, "#c2255c")):
+    w, history = 0.5, []
+    for step in range(25):
+        history.append(w)
+        grad = 2 * (w * x - target) * x  # d(loss)/dw, what loss.backward() computes
+        w -= lr * grad
+    ax.plot(history, marker="o", ms=3, color=color, label=f"learning rate {lr}")
+ax.axhline(1.5, color="#1b1f27", ls="--", lw=1, label="best weight 1.5")
+ax.set_xlabel("training step")
+ax.set_ylabel("weight w")
+ax.legend(frameon=False, loc="lower right")
+fig.tight_layout()
+plt.show()
+```
+
+::figure dl-learning-rates.svg | The weight over 25 steps for three learning rates: 0.02 creeps slowly towards 1.5, 0.1 reaches it in a few steps, 0.22 overshoots above and below 1.5 before settling
+
+Too small and training crawls; well chosen and it converges in a few steps; too large and the weight overshoots back and forth (a bit larger still and it would fly off completely). Optimisers like Adam adapt the step size for you, but the learning rate is still the first setting to tune.
+
 ## Summary
 
 - Tensors are GPU-ready arrays; autograd computes gradients with `loss.backward()`.

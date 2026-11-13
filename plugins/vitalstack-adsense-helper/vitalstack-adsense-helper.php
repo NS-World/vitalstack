@@ -2,7 +2,7 @@
 /**
  * Plugin Name: VitalStack AdSense Helper
  * Description: Tools → AdSense Helper. Publish your scheduled lessons now (or N per day) and run an AdSense readiness check: policy pages, placeholders, thin pages, links to unpublished lessons, empty categories, ads.txt and more. Works with any theme; changes nothing until you press a button.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Requires at least: 6.0
  * Requires PHP: 7.4
  * Author: VitalStack
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'VSAH_VERSION', '1.0.0' );
+define( 'VSAH_VERSION', '1.0.1' );
 
 /* ── Content helpers ───────────────────────────────────────────────────── */
 
@@ -231,8 +231,11 @@ function vsah_checks() {
 	$placeholders = array();
 	$patterns     = array( '/\[(your|one honest|add |insert|todo|tbd)[^\]]{0,80}\]/i', '/lorem ipsum/i', '/\bcoming soon\b/i', '/under construction/i', '/this is an example page/i', '/welcome to wordpress\. this is your first post/i' );
 	foreach ( $published as $p ) {
+		// 1.0.1: code examples are not placeholders ("[your code]", "[todos, setTodos]"), so skip code.
+		$prose = preg_replace( '#<(pre|code)\b[^>]*>.*?</\1>#is', ' ', $p->post_content );
+		$prose = preg_replace( '#```.*?```|`[^`\n]*`#s', ' ', $prose );
 		foreach ( $patterns as $re ) {
-			if ( preg_match( $re, $p->post_title . ' ' . $p->post_content, $m ) ) {
+			if ( preg_match( $re, $p->post_title . ' ' . $prose, $m ) ) {
 				$placeholders[] = array( get_the_title( $p ) . ' — “' . wp_strip_all_tags( $m[0] ) . '”', get_edit_post_link( $p->ID, 'raw' ) );
 				break;
 			}
@@ -272,6 +275,14 @@ function vsah_checks() {
 	foreach ( $articles as $p ) {
 		$words = vsah_word_count( $p->post_content );
 		if ( $words < 300 ) {
+			// 1.0.1: count what visitors see. Themes can add sections to a page when it is shown
+			// (VitalStack adds edge cases and charts to lessons), so recheck short ones as rendered.
+			$GLOBALS['post'] = $p; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- restored below
+			setup_postdata( $p );
+			$words = max( $words, vsah_word_count( preg_replace( '#<(pre|script|style|svg)\b[^>]*>.*?</\1>#is', ' ', apply_filters( 'the_content', $p->post_content ) ) ) ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals -- core filter
+			wp_reset_postdata();
+		}
+		if ( $words < 300 ) {
 			$thin[] = array( get_the_title( $p ) . ' — ' . $words . ' ' . __( 'words', 'vitalstack-adsense-helper' ), get_edit_post_link( $p->ID, 'raw' ) );
 		}
 	}
@@ -289,7 +300,8 @@ function vsah_checks() {
 	$broken = array();
 	$seen   = array();
 	foreach ( $published as $p ) {
-		if ( ! preg_match_all( '/href=["\']([^"\'#?]+)/i', $p->post_content, $mm ) ) {
+		// 1.0.1: links shown inside code examples (an HTML lesson's <a href="/contact/">) are not links.
+		if ( ! preg_match_all( '/href=["\']([^"\'#?]+)/i', preg_replace( '#<(pre|code)\b[^>]*>.*?</\1>#is', ' ', $p->post_content ), $mm ) ) {
 			continue;
 		}
 		foreach ( $mm[1] as $url ) {
