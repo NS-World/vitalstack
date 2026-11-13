@@ -38,6 +38,7 @@ function vitalstack_premium_tracks() {
 			),
 			'modules'  => array(
 				array( 'title' => __( 'Python for Data Science', 'vitalstack' ), 'path' => 'python', 'about' => __( 'Variables, data types, loops, functions, files and errors: the Python you need every day.', 'vitalstack' ) ),
+				array( 'title' => __( 'Setup: Anaconda, Jupyter and Colab', 'vitalstack' ), 'path' => 'ds-setup', 'about' => __( 'Install Anaconda, open Jupyter, use Google Colab and its free GPU, and work fast in notebooks.', 'vitalstack' ) ),
 				array( 'title' => __( 'NumPy: fast numbers', 'vitalstack' ), 'path' => 'numpy', 'about' => __( 'Arrays, shapes, slicing, broadcasting and vectorised maths.', 'vitalstack' ) ),
 				array( 'title' => __( 'Pandas: data analysis', 'vitalstack' ), 'path' => 'pandas', 'about' => __( 'Load, filter, clean, group, join and reshape tables of data.', 'vitalstack' ) ),
 				array( 'title' => __( 'Data Visualization', 'vitalstack' ), 'path' => 'data-visualization', 'about' => __( 'Charts that tell a story with Matplotlib and Seaborn.', 'vitalstack' ) ),

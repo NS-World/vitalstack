@@ -515,6 +515,11 @@ function vitalstack_setup_paths() {
 			'description' => 'Build full-stack business apps in Java with Jmix: entities, views, data access, security and deployment.',
 		),
 		array(
+			'slug'        => 'ds-setup',
+			'name'        => 'Data Science Setup',
+			'description' => 'Get ready for data science in 15 minutes: Anaconda, Jupyter Notebook, Google Colab and the notebook skills you use every day.',
+		),
+		array(
 			'slug'        => 'numpy',
 			'name'        => 'NumPy',
 			'description' => 'Fast maths on whole arrays of numbers: the foundation of data science and AI in Python, with animated arrays.',

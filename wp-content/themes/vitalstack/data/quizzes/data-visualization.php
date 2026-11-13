@@ -26,4 +26,24 @@ return array(
 		array( 'q' => 'What does `sns.regplot` add to a scatter plot?', 'o' => array( 'Colours by category', 'A histogram', 'A fitted trend line' ), 'a' => 2, 'e' => 'It fits a linear regression line.' ),
 		array( 'q' => 'Why use `vmin=-1, vmax=1` in a correlation heatmap?', 'o' => array( 'To make it faster', 'To hide negative values', 'So colours are on an honest fixed scale' ), 'a' => 2, 'e' => 'Weak correlations won\'t look as strong as big ones.' ),
 	),
+	'matplotlib-styling-annotations' => array(
+		array( 'q' => 'Which function draws an arrow from text to a data point?', 'o' => array( '`ax.legend()`', '`ax.annotate()`', '`ax.arrow_text()`' ), 'a' => 1, 'e' => '`xy` is the point, `xytext` is where the text sits.' ),
+		array( 'q' => 'What is the best way to make one bar stand out?', 'o' => array( 'Grey for all bars, one strong colour for the important bar', 'A different bright colour for every bar', 'Make it 3D' ), 'a' => 0, 'e' => 'Colour should carry meaning.' ),
+		array( 'q' => 'Which savefig option stops labels from being cut off at the edges?', 'o' => array( '`transparent=True`', '`dpi=10`', '`bbox_inches="tight"`' ), 'a' => 2, 'e' => 'It trims the border around the chart.' ),
+	),
+	'matplotlib-pie-stacked-area' => array(
+		array( 'q' => 'When is a donut chart a good choice?', 'o' => array( 'For 2–5 parts of a whole at one moment', 'For change over time', 'For 12 categories with close values' ), 'a' => 0, 'e' => 'With many parts, slices become too thin to compare.' ),
+		array( 'q' => 'Which argument stacks one bar layer on top of another?', 'o' => array( '`stack=True`', '`layer=2`', '`bottom=`' ), 'a' => 2, 'e' => 'Each layer starts where the previous one ends.' ),
+		array( 'q' => 'Why avoid 3D pie charts?', 'o' => array( 'Matplotlib can\'t draw them', 'They load slowly', 'The tilt makes front slices look bigger than they are' ), 'a' => 2, 'e' => 'The chart misleads the reader.' ),
+	),
+	'matplotlib-distributions-uncertainty' => array(
+		array( 'q' => 'In a box plot, what does the box contain?', 'o' => array( 'All the data', 'Only the outliers', 'The middle 50% of values (Q1 to Q3)' ), 'a' => 2, 'e' => 'The line inside is the median.' ),
+		array( 'q' => 'What can a violin plot show that a box plot hides?', 'o' => array( 'Two peaks (two separate groups) in the data', 'The exact mean', 'Time trends' ), 'a' => 0, 'e' => 'It draws the full shape of the distribution.' ),
+		array( 'q' => 'Which function shades a confidence band around a line?', 'o' => array( '`ax.fill_between()`', '`ax.axhline()`', '`ax.band()`' ), 'a' => 0, 'e' => 'It fills between a lower and an upper line.' ),
+	),
+	'choosing-the-right-chart' => array(
+		array( 'q' => 'Your reader asks "how did sales change over the year?". Which chart?', 'o' => array( 'Line chart', 'Pie chart', 'Box plot' ), 'a' => 0, 'e' => 'Time on the x-axis → line chart.' ),
+		array( 'q' => 'Why must a bar chart\'s y-axis start at zero?', 'o' => array( 'It\'s a Matplotlib rule', 'Bar length is how readers compare; a cut axis exaggerates differences', 'Otherwise the chart won\'t print' ), 'a' => 1, 'e' => 'Line charts may zoom in, bars may not.' ),
+		array( 'q' => 'What replaces eight tangled lines in one chart?', 'o' => array( 'Small multiples: one small chart per series', 'A 3D chart', 'A pie chart' ), 'a' => 0, 'e' => 'Same axes, one highlighted series per panel.' ),
+	),
 );

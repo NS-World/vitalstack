@@ -69,6 +69,7 @@ require VITALSTACK_DIR . '/inc/break-zone.php';
 require VITALSTACK_DIR . '/inc/helper-bot.php';
 require VITALSTACK_DIR . '/inc/offer-bar.php';
 require VITALSTACK_DIR . '/inc/mail-health.php';
+require VITALSTACK_DIR . '/inc/module-guides.php';
 require VITALSTACK_DIR . '/inc/adsense-readiness.php';
 require VITALSTACK_DIR . '/inc/ai-dictionary.php';
 require VITALSTACK_DIR . '/inc/ai-city.php';

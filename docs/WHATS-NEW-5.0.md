@@ -227,6 +227,12 @@ them before publishing. The notice only reminds you; it never publishes anything
       matching Return-Path; new *Tools → Email check* (SMTP, From domain, SPF, DKIM, DMARC, MX,
       test send) and a dashboard warning while something is red;
     - see `docs/releases/4.14-OFFERS-MARKETING-FESTIVE.md`.
+  - **4.15.0:**
+    - new free path **Data Science Setup** (Anaconda, Jupyter, Colab, notebook skills);
+    - four new Matplotlib lessons with 13 real charts;
+    - a **Module guide** (history, how it works, where to run it, used for) on every premium
+      lesson;
+    - see `docs/releases/4.15-DATA-SCIENCE-CONTENT.md`.
   - See `docs/releases/4.13-PLANS-INVITES-RAZORPAY.md`.
 
 ## After installing on the DEV site
