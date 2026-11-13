@@ -29,6 +29,16 @@ import matplotlib.pyplot as plt  # noqa: E402
 
 plt.show = lambda *a, **k: None
 
+# Plotly (4.16.0): fig.show() would open a browser; ::figure saves the figure as SVG with kaleido.
+try:
+    import plotly.basedatatypes as _pbt
+    import plotly.io as _pio
+
+    _pbt.BaseFigure.show = lambda self, *a, **k: None
+    _pio.show = lambda *a, **k: None
+except ImportError:
+    _pbt = _pio = None
+
 # Packages that need an API key, a server or a big install (GPU frameworks, Spark, databases):
 # blocks importing them are examples to read, not run here.
 API_SDKS = {"anthropic", "openai", "google", "pydantic", "streamlit", "dotenv", "fastapi", "uvicorn",
@@ -91,7 +101,11 @@ def check(path):
                 continue
         nxt = blocks[i + 1][2] if i + 1 < len(blocks) else len(text)
         fig = re.search(r"^::figure\s+([a-z0-9-]+\.svg)", text[end:nxt], re.M)
-        if fig and SAVE and plt.get_fignums():
+        pfig = ns.get("fig")
+        if fig and SAVE and _pbt is not None and isinstance(pfig, _pbt.BaseFigure) and "plotly" in code:
+            FIGURES.mkdir(parents=True, exist_ok=True)
+            _pio.write_image(pfig, str(FIGURES / fig.group(1)), format="svg", width=760, height=430)
+        elif fig and SAVE and plt.get_fignums():
             FIGURES.mkdir(parents=True, exist_ok=True)
             plt.gcf().savefig(FIGURES / fig.group(1), format="svg", metadata={"Date": None})
         plt.close("all")

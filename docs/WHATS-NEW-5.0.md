@@ -233,6 +233,13 @@ them before publishing. The notice only reminds you; it never publishes anything
     - a **Module guide** (history, how it works, where to run it, used for) on every premium
       lesson;
     - see `docs/releases/4.15-DATA-SCIENCE-CONTENT.md`.
+  - **4.16.0:**
+    - module guides on the free data and AI paths;
+    - Seaborn-in-depth and Plotly lessons;
+    - the "Data Science in 30 Days" plan at /study-plan/;
+    - the Website Playground at /playground/ (sandboxed preview, templates, Premium ZIP export);
+    - no more duplicate meta tags on /pricing/;
+    - a security review (see `docs/releases/4.16-ALL-PHASES-SECURITY.md`).
   - See `docs/releases/4.13-PLANS-INVITES-RAZORPAY.md`.
 
 ## After installing on the DEV site

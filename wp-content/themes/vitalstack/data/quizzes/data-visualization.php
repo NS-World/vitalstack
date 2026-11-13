@@ -46,4 +46,14 @@ return array(
 		array( 'q' => 'Why must a bar chart\'s y-axis start at zero?', 'o' => array( 'It\'s a Matplotlib rule', 'Bar length is how readers compare; a cut axis exaggerates differences', 'Otherwise the chart won\'t print' ), 'a' => 1, 'e' => 'Line charts may zoom in, bars may not.' ),
 		array( 'q' => 'What replaces eight tangled lines in one chart?', 'o' => array( 'Small multiples: one small chart per series', 'A 3D chart', 'A pie chart' ), 'a' => 0, 'e' => 'Same axes, one highlighted series per panel.' ),
 	),
+	'seaborn-distributions-facets' => array(
+		array( 'q' => 'What does a KDE plot show?', 'o' => array( 'Exact values of each row', 'Change over time', 'A smooth curve of where values are common' ), 'a' => 2, 'e' => 'It\'s like a smooth histogram, easy to overlap for groups.' ),
+		array( 'q' => 'Which argument splits a relplot into one panel per batch?', 'o' => array( '`split="batch"`', '`ax=batch`', '`col="batch"`' ), 'a' => 2, 'e' => '`col=` (and `row=`) make small multiples.' ),
+		array( 'q' => 'What is a pair plot good for?', 'o' => array( 'Maps', 'Showing one number', 'A first look at every pair of numeric columns' ), 'a' => 2, 'e' => 'Distributions on the diagonal, scatter plots elsewhere.' ),
+	),
+	'plotly-interactive-charts' => array(
+		array( 'q' => 'What can readers do with a Plotly chart in a notebook?', 'o' => array( 'Nothing, it\'s a picture', 'Edit your data', 'Hover for exact values, zoom, and hide series from the legend' ), 'a' => 2, 'e' => 'That\'s what makes Plotly great for sharing.' ),
+		array( 'q' => 'Which argument turns a Plotly scatter into a bubble chart?', 'o' => array( '`hover_name=`', '`bubble=True`', '`size=`' ), 'a' => 2, 'e' => 'Bubble size comes from a column.' ),
+		array( 'q' => 'How do you share a fully interactive chart as a file?', 'o' => array( 'Print it', '`fig.save()`', '`fig.write_html("chart.html")`' ), 'a' => 2, 'e' => 'Anyone can open the HTML file in a browser.' ),
+	),
 );

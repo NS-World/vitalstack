@@ -2,7 +2,8 @@
 /**
  * Module guides on premium lessons (4.15.0).
  *
- * Every premium lesson opens with a "Module guide" card: a short history of
+ * Every premium lesson (and, from 4.16.0, every lesson of the free data and
+ * AI paths) opens with a "Module guide" card: a short history of
  * the tool or idea, how it works step by step, where to run it, and what it
  * is used for at work. It is open on the module's first lesson and folded
  * (one tap to open) on the others. It is shown to everyone, including
@@ -28,9 +29,13 @@ function vitalstack_module_guides() {
 /** Title of a module (path) inside a premium track, from the track list. */
 function vitalstack_module_guide_title( $path_slug, $track ) {
 	$tracks = function_exists( 'vitalstack_premium_tracks' ) ? vitalstack_premium_tracks() : array();
-	foreach ( (array) ( $tracks[ $track ]['modules'] ?? array() ) as $m ) {
-		if ( ( $m['path'] ?? '' ) === $path_slug ) {
-			return $m['title'];
+	// The lesson's own track first, then any track (free paths belong to several).
+	$order = $track && isset( $tracks[ $track ] ) ? array_merge( array( $track => $tracks[ $track ] ), $tracks ) : $tracks;
+	foreach ( $order as $t ) {
+		foreach ( (array) ( $t['modules'] ?? array() ) as $m ) {
+			if ( ( $m['path'] ?? '' ) === $path_slug ) {
+				return $m['title'];
+			}
 		}
 	}
 	return '';
@@ -62,13 +67,16 @@ function vitalstack_module_guide_html( $path_slug, $track, $open = false ) {
 	$h .= '<section class="mg-col mg-facts">';
 	if ( ! empty( $g['run'] ) ) {
 		$h .= '<p class="mg-h">🧰 ' . esc_html__( 'Where to run it', 'vitalstack' ) . '</p><p>' . esc_html( $g['run'] ) . '</p>';
-		$term  = get_term_by( 'slug', 'ds-setup', 'tutorial_category' );
+		$term  = 'ds-setup' === $path_slug ? null : get_term_by( 'slug', 'ds-setup', 'tutorial_category' );
 		if ( $term && ! is_wp_error( $term ) ) {
 			$link = get_term_link( $term );
 			if ( ! is_wp_error( $link ) ) {
 				$h .= '<p class="mg-small"><a href="' . esc_url( $link ) . '">' . esc_html__( 'New to Jupyter or Colab? Set up in 15 minutes', 'vitalstack' ) . ' →</a></p>';
 			}
 		}
+	}
+	if ( function_exists( 'vitalstack_study_plan_url' ) && in_array( $path_slug, array( 'ds-setup', 'python', 'numpy', 'pandas', 'data-visualization', 'statistics', 'machine-learning', 'eda' ), true ) ) {
+		$h .= '<p class="mg-small"><a href="' . esc_url( vitalstack_study_plan_url() ) . '">🗓️ ' . esc_html__( 'Follow the 30-day Data Science plan', 'vitalstack' ) . ' →</a></p>';
 	}
 	if ( ! empty( $g['used'] ) ) {
 		$h .= '<p class="mg-h">💼 ' . esc_html__( 'Used at work for', 'vitalstack' ) . '</p><p>' . esc_html( $g['used'] ) . '</p>';
@@ -93,12 +101,13 @@ function vitalstack_module_guide_is_first( $post_id, $path ) {
 add_filter(
 	'the_content',
 	function ( $content ) {
-		if ( ! is_singular( 'tutorials' ) || ! in_the_loop() || ! is_main_query() || ! function_exists( 'vitalstack_lesson_track' ) ) {
+		if ( ! is_singular( 'tutorials' ) || ! in_the_loop() || ! is_main_query() || ! function_exists( 'vitalstack_tutorial_path' ) ) {
 			return $content;
 		}
-		$track = vitalstack_lesson_track();
-		$path  = $track && function_exists( 'vitalstack_tutorial_path' ) ? vitalstack_tutorial_path() : null;
-		if ( ! $path ) {
+		// Premium modules and the free data / AI paths (4.16.0) have a guide.
+		$path  = vitalstack_tutorial_path();
+		$track = function_exists( 'vitalstack_lesson_track' ) ? vitalstack_lesson_track() : '';
+		if ( ! $path || empty( vitalstack_module_guides()[ $path->slug ] ) ) {
 			return $content;
 		}
 		$card = vitalstack_module_guide_html( $path->slug, $track, vitalstack_module_guide_is_first( get_the_ID(), $path ) );

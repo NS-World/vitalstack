@@ -150,3 +150,37 @@ Q: What replaces eight tangled lines in one chart?
 - [x] Small multiples: one small chart per series
 - [ ] A pie chart
 > Same axes, one highlighted series per panel.
+
+## seaborn-distributions-facets
+Q: What does a KDE plot show?
+- [x] A smooth curve of where values are common
+- [ ] Exact values of each row
+- [ ] Change over time
+> It's like a smooth histogram, easy to overlap for groups.
+Q: Which argument splits a relplot into one panel per batch?
+- [ ] `split="batch"`
+- [x] `col="batch"`
+- [ ] `ax=batch`
+> `col=` (and `row=`) make small multiples.
+Q: What is a pair plot good for?
+- [x] A first look at every pair of numeric columns
+- [ ] Showing one number
+- [ ] Maps
+> Distributions on the diagonal, scatter plots elsewhere.
+
+## plotly-interactive-charts
+Q: What can readers do with a Plotly chart in a notebook?
+- [x] Hover for exact values, zoom, and hide series from the legend
+- [ ] Nothing, it's a picture
+- [ ] Edit your data
+> That's what makes Plotly great for sharing.
+Q: Which argument turns a Plotly scatter into a bubble chart?
+- [ ] `bubble=True`
+- [x] `size=`
+- [ ] `hover_name=`
+> Bubble size comes from a column.
+Q: How do you share a fully interactive chart as a file?
+- [ ] `fig.save()`
+- [x] `fig.write_html("chart.html")`
+- [ ] Print it
+> Anyone can open the HTML file in a browser.

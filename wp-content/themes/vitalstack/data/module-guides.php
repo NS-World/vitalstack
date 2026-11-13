@@ -393,4 +393,101 @@ return array(
 		'run'     => 'Your full agent toolkit: Python, LLM APIs, MCP, evals and deployment.',
 		'used'    => 'Portfolio agents that show you can ship reliable automation.',
 	),
+
+	/* ── Free data and AI paths (4.16.0) ────────────────────────────────── */
+
+	'ds-setup'               => array(
+		'history' => array(
+			array( '2001', 'Fernando Pérez creates IPython, a friendlier interactive Python.' ),
+			array( '2014', 'The notebook becomes Project Jupyter (Julia, Python, R).' ),
+			array( '2017', 'Google opens Colab to everyone: notebooks in the cloud with free GPUs.' ),
+		),
+		'flow'    => array( 'Install Anaconda (or open Colab)', 'Create an environment', 'Open a notebook', 'Each cell goes to the kernel', 'Output appears under the cell' ),
+		'run'     => 'Anaconda + JupyterLab on your laptop, or Google Colab in the browser.',
+		'used'    => 'Every data analysis, teaching notebook and machine learning experiment.',
+	),
+	'python'                 => array(
+		'history' => array(
+			array( '1989', 'Guido van Rossum starts Python as a hobby project over the Christmas holidays.' ),
+			array( '1991', 'The first public version is released.' ),
+			array( '2008', 'Python 3 arrives, cleaning up the language.' ),
+			array( '2020', 'Python 2 reaches end of life; Python 3 is the only version going forward.' ),
+		),
+		'flow'    => array( 'You write code (.py file or notebook)', 'The interpreter reads it', 'It is compiled to bytecode', 'The Python virtual machine runs it', 'You see the output' ),
+		'run'     => 'Python from python.org or Anaconda, in VS Code, Jupyter or Google Colab.',
+		'used'    => 'Data analysis, AI and machine learning, web backends, automation and scripting.',
+	),
+	'numpy'                  => array(
+		'history' => array(
+			array( '1995', 'Numeric, the first array package for Python, appears.' ),
+			array( '2006', 'Travis Oliphant releases NumPy 1.0, merging Numeric and Numarray.' ),
+			array( '2020', 'A paper in Nature describes NumPy as the base of scientific Python.' ),
+		),
+		'flow'    => array( 'Python list of numbers', 'np.array: one type, one block of memory', 'Vectorised maths runs in fast C code', 'A new array comes back', 'pandas, scikit-learn and others build on it' ),
+		'run'     => 'NumPy comes with Anaconda and Colab; otherwise pip install numpy.',
+		'used'    => 'The foundation under pandas, scikit-learn, image processing and deep learning.',
+	),
+	'pandas'                 => array(
+		'history' => array(
+			array( '2008', 'Wes McKinney starts pandas at a finance firm to analyse data in Python.' ),
+			array( '2009', 'pandas is released as open source.' ),
+			array( '2020', 'pandas 1.0 is released.' ),
+			array( '2023', 'pandas 2.0 adds optional Apache Arrow support for speed and memory.' ),
+		),
+		'flow'    => array( 'Read CSV, Excel or SQL', 'DataFrame: rows and named columns', 'Select and filter', 'Clean missing and wrong values', 'Group, merge and reshape', 'Result table or chart' ),
+		'run'     => 'pandas in Jupyter or Colab (pre-installed in both).',
+		'used'    => 'Daily work of data analysts: reports, cleaning, joining and summarising tables.',
+	),
+	'data-visualization'     => array(
+		'history' => array(
+			array( '1786', 'William Playfair invents the line chart and the bar chart.' ),
+			array( '1858', 'Florence Nightingale’s rose diagram shows soldiers dying of preventable disease.' ),
+			array( '1983', 'Edward Tufte’s book on displaying data sets the rules for honest charts.' ),
+			array( '2003', 'John Hunter creates Matplotlib.' ),
+		),
+		'flow'    => array( 'Start from a question', 'Pick the chart that answers it', 'Plot the data', 'Label, highlight and add context', 'Check it is honest', 'Share it' ),
+		'run'     => 'Matplotlib, Seaborn and Plotly in Jupyter or Colab.',
+		'used'    => 'Reports, dashboards, presentations, and spotting problems in data before modelling.',
+	),
+	'machine-learning'       => array(
+		'history' => array(
+			array( '1950', 'Alan Turing asks “Can machines think?” in a famous paper.' ),
+			array( '1959', 'Arthur Samuel popularises the term “machine learning” with a program that learns checkers.' ),
+			array( '2007', 'scikit-learn starts, making machine learning easy in Python.' ),
+		),
+		'flow'    => array( 'Examples with known answers', 'Split into train and test', 'Train: the model learns patterns', 'Test on unseen examples', 'Predict on new data' ),
+		'run'     => 'scikit-learn in Jupyter or Colab.',
+		'used'    => 'Spam filters, price prediction, recommendations, fraud and churn detection.',
+	),
+	'sql'                    => array(
+		'history' => array(
+			array( '1970', 'Edgar F. Codd at IBM describes the relational model of data.' ),
+			array( '1974', 'Chamberlin and Boyce at IBM design SEQUEL, which becomes SQL.' ),
+			array( '1979', 'Oracle releases one of the first commercial SQL databases.' ),
+			array( '1986', 'SQL becomes an ANSI standard.' ),
+		),
+		'flow'    => array( 'You write a query', 'The database checks it', 'The optimiser plans the fastest way', 'The engine reads tables and indexes', 'Result rows come back' ),
+		'run'     => 'The SQL playground on this site, SQLite, MySQL or PostgreSQL.',
+		'used'    => 'Almost every company’s data lives in SQL databases; analysts query them daily.',
+	),
+	'prompt-engineering'     => array(
+		'history' => array(
+			array( '2020', 'GPT-3 shows models can learn a task from a few examples in the prompt.' ),
+			array( '2022', 'Chain-of-thought prompting improves reasoning; ChatGPT makes prompting an everyday skill.' ),
+		),
+		'flow'    => array( 'Decide the goal', 'Give a role and context', 'Write clear instructions', 'Add examples', 'Ask for a format', 'Test and refine' ),
+		'run'     => 'Any AI chat app, or the prompt builder tool on this site.',
+		'used'    => 'Writing, coding help, research, data extraction and building AI features.',
+	),
+	'ai-models'              => array(
+		'history' => array(
+			array( '1956', 'The Dartmouth workshop names the field “artificial intelligence”.' ),
+			array( '2012', 'AlexNet starts the deep learning era.' ),
+			array( '2017', 'The Transformer architecture appears.' ),
+			array( '2022', 'ChatGPT brings AI models to hundreds of millions of people.' ),
+		),
+		'flow'    => array( 'Collect data', 'Choose an architecture', 'Train: learn the weights', 'Evaluate', 'Deploy', 'Use it (inference)' ),
+		'run'     => 'Concepts with animations here; small models in Colab.',
+		'used'    => 'Understanding what AI can and can’t do before building with it.',
+	),
 );

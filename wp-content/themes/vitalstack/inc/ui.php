@@ -225,6 +225,7 @@ function vitalstack_courses_panel() {
 		<div class="wrap courses-panel-inner">
 			<div class="courses-panel-head">
 				<p class="courses-panel-title"><?php esc_html_e( 'All courses', 'vitalstack' ); ?> <span><?php echo esc_html( sprintf( /* translators: %d: courses */ _n( '%d course', '%d courses', count( $paths ), 'vitalstack' ), count( $paths ) ) ); ?></span></p>
+				<?php if ( function_exists( 'vitalstack_study_plan_url' ) ) : ?><a class="courses-plan-link" href="<?php echo esc_url( vitalstack_study_plan_url() ); ?>">🗓️ <?php esc_html_e( '30-day Data Science plan', 'vitalstack' ); ?></a><?php endif; ?>
 				<label class="courses-find"><span class="screen-reader-text"><?php esc_html_e( 'Find a course', 'vitalstack' ); ?></span><?php echo vitalstack_icon( 'search', 16 ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?><input type="search" placeholder="<?php esc_attr_e( 'Find a course…', 'vitalstack' ); ?>" data-courses-find autocomplete="off"></label>
 				<button type="button" class="icon-btn courses-close" data-courses-close aria-label="<?php esc_attr_e( 'Close all courses', 'vitalstack' ); ?>"><?php echo vitalstack_icon( 'close', 18 ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></button>
 			</div>

@@ -70,6 +70,9 @@ function vitalstack_break_tools() {
 			$out[ $slug ] = array( $pages[ $slug ]['icon'], $name, $url );
 		}
 	}
+	if ( function_exists( 'vitalstack_playground_url' ) ) {
+		$out['playground'] = array( '🧪', __( 'Website playground', 'vitalstack' ), vitalstack_playground_url() );
+	}
 	return $out;
 }
 

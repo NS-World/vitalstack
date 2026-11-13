@@ -103,6 +103,8 @@ function vitalstack_helper_data() {
 				'cheats'     => vitalstack_helper_page( 'cheat-sheets' ),
 				'dictionary' => function_exists( 'vitalstack_ai_dictionary_url' ) ? vitalstack_ai_dictionary_url() : '',
 				'music'      => function_exists( 'vitalstack_study_music_url' ) ? vitalstack_study_music_url() : '',
+				'plan'       => function_exists( 'vitalstack_study_plan_url' ) ? vitalstack_study_plan_url() : '',
+				'playground' => function_exists( 'vitalstack_playground_url' ) ? vitalstack_playground_url() : '',
 				'contact'    => vitalstack_helper_page( 'contact' ),
 				'search'     => home_url( '/' ),
 			)

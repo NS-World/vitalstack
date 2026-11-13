@@ -87,8 +87,13 @@ function vitalstack_hub_descriptions() {
  * Meta description when no SEO plugin is active: excerpt, hub text, term
  * description, or the start of the content.
  */
+/** The theme's own routes (/pricing/, /study-plan/, /playground/) print their own SEO tags (4.16.0). */
+function vitalstack_is_theme_route() {
+	return get_query_var( 'vs_pricing' ) || get_query_var( 'vs_plan' ) || get_query_var( 'vs_playground' );
+}
+
 function vitalstack_fallback_meta_description() {
-	if ( vitalstack_seo_plugin_active() ) {
+	if ( vitalstack_seo_plugin_active() || vitalstack_is_theme_route() ) {
 		return;
 	}
 	$desc = '';
@@ -133,7 +138,7 @@ add_action( 'wp_head', 'vitalstack_fallback_meta_description', 2 );
  * single posts and pages). Paginated archives point to their own page.
  */
 function vitalstack_archive_canonical() {
-	if ( vitalstack_seo_plugin_active() || is_singular() || is_search() || is_404() ) {
+	if ( vitalstack_seo_plugin_active() || vitalstack_is_theme_route() || is_singular() || is_search() || is_404() ) {
 		return;
 	}
 	if ( ! ( is_front_page() || is_home() || is_category() || is_tag() || is_tax() || is_post_type_archive() || is_author() ) ) {

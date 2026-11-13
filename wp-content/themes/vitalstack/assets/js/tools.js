@@ -502,7 +502,7 @@
 				var e = ST.num(f.moe.input.value) / 100, N = ST.num(f.pop.input.value);
 				if (!(e > 0 && e < 0.5)) { out.innerHTML = '<p class="tool-err-msg">Margin of error must be between 0 and 50%.</p>'; return; }
 				var n0 = z * z * 0.25 / (e * e), n = N > 0 ? n0 / (1 + (n0 - 1) / N) : n0;
-				out.innerHTML = '<p class="tool-big">' + Math.ceil(n).toLocaleString('en-IN') + '</p><p>people needed for ±' + (e * 100) + '% at ' + f.conf.input.value + '% confidence' + (N > 0 ? ' (population ' + N.toLocaleString('en-IN') + ')' : '') + '.</p>' +
+				out.innerHTML = '<p class="tool-big">' + Math.ceil(n).toLocaleString('en-IN') + '</p><p>people needed for ±' + (e * 100) + '% at ' + esc(f.conf.input.value) + '% confidence' + (N > 0 ? ' (population ' + N.toLocaleString('en-IN') + ')' : '') + '.</p>' +
 					'<table class="dt-table"><thead><tr><th>Margin of error</th><th>People needed</th></tr></thead><tbody>' +
 					[10, 5, 3, 2, 1].map(function (m) { var a = z * z * 0.25 / Math.pow(m / 100, 2); a = N > 0 ? a / (1 + (a - 1) / N) : a; return '<tr><td>±' + m + '%</td><td>' + Math.ceil(a).toLocaleString('en-IN') + '</td></tr>'; }).join('') +
 					'</tbody></table><p class="tool-note">Uses p = 50%, the safest guess. Halving the margin needs about 4× the people.</p>';
@@ -510,7 +510,7 @@
 				var n2 = ST.num(f.n.input.value), y = ST.num(f.yes.input.value);
 				if (!(n2 > 0 && y >= 0 && y <= n2)) { out.innerHTML = '<p class="tool-err-msg">“Yes” answers must be between 0 and the number of people asked.</p>'; return; }
 				var p = y / n2, se = Math.sqrt(p * (1 - p) / n2), lo = Math.max(0, p - z * se), hi = Math.min(1, p + z * se);
-				out.innerHTML = '<p class="tool-big">' + ST.pct(p, 1) + '</p><p>' + f.conf.input.value + '% confidence interval: <b>' + ST.pct(lo, 1) + ' to ' + ST.pct(hi, 1) + '</b> (±' + ST.pct(z * se, 1) + ').</p>' +
+				out.innerHTML = '<p class="tool-big">' + ST.pct(p, 1) + '</p><p>' + esc(f.conf.input.value) + '% confidence interval: <b>' + ST.pct(lo, 1) + ' to ' + ST.pct(hi, 1) + '</b> (±' + ST.pct(z * se, 1) + ').</p>' +
 					'<div class="ci-line"><span class="ci-range" style="left:' + lo * 100 + '%;width:' + (hi - lo) * 100 + '%"></span><span class="ci-dot" style="left:' + p * 100 + '%"></span></div><div class="ci-scale"><span>0%</span><span>50%</span><span>100%</span></div>' +
 					'<p class="tool-note">Report it like this: “About ' + ST.pct(p, 0) + ' said yes (between ' + ST.pct(lo, 0) + ' and ' + ST.pct(hi, 0) + ').”</p>';
 			}
