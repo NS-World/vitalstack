@@ -3484,3 +3484,18 @@ html.obar-off .obar { display: none; }
 	.pg-main[data-view="code"] .pg-view, .pg-main[data-view="preview"] .pg-code { display: none; }
 	.pg-sp { display: none; }
 }
+
+/* ── 4.17.0: interview solutions in Python, Java, C++ and JavaScript ── */
+.sol-tabs { margin: 0 0 24px; }
+.sol-note { margin: 0 0 10px; font-size: 14px; color: var(--text-2); }
+.sol-lab { margin: 14px 0 6px; font-weight: 800; font-size: 14px; color: var(--text); }
+.sol-tabs.is-tabs .sol-lab { display: none; }
+.sol-tablist { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 10px; }
+.sol-tab { min-height: 40px; padding: 8px 16px; border: 1px solid var(--border-strong); border-radius: 999px; background: var(--surface); color: var(--text); font: 700 14px/1.2 var(--font-sans); cursor: pointer; transition: background .15s, border-color .15s, color .15s; }
+.sol-tab:hover { border-color: var(--brand); color: var(--brand-ink); }
+.sol-tab[aria-selected="true"] { background: var(--brand); border-color: var(--brand); color: var(--on-brand, #fff); }
+.sol-tab:focus-visible { outline: 2px solid var(--focus, var(--brand)); outline-offset: 2px; }
+.sol-panel > pre { margin-top: 0; }
+.sol-panel[hidden] { display: none; }
+@media (max-width: 480px) { .sol-tab { flex: 1 1 calc(50% - 6px); padding: 8px 10px; } }
+@media print { .sol-tablist { display: none; } .sol-tabs.is-tabs .sol-lab { display: block; } .sol-panel[hidden] { display: block; } }

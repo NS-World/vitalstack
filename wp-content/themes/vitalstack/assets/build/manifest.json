@@ -1,5 +1,5 @@
 {
- "style.css": "083a081c7cbab54e35edaa9f99069d0f",
+ "style.css": "7a4fc0b3b3d4e9d71ec34f9129c6e2b3",
  "assets/js/ai-city.js": "7098eb1daccdb5d3034616886022b92c",
  "assets/js/ai-dictionary.js": "0b10de0f478f6a0b62feb107935d06fa",
  "assets/js/break.js": "d84df49e5a0e0aceb85a2fc221548436",
@@ -11,7 +11,7 @@
  "assets/js/games.js": "6e8bd27ab447acf9322bf3ea0c9711e9",
  "assets/js/helper.js": "c22b7b50449809bb69e6e1eba02fbaaf",
  "assets/js/learn.js": "21e41f0ffeea8c682d0912f555d17d6d",
- "assets/js/main.js": "e47b067e25983dcf65b3a5fd01ad7ed5",
+ "assets/js/main.js": "254b796b609402dc1917bcf6050f3d5b",
  "assets/js/mocktest.js": "c3956937f4f244bb2b277868c3262c74",
  "assets/js/nova.js": "a5322a548f4fcd09c1e5b10802132ee0",
  "assets/js/pay.js": "97e3c2a51f21270d2c99ab824374ff0f",
@@ -22,6 +22,7 @@
  "assets/js/scene.js": "467b3b1f5f85ad9948ca7933f4248e09",
  "assets/js/share.js": "a56c3c3ee179572215fc52bfadda548d",
  "assets/js/skins.js": "302664f7a7a77bde118f2ab2bf3be3c4",
+ "assets/js/solution-tabs.js": "490856fc0022a10b6e5937d8a63c03a9",
  "assets/js/study-music.js": "8bf864093ced6890d4d97548773c2c1b",
  "assets/js/tools.js": "9e8abb3851c4a41c9c523dcd1e0069aa",
  "assets/js/viz.js": "3d6d096b66d102bc3e68550393bdf5ec",

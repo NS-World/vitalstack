@@ -72,6 +72,7 @@ require VITALSTACK_DIR . '/inc/mail-health.php';
 require VITALSTACK_DIR . '/inc/module-guides.php';
 require VITALSTACK_DIR . '/inc/study-plan.php';
 require VITALSTACK_DIR . '/inc/playground.php';
+require VITALSTACK_DIR . '/inc/solution-tabs.php';
 require VITALSTACK_DIR . '/inc/adsense-readiness.php';
 require VITALSTACK_DIR . '/inc/ai-dictionary.php';
 require VITALSTACK_DIR . '/inc/ai-city.php';

@@ -240,6 +240,10 @@ them before publishing. The notice only reminds you; it never publishes anything
     - the Website Playground at /playground/ (sandboxed preview, templates, Premium ZIP export);
     - no more duplicate meta tags on /pricing/;
     - a security review (see `docs/releases/4.16-ALL-PHASES-SECURITY.md`).
+  - **4.17.0:**
+    - every interview problem's solution in **Python, Java, C++ and JavaScript** (tabs that
+      remember the learner's language), all 153 programs tested against the Python answers;
+    - see `docs/releases/4.17-INTERVIEW-SOLUTIONS-4-LANGUAGES.md`.
   - See `docs/releases/4.13-PLANS-INVITES-RAZORPAY.md`.
 
 ## After installing on the DEV site
