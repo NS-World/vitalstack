@@ -223,6 +223,9 @@ them before publishing. The notice only reminds you; it never publishes anything
       not for premium readers or staff, not on the pricing page);
     - two new plugins: VitalStack Marketing (consented welcome, sign-in, pricing-reminder and
       win-back emails, plus campaigns) and VitalStack Festive (festival looks by date);
+    - **4.14.1:** emails get a plain-text part, a Message-ID on the sender's domain and a
+      matching Return-Path; new *Tools → Email check* (SMTP, From domain, SPF, DKIM, DMARC, MX,
+      test send) and a dashboard warning while something is red;
     - see `docs/releases/4.14-OFFERS-MARKETING-FESTIVE.md`.
   - See `docs/releases/4.13-PLANS-INVITES-RAZORPAY.md`.
 

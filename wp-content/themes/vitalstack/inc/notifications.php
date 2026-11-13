@@ -44,7 +44,16 @@ function vitalstack_mail( $to, $subject, $body, $extra = array() ) {
 		. '<tr><td style="padding:18px 28px;border-top:1px solid #e5e7eb;font-size:12px;line-height:1.5;color:#6b7280">' . $footer . '</td></tr>'
 		. '</table></td></tr></table></body></html>';
 
-	return wp_mail( $to, $subject, $html, $headers );
+	// 4.14.1: plain-text part, Message-ID and Return-Path on the sender's domain (inbox, not spam).
+	$prep = function_exists( 'vitalstack_mail_prepare' ) ? 'vitalstack_mail_prepare' : null;
+	if ( $prep ) {
+		add_action( 'phpmailer_init', $prep, 99 );
+	}
+	$sent = wp_mail( $to, $subject, $html, $headers );
+	if ( $prep ) {
+		remove_action( 'phpmailer_init', $prep, 99 );
+	}
+	return $sent;
 }
 
 function vitalstack_email_button( $url, $label ) {
