@@ -516,6 +516,7 @@ body.courses-open .install-app, body.courses-open .cookie-note { display: none; 
 @media (max-width: 900px) {
 	.home-hero-inner { grid-template-columns: 1fr; gap: 80px; }
 	.hero-card { max-width: 440px; width: 100%; margin: 0 auto; }
+	.home-hero-aside { max-width: 440px; width: 100%; margin: 0 auto; }
 }
 @media (max-width: 520px) { .home-hero-features { grid-template-columns: 1fr; } }
 
@@ -3499,3 +3500,8 @@ html.obar-off .obar { display: none; }
 .sol-panel[hidden] { display: none; }
 @media (max-width: 480px) { .sol-tab { flex: 1 1 calc(50% - 6px); padding: 8px 10px; } }
 @media print { .sol-tablist { display: none; } .sol-tabs.is-tabs .sol-lab { display: block; } .sol-panel[hidden] { display: block; } }
+
+/* ── 4.19.0: home hero aside (learning card + landing offer) ── */
+.home-hero-aside { display: grid; gap: 20px; min-width: 0; align-content: center; }
+.home-hero-aside > .hero-card { width: 100%; }
+#plans { scroll-margin-top: 90px; }

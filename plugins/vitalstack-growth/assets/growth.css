@@ -1,0 +1,40 @@
+/* VitalStack Growth Desk: offer cards. Uses the theme's colour tokens. */
+.vsg-deal, .vsg-panel, .vsg-slide { --vsg-hot: linear-gradient(90deg, #ff3b5c, #ff5a36 55%, #ff8a00); font-family: var(--font-sans, system-ui, sans-serif); }
+.vsg-badge { display: inline-block; margin: 0 0 10px; padding: 4px 12px; border-radius: 999px; background: var(--vsg-hot); color: #fff; font-weight: 800; font-size: 13px; letter-spacing: .02em; }
+.vsg-price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 4px; }
+.vsg-now { font-size: 34px; font-weight: 900; line-height: 1.1; }
+.vsg-was { font-size: 17px; opacity: .7; }
+.vsg-save { padding: 2px 8px; border-radius: 6px; background: #ffd400; color: #3a2a00; font-weight: 800; font-size: 13px; }
+.vsg-per { margin: 0 0 12px; font-size: 14px; opacity: .85; }
+.vsg-list { list-style: none; margin: 0 0 12px; padding: 0; display: grid; gap: 6px; }
+.vsg-list li { position: relative; padding-left: 24px; font-size: 14.5px; line-height: 1.4; }
+.vsg-list li::before { content: "✓"; position: absolute; left: 0; top: 0; color: #34c987; font-weight: 900; }
+.vsg-count { margin: 0 0 12px; font-size: 14px; }
+.vsg-count b { font-variant-numeric: tabular-nums; font-size: 16px; }
+.vsg-cta { display: inline-flex; align-items: center; justify-content: center; min-height: 46px; padding: 0 22px; border-radius: 12px; background: var(--vsg-hot); color: #fff; font-weight: 800; font-size: 16px; text-decoration: none; box-shadow: 0 8px 22px rgba(255, 70, 60, .35); transition: transform .15s, box-shadow .15s; }
+.vsg-cta:hover, .vsg-cta:focus-visible { color: #fff; text-decoration: none; transform: translateY(-1px); box-shadow: 0 12px 28px rgba(255, 70, 60, .45); }
+.vsg-cta:focus-visible, .vsg-x:focus-visible, .vsg-later:focus-visible { outline: 3px solid var(--focus, #2563eb); outline-offset: 2px; }
+.vsg-trust { margin: 10px 0 0; font-size: 12.5px; opacity: .8; }
+
+/* Home hero: the deal first, then the learning card (its mascot sits 58px above it, hence the gap). */
+.home-hero-aside .vsg-deal { order: -1; }
+.home-hero-aside:has(.vsg-deal) { gap: 72px; }
+.vsg-deal { position: relative; padding: 20px 22px; border-radius: 18px; background: #1e2430; border: 1px solid rgba(255, 138, 0, .45); box-shadow: 0 24px 60px rgba(0, 0, 0, .35); color: #fff; }
+.vsg-deal .vsg-cta { width: 100%; }
+
+/* Pricing page: deal panel first. */
+.vsg-panel { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 18px 28px; align-items: center; margin: 18px 0 0; padding: 20px 22px; border-radius: 18px; background: var(--surface, #fff); border: 2px solid #ff8a00; box-shadow: 0 14px 40px rgba(255, 90, 54, .14); color: var(--text, #1b1f27); }
+.vsg-panel .vsg-list { margin-bottom: 14px; }
+@media (max-width: 760px) { .vsg-panel { grid-template-columns: minmax(0, 1fr); } .vsg-panel .vsg-cta { width: 100%; } }
+
+/* Slide-in card. */
+.vsg-slide { position: fixed; left: 16px; bottom: 16px; z-index: 9990; width: min(340px, calc(100vw - 32px)); padding: 18px 18px 12px; border-radius: 18px; background: var(--surface, #fff); color: var(--text, #1b1f27); border: 2px solid #ff8a00; box-shadow: 0 20px 50px rgba(0, 0, 0, .25); transform: translateY(24px); opacity: 0; transition: transform .25s ease, opacity .25s ease; }
+.vsg-slide.is-in { transform: none; opacity: 1; }
+.vsg-slide .vsg-now { font-size: 28px; }
+.vsg-slide .vsg-cta { width: 100%; }
+.vsg-x { position: absolute; top: 8px; right: 8px; width: 34px; height: 34px; border: 0; border-radius: 50%; background: transparent; color: inherit; font-size: 16px; cursor: pointer; }
+.vsg-x:hover { background: rgba(127, 127, 127, .15); }
+.vsg-later { display: block; width: 100%; margin: 6px 0 0; padding: 8px; border: 0; background: none; color: inherit; opacity: .7; font-size: 13px; cursor: pointer; }
+@media (max-width: 560px) { .vsg-slide { left: 12px; right: 12px; bottom: 12px; width: auto; padding: 14px 14px 8px; } .vsg-slide .vsg-list { display: none; } .vsg-slide .vsg-now { font-size: 24px; } }
+@media (prefers-reduced-motion: reduce) { .vsg-slide { transition: none; } .vsg-cta { transition: none; } }
+@media print { .vsg-deal, .vsg-panel, .vsg-slide { display: none !important; } }

@@ -85,7 +85,8 @@ get_header();
 								<span><?php esc_html_e( 'Password', 'vitalstack' ); ?> <small class="muted"><?php esc_html_e( '(8+ characters)', 'vitalstack' ); ?></small></span>
 								<input type="password" name="pwd" autocomplete="new-password" minlength="8" required>
 							</label>
-							<label class="check"><input type="checkbox" name="subscribe" value="1" <?php checked( $vs_subscribe ); ?>> <?php esc_html_e( 'Email me when new lessons and guides are published', 'vitalstack' ); ?></label>
+							<label class="check"><input type="checkbox" name="subscribe" value="1" data-optin <?php checked( $vs_subscribe || ( function_exists( 'vitalstack_signup_optin_default' ) && vitalstack_signup_optin_default() ) ); ?>> <?php esc_html_e( 'Email me new lessons, guides and member offers (unsubscribe anytime)', 'vitalstack' ); ?></label>
+							<script>(function(){try{var tz=Intl.DateTimeFormat().resolvedOptions().timeZone||'';if(/^(Europe\/|Atlantic\/(Reykjavik|Canary|Madeira|Azores|Faroe))/.test(tz)&&!/^Europe\/(Moscow|Istanbul|Kiev|Kyiv|Minsk|Belgrade|Sarajevo|Skopje|Tirane|Chisinau|Simferopol|Volgograd|Kaliningrad|Samara|Ulyanovsk|Saratov|Astrakhan|Kirov)$/.test(tz)){var b=document.querySelectorAll('[data-optin]');b[b.length-1].checked=<?php echo $vs_subscribe ? 'true' : 'false'; ?>;}}catch(e){}})();</script>
 							<button type="submit" class="btn btn-primary btn-block"><?php esc_html_e( 'Create free account', 'vitalstack' ); ?></button>
 							<p class="auth-legal">
 								<?php

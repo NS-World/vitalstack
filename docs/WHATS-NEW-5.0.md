@@ -249,6 +249,12 @@ them before publishing. The notice only reminds you; it never publishes anything
       Time Series, Deep Learning, NumPy, pandas), shown on lessons already on the site;
     - Website Builder in the header and on the Free Tools page; AdSense fixes and Helper 1.0.1;
     - see `docs/releases/4.18-CHARTS-BUILDER-ADSENSE.md` and `docs/PROD-GO-LIVE-GUIDE.md`.
+  - **4.19.0 + Growth Desk 1.0.0:**
+    - landing offers like a big sale (home hero deal, pricing deal panel, slide-in), with real
+      regular prices, savings and a real countdown only;
+    - Sales, Marketing (share kit, subscribers) and Testing & Security agents with daily checks and a
+      Monday report; sign-up email box ticked by default outside the EU/UK;
+    - see `docs/releases/4.19-GROWTH-DESK.md`.
   - See `docs/releases/4.13-PLANS-INVITES-RAZORPAY.md`.
 
 ## After installing on the DEV site

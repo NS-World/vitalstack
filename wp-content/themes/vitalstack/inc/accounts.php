@@ -323,6 +323,18 @@ function vitalstack_account_messages() {
 
 /* ── Subscription state ───────────────────────────────────────────────────── */
 
+/**
+ * Whether the sign-up form's email box starts ticked (4.19.0). Yes, except for
+ * visitors whose country (from the CDN) is in the EU/EEA or the UK, where a
+ * pre-ticked box is not valid consent. The page also unticks it in the browser
+ * for European time zones, because cached pages don't know the country.
+ */
+function vitalstack_signup_optin_default() {
+	$gdpr    = array( 'AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'IS', 'LI', 'NO', 'GB', 'CH' );
+	$country = function_exists( 'vitalstack_pay_visitor_country' ) ? vitalstack_pay_visitor_country() : '';
+	return (bool) apply_filters( 'vitalstack_signup_optin_default', ! in_array( $country, $gdpr, true ), $country );
+}
+
 function vitalstack_is_subscribed( $user_id ) {
 	return (bool) get_user_meta( $user_id, 'vs_subscribed', true );
 }

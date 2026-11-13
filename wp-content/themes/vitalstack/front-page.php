@@ -47,7 +47,10 @@ if ( $vs_health ) {
 				</p>
 			<?php endif; ?>
 		</div>
-		<?php vitalstack_hero_card(); ?>
+		<div class="home-hero-aside">
+			<?php vitalstack_hero_card(); ?>
+			<?php do_action( 'vitalstack_home_hero_aside' ); // 4.19.0: landing offer (Growth Desk plugin) ?>
+		</div>
 	</div>
 </section>
 

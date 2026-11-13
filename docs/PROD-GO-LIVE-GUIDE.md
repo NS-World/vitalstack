@@ -1,4 +1,4 @@
-# VitalStack PROD go-live guide (4.18.0)
+# VitalStack PROD go-live guide (4.19.0)
 
 Is guide ko upar se neeche, step by step follow kijiye. Har step ke saath likha hai ki kahan click karna hai.
 Bracket mein likhe naam (jaise **Settings → Reading**) WordPress admin ke asli menu ke naam hain.
@@ -7,7 +7,8 @@ Bracket mein likhe naam (jaise **Settings → Reading**) WordPress admin ke asli
 
 | File | Kya hai |
 |---|---|
-| `vitalstack-theme-v4.18.0.zip` | Theme (upload over 4.12.x – 4.17.x) |
+| `vitalstack-theme-v4.19.0.zip` | Theme (upload over 4.12.x – 4.18.x) |
+| `vitalstack-growth-1.0.0.zip` | Growth Desk: landing offers + Sales, Marketing, Testing & Security agents |
 | `vitalstack-adsense-helper-1.0.1.zip` | AdSense readiness scanner (Tools → AdSense Helper) |
 | `vitalstack-marketing-1.0.0.zip` | Offer emails, sirf un users ko jinhone haan kaha |
 | `vitalstack-festive-1.0.0.zip` | Festival look, date ke hisaab se apne aap |
@@ -30,8 +31,8 @@ Bracket mein likhe naam (jaise **Settings → Reading**) WordPress admin ke asli
 
 ## Step 2: Theme aur plugins upload
 
-1. **Appearance → Themes → Add New → Upload Theme** → `vitalstack-theme-v4.18.0.zip` → **Replace current with uploaded**.
-2. **Plugins → Add New → Upload Plugin**: teeno plugin zips upload karke **Activate** kijiye.
+1. **Appearance → Themes → Add New → Upload Theme** → `vitalstack-theme-v4.19.0.zip` → **Replace current with uploaded**.
+2. **Plugins → Add New → Upload Plugin**: chaaron plugin zips (Growth Desk, AdSense Helper, Marketing, Festive) upload karke **Activate** kijiye.
 3. LiteSpeed Cache → **Purge All**, aur Hostinger CDN cache bhi purge kijiye.
 
 ## Step 3: Pages aur content
@@ -147,6 +148,24 @@ UAT par Festive plugin abhi **"Force: Diwali"** par set hai, isliye aaj (Diwali 
 1. **Settings → VitalStack Festive** kholiye.
 2. Mode **Auto** chuniye. Festival look apne aap sahi dates par aayega aur jaayega.
 
+## Step 6b: Growth Desk: offer aur agents (10 minute)
+
+1. **Growth Desk → Offer:**
+   - **Offer name**: jaise "Launch Sale".
+   - **Offer ends**: wahi date daaliye jo aap sach mein nibhayenge. Countdown sirf isi se dikhta hai, aur offer khatam hote hi apne aap hat jaata hai.
+   - **Regular prices**: har plan ka wo price jo offer ke baad lagega (jaise Pro Yearly: ₹2,999 / $149). Isse site par ~~purana price~~ aur "Save X%" dikhta hai. Jo price aap baad mein sach mein nahi lenge, wo mat daaliye: fake discount kanoon ke khilaaf hai.
+   - **Save** kijiye, phir "Preview the home page as a visitor" se dekh lijiye.
+2. **Growth Desk → Testing & Security → Run all checks now**:
+   - jo red ho, uska "How to fix" follow kijiye;
+   - roz ka check aur Monday report apne aap email aayenge.
+3. **Growth Desk → Marketing**:
+   - share kit se roz ek message WhatsApp, LinkedIn, Instagram, X ya Threads par daaliye;
+   - links tracked hain, isliye Analytics mein dikhega kaunsa post kaam kar raha hai.
+4. **Email list:**
+   - sign-up ka "Email me new lessons, guides and member offers" box ab pehle se ticked hota hai (Europe/UK ke visitors ke liye nahi, wahan GDPR allow nahi karta);
+   - unsubscribe hamesha sach mein kaam karta hai (kanoon, aur Gmail ke rules ke liye zaroori);
+   - kisi ek reader ko aap khud **Growth Desk → Marketing → Subscribers** se subscribe ya unsubscribe kar sakte hain.
+
 ## Step 7: ₹/$ price kaise test karein
 
 Price visitor ki location se decide hota hai:
@@ -229,3 +248,4 @@ Maine UAT par ye test kiya: New York aur London ke visitor ko $ aur India wale k
 6. Sign up kijiye: OTP email **Inbox** mein aana chahiye (Step 4).
 7. Footer mein Privacy, Terms, About links dikhne chahiye (Step 3).
 8. **Tools → AdSense Helper → Run check** green ho.
+9. Home page par (Incognito) **deal card**: price, ~~regular price~~, Save %, countdown. **Growth Desk → Testing & Security** green ho.
