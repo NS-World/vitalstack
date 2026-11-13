@@ -218,6 +218,12 @@ them before publishing. The notice only reminds you; it never publishes anything
     - 💬 "Ask" assistant: instant answers on prices, offers, invites, certificates, payments and
       where to start, in ₹ or $. It runs in the browser only, with no AI service or endpoint;
     - offers use the server's currency answer; the sample certificate fits 320px phones.
+  - **4.14.0:**
+    - an offer strip above the header on every page (₹ in India, $ elsewhere, closable for a day,
+      not for premium readers or staff, not on the pricing page);
+    - two new plugins: VitalStack Marketing (consented welcome, sign-in, pricing-reminder and
+      win-back emails, plus campaigns) and VitalStack Festive (festival looks by date);
+    - see `docs/releases/4.14-OFFERS-MARKETING-FESTIVE.md`.
   - See `docs/releases/4.13-PLANS-INVITES-RAZORPAY.md`.
 
 ## After installing on the DEV site

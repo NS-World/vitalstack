@@ -205,4 +205,11 @@
 		});
 		list.parentNode.insertBefore(btn, list.nextSibling);
 	});
+	/* 4.14.0: the offer strip can be hidden for a day. */
+	document.querySelectorAll('[data-obar-close]').forEach(function (b) {
+		b.addEventListener('click', function () {
+			try { localStorage.setItem('vs-obar-off', String(Date.now() + 864e5)); } catch (e) {}
+			document.documentElement.classList.add('obar-off');
+		});
+	});
 })();

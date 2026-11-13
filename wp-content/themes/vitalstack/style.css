@@ -3351,3 +3351,25 @@ a.why-card:hover { border-color: #f5b301; text-decoration: none; transform: tran
 .break-panel [hidden], .vsa-panel [hidden] { display: none !important; }
 .bt-short { display: none; }
 @media (max-width: 400px) { .bt-long { display: none; } .bt-short { display: inline; } }
+/* ── 4.14.0: offer strip above the header ── */
+.obar { position: relative; z-index: 101; display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 6px 0 0; background: linear-gradient(90deg, #ff3b5c, #ff5a36 55%, #ff8a00); color: #fff; font: 700 14px/1 var(--font-sans); overflow: hidden; }
+html.obar-off .obar { display: none; }
+.obar-track { flex: 1; min-width: 0; display: flex; overflow: hidden; color: #fff; text-decoration: none; height: 100%; align-items: center; -webkit-mask-image: linear-gradient(90deg, transparent, #000 24px, #000 calc(100% - 24px), transparent); mask-image: linear-gradient(90deg, transparent, #000 24px, #000 calc(100% - 24px), transparent); }
+.obar-track:hover, .obar-track:focus { color: #fff; text-decoration: none; }
+.obar-run { display: inline-flex; align-items: center; gap: 18px; padding-right: 18px; white-space: nowrap; flex: none; animation: obar-move 38s linear infinite; }
+.obar:hover .obar-run, .obar:focus-within .obar-run { animation-play-state: paused; }
+@keyframes obar-move { from { transform: translateX(0); } to { transform: translateX(-100%); } }
+.obar-item { display: inline-flex; align-items: center; gap: 6px; }
+.obar-item s { opacity: .8; font-weight: 600; }
+.obar-item b:not(.obar-price) { padding: 3px 8px; border-radius: 999px; background: #ffd400; color: #3a1500; font-size: 12px; }
+.obar-price { font-size: 15px; }
+.obar-hot { padding: 3px 9px; border-radius: 999px; background: rgba(0, 0, 0, .22); letter-spacing: .02em; }
+.obar-dot { opacity: .7; font-size: 11px; }
+.obar-cta { flex: none; display: inline-flex; align-items: center; height: 28px; padding: 0 14px; border-radius: 999px; background: #fff; color: #e2262f; font-weight: 800; font-size: 13px; text-decoration: none; box-shadow: 0 2px 8px rgba(0, 0, 0, .18); }
+.obar-cta:hover { color: #b3121b; text-decoration: none; transform: translateY(-1px); }
+.obar-x { flex: none; width: 28px; height: 28px; border: 0; border-radius: 50%; background: rgba(0, 0, 0, .18); color: #fff; font-size: 12px; cursor: pointer; }
+.obar-x:hover { background: rgba(0, 0, 0, .3); }
+.obar a:focus-visible, .obar-x:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+@media (max-width: 599px) { .obar { height: 36px; font-size: 13px; gap: 6px; } .obar-cta { height: 26px; padding: 0 10px; font-size: 12px; } .obar-x { width: 24px; height: 24px; } .obar-run { animation-duration: 30s; } }
+@media (prefers-reduced-motion: reduce) { .obar-run { animation: none; } .obar-run[aria-hidden] { display: none; } }
+@media print { .obar { display: none !important; } }
