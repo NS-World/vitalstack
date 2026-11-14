@@ -74,6 +74,7 @@ require VITALSTACK_DIR . '/inc/study-plan.php';
 require VITALSTACK_DIR . '/inc/playground.php';
 require VITALSTACK_DIR . '/inc/solution-tabs.php';
 require VITALSTACK_DIR . '/inc/lesson-charts.php';
+require VITALSTACK_DIR . '/inc/single-session.php';
 require VITALSTACK_DIR . '/inc/adsense-readiness.php';
 require VITALSTACK_DIR . '/inc/ai-dictionary.php';
 require VITALSTACK_DIR . '/inc/ai-city.php';

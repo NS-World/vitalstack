@@ -255,6 +255,10 @@ them before publishing. The notice only reminds you; it never publishes anything
     - Sales, Marketing (share kit, subscribers) and Testing & Security agents with daily checks and a
       Monday report; sign-up email box ticked by default outside the EU/UK;
     - see `docs/releases/4.19-GROWTH-DESK.md`.
+  - **4.20.0:**
+    - one device at a time for readers: signing in on a new device signs out the others, with
+      friendly popups on both devices;
+    - see `docs/releases/4.20-ONE-DEVICE.md`.
   - See `docs/releases/4.13-PLANS-INVITES-RAZORPAY.md`.
 
 ## After installing on the DEV site

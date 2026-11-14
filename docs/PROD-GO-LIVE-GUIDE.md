@@ -1,4 +1,4 @@
-# VitalStack PROD go-live guide (4.19.0)
+# VitalStack PROD go-live guide (4.20.0)
 
 Is guide ko upar se neeche, step by step follow kijiye. Har step ke saath likha hai ki kahan click karna hai.
 Bracket mein likhe naam (jaise **Settings → Reading**) WordPress admin ke asli menu ke naam hain.
@@ -7,7 +7,7 @@ Bracket mein likhe naam (jaise **Settings → Reading**) WordPress admin ke asli
 
 | File | Kya hai |
 |---|---|
-| `vitalstack-theme-v4.19.0.zip` | Theme (upload over 4.12.x – 4.18.x) |
+| `vitalstack-theme-v4.20.0.zip` | Theme (upload over 4.12.x – 4.19.x) |
 | `vitalstack-growth-1.0.0.zip` | Growth Desk: landing offers + Sales, Marketing, Testing & Security agents |
 | `vitalstack-adsense-helper-1.0.1.zip` | AdSense readiness scanner (Tools → AdSense Helper) |
 | `vitalstack-marketing-1.0.0.zip` | Offer emails, sirf un users ko jinhone haan kaha |
@@ -31,7 +31,7 @@ Bracket mein likhe naam (jaise **Settings → Reading**) WordPress admin ke asli
 
 ## Step 2: Theme aur plugins upload
 
-1. **Appearance → Themes → Add New → Upload Theme** → `vitalstack-theme-v4.19.0.zip` → **Replace current with uploaded**.
+1. **Appearance → Themes → Add New → Upload Theme** → `vitalstack-theme-v4.20.0.zip` → **Replace current with uploaded**.
 2. **Plugins → Add New → Upload Plugin**: chaaron plugin zips (Growth Desk, AdSense Helper, Marketing, Festive) upload karke **Activate** kijiye.
 3. LiteSpeed Cache → **Purge All**, aur Hostinger CDN cache bhi purge kijiye.
 
@@ -248,4 +248,5 @@ Maine UAT par ye test kiya: New York aur London ke visitor ko $ aur India wale k
 6. Sign up kijiye: OTP email **Inbox** mein aana chahiye (Step 4).
 7. Footer mein Privacy, Terms, About links dikhne chahiye (Step 3).
 8. **Tools → AdSense Helper → Run check** green ho.
-9. Home page par (Incognito) **deal card**: price, ~~regular price~~, Save %, countdown. **Growth Desk → Testing & Security** green ho.
+9. **Ek device ka niyam:** ek reader account se phone par login kijiye, phir laptop par. Laptop par "You're signed in on this device" aayega, aur phone par 1–2 minute mein (ya page kholte hi) "You were signed out on this device". Admin account par ye niyam lagu nahi hota.
+10. Home page par (Incognito) **deal card**: price, ~~regular price~~, Save %, countdown. **Growth Desk → Testing & Security** green ho.

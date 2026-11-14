@@ -3505,3 +3505,19 @@ html.obar-off .obar { display: none; }
 .home-hero-aside { display: grid; gap: 20px; min-width: 0; align-content: center; }
 .home-hero-aside > .hero-card { width: 100%; }
 #plans { scroll-margin-top: 90px; }
+
+/* ── 4.20.0: one device at a time (sign-in popups) ── */
+html.vss-open { overflow: hidden; }
+.vss { position: fixed; inset: 0; z-index: 10000; display: grid; place-items: center; padding: 16px; background: rgba(15, 20, 30, .62); backdrop-filter: blur(3px); animation: vss-in .2s ease; }
+.vss-card { width: min(440px, 100%); max-height: calc(100vh - 32px); overflow: auto; padding: 26px 24px 20px; border-radius: 20px; background: var(--surface, #fff); color: var(--text, #1b1f27); box-shadow: 0 30px 80px rgba(0, 0, 0, .35); text-align: center; }
+.vss-icon { margin: 0 0 6px; font-size: 40px; line-height: 1; }
+.vss-title { margin: 0 0 10px; font-size: 21px; line-height: 1.3; }
+.vss-text { margin: 0 0 10px; font-size: 15px; line-height: 1.55; color: var(--text-2, #444); }
+.vss-text b { color: var(--text, #1b1f27); }
+.vss-actions { display: grid; gap: 10px; margin-top: 16px; }
+.vss-go { width: 100%; justify-content: center; min-height: 46px; }
+.vss-link { font-size: 14px; color: var(--muted, #667085); }
+.vss-go:focus-visible, .vss-link:focus-visible { outline: 3px solid var(--focus, #2563eb); outline-offset: 2px; }
+@keyframes vss-in { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .vss { animation: none; } }
+@media print { .vss { display: none !important; } }
