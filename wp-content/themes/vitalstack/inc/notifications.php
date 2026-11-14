@@ -50,6 +50,10 @@ function vitalstack_mail( $to, $subject, $body, $extra = array() ) {
 		add_action( 'phpmailer_init', $prep, 99 );
 	}
 	$sent = wp_mail( $to, $subject, $html, $headers );
+	// 4.20.1: SMTP plugin failing (wrong password etc.)? Send once more with built-in mail.
+	if ( ! $sent && function_exists( 'vitalstack_mail_retry' ) ) {
+		$sent = vitalstack_mail_retry( $to, $subject, $html, $headers );
+	}
 	if ( $prep ) {
 		remove_action( 'phpmailer_init', $prep, 99 );
 	}
