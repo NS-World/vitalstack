@@ -648,7 +648,7 @@ function vitalstack_pay_rest_order( WP_REST_Request $req ) {
 	if ( ! isset( $plans[ $plan ] ) ) {
 		return vitalstack_pay_error( 'bad_plan', __( 'Please pick a plan.', 'vitalstack' ) );
 	}
-	if ( vitalstack_rate_limited( 'pay_order|' . $uid, 10, HOUR_IN_SECONDS ) ) {
+	if ( vitalstack_rate_limited( 'pay_order|' . $uid, function_exists( 'vitalstack_pay_limit' ) ? vitalstack_pay_limit( 10, 'order' ) : 10, HOUR_IN_SECONDS ) ) {
 		return vitalstack_pay_error( 'rate', __( 'Too many attempts. Please wait a few minutes and try again.', 'vitalstack' ), 429 );
 	}
 	$steps = vitalstack_pay_checklist( $uid );
@@ -742,7 +742,7 @@ function vitalstack_pay_rest_order( WP_REST_Request $req ) {
  * Price after a coupon, for the pricing page (no order is created).
  */
 function vitalstack_pay_rest_quote( WP_REST_Request $req ) {
-	if ( vitalstack_rate_limited( 'pay_quote|' . vitalstack_remote_ip(), 30, HOUR_IN_SECONDS ) ) {
+	if ( vitalstack_rate_limited( 'pay_quote|' . vitalstack_remote_ip(), function_exists( 'vitalstack_pay_limit' ) ? vitalstack_pay_limit( 30, 'quote' ) : 30, HOUR_IN_SECONDS ) ) {
 		return vitalstack_pay_error( 'rate', __( 'Too many attempts. Please wait a few minutes and try again.', 'vitalstack' ), 429 );
 	}
 	$plan = sanitize_key( (string) $req->get_param( 'plan' ) );
@@ -768,7 +768,7 @@ function vitalstack_pay_rest_verify( WP_REST_Request $req ) {
 	if ( ! preg_match( '/^order_[A-Za-z0-9]{6,40}$/', $oid ) || ! preg_match( '/^pay_[A-Za-z0-9]{6,40}$/', $pid ) || ! preg_match( '/^[a-f0-9]{64}$/', $sig ) ) {
 		return vitalstack_pay_error( 'bad_reply', __( 'We could not confirm this payment. If money was taken, it will be confirmed automatically within a few minutes, or contact us.', 'vitalstack' ) );
 	}
-	if ( vitalstack_rate_limited( 'pay_verify|' . get_current_user_id(), 20, HOUR_IN_SECONDS ) ) {
+	if ( vitalstack_rate_limited( 'pay_verify|' . get_current_user_id(), function_exists( 'vitalstack_pay_limit' ) ? vitalstack_pay_limit( 20, 'verify' ) : 20, HOUR_IN_SECONDS ) ) {
 		return vitalstack_pay_error( 'rate', __( 'Too many attempts. Please wait a few minutes and try again.', 'vitalstack' ), 429 );
 	}
 	$order = vitalstack_pay_find_order( $oid );

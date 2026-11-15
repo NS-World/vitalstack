@@ -77,6 +77,7 @@ require VITALSTACK_DIR . '/inc/lesson-charts.php';
 require VITALSTACK_DIR . '/inc/single-session.php';
 require VITALSTACK_DIR . '/inc/mail-fallback.php';
 require VITALSTACK_DIR . '/inc/auth-flow.php';
+require VITALSTACK_DIR . '/inc/pay-limits.php';
 require VITALSTACK_DIR . '/inc/adsense-readiness.php';
 require VITALSTACK_DIR . '/inc/ai-dictionary.php';
 require VITALSTACK_DIR . '/inc/ai-city.php';
