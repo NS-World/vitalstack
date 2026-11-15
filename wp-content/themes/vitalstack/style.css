@@ -3521,3 +3521,13 @@ html.vss-open { overflow: hidden; }
 @keyframes vss-in { from { opacity: 0; } to { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .vss { animation: none; } }
 @media print { .vss { display: none !important; } }
+
+/* ── 4.20.3: buttons inside lesson text keep their own colours ─────────── */
+/* ".prose a" (link colour + underline) out-ranked ".btn-primary", so the
+   "Unlock this lesson" button had green text on a green button. */
+.prose a.btn, .entry-content a.btn { text-decoration: none; overflow-wrap: normal; }
+.prose a.btn-primary, .prose a.btn-primary:hover, .entry-content a.btn-primary, .entry-content a.btn-primary:hover { color: var(--on-brand); }
+.prose a.btn-dark, .entry-content a.btn-dark { color: var(--on-dark); }
+.prose a.btn-ghost, .entry-content a.btn-ghost { color: var(--text); }
+.prose a.btn-ghost:hover, .entry-content a.btn-ghost:hover, .prose a.btn-soft, .entry-content a.btn-soft { color: var(--brand-ink); }
+.premium-lock .btn { margin: 4px; }
