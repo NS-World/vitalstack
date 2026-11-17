@@ -46,6 +46,37 @@ no fake urgency.** Every number we post must be true on the site that day.
 
 ---
 
+## 1b. Worldwide first, India as a strong second
+
+The site already shows ₹ in India and $ everywhere else, so content has to work for **anyone**,
+anywhere. The rule:
+
+| | Global edition (main account content) | India edition (extra, same assets) |
+|---|---|---|
+| Language | Simple English (short sentences, no slang) | Hinglish voice-over / captions |
+| Analogies | Universal: restaurant waiter, fridge, traffic, library, airport | Desi: dhaba, Tatkal line, shaadi buffet |
+| Data stories | Global topics (AI, jobs-of-the-future skills, world cities, open datasets) + India projects as "a real case study from India" | Desi Data series |
+| Prices in posts | Say "free" and "Pro"; never print ₹ on global posts (the site shows the right currency) | ₹199 / ₹999 |
+| Posting time | 2 slots: **7:30 pm IST** (India + Gulf) and **8:30 pm US Eastern** (= 7 am IST, US + Europe morning). Schedule the global post for the US slot on alternate days | 7–9 pm IST |
+| Hashtags | #learntocode #coding #programming #python #ai #softwareengineer #codenewbie #100daysofcode | add #codinginhindi #placementprep #techindia |
+
+**Global personas** (on top of the India three in section 1):
+- **Self-taught Sam** (US/UK/Europe/Philippines/Nigeria/Pakistan/Bangladesh): learning on phone after work,
+  wants a job in tech, can't afford bootcamps → "free, visual, step by step" is the hook; buys Pro Yearly ($49).
+- **CS Student Chen / Aisha** (any country): exams and interviews → puzzles, Big-O, DSA, mock tests.
+- **AI-curious professional** (anywhere): "how does ChatGPT work, can I build with it?" → Gen AI / Agentic tracks ($29).
+
+**Before pushing global sales:** turn on **International Payments** in Razorpay (see `PAYMENTS-SETUP.md`
+section 4). Until then a $ buyer sees an error, so global posts should drive **free sign-ups** only.
+
+**Series names (global):** "Chai pe Code" becomes **Code in Real Life** on the main feed (India edition keeps
+the Chai pe Code name for Hinglish reels). Desi Data stays as a series, presented as "real-world case
+studies from India". Every other series is already language-neutral; write their captions in English.
+
+Sample: `Code in Real Life #1: An API is a restaurant waiter` (5-slide carousel, English).
+
+---
+
 ## 2. The funnel (what each platform does)
 
 ```
@@ -79,8 +110,8 @@ Pinterest pins.
 Pages that grow fast have **recurring series** people come back for, not random posts.
 These six are built only from things VitalStack has.
 
-### 🫖 Series 1: "Chai pe Code": tech explained with desi life
-The most shareable format for Indian students. One concept, one everyday Indian analogy, 20–30 seconds.
+### 🫖 Series 1: "Code in Real Life" (global) / "Chai pe Code" (India Hinglish edition)
+The most shareable format. Global posts use the universal analogy (restaurant waiter, fridge, traffic); the India edition uses the desi one below. One concept, one everyday Indian analogy, 20–30 seconds.
 
 | Concept | Desi analogy |
 |---|---|
