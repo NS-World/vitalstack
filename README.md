@@ -48,6 +48,7 @@ emails and are git-ignored on purpose.
 - [`docs/AUDIT-2026-09.md`](docs/AUDIT-2026-09.md): why AdSense rejected the site
 - [`docs/CONTENT-GUIDE.md`](docs/CONTENT-GUIDE.md): **the included 180 lessons + 13 guides, making them yours, writing new ones**
 - [`docs/FRESH-SITE-SETUP.md`](docs/FRESH-SITE-SETUP.md): **new WordPress site from scratch, step by step**
+- [`docs/DIGITAL-MARKETING-PLAYBOOK.md`](docs/DIGITAL-MARKETING-PLAYBOOK.md): **social media system: series, weekly calendar, comment-to-DM funnel, scorecard**
 - [`docs/ADSENSE-APPROVAL.md`](docs/ADSENSE-APPROVAL.md): **the final checklist to get AdSense approval**
 - [`docs/ROADMAP.md`](docs/ROADMAP.md): step-by-step plan to approval and growth
 - [`docs/THEME-V2-SETUP.md`](docs/THEME-V2-SETUP.md): how to install the theme and clean up authors, menus and pages
