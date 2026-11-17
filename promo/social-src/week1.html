@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="style.css">
+<style>
+.quote{background:#171d28;border:1px solid #232c3c;border-radius:30px;padding:44px 46px;margin-top:28px;font-size:44px;line-height:1.35;font-weight:600}
+.quote small{display:block;font-size:26px;color:#7ce8b5;font-weight:700;letter-spacing:.06em;margin-bottom:12px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:30px}
+.pair div{border-radius:26px;padding:44px 34px;font-size:40px;line-height:1.35;font-weight:600}
+.pair .d{background:#2a1820;border:1px solid #4a2633;color:#f3c6d3}
+.pair .o{background:#123527;border:1px solid #1e5a40;color:#c9f5df}
+.pair small{display:block;font-size:24px;font-weight:800;letter-spacing:.1em;margin-bottom:10px;opacity:.85}
+.big-out{font-family:"DejaVu Sans Mono",monospace;font-size:36px;color:#ff8a8a}
+.ft{position:absolute;left:0;right:0;bottom:0;height:120px;border-top:1px solid #222a38;background:#0c1017;display:flex;align-items:center;justify-content:space-between;padding:0 80px}
+.ft img{height:52px}.ft span{color:#34c987;font-weight:700;font-size:32px}
+</style></head><body>
+
+<!-- ============ DAY 2: SPOT THE BUG #1 ============ -->
+<section class="s" data-name="day2-spot-the-bug-1">
+  <div class="tag">🐞 SPOT THE BUG · #1</div><div class="num">1/2</div>
+  <h2>Why did my <span class="g">original<br>list change?</span></h2>
+  <div class="code" style="margin-top:40px"><div class="bar">backup.py</div>
+<pre>scores = [<span class="n">90</span>, <span class="n">85</span>, <span class="n">70</span>]
+backup = scores        <span class="c"># "save a copy"</span>
+backup.append(<span class="n">100</span>)
+
+<span class="n">print</span>(scores)</pre></div>
+  <div class="code" style="margin-top:24px"><div class="bar">output</div>
+<pre class="big-out">[90, 85, 70, 100]   😱</pre></div>
+  <p class="note" style="font-size:36px;color:#e6ebf3">Find the bug in 10 seconds.<br>Comment your fix 👇</p>
+  <div class="swipe">Answer →</div>
+  <div class="ft"><img src="file:///home/user/vitalstack/brand-kit/logo-dark.png"><span>vitalstack.co.in</span></div>
+</section>
+<section class="s" data-name="day2-spot-the-bug-2">
+  <div class="tag">✅ THE ANSWER</div><div class="num">2/2</div>
+  <h2><span class="g">= doesn't copy.</span><br>It shares.</h2>
+  <p class="sub"><b style="color:#fff">scores</b> and <b style="color:#fff">backup</b> are two names for the <b style="color:#fff">same list</b>. Change one, you change "both".</p>
+  <div class="code" style="margin-top:36px"><div class="bar">fixed.py</div>
+<pre>backup = scores.copy()   <span class="c"># ✅ a real copy</span>
+<span class="c"># also works:</span>
+backup = scores[:]
+backup = <span class="n">list</span>(scores)</pre></div>
+  <div class="cta" style="margin-top:36px;padding:38px 44px"><b style="font-size:44px">Comment “BUG” 👇</b><p>for the free Python Lists lesson: copying, slicing and 5 more classic mistakes.</p></div>
+  <div class="ft"><img src="file:///home/user/vitalstack/brand-kit/logo-dark.png"><span>vitalstack.co.in</span></div>
+</section>
+
+<!-- ============ DAY 3: CODE RIZZ #1 ============ -->
+<section class="s" data-name="day3-code-rizz-1">
+  <div class="tag">💘 CODE RIZZ · #1</div><div class="num">1/4</div>
+  <h1>Pick-up lines<br>that actually<br><span class="g">compile.</span></h1>
+  <p class="sub">Use at your own risk. Works best on developers. 😏</p>
+  <div style="position:absolute;right:70px;bottom:190px;font-size:260px;line-height:1">💘</div>
+  <div class="swipe" style="right:auto;left:80px">Swipe →</div>
+  <div class="ft"><img src="file:///home/user/vitalstack/brand-kit/logo-dark.png"><span>vitalstack.co.in</span></div>
+</section>
+<section class="s" data-name="day3-code-rizz-2">
+  <div class="tag">💘 CODE RIZZ</div><div class="num">2/4</div>
+  <div class="quote" style="margin-top:56px"><small>JAVA · JAVASCRIPT</small>“Are you a semicolon? Because without you, nothing works.”</div>
+  <div class="quote"><small>HTTP</small>“You must be a 200 OK, because everything feels right when you respond.”</div>
+  <div class="quote"><small>LOOPS</small>“Are you a <span class="g">while(true)</span> loop? Because I can’t stop thinking about you.”</div>
+  <div class="ft"><img src="file:///home/user/vitalstack/brand-kit/logo-dark.png"><span>vitalstack.co.in</span></div>
+</section>
+<section class="s" data-name="day3-code-rizz-3">
+  <div class="tag">💘 CODE RIZZ</div><div class="num">3/4</div>
+  <div class="quote" style="margin-top:56px"><small>WEB</small>“You’re the CSS to my HTML. Without you, I’m just… plain.”</div>
+  <div class="quote"><small>GIT</small>“Is your name Git? Because I’d never force-push you away.”</div>
+  <div class="quote"><small>DAY ONE</small>“You had me at <span class="g">Hello, World</span>.”</div>
+  <div class="ft"><img src="file:///home/user/vitalstack/brand-kit/logo-dark.png"><span>vitalstack.co.in</span></div>
+</section>
+<section class="s" data-name="day3-code-rizz-4">
+  <div class="tag">😏 YOUR TURN</div><div class="num">4/4</div>
+  <h2>Tag the friend<br>who <span class="g">needs these.</span></h2>
+  <div class="row" style="margin-top:48px"><div class="e">🔢</div><div><b>Rate them 1–10</b><p>in the comments 👇</p></div></div>
+  <div class="row"><div class="e">✍️</div><div><b>Got a better one?</b><p>Best line gets featured in Code Rizz #2</p></div></div>
+  <div class="next">Didn’t get every joke? 👀<br><b>Learn the basics free</b> → vitalstack.co.in</div>
+  <div class="ft"><img src="file:///home/user/vitalstack/brand-kit/logo-dark.png"><span>vitalstack.co.in</span></div>
+</section>
+
+<!-- ============ DAY 4: FREE TOOLS ============ -->
+<section class="s" data-name="day4-free-tools-1">
+  <div class="tag">🎮 TRY THIS FREE</div><div class="num">1/3</div>
+  <h1>6 coding tools<br>that run in your<br><span class="g">browser.</span></h1>
+  <p class="sub">No install. No sign-up. Works on your phone. 📱</p>
+  <div style="position:absolute;right:80px;bottom:200px;display:grid;grid-template-columns:repeat(3,130px);gap:22px;font-size:84px;text-align:center">
+    <div>🐍</div><div>🗃️</div><div>🧱</div><div>🧩</div><div>🔍</div><div>🔢</div></div>
+  <div class="swipe" style="right:auto;left:80px">Swipe →</div>
+  <div class="ft"><img src="file:///home/user/vitalstack/brand-kit/logo-dark.png"><span>vitalstack.co.in</span></div>
+</section>
+<section class="s" data-name="day4-free-tools-2">
+  <div class="tag">📌 SAVE THIS</div><div class="num">2/3</div>
+  <div style="margin-top:34px">
+  <div class="row"><div class="e">🐍</div><div><b>Python Compiler</b><p>run Python on any device, input() works</p></div></div>
+  <div class="row"><div class="e">🗃️</div><div><b>SQL Playground</b><p>a real database with sample tables</p></div></div>
+  <div class="row"><div class="e">🧱</div><div><b>HTML Editor</b><p>type HTML & CSS, see the page live</p></div></div>
+  <div class="row"><div class="e">🧩</div><div><b>JSON Formatter</b><p>clean, validate and fix messy JSON</p></div></div>
+  <div class="row"><div class="e">🔍</div><div><b>Regex Tester</b><p>test patterns with live matches</p></div></div>
+  <div class="row"><div class="e">🔢</div><div><b>AI Token Counter</b><p>count tokens and estimate prompt cost</p></div></div>
+  </div>
+  <div class="ft"><img src="file:///home/user/vitalstack/brand-kit/logo-dark.png"><span>vitalstack.co.in</span></div>
+</section>
+<section class="s" data-name="day4-free-tools-3">
+  <div class="tag">🎁 ALL FREE</div><div class="num">3/3</div>
+  <h2>And there are<br><span class="g">20+ more.</span></h2>
+  <p class="sub">Password generator, JWT decoder, diagram maker, CSV explorer, AI cost calculator…</p>
+  <div class="cta"><b>Comment “TOOLS” 👇</b><p>and we’ll DM you the full list. Or open vitalstack.co.in/tools</p></div>
+  <p class="note">Which one will you try first? 👀</p>
+  <div class="ft"><img src="file:///home/user/vitalstack/brand-kit/logo-dark.png"><span>vitalstack.co.in</span></div>
+</section>
+
+<!-- ============ DAY 5: DELULU VS SOLULU #1 ============ -->
+<section class="s" data-name="day5-delulu-solulu-1">
+  <div class="tag">🫠 DELULU VS SOLULU · #1</div><div class="num">1/4</div>
+  <h1><span style="color:#f3a5bb">Delulu</span> 🫠<br>vs <span class="g">Solulu</span> ✅</h1>
+  <p class="sub">Learning to code edition.<br>Be honest: which side are you on today?</p>
+  <div class="swipe" style="right:auto;left:80px">Swipe →</div>
+  <div class="ft"><img src="file:///home/user/vitalstack/brand-kit/logo-dark.png"><span>vitalstack.co.in</span></div>
+</section>
+<section class="s" data-name="day5-delulu-solulu-2">
+  <div class="tag">🫠 vs ✅</div><div class="num">2/4</div>
+  <div style="margin-top:30px">
+  <div class="pair"><div class="d"><small>DELULU</small>“I’ll learn coding in one weekend.”</div><div class="o"><small>SOLULU</small>15 minutes a day. Every day.</div></div>
+  <div class="pair"><div class="d"><small>DELULU</small>“I need a better laptop first.”</div><div class="o"><small>SOLULU</small>Start on your phone. Free browser compiler.</div></div>
+  <div class="pair"><div class="d"><small>DELULU</small>“I’ll watch 10 tutorials, then start.”</div><div class="o"><small>SOLULU</small>Watch one. Code one.</div></div>
+  </div>
+  <div class="ft"><img src="file:///home/user/vitalstack/brand-kit/logo-dark.png"><span>vitalstack.co.in</span></div>
+</section>
+<section class="s" data-name="day5-delulu-solulu-3">
+  <div class="tag">🫠 vs ✅</div><div class="num">3/4</div>
+  <div style="margin-top:30px">
+  <div class="pair"><div class="d"><small>DELULU</small>“Errors mean I’m bad at this.”</div><div class="o"><small>SOLULU</small>Errors are the lesson. Read them.</div></div>
+  <div class="pair"><div class="d"><small>DELULU</small>“I’ll learn 5 languages at once.”</div><div class="o"><small>SOLULU</small>One language. One roadmap.</div></div>
+  <div class="pair"><div class="d"><small>DELULU</small>“I’ll start on Monday.”</div><div class="o"><small>SOLULU</small>Start today. Lesson 1 is waiting.</div></div>
+  </div>
+  <div class="ft"><img src="file:///home/user/vitalstack/brand-kit/logo-dark.png"><span>vitalstack.co.in</span></div>
+</section>
+<section class="s" data-name="day5-delulu-solulu-4">
+  <div class="tag">✅ CHOOSE SOLULU</div><div class="num">4/4</div>
+  <h2>Delulu is fine.<br><span class="g">Solulu ships.</span></h2>
+  <div class="cta"><b>Comment “ROADMAP” 👇</b><p>Get a free step-by-step roadmap for Python, Java, web, data or AI.</p></div>
+  <p class="note">Which delulu have you said out loud? Be honest 😅 👇</p>
+  <div class="ft"><img src="file:///home/user/vitalstack/brand-kit/logo-dark.png"><span>vitalstack.co.in</span></div>
+</section>
+
+<!-- ============ DAY 6: PYTHON ROADMAP ============ -->
+<section class="s" data-name="day6-python-roadmap-1">
+  <div class="tag">📌 SAVE THIS</div><div class="num">1/4</div>
+  <h1>Python<br>Roadmap <span class="g">2027.</span></h1>
+  <p class="sub">7 steps from zero to interview-ready.<br>Every step has free lessons.</p>
+  <div style="position:absolute;right:80px;bottom:190px;font-size:250px;line-height:1">🐍</div>
+  <div class="swipe" style="right:auto;left:80px">Swipe →</div>
+  <div class="ft"><img src="file:///home/user/vitalstack/brand-kit/logo-dark.png"><span>vitalstack.co.in</span></div>
+</section>
+<section class="s" data-name="day6-python-roadmap-2">
+  <div class="tag">🐍 STEPS 1–4 · ~4 WEEKS</div><div class="num">2/4</div>
+  <div class="flow" style="margin-top:70px;transform:scale(1.12);transform-origin:left top">
+    <div class="step"><div class="dot">1</div><div>The basics<small>variables, strings, lists, dictionaries</small></div></div><div class="line"></div>
+    <div class="step"><div class="dot">2</div><div>Logic<small>if/else, loops, functions, modules</small></div></div><div class="line"></div>
+    <div class="step"><div class="dot">3</div><div>Real-world Python<small>files, errors, classes, pip, JSON and APIs</small></div></div><div class="line"></div>
+    <div class="step"><div class="dot">4</div><div>Your first project<small>an expense tracker you can show</small></div></div>
+  </div>
+  <div class="ft"><img src="file:///home/user/vitalstack/brand-kit/logo-dark.png"><span>vitalstack.co.in</span></div>
+</section>
+<section class="s" data-name="day6-python-roadmap-3">
+  <div class="tag">🐍 STEPS 5–7</div><div class="num">3/4</div>
+  <div class="flow" style="margin-top:70px;transform:scale(1.12);transform-origin:left top">
+    <div class="step"><div class="dot">5</div><div>SQL · ~2 weeks<small>SELECT, JOIN, GROUP BY: every job asks</small></div></div><div class="line"></div>
+    <div class="step"><div class="dot">6</div><div>Data structures & algorithms<small>~6 weeks, alongside small projects</small></div></div><div class="line"></div>
+    <div class="step"><div class="dot">7</div><div>Interview problems<small>solved step by step, ongoing</small></div></div>
+  </div>
+  <div class="next" style="margin-top:60px">Then pick your path:<br><b>📊 Data Science</b> · <b>🤖 Gen AI</b> · <b>🌐 Web</b></div>
+  <div class="ft"><img src="file:///home/user/vitalstack/brand-kit/logo-dark.png"><span>vitalstack.co.in</span></div>
+</section>
+<section class="s" data-name="day6-python-roadmap-4">
+  <div class="tag">🚀 START TODAY</div><div class="num">4/4</div>
+  <h2>Step 1 takes<br><span class="g">one evening.</span></h2>
+  <div class="cta"><b>Comment “ROADMAP” 👇</b><p>We’ll DM you the full Python roadmap with every lesson linked, plus a free browser compiler to practise.</p></div>
+  <p class="note">📌 Save this so you don’t lose it · Share with your study buddy</p>
+  <div class="ft"><img src="file:///home/user/vitalstack/brand-kit/logo-dark.png"><span>vitalstack.co.in</span></div>
+</section>
+</body></html>

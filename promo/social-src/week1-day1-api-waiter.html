@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#000;font-family:Inter,"Noto Color Emoji",sans-serif}
+.s{width:1080px;height:1350px;position:relative;overflow:hidden;color:#f3f5f9;
+  background:radial-gradient(900px 600px at 100% 0%,#173d2d 0%,rgba(23,61,45,0) 70%),
+             radial-gradient(700px 500px at 0% 100%,#1a2233 0%,rgba(26,34,51,0) 70%),#10141c;
+  padding:84px 80px 0;margin-bottom:20px}
+.tag{display:inline-flex;gap:12px;align-items:center;background:#123527;color:#7ce8b5;
+  font-weight:700;font-size:28px;letter-spacing:.08em;padding:16px 26px;border-radius:999px}
+.num{position:absolute;top:92px;right:80px;color:#5d6b85;font-weight:700;font-size:28px}
+h1{font-family:"Inter Display",Inter;font-weight:800;font-size:104px;line-height:1.02;letter-spacing:-.03em;margin-top:44px}
+h2{font-family:"Inter Display",Inter;font-weight:800;font-size:76px;line-height:1.05;letter-spacing:-.025em;margin-top:40px}
+.g{color:#34c987}
+.sub{font-size:38px;color:#b9c2d3;line-height:1.4;margin-top:34px;max-width:880px}
+.foot{position:absolute;left:0;right:0;bottom:0;height:120px;border-top:1px solid #222a38;background:#0c1017;
+  display:flex;align-items:center;justify-content:space-between;padding:0 80px}
+.foot img{height:52px}
+.foot span{color:#34c987;font-weight:700;font-size:32px}
+.swipe{position:absolute;bottom:160px;right:80px;font-size:32px;font-weight:700;color:#7ce8b5}
+/* cover art */
+.scene{position:absolute;left:80px;right:80px;bottom:250px;display:flex;justify-content:space-between;align-items:center}
+.who{text-align:center;width:250px}
+.who .e{font-size:150px;line-height:1}
+.who b{display:block;font-size:34px;margin-top:18px}
+.who i{display:block;font-style:normal;color:#8d99b0;font-size:28px;margin-top:6px}
+.arrow{font-size:56px;color:#34c987;font-weight:800}
+/* rows */
+.row{display:flex;gap:30px;align-items:center;background:#171d28;border:1px solid #232c3c;border-radius:28px;padding:24px 36px;margin-top:16px}
+.row .e{font-size:64px;width:84px;text-align:center}
+.row b{font-size:40px;display:block}
+.row p{font-size:31px;color:#a9b3c6;margin-top:6px}
+.eq{color:#34c987}
+/* flow */
+.flow{margin-top:56px}
+.step{display:flex;align-items:center;gap:28px;margin-bottom:12px}
+.dot{width:74px;height:74px;border-radius:50%;background:#123527;color:#7ce8b5;font-weight:800;font-size:34px;display:flex;align-items:center;justify-content:center;flex:none}
+.step div{font-size:36px;line-height:1.35}
+.step small{display:block;color:#8d99b0;font-size:28px}
+.line{width:2px;height:28px;background:#2b3a4c;margin-left:36px;margin-bottom:12px}
+/* code */
+.code{margin-top:40px;background:#0b0f16;border:1px solid #232c3c;border-radius:28px;overflow:hidden}
+.code .bar{background:#151b26;padding:18px 28px;font-size:26px;color:#8d99b0;font-weight:600}
+pre{font-family:"DejaVu Sans Mono",monospace;font-size:29px;line-height:1.5;padding:24px 32px;color:#e6ebf3;white-space:pre}
+.k{color:#7ce8b5}.s1{color:#f5c26b}.c{color:#5d6b85}.n{color:#82b4ff}
+.note{font-size:31px;color:#a9b3c6;margin-top:30px;line-height:1.45}
+/* cta */
+.cta{margin-top:56px;background:linear-gradient(135deg,#0a7d4f,#11613f);border-radius:36px;padding:48px}
+.cta b{font-size:52px;display:block;line-height:1.15}
+.cta p{font-size:33px;color:#d8f5e7;margin-top:18px;line-height:1.4}
+.next{margin-top:36px;border:2px dashed #2f3d52;border-radius:28px;padding:32px 36px;font-size:34px;color:#c7cfdd}
+.next b{color:#f5c26b}
+</style></head><body>
+
+<!-- 1 COVER -->
+<section class="s" id="s1">
+  <div class="tag">🍽️ CODE IN REAL LIFE · #1</div><div class="num">1/5</div>
+  <h1>An API is a<br><span class="g">restaurant waiter.</span></h1>
+  <p class="sub">The idea every developer uses daily, explained in 30 seconds.</p>
+  <div class="scene">
+    <div class="who"><div class="e">🧑‍💻</div><b>You</b><i>the app</i></div>
+    <div class="arrow">→</div>
+    <div class="who"><div class="e">🤵</div><b>Waiter</b><i>the API</i></div>
+    <div class="arrow">→</div>
+    <div class="who"><div class="e">👩‍🍳</div><b>Kitchen</b><i>the server</i></div>
+  </div>
+  <div class="swipe">Swipe →</div>
+  <div class="foot"><img src="file:///home/user/vitalstack/brand-kit/logo-dark.png"><span>vitalstack.co.in</span></div>
+</section>
+
+<!-- 2 STORY -->
+<section class="s" id="s2">
+  <div class="tag">🍽️ THE STORY</div><div class="num">2/5</div>
+  <h2>You never walk<br>into the <span class="g">kitchen.</span></h2>
+  <div class="flow">
+    <div class="step"><div class="dot">1</div><div>You read the menu<small>and pick what you want</small></div></div>
+    <div class="line"></div>
+    <div class="step"><div class="dot">2</div><div>You tell the waiter your order<small>in a format the kitchen understands</small></div></div>
+    <div class="line"></div>
+    <div class="step"><div class="dot">3</div><div>The kitchen cooks it<small>you don't see how, and you don't need to</small></div></div>
+    <div class="line"></div>
+    <div class="step"><div class="dot">4</div><div>The waiter brings your food back<small>on a plate, ready to use</small></div></div>
+  </div>
+  <p class="note" style="margin-top:44px">That's exactly how apps talk to each other. 👇</p>
+  <div class="foot"><img src="file:///home/user/vitalstack/brand-kit/logo-dark.png"><span>vitalstack.co.in</span></div>
+</section>
+
+<!-- 3 MAPPING -->
+<section class="s" id="s3">
+  <div class="tag">🔁 RESTAURANT <span class="eq">=</span> CODE</div><div class="num">3/5</div>
+  <h2>Every part has<br>a <span class="g">tech name.</span></h2>
+  <div style="margin-top:28px">
+    <div class="row"><div class="e">📖</div><div><b>Menu <span class="eq">=</span> API docs</b><p>what you're allowed to ask for</p></div></div>
+    <div class="row"><div class="e">📝</div><div><b>Your order <span class="eq">=</span> Request</b><p>GET /menu/pizza</p></div></div>
+    <div class="row"><div class="e">🍕</div><div><b>Your plate <span class="eq">=</span> Response</b><p>the data, usually as JSON</p></div></div>
+    <div class="row"><div class="e">🙅</div><div><b>"Not on the menu" <span class="eq">=</span> 404</b><p>the thing you asked for doesn't exist</p></div></div>
+    <div class="row"><div class="e">⏳</div><div><b>"Kitchen's busy" <span class="eq">=</span> 503</b><p>the server can't take more orders right now</p></div></div>
+  </div>
+  <div class="foot"><img src="file:///home/user/vitalstack/brand-kit/logo-dark.png"><span>vitalstack.co.in</span></div>
+</section>
+
+<!-- 4 CODE -->
+<section class="s" id="s4">
+  <div class="tag">💻 NOW IN REAL CODE</div><div class="num">4/5</div>
+  <h2>Ordering, in<br><span class="g">4 lines of Python.</span></h2>
+  <div class="code" style="margin-top:32px">
+    <div class="bar">order.py</div>
+<pre><span class="k">import</span> requests
+
+<span class="c"># 📝 tell the waiter what you want</span>
+r = requests.get(<span class="s1">"https://api.example.com/pizza"</span>)
+
+<span class="c"># 🍕 the plate comes back</span>
+<span class="n">print</span>(r.status_code)   <span class="c"># 200 = order served</span>
+<span class="n">print</span>(r.json())</pre>
+  </div>
+  <div class="code" style="margin-top:26px">
+    <div class="bar">output</div>
+<pre>200
+{<span class="s1">"dish"</span>: <span class="s1">"Margherita"</span>, <span class="s1">"price"</span>: <span class="n">9.5</span>}</pre>
+  </div>
+  <p class="note" style="margin-top:24px">Weather apps, payments, maps, ChatGPT: all of them are waiters taking orders like this.</p>
+  <div class="foot"><img src="file:///home/user/vitalstack/brand-kit/logo-dark.png"><span>vitalstack.co.in</span></div>
+</section>
+
+<!-- 5 CTA -->
+<section class="s" id="s5">
+  <div class="tag">✅ YOU GOT IT</div><div class="num">5/5</div>
+  <h2>Now you know<br>what an <span class="g">API</span> is. 🎉</h2>
+  <div class="cta">
+    <b>Comment “API” 👇</b>
+    <p>and we'll DM you the free lesson: build your own API, step by step, with code you can copy.</p>
+  </div>
+  <div class="next">Next in <b>Code in Real Life</b>:<br>🧊 Cache = the fridge in your kitchen</div>
+  <p class="note">📌 Save this for your next interview · Share it with a friend who's learning to code</p>
+  <div class="foot"><img src="file:///home/user/vitalstack/brand-kit/logo-dark.png"><span>vitalstack.co.in</span></div>
+</section>
+</body></html>
