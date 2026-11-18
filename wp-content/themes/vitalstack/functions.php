@@ -79,6 +79,7 @@ require VITALSTACK_DIR . '/inc/mail-fallback.php';
 require VITALSTACK_DIR . '/inc/auth-flow.php';
 require VITALSTACK_DIR . '/inc/pay-limits.php';
 require VITALSTACK_DIR . '/inc/seo-index.php';
+require VITALSTACK_DIR . '/inc/seo-extra.php';
 require VITALSTACK_DIR . '/inc/adsense-readiness.php';
 require VITALSTACK_DIR . '/inc/ai-dictionary.php';
 require VITALSTACK_DIR . '/inc/ai-city.php';

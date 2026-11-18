@@ -8,7 +8,7 @@ Written for a busy owner: the site does most of the work automatically, you do a
 
 | Reason (pages) | What it is | Action |
 |---|---|---|
-| Excluded by 'noindex' (468) | Locked premium lessons (only a 2-paragraph preview is on the page), account, certificate, tag pages, old-site URLs. **Intentional**: thin pages hurt AdSense. | Theme 4.20.5 removes them from the sitemap. **Don't** "validate fix" here. The count stops growing and stays as information. |
+| Excluded by 'noindex' (468) | Locked premium lessons (only a 2-paragraph preview is on the page), account, certificate, tag pages, old-site URLs. **Intentional**: thin pages hurt AdSense. | Theme 4.20.5+ removes them from the sitemap. **Don't** "validate fix" here. The count stops growing and stays as information. |
 | Page with redirect (202) | Old-site URLs, http→https, www→non-www. Google keeps the target page. | Nothing. Validation always "fails" for redirects, and that's fine. Stop validating. |
 | Not found 404 (167) | Old-site pages that no longer exist. | Nothing for most of them: Google drops them in 1–3 months. For old URLs that still get clicks, export them (step 4) and add redirects. |
 | Server error 5xx (13) | The server was slow or busy while Google crawled. | Hostinger → LiteSpeed Cache on, then **URL Inspection → Test live URL** on 2–3 of them. Green → "Validate fix". |
@@ -17,7 +17,7 @@ Written for a busy owner: the site does most of the work automatically, you do a
 
 ### Do this once (30 minutes)
 
-1. Upload theme **4.20.5**, then **LiteSpeed Cache → Purge All**.
+1. Upload theme **4.20.6**, then **LiteSpeed Cache → Purge All**.
 2. Search Console → **Sitemaps** → remove old sitemaps (old site, `sitemap_index.xml`, etc.) → add `https://vitalstack.co.in/wp-sitemap.xml` → Submit.
 3. **URL Inspection → Request indexing** for these 10 pages (Google allows about 10 a day):
    - `/`
