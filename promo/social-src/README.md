@@ -14,3 +14,11 @@ Make a reel from slides (ffmpeg; the audio file is any original VitalStack track
 ```bash
 python3 promo/social-src/make_reel.py out.mp4 music.mp4 slide1.png:3 slide2.png:4
 ```
+
+## The crew (characters for posts)
+`crew/<who>-<mood>.svg`: Dev, Chip, Bugsy and Byte, each as `happy`, `wow` and `cheer`, exported from
+the theme's sprites (`wp-content/themes/vitalstack/inc/crew.php`) with `crew_svg.py`:
+```bash
+python3 promo/social-src/crew_svg.py wp-content/themes/vitalstack/inc/crew.php promo/social-src/crew
+```
+`edu-crew.html` shows how to place them with comic speech bubbles (`.ch` + `.bub`).
