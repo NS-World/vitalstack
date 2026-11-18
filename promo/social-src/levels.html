@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="style.css">
+<style>
+.ft{position:absolute;left:0;right:0;bottom:0;height:120px;border-top:1px solid #222a38;background:#0c1017;display:flex;align-items:center;justify-content:space-between;padding:0 80px}
+.ft img{height:52px}.ft span{color:#34c987;font-weight:700;font-size:32px}
+.hud{display:flex;align-items:center;gap:18px;margin-top:60px}
+.hud .lv{font-family:"DejaVu Sans Mono",monospace;font-weight:700;font-size:34px;color:#f5c26b}
+.bar{flex:1;height:34px;border-radius:999px;background:#1b2230;border:2px solid #2a3446;overflow:hidden}
+.bar i{display:block;height:100%;width:62%;background:linear-gradient(90deg,#0a7d4f,#34c987)}
+.xp{font-family:"DejaVu Sans Mono",monospace;font-size:28px;color:#8d99b0}
+.lvl{display:flex;align-items:center;gap:26px;background:#171d28;border:1px solid #232c3c;border-radius:24px;padding:32px 32px;margin-top:20px}
+.lvl .n{font-family:"DejaVu Sans Mono",monospace;font-weight:700;font-size:30px;color:#0f1a14;background:#34c987;border-radius:14px;min-width:96px;text-align:center;padding:10px 0}
+.lvl .e{font-size:58px;width:60px;text-align:center}
+.lvl b{font-size:40px;display:block}
+.lvl p{font-size:29px;color:#a9b3c6;margin-top:4px}
+.lvl.pro .n{background:#f5c26b}
+.lvl .tagpro{margin-left:auto;font-size:22px;font-weight:800;letter-spacing:.08em;color:#f5c26b;border:2px solid #5a4a2a;border-radius:999px;padding:6px 14px}
+.boss{border:2px solid #f5c26b;background:linear-gradient(135deg,#2a2212,#171d28)}
+.big{font-family:"Inter Display",Inter;font-weight:900;font-size:150px;line-height:.95;letter-spacing:-.04em;margin-top:40px}
+.press{position:absolute;left:80px;right:80px;bottom:190px;text-align:center;font-family:"DejaVu Sans Mono",monospace;font-size:38px;color:#7ce8b5;letter-spacing:.1em}
+</style></head><body>
+
+<section class="s" data-name="levels-1">
+  <div class="tag">🎮 CODER LEVEL CHECK</div><div class="num">1/4</div>
+  <div class="big">What <span class="g">level</span><br>coder are<br>you?</div>
+  <div class="hud"><span class="lv">LVL ?</span><div class="bar"><i></i></div><span class="xp">XP</span></div>
+  <p class="sub" style="margin-top:40px">10 levels. Be honest. 👀<br>Comment yours at the end.</p>
+  <div class="press">▶ SWIPE TO START</div>
+  <div class="ft"><img src="file:///home/user/vitalstack/brand-kit/logo-dark.png"><span>vitalstack.co.in</span></div>
+</section>
+
+<section class="s" data-name="levels-2">
+  <div class="tag">🟢 LEVELS 1–5 · BEGINNER ARC</div><div class="num">2/4</div>
+  <div style="margin-top:34px">
+  <div class="lvl"><span class="n">LV 1</span><span class="e">👶</span><div><b>Hello, World</b><p>you printed your first line</p></div></div>
+  <div class="lvl"><span class="n">LV 2</span><span class="e">🔁</span><div><b>Loop Lord</b><p>if/else and loops make sense</p></div></div>
+  <div class="lvl"><span class="n">LV 3</span><span class="e">🧩</span><div><b>Function Fan</b><p>you stop copy-pasting code</p></div></div>
+  <div class="lvl"><span class="n">LV 4</span><span class="e">📦</span><div><b>Data Wrangler</b><p>lists and dictionaries, no fear</p></div></div>
+  <div class="lvl"><span class="n">LV 5</span><span class="e">🛠️</span><div><b>Builder</b><p>you finished your first project</p></div></div>
+  </div>
+  <div class="ft"><img src="file:///home/user/vitalstack/brand-kit/logo-dark.png"><span>vitalstack.co.in</span></div>
+</section>
+
+<section class="s" data-name="levels-3">
+  <div class="tag">🔥 LEVELS 6–10 · PRO ARC</div><div class="num">3/4</div>
+  <div style="margin-top:34px">
+  <div class="lvl"><span class="n">LV 6</span><span class="e">🗃️</span><div><b>Query Queen/King</b><p>SQL JOINs don’t scare you</p></div></div>
+  <div class="lvl"><span class="n">LV 7</span><span class="e">🌿</span><div><b>Real Dev</b><p>Git, APIs and reading error messages</p></div></div>
+  <div class="lvl"><span class="n">LV 8</span><span class="e">🧠</span><div><b>Interview Ready</b><p>data structures, algorithms, Big-O</p></div></div>
+  <div class="lvl pro"><span class="n">LV 9</span><span class="e">🤖</span><div><b>AI Builder</b><p>LLM APIs and RAG apps</p></div><span class="tagpro">PRO</span></div>
+  <div class="lvl pro boss"><span class="n">LV 10</span><span class="e">👑</span><div><b>Final Boss</b><p>you ship AI agents</p></div><span class="tagpro">PRO</span></div>
+  </div>
+  <div class="ft"><img src="file:///home/user/vitalstack/brand-kit/logo-dark.png"><span>vitalstack.co.in</span></div>
+</section>
+
+<section class="s" data-name="levels-4">
+  <div class="tag">⬆️ LEVEL UP</div><div class="num">4/4</div>
+  <h2>Comment your<br><span class="g">level</span> 👇</h2>
+  <p class="sub">“LV 3 but lying about LV 5” is also a valid answer 😅</p>
+  <div class="cta"><b>Comment “LEVEL” 👇</b><p>Get the free path from your level to the next. Earn real XP and level up on the site as you learn.</p></div>
+  <div class="next">Levels 1–8: <b>free</b> · Levels 9–10: <b>Pro tracks</b></div>
+  <p class="note">Tag a friend and compare levels 👀</p>
+  <div class="ft"><img src="file:///home/user/vitalstack/brand-kit/logo-dark.png"><span>vitalstack.co.in</span></div>
+</section>
+</body></html>
