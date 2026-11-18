@@ -1,11 +1,11 @@
-# Google Search Console: step by step (after uploading theme 4.20.6)
+# Google Search Console: step by step (after uploading theme 4.20.7)
 
 Your export (18 Nov) shows: Indexed 640, Not indexed 997 (redirect 202, 404 167, noindex 468, 5xx 13,
 crawled-not-indexed 114, others 31). Impressions per day have been rising (about 150–360).
 
 ## Day 0: deploy (15 minutes)
 
-1. WordPress → Appearance → Themes → Add New → Upload `vitalstack-theme-v4.20.6.zip` → **Replace current**.
+1. WordPress → Appearance → Themes → Add New → Upload `vitalstack-theme-v4.20.7.zip` → **Replace current**.
 2. LiteSpeed Cache → Toolbox → **Purge All**.
 3. Open `https://vitalstack.co.in/wp-sitemap.xml` in the browser. You should see `posts-post`, `posts-page`, `posts-tutorials`,
    `taxonomies-category` and `taxonomies-tutorial_category`. Open the tutorials one: there should be no premium (locked) lesson in it.
@@ -65,3 +65,15 @@ Copilot, DuckDuckGo and Yahoo.
 - Sitemap "Success" in 1–2 days. The noindex count stops growing.
 - 404 and redirect counts fall slowly over 1–3 months (normal after replacing an old site).
 - Indexed pages and impressions keep rising as new pages are crawled. Apply for AdSense when daily clicks are steady (2–4 weeks).
+
+## After 4.20.7 (old-site URLs)
+
+- The 404 list from 18 Nov is handled: old URLs with a new home redirect (301), and the rest answer **410 Gone**.
+  Search Console moves them to "Page with redirect" or "Not found (404)" first and then drops them over a few weeks.
+  Click **Validate fix** on "Not found (404)" once, about a week after the deploy.
+- **Hide the old author URL that shows your email:** Search Console → **Removals** → New request →
+  "Remove all URLs with this prefix" → `https://vitalstack.co.in/author/`. The theme already redirects author pages to About Us;
+  this also removes the old address from Google results straight away.
+- Tools pages in "Crawled – currently not indexed" (A/B test, sample size, AI cost, CSV explorer, prompt builder): request indexing
+  for 2 a day. Links to them from related lessons help them rank.
+- Feeds (`/feed/`) and date archives move from "Crawled – currently not indexed" to "Excluded by noindex". This is intentional.
