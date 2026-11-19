@@ -68,6 +68,8 @@ function vitalstack_practice_links() {
 	if ( function_exists( 'vitalstack_playground_url' ) ) {
 		$links[] = array( vitalstack_playground_url(), __( 'Website Builder', 'vitalstack' ), '🧪', (bool) get_query_var( 'vs_playground' ) );
 	}
+	// 4.20.8: plugins (e.g. the AI Hub) can add a practice link.
+	$links = (array) apply_filters( 'vitalstack_practice_links', $links );
 	return $links;
 }
 

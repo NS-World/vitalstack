@@ -3531,3 +3531,26 @@ html.vss-open { overflow: hidden; }
 .prose a.btn-ghost, .entry-content a.btn-ghost { color: var(--text); }
 .prose a.btn-ghost:hover, .entry-content a.btn-ghost:hover, .prose a.btn-soft, .entry-content a.btn-soft { color: var(--brand-ink); }
 .premium-lock .btn { margin: 4px; }
+
+/* ── 4.20.8: printing / "Download PDF" works on every page ─────────────── */
+/* The certificate's print rule (hide everything except .cert) applied to every
+   page, so cheat sheets, lessons and the study plan printed blank. It now
+   applies only on the certificate page. */
+@page { size: A4 portrait; margin: 12mm; }
+@page vs-cert { size: A4 landscape; margin: 0; }
+@media print {
+	body:not(:has(.cert-page)) * { visibility: visible !important; }
+	body:not(:has(.cert-page)) .cert { position: static; inset: auto; width: auto; height: auto; max-width: 560px; }
+	body:has(.cert-page), body:has(.cert-page) main, .cert-page { page: vs-cert; }
+	body { background: #fff !important; color: #111 !important; }
+	.sheet a { color: #111 !important; text-decoration: none; }
+	.sheet pre, .sheet code { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+	.sheet-wrap::after { content: "From vitalstack.co.in: free cheat sheets, lessons and tools"; display: block; margin-top: 10px; font-size: 9px; color: #555; }
+	.helper-launch, .vsg-slide, .obar, [class*="cookie"], .vsa-fab, .back-to-top { display: none !important; }
+}
+
+/* ── 4.20.8: header search box text stays on one line ──────────────────── */
+.topbar-search { min-width: 0; flex-shrink: 1; overflow: hidden; }
+.topbar-search span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; text-align: left; }
+.topbar-search svg, .topbar-search kbd { flex-shrink: 0; }
+@media (min-width: 901px) { .topbar-search { min-width: 150px; } }
