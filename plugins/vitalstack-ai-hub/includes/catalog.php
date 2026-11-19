@@ -51,10 +51,80 @@ function vsai_builtin( $type ) {
 	// Generated catalogue (tools/aihub/gen_*.py), added after the hand-made items.
 	$gen = VSAI_DIR . 'includes/data/' . $type . '-gen.php';
 	if ( file_exists( $gen ) ) {
-		$more  = include $gen;
+		$more = include $gen;
+		if ( is_array( $more ) && isset( $more['rows'] ) ) {
+			$more = vsai_motion_gen_items( $more );
+		}
 		$items = is_array( $more ) ? array_merge( $items, $more ) : $items;
 	}
 	return $items;
+}
+
+/**
+ * Find one motion design without expanding all 10,000 (used by the preview
+ * view and the copy endpoint, which run once per tile).
+ */
+function vsai_find_motion( $id ) {
+	if ( ! preg_match( '/^[a-z0-9-]{1,60}$/', $id ) ) {
+		return null;
+	}
+	foreach ( array_merge( vsai_custom( 'motion' ), (array) include VSAI_DIR . 'includes/data/motion.php' ) as $it ) {
+		if ( (string) $it['id'] === $id ) {
+			return apply_filters( 'vsai_find_motion', $it );
+		}
+	}
+	$gen = VSAI_DIR . 'includes/data/motion-gen.php';
+	$d   = file_exists( $gen ) ? include $gen : array();
+	if ( ! isset( $d['rows'] ) ) {
+		foreach ( (array) $d as $it ) {
+			if ( isset( $it['id'] ) && $it['id'] === $id ) {
+				return $it;
+			}
+		}
+		return null;
+	}
+	foreach ( $d['rows'] as $r ) {
+		$e = $d['engines'][ $r[0] ] ?? null;
+		$t = $d['themes'][ $r[1] ] ?? null;
+		$p = $d['palettes'][ $r[2] ] ?? null;
+		if ( $e && $t && $p && trim( strtolower( preg_replace( '/[^a-z0-9]+/i', '-', $e[0] . '-' . $t[0] . '-' . strtok( $p, ' ' ) ) ), '-' ) === $id ) {
+			$one = vsai_motion_gen_items( array( 'engines' => $d['engines'], 'themes' => $d['themes'], 'palettes' => $d['palettes'], 'rows' => array( $r ) ) );
+			return $one ? $one[0] : null;
+		}
+	}
+	return null;
+}
+
+/**
+ * Expand the compact generated motion catalogue (engine, theme, palette per
+ * row) into normal items. Ids and texts match tools/aihub/gen_motion.py.
+ */
+function vsai_motion_gen_items( $d ) {
+	$out = array();
+	foreach ( $d['rows'] as $r ) {
+		list( $ei, $ti, $pi, $pro, $sh ) = $r;
+		if ( ! isset( $d['engines'][ $ei ], $d['themes'][ $ti ], $d['palettes'][ $pi ] ) ) {
+			continue;
+		}
+		$e       = $d['engines'][ $ei ];
+		$t       = $d['themes'][ $ti ];
+		$word    = strtok( $d['palettes'][ $pi ], ' ' );
+		$pword   = strtolower( preg_replace( '/[^a-z0-9]+/i', '-', $word ) );
+		$summary = str_replace( '{label}', $t[2], $e[4] );
+		$summary = preg_replace( '/\b([Aa]) (?=[AEIOUaeiou])/', '$1n ', $summary );
+		$out[]   = array(
+			'id'      => trim( strtolower( preg_replace( '/[^a-z0-9]+/i', '-', $e[0] . '-' . $t[0] . '-' . $word ) ), '-' ),
+			'title'   => $word . ' ' . $e[1] . ' · ' . $t[1],
+			'cat'     => $e[2],
+			'premium' => (bool) $pro,
+			'summary' => ucfirst( $summary ),
+			'tags'    => $e[3] . ' ' . strtolower( $t[1] ) . ' ' . strtolower( $d['palettes'][ $pi ] ),
+			'src'     => 'gen2',
+			'shard'   => $e[0] . '-' . (int) $sh,
+			'poster'  => $e[0] . '-' . $pword,
+		);
+	}
+	return $out;
 }
 
 /**
@@ -63,6 +133,26 @@ function vsai_builtin( $type ) {
  */
 function vsai_motion_payload( $it ) {
 	static $cache = array();
+	if ( ! empty( $it['src'] ) && 'gen2' === $it['src'] ) {
+		static $shards = array();
+		$sh = (string) ( $it['shard'] ?? '' );
+		if ( ! preg_match( '/^[a-z0-9-]{1,60}$/', $sh ) ) {
+			return array();
+		}
+		if ( ! isset( $shards[ $sh ] ) ) {
+			$shards[ $sh ] = array();
+			$file          = VSAI_DIR . 'data/motion/' . $sh . '.php';
+			$raw           = file_exists( $file ) ? file_get_contents( $file ) : false; // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- local plugin file
+			$pos           = false === $raw ? false : strpos( $raw, '__halt_compiler();' );
+			if ( false !== $pos ) {
+				$json = gzdecode( substr( $raw, $pos + strlen( '__halt_compiler();' ) ) );
+				$data = false === $json ? null : json_decode( $json, true );
+				$shards[ $sh ] = is_array( $data ) ? $data : array();
+			}
+		}
+		$row = $shards[ $sh ][ $it['id'] ] ?? null;
+		return is_array( $row ) ? array( 'code' => (string) $row[0], 'spec' => (string) $row[1] ) : array();
+	}
 	if ( empty( $it['src'] ) || 'gen' !== $it['src'] || ! preg_match( '/^[a-z0-9-]{1,60}$/', (string) $it['id'] ) ) {
 		return array();
 	}
@@ -150,6 +240,9 @@ function vsai_items( $type ) {
 }
 
 function vsai_find( $type, $id ) {
+	if ( 'motion' === $type ) {
+		return vsai_find_motion( (string) $id );
+	}
 	foreach ( vsai_items( $type ) as $it ) {
 		if ( (string) $it['id'] === (string) $id ) {
 			return $it;

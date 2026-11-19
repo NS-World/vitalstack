@@ -83,9 +83,7 @@ add_action(
 			return;
 		}
 		$st = vsai_list_state_full( $page );
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only
-		$bad_cat = isset( $_GET['cat'] ) && '' !== $_GET['cat'] && '' === $st['cat'];
-		if ( $st['asked'] !== $st['pg'] || $bad_cat ) {
+		if ( $st['asked'] !== $st['pg'] || $st['bad'] ) {
 			wp_safe_redirect( vsai_list_url( $page, $st ), 301 );
 			exit;
 		}
@@ -148,7 +146,8 @@ add_filter(
 		// Search results and price filters are for people; category pages and their pages stay indexable.
 		if ( in_array( vsai_current(), array( 'prompts', 'motion' ), true ) ) {
 			$st = vsai_list_state( vsai_current() );
-			if ( '' !== $st['q'] || '' !== $st['price'] ) {
+			// Only category landing pages (page 1) are indexable; deep pages, searches and narrow filters are for people.
+			if ( '' !== $st['q'] || '' !== $st['price'] || '' !== $st['sub'] || '' !== $st['tool'] || '' !== $st['kind'] || $st['pg'] > 1 ) {
 				$robots['noindex'] = true;
 				$robots['follow']  = true;
 			}

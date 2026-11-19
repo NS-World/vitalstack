@@ -22,10 +22,12 @@ class VSAI_Sitemap extends WP_Sitemaps_Provider {
 			$urls[] = array( 'loc' => vsai_url( $s ) );
 		}
 		// One landing page per category of the big sections.
-		foreach ( array( 'prompts', 'motion' ) as $s ) {
-			foreach ( vsai_categories( $s ) as $c ) {
-				$urls[] = array( 'loc' => vsai_list_url( $s, array( 'cat' => sanitize_title( $c ) ) ) );
-			}
+		$pc = vsai_store_ready() ? wp_list_pluck( vsai_store_facet( 'cat' ), 'slug' ) : array_map( 'sanitize_title', vsai_categories( 'prompts' ) );
+		foreach ( $pc as $slug ) {
+			$urls[] = array( 'loc' => vsai_list_url( 'prompts', array( 'cat' => $slug ) ) );
+		}
+		foreach ( vsai_categories( 'motion' ) as $c ) {
+			$urls[] = array( 'loc' => vsai_list_url( 'motion', array( 'cat' => sanitize_title( $c ) ) ) );
 		}
 		return $urls;
 	}

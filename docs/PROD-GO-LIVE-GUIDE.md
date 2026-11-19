@@ -8,7 +8,7 @@ Bracket mein likhe naam (jaise **Settings → Reading**) WordPress admin ke asli
 | File | Kya hai |
 |---|---|
 | `vitalstack-theme-v4.20.9.zip` | Theme (upload over 4.12.x – 4.20.8) |
-| `vitalstack-ai-hub-1.2.0.zip` | AI Hub plugin: /ai/ (Library, Commands, Prompt Bazaar, Motion Studio, AI Pro pricing). Needs theme 4.20.9+ for AI Pro checkout. Activate, then open /ai/. If it shows "not found", go to Settings → Permalinks → Save. |
+| `vitalstack-ai-hub-2.0.0.zip` | AI Hub plugin: /ai/ (Library, Commands, Prompt Bazaar, Motion Studio, AI Pro pricing). Needs theme 4.20.9+ for AI Pro checkout. Activate, then open /ai/. If it shows "not found", go to Settings → Permalinks → Save. |
 | `vitalstack-growth-1.0.0.zip` | Growth Desk: landing offers + Sales, Marketing, Testing & Security agents |
 | `vitalstack-adsense-helper-1.0.1.zip` | AdSense readiness scanner (Tools → AdSense Helper) |
 | `vitalstack-marketing-1.0.0.zip` | Offer emails, sirf un users ko jinhone haan kaha |

@@ -20,7 +20,7 @@ import re
 import sys
 
 PLUGIN = sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(__file__), '..', '..', 'plugins', 'vitalstack-ai-hub')
-COUNT = int(sys.argv[2]) if len(sys.argv) > 2 else 477
+COUNT = int(sys.argv[2]) if len(sys.argv) > 2 else 9977
 
 # ── Palettes: name, bg, surface, ink, muted, a1, a2, a3, dark ──────────────
 PALETTES = [
@@ -42,6 +42,18 @@ PALETTES = [
     ('Sand Studio', '#f6f1e7', '#fffdf8', '#2a2418', '#7a6f5a', '#b45309', '#0f766e', '#be123c', False),
     ('Mono Contrast', '#0a0a0a', '#171717', '#fafafa', '#a3a3a3', '#fafafa', '#a3a3a3', '#525252', True),
     ('Citrus Pop', '#fffbea', '#ffffff', '#1f1a05', '#6f6640', '#eab308', '#16a34a', '#ef4444', False),
+    ('Velvet Plum', '#12061a', '#21102e', '#f9f0ff', '#bba3cc', '#a855f7', '#ec4899', '#fbbf24', True),
+    ('Teal Abyss', '#021614', '#082824', '#e6fffb', '#86b9b1', '#14b8a6', '#06b6d4', '#facc15', True),
+    ('Crimson Steel', '#0f0a0b', '#1d1416', '#fff1f2', '#b9a1a5', '#e11d48', '#94a3b8', '#f97316', True),
+    ('Indigo Dream', '#0a0b26', '#15173d', '#eef0ff', '#a3a8d6', '#6366f1', '#a78bfa', '#22d3ee', True),
+    ('Lime Volt', '#0a0f02', '#151f06', '#f6ffe6', '#a8bd84', '#a3e635', '#22c55e', '#f472b6', True),
+    ('Sunset Glow', '#1a0b12', '#2a1420', '#fff2ea', '#d1a99a', '#fb923c', '#f43f5e', '#c084fc', True),
+    ('Ice Mint', '#f2fbfb', '#ffffff', '#0a2629', '#4f6f72', '#0d9488', '#6366f1', '#f43f5e', False),
+    ('Blush Linen', '#fdf4f2', '#ffffff', '#2d1515', '#7f5c58', '#e11d48', '#d97706', '#0ea5e9', False),
+    ('Ocean Breeze', '#eff8ff', '#ffffff', '#082f49', '#4b6b85', '#0284c7', '#14b8a6', '#f59e0b', False),
+    ('Fern Paper', '#f3f6ef', '#ffffff', '#16240f', '#5a6b50', '#3f6212', '#b45309', '#2563eb', False),
+    ('Charcoal Coral', '#141416', '#1f1f23', '#fafafa', '#a1a1aa', '#fb7185', '#38bdf8', '#fde047', True),
+    ('Royal Navy', '#050b1f', '#0d1733', '#f1f5ff', '#9aa8c7', '#facc15', '#3b82f6', '#f472b6', True),
 ]
 
 FONTS = [
@@ -134,6 +146,115 @@ THEMES = [
     T('devtools', 'Developer tools', 'Stackline', 'Deploy on push. Sleep at night.', 'Preview environments, instant rollbacks and logs that make sense.', 'Deploy now', 'Read docs',
       ['Previews', 'Rollbacks', 'Edge cache', 'Logs', 'Cron jobs', 'Secrets'], [('30s', 'deploys'), ('300+', 'edge locations'), ('1-click', 'rollback')],
       'We went from weekly to 40 deploys a day.', 'Lead engineer, Pixelcart', ['faster', 'safer', 'simpler', 'global']),
+]
+
+
+THEMES += [
+    T('bank', 'Digital bank', 'Northstar Bank', 'Banking that fits in your pocket', 'Zero-fee accounts, instant cards and savings that grow while you sleep.', 'Open free account', 'Compare plans',
+      ['Instant card', 'Savings goals', 'UPI payments', 'Credit score', 'Fixed deposits', 'Bill pay'], [('0', 'hidden fees'), ('3M', 'customers'), ('24/7', 'support')],
+      'Opening my account took four minutes. Four.', 'Kiran B., designer', ['simpler', 'safer', 'smarter', 'faster']),
+    T('insurance', 'Insurance', 'Shieldwise', 'Insurance in plain English', 'Compare health, life and motor cover in minutes, with claims that actually get paid.', 'Get a quote', 'How claims work',
+      ['Health cover', 'Term life', 'Motor', 'Travel', 'Home', 'Claims help'], [('98%', 'claims settled'), ('2 min', 'quotes'), ('40+', 'insurers')],
+      'They handled my claim while I was still in hospital.', 'Policyholder, Chennai', ['clear', 'fair', 'quick', 'covered']),
+    T('legal', 'Law firm', 'Mehra & Partners', 'Clear advice. Strong representation.', 'Corporate, property and family law handled with care and straight answers.', 'Book a consultation', 'Practice areas',
+      ['Corporate law', 'Property', 'Family law', 'Contracts', 'Disputes', 'IP and trademarks'], [('25', 'years'), ('1,200+', 'cases'), ('9', 'partners')],
+      'They explained every step and never surprised us with fees.', 'Founder, Craftly', ['clear', 'trusted', 'precise', 'calm']),
+    T('ngo-climate', 'Climate nonprofit', 'Green Thread', 'Plant a forest from your phone', 'Every rupee you give plants native trees with local farmers, tracked by satellite.', 'Plant trees', 'See our impact',
+      ['Native trees', 'Farmer income', 'Satellite tracking', 'School programmes', 'Water bodies', 'Corporate partners'], [('1.4M', 'trees'), ('6,000', 'farmers'), ('92%', 'survival rate')],
+      'I can see the exact trees my donation planted.', 'Donor, Mumbai', ['greener', 'cooler', 'kinder', 'together']),
+    T('school', 'School', 'Brightpath School', 'Where curious kids grow brave', 'A K-12 school with small classes, real projects and teachers who know every child.', 'Book a campus tour', 'Admissions',
+      ['Primary', 'Middle school', 'Senior school', 'Sports', 'Arts', 'Robotics club'], [('1:15', 'teacher ratio'), ('40+', 'clubs'), ('100%', 'board pass rate')],
+      'My son actually looks forward to Mondays.', 'Parent of a Grade 5 student', ['curious', 'brave', 'kind', 'bright']),
+    T('coaching', 'Coaching institute', 'Apex Academy', 'Crack it with a plan', 'Structured coaching for JEE, NEET and boards with weekly tests and personal mentors.', 'Book a free demo', 'Batches',
+      ['JEE', 'NEET', 'Boards', 'Test series', 'Doubt clinics', 'Mentorship'], [('12k', 'students'), ('Weekly', 'tests'), ('1:25', 'batch size')],
+      'The weekly tests showed me exactly what to fix.', 'Aditya, JEE aspirant', ['focused', 'confident', 'prepared', 'ready']),
+    T('hotel', 'Boutique hotel', 'Casa Azul', 'Stay somewhere that feels like a story', 'Twelve rooms, a rooftop pool and breakfast made from the morning market.', 'Book your stay', 'See rooms',
+      ['Rooms', 'Rooftop pool', 'Breakfast', 'Spa', 'Events', 'Local tours'], [('12', 'rooms'), ('4.9★', 'guest rating'), ('5 min', 'to the beach')],
+      'Every corner felt like it was designed just for us.', 'Guests from Berlin', ['slower', 'warmer', 'quieter', 'lovely']),
+    T('wedding', 'Wedding planner', 'Ever After Co.', 'Your day, beautifully handled', 'Full planning, decor and coordination so you can actually enjoy your wedding.', 'Plan my wedding', 'Our weddings',
+      ['Full planning', 'Decor', 'Venues', 'Catering', 'Photography', 'Day-of coordination'], [('350+', 'weddings'), ('8', 'cities'), ('0', 'stress')],
+      'We did not have to worry about a single thing.', 'Ananya & Rohit', ['joyful', 'graceful', 'golden', 'forever']),
+    T('car-rental', 'Car rental', 'RoadReady', 'Pick up keys, not paperwork', 'Self-drive cars with doorstep delivery, unlimited km plans and 24/7 roadside help.', 'Find a car', 'See plans',
+      ['Hatchbacks', 'SUVs', 'EVs', 'Doorstep delivery', 'Unlimited km', 'Roadside help'], [('2,000+', 'cars'), ('15', 'cities'), ('30 min', 'delivery')],
+      'The car arrived at my door before my coffee was done.', 'Weekend traveller', ['freer', 'easier', 'quicker', 'roadready']),
+    T('saas-hr', 'HR software', 'TeamFlow', 'HR that runs itself', 'Payroll, leave, onboarding and reviews in one simple tool your team will actually use.', 'Start free trial', 'Book a demo',
+      ['Payroll', 'Leave', 'Onboarding', 'Reviews', 'Attendance', 'Reports'], [('4,000+', 'companies'), ('10 hrs', 'saved weekly'), ('99.9%', 'uptime')],
+      'Payroll day used to take a week. Now it takes an hour.', 'HR head, Brightlane', ['simpler', 'fairer', 'faster', 'happier']),
+    T('analytics', 'Analytics', 'Lumen Metrics', 'Know what moves your numbers', 'Product analytics with funnels, cohorts and AI summaries anyone on the team can read.', 'Try it free', 'See a demo',
+      ['Funnels', 'Cohorts', 'Dashboards', 'AI insights', 'Alerts', 'Data exports'], [('2B', 'events daily'), ('5 min', 'setup'), ('GDPR', 'ready')],
+      'We found our biggest drop-off in the first afternoon.', 'Growth lead, Snapcart', ['clearer', 'sharper', 'faster', 'wiser']),
+    T('ai-agent', 'AI agents', 'Agentic Labs', 'AI agents that finish the job', 'Build reliable AI agents with tools, memory and human approval built in.', 'Build an agent', 'Read the docs',
+      ['Tool calling', 'Memory', 'Approvals', 'Evaluations', 'Monitoring', 'Integrations'], [('10k', 'agents running'), ('99.5%', 'task success'), ('SOC 2', 'controls')],
+      'Our support agent resolves half the tickets before a human looks.', 'CTO, Helpdeskly', ['smarter', 'safer', 'tireless', 'helpful']),
+    T('crypto-free-fintech', 'Investing app', 'Seedling Invest', 'Start investing with ₹100', 'Index funds, SIPs and goal tracking explained in plain words. No jargon, no hype.', 'Start investing', 'Learn the basics',
+      ['Index funds', 'SIPs', 'Goal tracking', 'Tax reports', 'Learning hub', 'Family accounts'], [('₹100', 'to start'), ('1.2M', 'investors'), ('0', 'commission on SIPs')],
+      'Finally an investing app that does not shout at me.', 'First-time investor', ['steady', 'simple', 'patient', 'growing']),
+    T('fashion-kids', 'Kids clothing', 'Little Sprout', 'Soft clothes for big adventures', 'Organic cotton kidswear that survives puddles, paint and growth spurts.', 'Shop now', 'Size guide',
+      ['Tees', 'Rompers', 'Pyjamas', 'Rainwear', 'Bundles', 'Gift cards'], [('100%', 'organic cotton'), ('50+', 'washes tested'), ('2-day', 'delivery')],
+      'Still looks new after a whole summer of chaos.', 'Parent of twins', ['softer', 'brighter', 'tougher', 'playful']),
+    T('jewellery', 'Jewellery', 'Aurum & Ash', 'Fine jewellery for every day', 'Hallmarked gold and lab-grown diamonds, designed to be worn, not saved.', 'Shop collection', 'Book a try-on',
+      ['Rings', 'Earrings', 'Necklaces', 'Bracelets', 'Bridal', 'Custom'], [('BIS', 'hallmarked'), ('30-day', 'returns'), ('Lifetime', 'polishing')],
+      'I have not taken my ring off since the day I got it.', 'Customer, Pune', ['timeless', 'radiant', 'personal', 'golden']),
+    T('furniture', 'Furniture', 'Oak & Ember', 'Furniture made to stay', 'Solid wood furniture built by local craftspeople, delivered and assembled free.', 'Shop furniture', 'Visit studio',
+      ['Sofas', 'Beds', 'Dining', 'Storage', 'Office', 'Custom builds'], [('10-yr', 'warranty'), ('100%', 'solid wood'), ('Free', 'assembly')],
+      'Our dining table is now the heart of the house.', 'Homeowner, Bengaluru', ['solid', 'warm', 'crafted', 'lasting']),
+    T('pet', 'Pet care', 'Pawsome', 'Happy pets, calm owners', 'Vet-approved food, grooming and boarding with live updates while you are away.', 'Book a visit', 'Shop food',
+      ['Grooming', 'Boarding', 'Vet visits', 'Training', 'Fresh food', 'Pet insurance'], [('20k', 'happy pets'), ('Live', 'photo updates'), ('24/7', 'vet line')],
+      'I get photos of my dog playing every afternoon.', 'Pet parent, Gurugram', ['happier', 'healthier', 'calmer', 'loved']),
+    T('gym-chain', 'Gym chain', 'Iron Republic', 'Strong starts here', 'Clean gyms open 24/7 with coaches on the floor and classes included.', 'Join now', 'Find a gym',
+      ['Strength floor', 'Classes', 'Personal training', 'Recovery zone', 'App workouts', 'Nutrition'], [('24/7', 'access'), ('60+', 'clubs'), ('200+', 'weekly classes')],
+      'The coaches actually notice you. That keeps me coming back.', 'Member, Hyderabad', ['stronger', 'fitter', 'bolder', 'unstoppable']),
+    T('dental', 'Dental clinic', 'BrightSmile Dental', 'Gentle dentistry, real smiles', 'Painless check-ups, aligners and implants with clear prices before we start.', 'Book a check-up', 'Treatments',
+      ['Check-ups', 'Aligners', 'Implants', 'Whitening', 'Kids dentistry', 'Emergency care'], [('15k', 'smiles'), ('0', 'surprise bills'), ('Same day', 'emergencies')],
+      'First time I was not scared at a dentist.', 'Patient, Kochi', ['gentle', 'bright', 'confident', 'healthy']),
+    T('salon', 'Hair salon', 'Mane Studio', 'Hair that feels like you', 'Cuts, colour and care by stylists who listen first and cut second.', 'Book an appointment', 'Our looks',
+      ['Haircuts', 'Colour', 'Keratin', 'Bridal hair', 'Beard care', 'Hair spa'], [('12', 'stylists'), ('4.9★', 'reviews'), ('7 days', 'a week')],
+      'Best haircut I have had in ten years.', 'Regular client', ['fresh', 'bold', 'easy', 'yours']),
+    T('florist', 'Florist', 'Petal Post', 'Flowers that say it for you', 'Hand-tied bouquets delivered the same day, with a note written by hand.', 'Send flowers', 'Subscriptions',
+      ['Bouquets', 'Same-day delivery', 'Subscriptions', 'Weddings', 'Plants', 'Corporate'], [('3 hr', 'delivery'), ('Fresh', 'every morning'), ('50k', 'smiles sent')],
+      'My mum cried happy tears. Thank you.', 'Customer, Delhi', ['fresh', 'joyful', 'sweet', 'blooming']),
+    T('bookstore', 'Bookstore', 'Paper Lantern Books', 'Lose yourself in a good book', 'An independent bookstore with handpicked reads, a cosy café and weekly author nights.', 'Browse books', 'Events',
+      ['New releases', 'Staff picks', 'Kids corner', 'Book club', 'Café', 'Gift cards'], [('20k', 'titles'), ('Weekly', 'author nights'), ('Since', '1998')],
+      'I came for one book and stayed for the whole afternoon.', 'Reader, Kolkata', ['curious', 'cosy', 'lost', 'inspired']),
+    T('music-school', 'Music school', 'Harmony House', 'Play the music you love', 'Guitar, piano, vocals and drums for every age, with recitals every season.', 'Book a trial class', 'Courses',
+      ['Guitar', 'Piano', 'Vocals', 'Drums', 'Music theory', 'Recitals'], [('800', 'students'), ('20', 'teachers'), ('4', 'recitals a year')],
+      'My daughter played her first song in three weeks.', 'Parent', ['louder', 'brighter', 'braver', 'musical']),
+    T('cafe-chain', 'Café chain', 'Third Wave Co.', 'Great coffee, every corner', 'Specialty coffee and fresh bakes across the city, with order-ahead in the app.', 'Order ahead', 'Find a café',
+      ['Espresso bar', 'Cold brew', 'Bakes', 'App rewards', 'Beans to go', 'Workspace'], [('18', 'cafés'), ('4 min', 'pick-up'), ('Ethically', 'sourced beans')],
+      'My morning would fall apart without their app.', 'Daily regular', ['bold', 'smooth', 'fresh', 'warm']),
+    T('ev-charging', 'EV charging', 'ChargeGrid', 'Charge anywhere. Pay once.', 'Find, book and pay for fast EV chargers across the country in one app.', 'Get the app', 'Charger map',
+      ['Fast chargers', 'Booking', 'One-tap pay', 'Home charging', 'Fleet plans', 'Route planner'], [('5,000+', 'chargers'), ('120', 'cities'), ('30 min', 'to 80%')],
+      'Road trips in my EV are finally stress-free.', 'EV owner, Pune', ['cleaner', 'quicker', 'smarter', 'electric']),
+    T('solar', 'Solar energy', 'SunBridge Solar', 'Your roof can pay your bills', 'Rooftop solar with free site survey, subsidy help and a 25-year performance warranty.', 'Free site survey', 'Savings calculator',
+      ['Rooftop solar', 'Battery backup', 'Subsidy help', 'Net metering', 'Maintenance', 'Financing'], [('25-yr', 'warranty'), ('90%', 'bill savings'), ('7,000+', 'roofs')],
+      'Our electricity bill went from ₹6,000 to almost zero.', 'Homeowner, Jaipur', ['brighter', 'cleaner', 'cheaper', 'sunnier']),
+    T('logistics', 'Logistics', 'ShipSwift', 'Ship anything, track everything', 'Same-day city delivery and nationwide shipping with live tracking and one dashboard.', 'Get a quote', 'Track a parcel',
+      ['Same-day', 'Nationwide', 'Live tracking', 'COD', 'Returns', 'API'], [('19,000', 'pin codes'), ('98%', 'on-time'), ('2M', 'parcels a month')],
+      'Our returns process went from chaos to calm.', 'D2C founder', ['faster', 'safer', 'smarter', 'everywhere']),
+    T('telemedicine', 'Telemedicine', 'DocNow', 'See a doctor in 10 minutes', 'Video consultations with verified doctors, e-prescriptions and medicine delivery.', 'Consult now', 'Our doctors',
+      ['General physician', 'Paediatrics', 'Dermatology', 'Mental health', 'Lab tests', 'Medicine delivery'], [('10 min', 'average wait'), ('2,000+', 'doctors'), ('24/7', 'available')],
+      'Got help for my son at 2 a.m. without leaving home.', 'Parent, Nagpur', ['quicker', 'kinder', 'closer', 'healthier']),
+    T('mental-health', 'Mental wellness', 'Calm Corner', 'Feel a little lighter every day', 'Guided meditations, journaling and licensed therapists, all in one gentle app.', 'Start free', 'Talk to a therapist',
+      ['Meditation', 'Sleep stories', 'Journaling', 'Therapy', 'Breathing', 'Mood tracker'], [('5 min', 'a day'), ('300+', 'sessions'), ('Licensed', 'therapists')],
+      'Five minutes in the morning changed my whole week.', 'Member', ['calmer', 'lighter', 'kinder', 'present']),
+    T('game-studio', 'Game studio', 'Nebula Forge', 'Worlds worth getting lost in', 'An indie studio crafting story-rich games with hand-painted worlds.', 'Wishlist now', 'Watch trailer',
+      ['Story mode', 'Co-op', 'Soundtrack', 'Art book', 'Mod tools', 'Community'], [('3', 'titles'), ('2M', 'players'), ('96%', 'positive reviews')],
+      'The most beautiful indie game I have played this year.', 'Games critic', ['wilder', 'deeper', 'stranger', 'unforgettable']),
+    T('film', 'Film production', 'Reelhouse Films', 'Stories that move people', 'Ads, documentaries and brand films from concept to final cut.', 'Start a project', 'Showreel',
+      ['Brand films', 'Documentaries', 'Ads', 'Music videos', 'Animation', 'Post-production'], [('200+', 'films'), ('15', 'awards'), ('30', 'countries')],
+      'They found the story in our brand we did not know we had.', 'Marketing head, Tealeaf', ['bolder', 'deeper', 'cinematic', 'moving']),
+    T('marketplace', 'Local marketplace', 'Nearby', 'Everything local, delivered', 'Order from neighbourhood shops — groceries, bakeries, pharmacies — in under an hour.', 'Order now', 'Become a seller',
+      ['Groceries', 'Bakery', 'Pharmacy', 'Pet supplies', 'Flowers', 'Stationery'], [('45 min', 'delivery'), ('3,000', 'local shops'), ('0', 'minimum order')],
+      'I support my local shops and still get it fast.', 'Customer, Indore', ['closer', 'fresher', 'faster', 'local']),
+    T('coworking', 'Co-working', 'Common Ground', 'Work somewhere that works', 'Flexible desks, private cabins and meeting rooms with coffee that is actually good.', 'Book a day pass', 'See spaces',
+      ['Hot desks', 'Private cabins', 'Meeting rooms', 'Events', 'Mail handling', '24/7 access'], [('6', 'locations'), ('1 Gbps', 'Wi-Fi'), ('1,500', 'members')],
+      'I met my co-founder at the coffee machine here.', 'Startup founder', ['focused', 'social', 'flexible', 'productive']),
+    T('cloud', 'Cloud hosting', 'Skyforge Cloud', 'Servers in seconds, not tickets', 'Fast virtual servers, managed databases and object storage with simple pricing.', 'Deploy a server', 'Pricing',
+      ['VPS', 'Managed databases', 'Object storage', 'Kubernetes', 'Backups', 'DDoS protection'], [('55s', 'to deploy'), ('12', 'regions'), ('99.99%', 'uptime SLA')],
+      'Migrated our whole stack in a weekend.', 'Lead engineer, Tixly', ['faster', 'simpler', 'safer', 'global']),
+    T('security-saas', 'Password manager', 'Vaultly', 'One password to rule them all', 'Store, share and auto-fill passwords and passkeys with end-to-end encryption.', 'Get Vaultly free', 'Security model',
+      ['Password vault', 'Passkeys', 'Secure sharing', 'Breach alerts', '2FA codes', 'Family plan'], [('Zero', 'knowledge'), ('5M', 'users'), ('Audited', 'yearly')],
+      'My whole family finally uses strong passwords.', 'User review', ['safer', 'simpler', 'private', 'protected']),
 ]
 
 # ── Engines ────────────────────────────────────────────────────────────────
@@ -973,11 +1094,11 @@ def e_retro(c):
     css = ('body{min-height:100vh;overflow:hidden;background:linear-gradient(180deg,var(--bg) 0%%,var(--surface) 55%%,var(--bg) 56%%)}'
            '.sun{position:absolute;left:50%%;top:max(30vh,300px);width:min(40vmin,380px);aspect-ratio:1;transform:translateX(-50%%);border-radius:50%%;background:linear-gradient(180deg,var(--a3),var(--a1));'
            '-webkit-mask:repeating-linear-gradient(180deg,#000 0 14px,transparent 14px 20px);mask:repeating-linear-gradient(180deg,#000 0 14px,transparent 14px 20px);filter:drop-shadow(0 0 40px var(--a1))}'
-           '.floor{position:absolute;left:0;right:0;bottom:-10vh;height:56vh;perspective:300px;overflow:hidden}.plane{position:absolute;top:0;bottom:-100%%;left:-50%%;right:-50%%;transform:rotateX(%ddeg);transform-origin:top;'
-           'background-image:linear-gradient(var(--a2) 2px,transparent 2px),linear-gradient(90deg,var(--a2) 2px,transparent 2px);background-size:60px 60px;animation:fl %ss linear infinite;opacity:.8}'
-           '@keyframes fl{to{background-position:0 60px}}.hz{position:absolute;left:0;right:0;top:55vh;height:2px;background:var(--a2);box-shadow:0 0 30px 6px var(--a2)}'
-           '.copy{padding-top:6vh!important}@media(prefers-reduced-motion:reduce){.plane{animation:none}}' % (tilt, dur) + NAV_CSS + COPY_CSS + center_hero_css() + '.copy .sub{display:none}')
-    body = '<div class="sun" aria-hidden="true"></div><div class="hz"></div><div class="floor" aria-hidden="true"><div class="plane"></div></div>' + nav(c) + hero_copy(c)
+           '.floor{position:absolute;left:0;right:0;bottom:-10vh;height:56vh;perspective:300px;overflow:hidden}.plane{position:absolute;top:0;bottom:-100%%;left:-30%%;right:-30%%;transform:rotateX(%ddeg);transform-origin:top;overflow:hidden}'
+           '.gridl{position:absolute;left:0;right:0;top:-60px;bottom:0;background-image:linear-gradient(var(--a2) 2px,transparent 2px),linear-gradient(90deg,var(--a2) 2px,transparent 2px);background-size:60px 60px;opacity:.8;will-change:transform;animation:fl %ss linear infinite}'
+           '@keyframes fl{to{transform:translateY(60px)}}'
+           '.copy{padding-top:6vh!important}@media(prefers-reduced-motion:reduce){.gridl{animation:none}}' % (tilt, dur) + NAV_CSS + COPY_CSS + center_hero_css() + '.copy .sub{display:none}')
+    body = '<div class="sun" aria-hidden="true"></div><div class="hz"></div><div class="floor" aria-hidden="true"><div class="plane"><i class="gridl"></i></div></div>' + nav(c) + hero_copy(c)
     return css, body, '', ''
 
 
@@ -1110,7 +1231,7 @@ def e_neon(c):
     c['vars'].update(flick=flick)
     css = ('body{min-height:100vh;display:flex;flex-direction:column;background-color:var(--bg);background-image:linear-gradient(335deg,#00000033 23px,transparent 23px),linear-gradient(155deg,#00000022 23px,transparent 23px),linear-gradient(335deg,#00000033 23px,transparent 23px),linear-gradient(155deg,#00000022 23px,transparent 23px);background-size:58px 58px;background-position:0 2px,4px 35px,29px 31px,34px 6px}'
            'main{flex:1;display:grid;place-items:center;text-align:center;padding:24px}.sign{padding:clamp(24px,5vw,50px) clamp(24px,6vw,70px);border-radius:24px;border:3px solid color-mix(in srgb,var(--a1) 50%%,transparent);box-shadow:0 0 30px -5px var(--a1),inset 0 0 30px -10px var(--a1)}'
-           '.n1{font-size:clamp(44px,10vw,120px);font-weight:400;letter-spacing:.02em;margin:0;color:#fff;text-shadow:0 0 4px #fff,0 0 10px var(--a1),0 0 22px var(--a1),0 0 44px var(--a1),0 0 80px var(--a1);animation:fk %ds infinite}'
+           '.sign{max-width:100%%}.n1{overflow-wrap:anywhere;font-size:clamp(34px,9vw,120px);font-weight:400;letter-spacing:.02em;margin:0;color:#fff;text-shadow:0 0 4px #fff,0 0 10px var(--a1),0 0 22px var(--a1),0 0 44px var(--a1),0 0 80px var(--a1);animation:fk %ds infinite}'
            '.n2{font-size:clamp(16px,2.4vw,24px);letter-spacing:.3em;text-transform:uppercase;color:#fff;text-shadow:0 0 6px var(--a2),0 0 18px var(--a2);margin:10px 0 0}'
            '@keyframes fk{0%%,18%%,22%%,25%%,53%%,57%%,100%%{opacity:1}20%%,24%%,55%%{opacity:.35;text-shadow:none}}.below{margin-top:34px;color:var(--muted)}.below .btn{margin-top:16px}'
            '@media(prefers-reduced-motion:reduce){.n1{animation:none}}' % flick + NAV_CSS + BTN_CSS + COPY_CSS)
@@ -1149,6 +1270,771 @@ def e_chart(c):
                      % (esc(t['brand']), esc(t['headline']), esc(t['cta']), kpis, bars, area, path))
     js = ('(function(){var d=document.getElementById("db");function run(){d.classList.remove("go");void d.offsetWidth;requestAnimationFrame(function(){d.classList.add("go")})}if(matchMedia("(prefers-reduced-motion: reduce)").matches){d.classList.add("go");return}setTimeout(run,300);setInterval(run,6000)})();')
     return css, body, js, ''
+
+
+
+# ══ 2.0 engines: 3D and creative ═══════════════════════════════════════════
+
+# 35. 3D cube
+@engine('cube-3d', '3D Rotating Cube', 'Hero', '3d cube css perspective rotate faces hero',
+        'A glowing 3D cube turns face by face beside a {label} headline, each face showing a feature.',
+        ['A preserve-3d cube with 6 faces (translateZ = half the size) rotates through 4 orientations every {step}s with a springy ease.',
+         'Each face shows one feature label on a gradient; edges glow with box-shadow in --a1.',
+         'Dragging horizontally spins the cube; it settles back into its loop after 3 seconds.'])
+def e_cube(c):
+    r = c['r']
+    t = c['t']
+    step = pick(r, [2, 2.5, 3])
+    c['vars'].update(step=step)
+    rot = ['rotateY(0deg)', 'rotateY(90deg)', 'rotateY(180deg)', 'rotateY(-90deg)', 'rotateX(90deg)', 'rotateX(-90deg)']
+    faces = ''.join('<div class="fc" style="transform:%s translateZ(var(--h))"><span>%s</span></div>' % (rot[i], esc(t['items'][i])) for i in range(6))
+    css = ('body{min-height:100vh;overflow:hidden}.wrap{display:grid;grid-template-columns:1.1fr 1fr;align-items:center;max-width:1200px;margin:0 auto;min-height:calc(100vh - 80px)}'
+           '.scene{height:min(56vmin,420px);display:grid;place-items:center;perspective:1100px}.cube{--s:min(30vmin,240px);--h:calc(var(--s)/2);position:relative;width:var(--s);height:var(--s);transform-style:preserve-3d;transition:transform 1s cubic-bezier(.3,1.4,.5,1)}'
+           '.fc{position:absolute;inset:0;display:grid;place-items:center;border-radius:18px;background:linear-gradient(140deg,color-mix(in srgb,var(--a1) 85%,#000),color-mix(in srgb,var(--a2) 70%,#000));box-shadow:0 0 40px -6px var(--a1),inset 0 0 0 1px #ffffff40;backface-visibility:hidden}'
+           '.fc span{color:#fff;font-weight:800;font-size:clamp(16px,2.4vw,24px);text-align:center;padding:12px}'
+           '@media(max-width:820px){.wrap{grid-template-columns:1fr}.scene{order:-1;height:46vmin}}' + NAV_CSS + COPY_CSS + left_hero_css())
+    body = nav(c) + '<div class="wrap">%s<div class="scene" aria-hidden="true"><div class="cube" id="cb">%s</div></div></div>' % (hero_copy(c), faces)
+    js = ('(function(){var cb=document.getElementById("cb"),S=[[-15,20],[-15,-70],[-15,-160],[-15,110],[-80,20],[60,200]],i=0,drag=null,base=0,last=0;if(matchMedia("(prefers-reduced-motion: reduce)").matches){cb.style.transform="rotateX(-15deg) rotateY(20deg)";return}'
+          'function go(){cb.style.transform="rotateX("+S[i][0]+"deg) rotateY("+(S[i][1]+base)+"deg)";i=(i+1)%%S.length}go();setInterval(function(){if(!drag&&Date.now()-last>3000)go()},%d);'
+          'addEventListener("pointerdown",function(e){drag=e.clientX;cb.style.transition="none"});addEventListener("pointermove",function(e){if(drag!==null){base+=(e.clientX-drag)*.5;drag=e.clientX;cb.style.transform="rotateX(-15deg) rotateY("+base+"deg)"}});'
+          'addEventListener("pointerup",function(){drag=null;last=Date.now();cb.style.transition=""})})();' % int(step * 1000))
+    return css, body, js, ''
+
+
+# 36. 3D ring carousel
+@engine('ring-carousel-3d', '3D Ring Carousel', 'Gallery', '3d carousel ring rotate cards drag perspective',
+        'Cards for {label} float in a 3D ring that spins slowly and can be dragged.',
+        ['{n} cards are placed around a circle with rotateY(i × 360/n) translateZ(radius) inside a preserve-3d stage.',
+         'The ring rotates continuously ({dur}s per turn); pointer drag adds momentum that eases out.',
+         'The front card is detected from the angle and scales up slightly with a brighter glow.'])
+def e_ring(c):
+    r = c['r']
+    t = c['t']
+    n = pick(r, [6, 8, 10])
+    dur = pick(r, [24, 30, 40])
+    c['vars'].update(n=n, dur=dur)
+    cards = ''.join('<div class="cd" style="--i:%d;--h:%d"><b>%02d</b><span>%s</span></div>' % (i, (i * 360 // n + r.randint(0, 30)) % 360, i + 1, esc((t['items'] + t['words'])[i % 10])) for i in range(n))
+    css = ('body{min-height:100vh;overflow:hidden}.head{text-align:center;padding:6vh 20px 0;position:relative;z-index:2}.head h1{font-size:clamp(28px,5vw,58px);margin:10px auto;max-width:18ch}'
+           '.stage{position:relative;height:min(60vh,520px);perspective:1200px;display:grid;place-items:center;touch-action:pan-y;overflow:hidden}.ring{position:relative;width:min(34vw,220px);height:min(46vw,300px);transform-style:preserve-3d}'
+           '.cd{position:absolute;inset:0;border-radius:20px;display:flex;flex-direction:column;justify-content:flex-end;padding:18px;color:#fff;background:linear-gradient(160deg,hsl(var(--h) 80%% 60%%),hsl(calc(var(--h) + 50) 70%% 28%%));'
+           'transform:rotateY(calc(var(--i)*%ddeg)) translateZ(var(--r));box-shadow:0 30px 60px -30px #000c,inset 0 0 0 1px #ffffff30;transition:filter .3s}.cd b{opacity:.8;font-size:13px}.cd span{font-size:clamp(16px,2vw,22px);font-weight:800}'
+           '.cd.front{filter:brightness(1.15) drop-shadow(0 0 24px var(--a1))}' % (360 // n) + NAV_CSS + BTN_CSS + COPY_CSS)
+    body = nav(c) + '<div class="head"><p class="eyebrow">%s</p><h1>%s</h1></div><div class="stage" id="st"><div class="ring" id="rg">%s</div></div>' % (esc(t['label']), esc(t['headline']), cards)
+    js = ('(function(){var rg=document.getElementById("rg"),st=document.getElementById("st"),C=rg.children,n=C.length,a=0,v=360/(%d*60),drag=null,red=matchMedia("(prefers-reduced-motion: reduce)").matches;'
+          'function R(){var w=rg.offsetWidth;rg.style.setProperty("--r",Math.round(w/2/Math.tan(Math.PI/n)+w*.35)+"px")}R();addEventListener("resize",R);'
+          'st.addEventListener("pointerdown",function(e){drag=e.clientX;v=0});addEventListener("pointermove",function(e){if(drag!==null){var d=e.clientX-drag;drag=e.clientX;a+=d*.3;v=d*.05}});addEventListener("pointerup",function(){drag=null});'
+          'function f(){if(drag===null){a+=v;v+=(360/(%d*60)-v)*.02}if(red)a=0;rg.style.transform="rotateY("+(-a)+"deg)";var fi=((Math.round(a/(360/n))%%n)+n)%%n;for(var i=0;i<n;i++)C[i].classList.toggle("front",i===fi);if(!document.hidden)requestAnimationFrame(f)}f();document.addEventListener("visibilitychange",function(){if(!document.hidden)f()})})();' % (dur, dur))
+    return css, body, js, ''
+
+
+# 37. Wireframe sphere
+@engine('wire-sphere', '3D Wireframe Sphere', 'Background', '3d sphere points canvas rotate wireframe network',
+        'A glowing 3D point sphere rotates and links nearby points, reacting to your pointer, behind a {label} hero.',
+        ['{n} points are spread evenly on a sphere (Fibonacci lattice) and rotated in 3D each frame (rotation around X and Y).',
+         'Points are projected with perspective; closer points are bigger and brighter. Points closer than a threshold are linked with faint lines.',
+         'Pointer position steers the rotation speed and tilt.'])
+def e_wsphere(c):
+    r = c['r']
+    n = pick(r, [180, 240, 300])
+    c['vars'].update(n=n)
+    side = c['v'] % 2
+    css = ('body{min-height:100vh;overflow:hidden}canvas{position:fixed;top:0;height:100%%;width:%s;%s}' % ('60%' if side else '100%', 'right:0' if side else 'left:0')
+           + NAV_CSS + COPY_CSS + (left_hero_css() if side else center_hero_css()) + '@media(max-width:820px){canvas{width:100%;opacity:.5}}')
+    js = ('(function(){var cv=document.getElementById("cv"),x=cv.getContext("2d"),W,H,D=Math.min(devicePixelRatio||1,2),N=%d,P=[],ax=0,ay=0,tx=.002,ty=.004,cs=getComputedStyle(document.documentElement),a1=cs.getPropertyValue("--a1").trim(),a2=cs.getPropertyValue("--a2").trim(),red=matchMedia("(prefers-reduced-motion: reduce)").matches;'
+          'for(var i=0;i<N;i++){var y=1-2*(i+.5)/N,rr=Math.sqrt(1-y*y),th=i*2.399963;P.push([Math.cos(th)*rr,y,Math.sin(th)*rr])}'
+          'function rs(){W=cv.clientWidth;H=cv.clientHeight;cv.width=W*D;cv.height=H*D;x.setTransform(D,0,0,D,0,0)}rs();addEventListener("resize",rs);'
+          'addEventListener("pointermove",function(e){tx=(e.clientY/innerHeight-.5)*.01;ty=(e.clientX/innerWidth-.5)*.016});'
+          'function f(){if(!red){ax+=tx;ay+=ty}x.clearRect(0,0,W,H);var R=Math.min(W,H)*.36,cx=W/2,cy=H/2,Q=[],ca=Math.cos(ax),sa=Math.sin(ax),cb=Math.cos(ay),sb=Math.sin(ay);'
+          'for(var i=0;i<N;i++){var p=P[i],X=p[0]*cb+p[2]*sb,Z=-p[0]*sb+p[2]*cb,Y=p[1]*ca-Z*sa;Z=p[1]*sa+Z*ca;var k=2.6/(2.6-Z);Q.push([cx+X*R*k,cy+Y*R*k,Z])}'
+          'x.lineWidth=.6;for(var i=0;i<N;i++){for(var j=i+1;j<N;j+=3){var dx=Q[i][0]-Q[j][0],dy=Q[i][1]-Q[j][1],d=dx*dx+dy*dy,L=R*R*.03;if(d<L){x.globalAlpha=(1-d/L)*.5*((Q[i][2]+1)/2);x.strokeStyle=a1;x.beginPath();x.moveTo(Q[i][0],Q[i][1]);x.lineTo(Q[j][0],Q[j][1]);x.stroke()}}}'
+          'for(var i=0;i<N;i++){var z=(Q[i][2]+1)/2;x.globalAlpha=.25+.75*z;x.fillStyle=z>.5?a2:a1;x.beginPath();x.arc(Q[i][0],Q[i][1],.8+2.2*z,0,7);x.fill()}x.globalAlpha=1;'
+          'if(!document.hidden)requestAnimationFrame(f)}f();document.addEventListener("visibilitychange",function(){if(!document.hidden)f()})})();' % n)
+    return css, '<canvas id="cv" aria-hidden="true"></canvas>' + nav(c) + hero_copy(c), js, ''
+
+
+# 38. 3D terrain
+@engine('terrain-3d', '3D Wave Terrain', 'Background', '3d terrain mesh grid wave canvas perspective synth',
+        'A 3D wireframe landscape rolls toward you like ocean swell under a {label} headline.',
+        ['A {cols}×{rows} grid of points has heights from layered sine waves that move over time.',
+         'Each point is projected with a simple camera (perspective divide by depth); rows are drawn back to front as polylines.',
+         'Line opacity fades with distance; colours run from --a2 near the horizon to --a1 in front.'])
+def e_terrain(c):
+    r = c['r']
+    cols, rows = pick(r, [(40, 28), (50, 32), (60, 36)])
+    c['vars'].update(cols=cols, rows=rows)
+    css = 'body{min-height:100vh;overflow:hidden}canvas{position:fixed;left:0;bottom:0;width:100%;height:62vh}.copy{padding-top:4vh!important}' + NAV_CSS + COPY_CSS + center_hero_css()
+    js = ('(function(){var cv=document.getElementById("cv"),x=cv.getContext("2d"),W,H,D=Math.min(devicePixelRatio||1,2),C=%d,Rw=%d,t=0,cs=getComputedStyle(document.documentElement),a1=cs.getPropertyValue("--a1").trim(),a2=cs.getPropertyValue("--a2").trim(),red=matchMedia("(prefers-reduced-motion: reduce)").matches;'
+          'function rs(){W=cv.clientWidth;H=cv.clientHeight;cv.width=W*D;cv.height=H*D;x.setTransform(D,0,0,D,0,0)}rs();addEventListener("resize",rs);'
+          'function f(){if(!red)t+=.02;x.clearRect(0,0,W,H);for(var j=Rw-1;j>=0;j--){var z=1+j*.35;x.beginPath();for(var i=0;i<=C;i++){var X=(i/C-.5)*14,h=Math.sin(i*.35+t)*.5+Math.sin(j*.45-t*1.3)*.6+Math.sin((i+j)*.2+t*.7)*.4,sx=W/2+X/z*W*.12,sy=H*.15+(1.6-h*.6)/z*H*.55;i?x.lineTo(sx,sy):x.moveTo(sx,sy)}'
+          'x.globalAlpha=Math.max(.08,1-j/Rw);x.strokeStyle=j<Rw/2?a1:a2;x.lineWidth=j<4?1.6:1;x.stroke()}x.globalAlpha=1;if(!document.hidden)requestAnimationFrame(f)}f();document.addEventListener("visibilitychange",function(){if(!document.hidden)f()})})();' % (cols, rows))
+    return css, '<canvas id="cv" aria-hidden="true"></canvas>' + nav(c) + hero_copy(c), js, ''
+
+
+# 39. Tunnel
+@engine('tunnel-3d', '3D Light Tunnel', 'Background', '3d tunnel rings canvas warp depth hero',
+        'Neon rings rush toward you through an endless tunnel that bends with the pointer, for {label}.',
+        ['{n} rings (polygons with {sides} sides) sit at increasing depths; each frame they move closer and recycle to the back.',
+         'Ring centres follow a sine path so the tunnel bends; the pointer offsets the vanishing point.',
+         'Ring stroke colour alternates --a1/--a2 and fades in from the distance.'])
+def e_tunnel(c):
+    r = c['r']
+    n = pick(r, [26, 34, 42])
+    sides = pick(r, [6, 8, 40])
+    c['vars'].update(n=n, sides=sides)
+    css = 'body{min-height:100vh;overflow:hidden;background:#000}canvas{position:fixed;inset:0;width:100%;height:100%}.copy h1{text-shadow:0 0 30px #000}' + NAV_CSS + COPY_CSS + center_hero_css()
+    js = ('(function(){var cv=document.getElementById("cv"),x=cv.getContext("2d"),W,H,D=Math.min(devicePixelRatio||1,2),N=%d,S=%d,z=[],t=0,mx=0,my=0,cs=getComputedStyle(document.documentElement),a1=cs.getPropertyValue("--a1").trim(),a2=cs.getPropertyValue("--a2").trim(),red=matchMedia("(prefers-reduced-motion: reduce)").matches;'
+          'for(var i=0;i<N;i++)z.push(i/N*10+.2);function rs(){W=innerWidth;H=innerHeight;cv.width=W*D;cv.height=H*D;x.setTransform(D,0,0,D,0,0)}rs();addEventListener("resize",rs);addEventListener("pointermove",function(e){mx=e.clientX/W-.5;my=e.clientY/H-.5});'
+          'function f(){if(!red){t+=.01;for(var i=0;i<N;i++){z[i]-=.04;if(z[i]<.2)z[i]+=10}}x.clearRect(0,0,W,H);var o=z.map(function(v,i){return[v,i]}).sort(function(a,b){return b[0]-a[0]});'
+          'o.forEach(function(q){var v=q[0],i=q[1],R=Math.min(W,H)*.5/v,cx=W/2+Math.sin(t+v*.4)*W*.08/v*3-mx*W*.3/v,cy=H/2+Math.cos(t*.8+v*.3)*H*.06/v*3-my*H*.3/v;x.globalAlpha=Math.min(1,(10-v)/6);x.strokeStyle=i%%2?a1:a2;x.lineWidth=Math.max(1,4/v);x.beginPath();'
+          'for(var k=0;k<=S;k++){var an=k/S*6.283+t*.3,px=cx+Math.cos(an)*R,py=cy+Math.sin(an)*R;k?x.lineTo(px,py):x.moveTo(px,py)}x.stroke()});x.globalAlpha=1;if(!document.hidden)requestAnimationFrame(f)}f();document.addEventListener("visibilitychange",function(){if(!document.hidden)f()})})();' % (n, sides))
+    return css, '<canvas id="cv" aria-hidden="true"></canvas>' + nav(c) + hero_copy(c), js, 'Looks best with a dark palette.'
+
+
+# 40. Dotted globe
+@engine('globe-dots', '3D Dotted Globe', 'Hero', '3d globe dots canvas rotate arcs world hero',
+        'A dotted 3D globe spins with glowing arcs between cities next to a {label} headline.',
+        ['A sphere of dots on a latitude/longitude grid rotates around the Y axis; only the front hemisphere is drawn brightly.',
+         '{arcs} arcs between random points rise above the surface and travel with a moving highlight.',
+         'The globe sits beside the copy on desktop and above it on phones.'])
+def e_globe(c):
+    r = c['r']
+    arcs = pick(r, [4, 6, 8])
+    c['vars'].update(arcs=arcs)
+    css = ('body{min-height:100vh;overflow:hidden}.wrap{display:grid;grid-template-columns:1.1fr 1fr;align-items:center;max-width:1200px;margin:0 auto;min-height:calc(100vh - 80px)}canvas{width:100%;height:min(60vh,520px)}'
+           '@media(max-width:820px){.wrap{grid-template-columns:1fr}canvas{order:-1;height:40vh}}' + NAV_CSS + COPY_CSS + left_hero_css())
+    js = ('(function(){var cv=document.getElementById("cv"),x=cv.getContext("2d"),W,H,D=Math.min(devicePixelRatio||1,2),P=[],A=[],ry=0,cs=getComputedStyle(document.documentElement),a1=cs.getPropertyValue("--a1").trim(),a2=cs.getPropertyValue("--a2").trim(),ink=cs.getPropertyValue("--muted").trim(),red=matchMedia("(prefers-reduced-motion: reduce)").matches;'
+          'for(var la=-80;la<=80;la+=8)for(var lo=0;lo<360;lo+=8*1/Math.max(.25,Math.cos(la*Math.PI/180))){P.push([la*Math.PI/180,lo*Math.PI/180])}'
+          'for(var i=0;i<%d;i++)A.push([P[Math.floor(Math.random()*P.length)],P[Math.floor(Math.random()*P.length)],Math.random()]);'
+          'function rs(){W=cv.clientWidth;H=cv.clientHeight;cv.width=W*D;cv.height=H*D;x.setTransform(D,0,0,D,0,0)}rs();addEventListener("resize",rs);'
+          'function pr(la,lo,R,lift){var cx=Math.cos(la)*Math.sin(lo+ry),cy=Math.sin(la),cz=Math.cos(la)*Math.cos(lo+ry),k=1+(lift||0);return[W/2+cx*R*k,H/2-cy*R*k,cz]}'
+          'function f(){if(!red)ry+=.004;x.clearRect(0,0,W,H);var R=Math.min(W,H)*.4;for(var i=0;i<P.length;i++){var p=pr(P[i][0],P[i][1],R);if(p[2]<-.1)continue;x.globalAlpha=.2+.8*p[2];x.fillStyle=ink;x.fillRect(p[0]-1,p[1]-1,2,2)}'
+          'A.forEach(function(a){a[2]=(a[2]+.004)%%1;x.beginPath();for(var s=0;s<=30;s++){var u=s/30,la=a[0][0]+(a[1][0]-a[0][0])*u,lo=a[0][1]+(a[1][1]-a[0][1])*u,p=pr(la,lo,R,Math.sin(u*Math.PI)*.25);if(p[2]<-.2){x.moveTo(p[0],p[1]);continue}s?x.lineTo(p[0],p[1]):x.moveTo(p[0],p[1])}'
+          'x.globalAlpha=.55;x.strokeStyle=a1;x.lineWidth=1.4;x.stroke();var u=a[2],p=pr(a[0][0]+(a[1][0]-a[0][0])*u,a[0][1]+(a[1][1]-a[0][1])*u,R,Math.sin(u*Math.PI)*.25);if(p[2]>-.2){x.globalAlpha=1;x.fillStyle=a2;x.beginPath();x.arc(p[0],p[1],3,0,7);x.fill()}});'
+          'x.globalAlpha=1;if(!document.hidden)requestAnimationFrame(f)}f();document.addEventListener("visibilitychange",function(){if(!document.hidden)f()})})();' % arcs)
+    return css, nav(c) + '<div class="wrap">%s<canvas id="cv" aria-hidden="true"></canvas></div>' % hero_copy(c), js, ''
+
+
+# 41. Floating 3D shapes
+@engine('floating-shapes-3d', 'Floating 3D Shapes', 'Hero', '3d shapes floating parallax mouse css cubes rings',
+        'Glossy 3D shapes float around a {label} headline and tilt with your pointer in depth.',
+        ['{n} CSS shapes (cubes, rings, pills, spheres) are placed at different translateZ depths inside a perspective scene.',
+         'Each bobs on its own keyframe loop ({dur}s); the whole scene rotates up to 12° toward the pointer, so near shapes move more.',
+         'Shapes use gradients from the palette with soft highlights for a glossy look.'])
+def e_shapes3d(c):
+    r = c['r']
+    n = pick(r, [6, 8, 10])
+    dur = pick(r, [6, 8, 10])
+    c['vars'].update(n=n, dur=dur)
+    kinds = ['sph', 'ring', 'pill', 'box']
+    shapes = ''
+    for i in range(n):
+        k = kinds[i % 4]
+        x, y, z, s = r.randint(4, 88), r.randint(10, 82), r.randint(-200, 200), r.randint(50, 110)
+        shapes += '<i class="sh %s" style="left:%d%%;top:%d%%;--z:%dpx;--s:%dpx;animation-delay:-%ds"></i>' % (k, x, y, z, s, i)
+    css = ('body{min-height:100vh;overflow:hidden}.scene{position:fixed;inset:0;perspective:900px;overflow:hidden}.lay{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .2s}'
+           '.sh{position:absolute;width:var(--s);height:var(--s);transform:translateZ(var(--z));animation:bob %ds ease-in-out infinite alternate}'
+           '@keyframes bob{to{transform:translateZ(var(--z)) translateY(-24px) rotate(25deg)}}'
+           '.sph{border-radius:50%%;background:radial-gradient(circle at 30%% 30%%,#fff,var(--a1) 35%%,color-mix(in srgb,var(--a1) 40%%,#000))}'
+           '.ring{border-radius:50%%;border:calc(var(--s)*.18) solid var(--a2);box-shadow:inset 0 0 20px #0006,0 10px 30px -10px var(--a2)}'
+           '.pill{height:calc(var(--s)*.45);border-radius:99px;background:linear-gradient(90deg,var(--a3),var(--a1))}'
+           '.box{border-radius:16px;background:linear-gradient(135deg,var(--a2),color-mix(in srgb,var(--a2) 40%%,#000));box-shadow:inset 0 0 0 1px #ffffff40}'
+           '@media(max-width:700px){.sh{--s:44px!important}}' % dur + NAV_CSS + COPY_CSS + center_hero_css())
+    body = '<div class="scene" aria-hidden="true"><div class="lay" id="ly">%s</div></div>' % shapes + nav(c) + hero_copy(c)
+    js = ('(function(){var l=document.getElementById("ly"),t=0;if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;addEventListener("pointermove",function(e){var x=e.clientX/innerWidth-.5,y=e.clientY/innerHeight-.5;l.style.transform="rotateY("+x*24+"deg) rotateX("+(-y*24)+"deg)"});'
+          'if(!matchMedia("(hover:hover)").matches)setInterval(function(){t+=.05;l.style.transform="rotateY("+Math.sin(t)*10+"deg) rotateX("+Math.cos(t)*6+"deg)"},50)})();')
+    return css, body, js, ''
+
+
+# 42. Isometric blocks
+@engine('isometric-blocks', 'Isometric Blocks Build', 'Interactive', 'isometric 3d blocks build stack css',
+        'Isometric blocks pop up one by one to build a little city of {label} features, then rebuild.',
+        ['A grid of {g}×{g} cells is drawn in an isometric view (rotateX(60deg) rotateZ(45deg)).',
+         'Each block has three faces made with CSS; blocks rise from 0 to a random height with a staggered delay.',
+         'The build loops every 7 seconds; hovering a block lifts it and shows its label.'])
+def e_iso(c):
+    r = c['r']
+    t = c['t']
+    g = pick(r, [4, 5])
+    c['vars'].update(g=g)
+    cells = ''
+    for i in range(g * g):
+        h = r.randint(20, 110)
+        cells += '<div class="bl" style="--h:%dpx;--d:%dms;--hue:%d" title="%s"><i></i></div>' % (h, i * 90, (i * 23) % 60, esc(t['items'][i % 6]))
+    css = ('body{min-height:100vh;overflow:hidden}.wrap{display:grid;grid-template-columns:1fr 1.1fr;align-items:center;max-width:1200px;margin:0 auto;min-height:calc(100vh - 80px)}'
+           '.iso{display:grid;place-items:center;height:min(60vh,520px)}.grid{display:grid;grid-template-columns:repeat(%d,min(9vmin,70px));gap:10px;transform:rotateX(58deg) rotateZ(45deg);transform-style:preserve-3d}'
+           '.bl{position:relative;aspect-ratio:1;transform-style:preserve-3d}.bl i{position:absolute;inset:0;background:color-mix(in srgb,var(--a1) calc(60%% + var(--hue)*1%%),#fff);transform:translateZ(0);transition:transform .7s cubic-bezier(.3,1.5,.5,1);transition-delay:var(--d);border-radius:4px;box-shadow:0 0 0 1px #ffffff30}'
+           '.bl i::before,.bl i::after{content:"";position:absolute;background:color-mix(in srgb,var(--a1) 55%%,#000)}.bl i::before{left:0;top:100%%;width:100%%;height:var(--h);transform-origin:top;transform:rotateX(-90deg)}'
+           '.bl i::after{top:0;left:100%%;width:var(--h);height:100%%;transform-origin:left;transform:rotateY(90deg);background:color-mix(in srgb,var(--a1) 35%%,#000)}'
+           '.up .bl i{transform:translateZ(var(--h))}.bl:hover i{transform:translateZ(calc(var(--h) + 20px));transition-delay:0s}'
+           '@media(max-width:820px){.wrap{grid-template-columns:1fr}.iso{order:-1;height:44vh}}' % g + NAV_CSS + COPY_CSS + left_hero_css())
+    body = nav(c) + '<div class="wrap">%s<div class="iso" aria-hidden="true"><div class="grid" id="gr">%s</div></div></div>' % (hero_copy(c), cells)
+    js = ('(function(){var g=document.getElementById("gr");if(matchMedia("(prefers-reduced-motion: reduce)").matches){g.classList.add("up");return}function go(){g.classList.remove("up");setTimeout(function(){g.classList.add("up")},900)}go();setInterval(go,7000)})();')
+    return css, body, js, ''
+
+
+# 43. Gyroscope
+@engine('gyroscope', 'Gyroscope Rings', 'Hero', '3d gyroscope rings rotate axes css orbit',
+        'Three glowing rings spin on different 3D axes around a pulsing core next to a {label} message.',
+        ['Three bordered circles rotate with rotateX/rotateY/rotateZ keyframes at different speeds ({dur}s base) inside preserve-3d.',
+         'A radial-gradient core pulses; small dots travel on each ring using a child element rotated with the ring.',
+         'The gyroscope tilts gently toward the pointer.'])
+def e_gyro(c):
+    r = c['r']
+    dur = pick(r, [6, 8, 12])
+    c['vars'].update(dur=dur)
+    css = ('body{min-height:100vh;overflow:hidden}.wrap{display:grid;grid-template-columns:1.1fr 1fr;align-items:center;max-width:1200px;margin:0 auto;min-height:calc(100vh - 80px)}'
+           '.gy{display:grid;place-items:center;height:min(60vh,500px);perspective:900px}.g{position:relative;width:min(40vmin,320px);aspect-ratio:1;transform-style:preserve-3d;transition:transform .3s}'
+           '.rg{position:absolute;inset:0;border-radius:50%%;border:3px solid var(--a1);box-shadow:0 0 30px -4px var(--a1),inset 0 0 30px -10px var(--a1)}.rg::after{content:"";position:absolute;top:-7px;left:50%%;width:12px;height:12px;margin-left:-6px;border-radius:50%%;background:var(--a3);box-shadow:0 0 14px var(--a3)}'
+           '.r1{animation:x %ds linear infinite}.r2{inset:8%%;border-color:var(--a2);box-shadow:0 0 30px -4px var(--a2);animation:y %ds linear infinite}.r3{inset:16%%;border-color:var(--a3);animation:z %ds linear infinite}'
+           '@keyframes x{from{transform:rotateX(70deg) rotateZ(0)}to{transform:rotateX(70deg) rotateZ(360deg)}}@keyframes y{from{transform:rotateY(70deg) rotateZ(0)}to{transform:rotateY(70deg) rotateZ(-360deg)}}@keyframes z{from{transform:rotateX(35deg) rotateY(35deg) rotateZ(0)}to{transform:rotateX(35deg) rotateY(35deg) rotateZ(360deg)}}'
+           '.core{position:absolute;inset:38%%;border-radius:50%%;background:radial-gradient(circle at 35%% 35%%,#fff,var(--a1) 45%%,transparent 72%%);animation:p 3s ease-in-out infinite}@keyframes p{50%%{transform:scale(1.15)}}'
+           '@media(max-width:820px){.wrap{grid-template-columns:1fr}.gy{order:-1;height:44vh}}' % (dur, int(dur * 1.4), int(dur * 1.9)) + NAV_CSS + COPY_CSS + left_hero_css())
+    body = nav(c) + '<div class="wrap">%s<div class="gy" aria-hidden="true"><div class="g" id="g"><i class="rg r1"></i><i class="rg r2"></i><i class="rg r3"></i><i class="core"></i></div></div></div>' % hero_copy(c)
+    js = '(function(){var g=document.getElementById("g");if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;addEventListener("pointermove",function(e){g.style.transform="rotateY("+(e.clientX/innerWidth-.5)*30+"deg) rotateX("+(.5-e.clientY/innerHeight)*30+"deg)"})})();'
+    return css, body, js, ''
+
+
+# 44. Flipbook
+@engine('flipbook-3d', '3D Flipbook Pages', 'Interactive', '3d flipbook pages turn book rotateY story',
+        'A 3D book turns its pages by itself to tell the {label} story, one page per feature.',
+        ['A book of {n} pages: each page is a preserve-3d leaf hinged on its left edge with front and back faces.',
+         'Every {step}s the next leaf rotates to -180deg; when all pages are turned the book closes back in reverse.',
+         'Click or tap turns the next page immediately.'])
+def e_flipbook(c):
+    r = c['r']
+    t = c['t']
+    n = pick(r, [4, 5, 6])
+    step = pick(r, [1.8, 2.4, 3])
+    c['vars'].update(n=n, step=step)
+    pages = ''
+    for i in range(n):
+        pages += ('<div class="lf" style="z-index:%d"><div class="pf"><b>%02d</b><h3>%s</h3><p>%s</p></div><div class="pb"><p>“%s”</p></div></div>'
+                  % (n - i, i + 1, esc(t['items'][i % 6]), esc(t['stats'][i % 3][0] + ' ' + t['stats'][i % 3][1]), esc(t['quote'] if i == 0 else t['words'][i % 4].capitalize() + ' by design.')))
+    css = ('body{min-height:100vh;overflow:hidden}.wrap{display:grid;grid-template-columns:1fr 1.1fr;align-items:center;max-width:1200px;margin:0 auto;min-height:calc(100vh - 80px)}'
+           '.bk{position:relative;width:min(36vw,300px);height:min(48vw,400px);margin:0 auto 0 50%;perspective:1600px;cursor:pointer}.lf{position:absolute;inset:0;transform-origin:left center;transform-style:preserve-3d;transition:transform 1s cubic-bezier(.6,.1,.3,1)}'
+           '.lf.t{transform:rotateY(-180deg)}.pf,.pb{position:absolute;inset:0;padding:24px;border-radius:4px 14px 14px 4px;backface-visibility:hidden;display:flex;flex-direction:column;justify-content:flex-end}'
+           '.pf{background:linear-gradient(135deg,var(--surface),color-mix(in srgb,var(--a1) 25%,var(--surface)));box-shadow:inset 0 0 0 1px var(--line),inset 18px 0 30px -20px #0008}.pf b{color:var(--a1)}.pf h3{font-size:clamp(20px,2.4vw,28px);margin:6px 0}.pf p{color:var(--muted)}'
+           '.pb{transform:rotateY(180deg);border-radius:14px 4px 4px 14px;background:linear-gradient(135deg,var(--a1),var(--a2));color:var(--on);justify-content:center;font-size:clamp(16px,1.8vw,20px);font-weight:700}'
+           '@media(max-width:820px){.wrap{grid-template-columns:1fr}.bk{order:-1;margin:20px auto 0 50%;width:40vw;height:54vw}}' + NAV_CSS + COPY_CSS + left_hero_css())
+    body = nav(c) + '<div class="wrap">%s<div class="bk" id="bk" aria-hidden="true">%s</div></div>' % (hero_copy(c), pages)
+    js = ('(function(){var L=document.querySelectorAll(".lf"),i=0,dir=1,bk=document.getElementById("bk");function step(){if(dir>0){L[i].classList.add("t");L[i].style.zIndex=10+i;i++;if(i>=L.length){dir=-1;i=L.length-1}}else{L[i].classList.remove("t");L[i].style.zIndex=L.length-i;i--;if(i<0){dir=1;i=0}}}'
+          'bk.addEventListener("click",step);if(!matchMedia("(prefers-reduced-motion: reduce)").matches)setInterval(step,%d)})();' % int(step * 1000))
+    return css, body, js, ''
+
+
+# 45. Depth fly-through
+@engine('depth-flythrough', '3D Depth Fly-through', 'Scroll Story', '3d scroll depth fly through cards perspective translateZ',
+        'Scroll flies the camera forward through floating {label} cards placed at different depths.',
+        ['A sticky 100vh stage with perspective holds {n} cards at translateZ from 0 to −{depth}px, spread left and right.',
+         'Scroll progress moves the whole world forward on Z, so cards rush past the viewer; cards fade as they pass the camera.',
+         'A final card with the call to action stops in the centre.'])
+def e_depth(c):
+    r = c['r']
+    t = c['t']
+    n = pick(r, [6, 8])
+    depth = 600 * n
+    c['vars'].update(n=n, depth=depth)
+    cards = ''
+    for i in range(n):
+        x = (-1 if i % 2 else 1) * r.randint(10, 26)
+        y = r.randint(-12, 12)
+        cards += '<article class="dc" style="--z:%dpx;--x:%dvw;--y:%dvh"><b>%02d</b><h3>%s</h3><p>%s</p></article>' % (-i * 600 - 400, x, y, i + 1, esc((t['items'] + t['words'])[i % 10]), esc(t['stats'][i % 3][0] + ' ' + t['stats'][i % 3][1]))
+    cards += '<article class="dc end" style="--z:%dpx;--x:0vw;--y:0vh"><h3>%s</h3><a class="btn" href="#">%s</a></article>' % (-n * 600 - 400, esc(t['headline']), esc(t['cta']))
+    css = ('.intro{min-height:80vh;display:grid;place-items:center;text-align:center;padding:24px}#fs{height:%dvh;position:relative}.stg{position:sticky;top:0;height:100vh;overflow:hidden;perspective:800px}'
+           '.wd{position:absolute;left:50%%;top:50%%;transform-style:preserve-3d}.dc{position:absolute;width:min(70vw,300px);margin-left:calc(min(70vw,300px)/-2);transform:translate3d(var(--x),var(--y),var(--z)) translateY(-50%%);padding:22px;border-radius:20px;'
+           'background:color-mix(in srgb,var(--surface) 88%%,transparent);box-shadow:inset 0 0 0 1px var(--line),0 30px 60px -30px var(--a1);backdrop-filter:blur(6px)}.dc b{color:var(--a1)}.dc h3{margin:6px 0;font-size:clamp(20px,2.6vw,30px)}.dc p{color:var(--muted)}'
+           '.dc.end{text-align:center;width:min(86vw,520px);margin-left:calc(min(86vw,520px)/-2)}' % (n * 60 + 140) + NAV_CSS + BTN_CSS + COPY_CSS)
+    body = nav(c) + '<header class="intro"><div><p class="eyebrow">%s</p><h1>%s</h1><p class="sub" style="margin:0 auto">Scroll to fly in ↓</p></div></header><section id="fs"><div class="stg"><div class="wd" id="wd">%s</div></div></section>' % (esc(t['label']), esc(t['headline']), cards)
+    js = ('(function(){var s=document.getElementById("fs"),w=document.getElementById("wd"),C=w.children,M=%d;function f(){var b=s.getBoundingClientRect(),m=s.offsetHeight-innerHeight,p=Math.min(1,Math.max(0,-b.top/m)),z=p*M;w.style.transform="translateZ("+z+"px)";'
+          'for(var i=0;i<C.length;i++){var cz=parseFloat(C[i].style.getPropertyValue("--z"))+z;C[i].style.opacity=cz>200?0:cz<-3000?.15:1}}addEventListener("scroll",f,{passive:true});f()})();' % (n * 600 + 350))
+    return css, body, js, ''
+
+
+# 46. Goo blobs
+@engine('goo-blobs', 'Liquid Goo Blobs', 'Background', 'goo liquid metaballs svg filter blobs merge',
+        'Liquid blobs merge and split like lava behind a {label} headline, made with an SVG goo filter.',
+        ['{n} coloured circles drift on independent keyframe paths inside a container with an SVG filter.',
+         'The filter blurs (feGaussianBlur) then boosts alpha contrast (feColorMatrix) so overlapping circles melt into one shape.',
+         'The headline sits on top in a frosted card.'])
+def e_goo(c):
+    r = c['r']
+    n = pick(r, [6, 8, 10])
+    c['vars'].update(n=n)
+    blobs, kf = '', ''
+    cols = ['var(--a1)', 'var(--a2)', 'var(--a3)']
+    for i in range(n):
+        s = r.randint(12, 26)
+        blobs += '<i style="width:%dvmin;height:%dvmin;background:%s;left:%d%%;top:%d%%;animation:m%d %ds ease-in-out infinite alternate"></i>' % (s, s, cols[i % 3], r.randint(10, 70), r.randint(10, 60), i, r.randint(8, 16))
+        kf += '@keyframes m%d{to{transform:translate(%dvw,%dvh)}}' % (i, r.randint(-25, 25), r.randint(-20, 20))
+    css = ('body{min-height:100vh;overflow:hidden}.goo{position:fixed;inset:0;filter:url(#g);overflow:hidden}.goo i{position:absolute;border-radius:50%}' + kf
+           + '.copy{background:color-mix(in srgb,var(--bg) 55%,transparent);backdrop-filter:blur(14px);border-radius:28px;box-shadow:inset 0 0 0 1px var(--line);margin-top:8vh!important;max-width:min(820px,92vw)!important}'
+           '@media(prefers-reduced-motion:reduce){.goo i{animation:none!important}}' + NAV_CSS + COPY_CSS + center_hero_css())
+    body = ('<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="g"><feGaussianBlur in="SourceGraphic" stdDeviation="18"/><feColorMatrix values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9"/></filter></svg>'
+            '<div class="goo" aria-hidden="true">%s</div>' % blobs + nav(c) + hero_copy(c))
+    return css, body, '', ''
+
+
+# 47. Rotating circular text badge
+@engine('circle-text-badge', 'Spinning Text Badge', 'CTA', 'circular text svg textpath rotate badge cta',
+        'A spinning circular text badge orbits a big arrow button in a bold {label} call to action.',
+        ['The badge text runs along an SVG <textPath> on a circle and the SVG rotates continuously ({dur}s per turn).',
+         'Hovering the badge speeds it up and scales the central arrow; the arrow nudges diagonally on loop.',
+         'The section uses a large headline with an outlined word for contrast.'])
+def e_cbadge(c):
+    r = c['r']
+    t = c['t']
+    dur = pick(r, [10, 14, 18])
+    c['vars'].update(dur=dur)
+    ring = esc((' ✦ '.join([t['cta'], t['brand'], t['words'][0]]) + ' ✦ ').upper())
+    css = ('body{min-height:100vh;display:flex;flex-direction:column}main{flex:1;display:grid;grid-template-columns:1.3fr 1fr;align-items:center;gap:30px;max-width:1150px;margin:0 auto;padding:30px 20px}'
+           'main h2{font-size:clamp(36px,6.4vw,84px);line-height:1;letter-spacing:var(--ls);font-weight:var(--hw);margin:0}main h2 em{font-style:normal;color:transparent;-webkit-text-stroke:2px var(--a1)}main p{color:var(--muted);margin-top:16px;max-width:46ch}'
+           '.bd{position:relative;width:min(56vw,280px);aspect-ratio:1;margin:auto;display:grid;place-items:center;text-decoration:none;color:var(--ink)}.bd svg{position:absolute;inset:0;width:100%%;height:100%%;animation:sp %ds linear infinite}.bd:hover svg{animation-duration:%ds}'
+           '.bd text{font:700 15px var(--font);letter-spacing:.32em;fill:currentColor}.ar{width:44%%;aspect-ratio:1;border-radius:50%%;display:grid;place-items:center;background:var(--a1);color:var(--on);font-size:clamp(28px,5vw,48px);transition:transform .3s;animation:nd 2.4s ease-in-out infinite}.bd:hover .ar{transform:scale(1.1)}'
+           '@keyframes sp{to{transform:rotate(360deg)}}@keyframes nd{50%%{transform:translate(4px,-4px)}}@media(max-width:760px){main{grid-template-columns:1fr;text-align:center}main p{margin-inline:auto}}' % (dur, max(3, dur // 3)) + NAV_CSS + BTN_CSS + COPY_CSS)
+    words = t['headline'].split(' ')
+    head = esc(' '.join(words[:-2])) + ' <em>' + esc(' '.join(words[-2:])) + '</em>'
+    body = nav(c) + ('<main><div><p class="eyebrow">%s</p><h2>%s</h2><p>%s</p></div><a class="bd" href="#" aria-label="%s"><svg viewBox="0 0 200 200" aria-hidden="true"><defs><path id="cp" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0"/></defs><text><textPath href="#cp">%s</textPath></text></svg><span class="ar" aria-hidden="true">↗</span></a></main>'
+                     % (esc(t['brand']), head, esc(t['sub']), esc(t['cta']), ring * 2))
+    return css, body, '', ''
+
+
+# 48. Accordion gallery strips
+@engine('accordion-strips', 'Expanding Strips Gallery', 'Gallery', 'accordion gallery strips expand hover flex',
+        'Tall gradient strips expand one at a time to reveal each {label} feature, cycling by themselves.',
+        ['A flex row of {n} panels; the active panel grows to flex: 5 while others stay at flex: 1 (transition {dur}ms).',
+         'Hover or focus activates a panel; without interaction the active panel advances every 2.6 seconds.',
+         'Labels rotate vertical in closed panels and slide in horizontally when open; on phones the strips stack vertically.'])
+def e_strips(c):
+    r = c['r']
+    t = c['t']
+    n = pick(r, [4, 5, 6])
+    dur = pick(r, [500, 700])
+    c['vars'].update(n=n, dur=dur)
+    ps = ''.join('<button class="st%s" type="button" style="--h:%d"><span class="v">%s</span><span class="o"><b>%02d</b><strong>%s</strong><em>%s</em></span></button>'
+                 % (' on' if i == 0 else '', (i * 47 + r.randint(0, 40)) % 360, esc(t['items'][i]), i + 1, esc(t['items'][i]), esc(t['stats'][i % 3][0] + ' ' + t['stats'][i % 3][1])) for i in range(n))
+    css = ('main{max-width:1150px;margin:0 auto;padding:30px 20px 50px}main h2{font-size:clamp(28px,4.4vw,52px);letter-spacing:var(--ls);font-weight:var(--hw);margin:0 0 20px}'
+           '.row{display:flex;gap:10px;height:min(64vh,520px)}.st{all:unset;box-sizing:border-box;position:relative;flex:1;min-width:0;border-radius:22px;overflow:hidden;cursor:pointer;transition:flex %dms cubic-bezier(.3,.8,.2,1);'
+           'background:radial-gradient(circle at 70%% 20%%,hsl(var(--h) 90%% 70%%),transparent 55%%),linear-gradient(160deg,hsl(var(--h) 70%% 48%%),hsl(calc(var(--h) + 60) 60%% 20%%))}.st:focus-visible{outline:2px solid var(--a2);outline-offset:3px}'
+           '.st.on{flex:5}.v{position:absolute;left:50%%;bottom:24px;transform:translateX(-50%%) rotate(180deg);writing-mode:vertical-rl;color:#fff;font-weight:800;white-space:nowrap;transition:opacity .3s}.st.on .v{opacity:0}'
+           '.o{position:absolute;left:24px;right:24px;bottom:24px;color:#fff;display:flex;flex-direction:column;gap:4px;opacity:0;transform:translateX(-20px);transition:.4s .2s}.st.on .o{opacity:1;transform:none}.o strong{font-size:clamp(22px,3vw,36px)}.o em{font-style:normal;opacity:.85}'
+           '@media(max-width:700px){.row{flex-direction:column;height:auto}.st{flex:none;height:64px}.st.on{height:280px;flex:none}.v{writing-mode:horizontal-tb;transform:none;left:20px;bottom:20px}}' % dur + NAV_CSS + BTN_CSS + COPY_CSS)
+    body = nav(c) + '<main><h2>%s</h2><div class="row" id="rw">%s</div></main>' % (esc(t['headline']), ps)
+    js = ('(function(){var S=document.querySelectorAll(".st"),i=0,last=0;function on(k){S.forEach(function(s,j){s.classList.toggle("on",j===k)});i=k}S.forEach(function(s,j){s.addEventListener("mouseenter",function(){last=Date.now();on(j)});s.addEventListener("focus",function(){last=Date.now();on(j)});s.addEventListener("click",function(){last=Date.now();on(j)})});'
+          'if(!matchMedia("(prefers-reduced-motion: reduce)").matches)setInterval(function(){if(Date.now()-last>4000)on((i+1)%S.length)},2600)})();')
+    return css, body, js, ''
+
+
+# 49. SVG line-draw icons
+@engine('line-draw-features', 'Line-Draw Feature Icons', 'Cards', 'svg line drawing stroke dashoffset icons features',
+        'Feature icons for {label} draw themselves stroke by stroke, then the text fades in, on a loop.',
+        ['Each icon is an inline SVG path with pathLength=1; stroke-dasharray 1 and dashoffset animate from 1 to 0 over {dur}ms.',
+         'Cards start their drawing with a stagger; the titles and descriptions fade up after the stroke finishes.',
+         'The cycle replays every 7 seconds in the preview.'])
+def e_linedraw(c):
+    r = c['r']
+    t = c['t']
+    dur = pick(r, [900, 1200, 1500])
+    c['vars'].update(dur=dur)
+    icons = ['M4 12h16M12 4v16', 'M5 19l7-14 7 14z', 'M4 6h16v12H4z M4 6l8 7 8-7', 'M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18 M12 7v5l3 3', 'M4 17l5-5 4 4 7-8', 'M12 21s-7-5-7-11a7 7 0 0 1 14 0c0 6-7 11-7 11z M12 10h.01']
+    cards = ''.join('<article class="lc" style="--i:%d"><svg viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="%s"/></svg><h3>%s</h3><p>%s</p></article>'
+                    % (i, icons[i], esc(it), esc(t['stats'][i % 3][1].capitalize() + ' — built for you.')) for i, it in enumerate(t['items'][:6]))
+    css = ('main{max-width:1100px;margin:0 auto;padding:40px 20px 60px}.hd{text-align:center;margin-bottom:30px}.hd h2{font-size:clamp(28px,4.4vw,52px);letter-spacing:var(--ls);font-weight:var(--hw);margin:10px 0}'
+           '.gr{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%%,240px),1fr));gap:16px}.lc{padding:26px;border-radius:20px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line)}'
+           '.lc svg{width:48px;height:48px;fill:none;stroke:var(--a1);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.lc path{stroke-dasharray:1;stroke-dashoffset:1}.go .lc path{transition:stroke-dashoffset %dms ease;transition-delay:calc(var(--i)*150ms);stroke-dashoffset:0}'
+           '.lc h3,.lc p{opacity:0;transform:translateY(10px)}.go .lc h3,.go .lc p{opacity:1;transform:none;transition:.6s;transition-delay:calc(var(--i)*150ms + %dms)}.lc h3{margin:14px 0 6px}.lc p{color:var(--muted);margin:0}'
+           '@media(prefers-reduced-motion:reduce){.lc path{stroke-dashoffset:0}.lc h3,.lc p{opacity:1;transform:none}}' % (dur, dur) + NAV_CSS + BTN_CSS + COPY_CSS)
+    body = nav(c) + '<main id="mn"><div class="hd"><p class="eyebrow">%s</p><h2>%s</h2></div><div class="gr">%s</div></main>' % (esc(t['brand']), esc(t['headline']), cards)
+    js = '(function(){var m=document.getElementById("mn");function go(){m.classList.remove("go");void m.offsetWidth;requestAnimationFrame(function(){m.classList.add("go")})}setTimeout(go,200);if(!matchMedia("(prefers-reduced-motion: reduce)").matches)setInterval(go,7000)})();'
+    return css, body, js, ''
+
+
+# 50. Slot-machine stats
+@engine('slot-stats', 'Slot-Machine Numbers', 'Stats', 'slot machine rolling digits numbers stats odometer',
+        'Big {label} numbers roll into place digit by digit like a slot machine.',
+        ['Each digit is a vertical strip of 0–9 inside a clipping box; translateY moves the strip to the target digit.',
+         'Digits roll with a staggered delay and a slight overshoot ({dur}ms each); prefixes and suffixes stay fixed.',
+         'The roll replays every 6 seconds in the preview.'])
+def e_slot(c):
+    r = c['r']
+    t = c['t']
+    dur = pick(r, [1200, 1600, 2000])
+    c['vars'].update(dur=dur)
+    blocks = ''
+    for val, lab in t['stats']:
+        chars = ''
+        for k, ch in enumerate(val):
+            if ch.isdigit():
+                chars += '<span class="dg" data-d="%s" style="--k:%d"><span class="sp">%s</span></span>' % (ch, k, ''.join('<i>%d</i>' % d for d in range(10)))
+            else:
+                chars += '<span class="fx">%s</span>' % esc(ch)
+        blocks += '<div class="sb"><div class="nm" aria-label="%s">%s</div><p>%s</p></div>' % (esc(val), chars, esc(lab))
+    css = ('main{min-height:100vh;display:grid;place-items:center;padding:30px 20px}.wr{max-width:1100px;width:100%%;text-align:center}.wr h2{font-size:clamp(26px,4vw,46px);letter-spacing:var(--ls);font-weight:var(--hw);margin:10px auto 30px;max-width:22ch}'
+           '.gr{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%%,240px),1fr));gap:16px}.sb{padding:28px 20px;border-radius:22px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line)}'
+           '.nm{display:inline-flex;align-items:flex-end;font-size:clamp(44px,7vw,76px);font-weight:900;letter-spacing:-.03em;line-height:1;color:var(--a1);font-variant-numeric:tabular-nums}.dg{display:inline-block;height:1em;overflow:hidden}'
+           '.sp{display:flex;flex-direction:column;transition:transform %dms cubic-bezier(.3,1.25,.5,1);transition-delay:calc(var(--k)*120ms)}.sp i{font-style:normal;height:1em;line-height:1}.sb p{color:var(--muted);margin-top:10px}' % dur
+           + NAV_CSS + BTN_CSS + COPY_CSS)
+    body = nav(c) + '<main><div class="wr"><p class="eyebrow">%s</p><h2>%s</h2><div class="gr" id="gr">%s</div></div></main>' % (esc(t['brand']), esc(t['headline']), blocks)
+    js = ('(function(){var D=document.querySelectorAll(".dg");function set(z){D.forEach(function(d){d.firstChild.style.transform="translateY(-"+(z?0:d.dataset.d)+"em)"})}if(matchMedia("(prefers-reduced-motion: reduce)").matches){set(0);return}'
+          'function roll(){D.forEach(function(d){d.firstChild.style.transition="none"});set(1);void document.body.offsetWidth;D.forEach(function(d){d.firstChild.style.transition=""});setTimeout(function(){set(0)},50)}roll();setInterval(roll,6000)})();')
+    return css, body, js, ''
+
+
+# 51. Morphing menu overlay
+@engine('menu-overlay', 'Full-Screen Menu Morph', 'Navigation', 'hamburger menu morph overlay navigation stagger links',
+        'A hamburger morphs into a cross and a full-screen {label} menu wipes in with staggered links.',
+        ['The three menu bars rotate and fade into an X with CSS transforms when the button gets aria-expanded="true".',
+         'The overlay reveals with a clip-path circle growing from the button; links slide up one after another ({stagger}ms stagger).',
+         'Esc closes the menu; in the preview it opens and closes every 4 seconds.'])
+def e_menu(c):
+    r = c['r']
+    t = c['t']
+    stagger = pick(r, [60, 80, 110])
+    c['vars'].update(stagger=stagger)
+    links = ''.join('<li style="--i:%d"><a href="#">%s</a></li>' % (i, esc(it)) for i, it in enumerate(t['items'][:5] + ['Contact']))
+    css = ('body{min-height:100vh;overflow:hidden}.top{position:relative;z-index:30;display:flex;justify-content:space-between;align-items:center;padding:20px clamp(16px,4vw,48px)}.top b{font-size:20px}'
+           '.mb{all:unset;cursor:pointer;width:46px;height:46px;border-radius:50%%;display:grid;place-items:center;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line)}.mb:focus-visible{outline:2px solid var(--a2)}'
+           '.mb i{position:absolute;width:20px;height:2px;background:var(--ink);transition:transform .35s,opacity .2s}.mb i:nth-child(1){transform:translateY(-6px)}.mb i:nth-child(3){transform:translateY(6px)}'
+           '.mb[aria-expanded=true] i:nth-child(1){transform:rotate(45deg)}.mb[aria-expanded=true] i:nth-child(2){opacity:0}.mb[aria-expanded=true] i:nth-child(3){transform:rotate(-45deg)}.mb{position:relative}'
+           '.ov{position:fixed;inset:0;z-index:20;background:linear-gradient(140deg,var(--a1),var(--a2));clip-path:circle(0 at calc(100%% - 50px) 42px);transition:clip-path .7s cubic-bezier(.7,0,.2,1);display:grid;place-items:center}'
+           '.ov.open{clip-path:circle(150%% at calc(100%% - 50px) 42px)}.ov ul{list-style:none;margin:0;padding:0;text-align:center}.ov li{overflow:hidden}.ov a{display:block;color:var(--on);text-decoration:none;font-size:clamp(30px,6vw,64px);font-weight:900;letter-spacing:-.03em;transform:translateY(110%%);transition:transform .5s cubic-bezier(.2,.8,.2,1)}'
+           '.ov.open a{transform:none;transition-delay:calc(.25s + var(--i)*%dms)}.ov a:hover{opacity:.8}' % stagger + COPY_CSS + center_hero_css() + BTN_CSS)
+    body = ('<header class="top"><b>%s</b><button class="mb" id="mb" type="button" aria-expanded="false" aria-controls="ov" aria-label="Menu"><i></i><i></i><i></i></button></header>'
+            '<nav class="ov" id="ov" aria-label="Main"><ul>%s</ul></nav>' % (esc(t['brand']), links) + hero_copy(c))
+    js = ('(function(){var b=document.getElementById("mb"),o=document.getElementById("ov"),user=0;function set(v){b.setAttribute("aria-expanded",v);o.classList.toggle("open",v)}b.addEventListener("click",function(){user=1;set(b.getAttribute("aria-expanded")!=="true")});'
+          'addEventListener("keydown",function(e){if(e.key==="Escape")set(false)});if(!matchMedia("(prefers-reduced-motion: reduce)").matches)setInterval(function(){if(!user)set(b.getAttribute("aria-expanded")!=="true")},4000)})();')
+    return css, body, js, ''
+
+
+# 52. Sticky shrinking header
+@engine('shrink-header', 'Shrinking Sticky Header', 'Navigation', 'sticky header shrink scroll progress navigation active section',
+        'A {label} header shrinks and blurs as you scroll, with a progress line and the current section highlighted.',
+        ['The header is position:sticky; after {th}px of scroll it gets .small (less padding, smaller logo, frosted background).',
+         'A gradient line under the header scales with scroll progress; an IntersectionObserver highlights the nav link of the section in view.',
+         'Sections below are simple content blocks so the behaviour is easy to see.'])
+def e_shrink(c):
+    r = c['r']
+    t = c['t']
+    th = pick(r, [40, 80, 120])
+    c['vars'].update(th=th)
+    links = ''.join('<a href="#s%d" data-s="s%d">%s</a>' % (i, i, esc(it)) for i, it in enumerate(t['items'][:4]))
+    secs = ''.join('<section id="s%d" class="sc"><b>%02d</b><h2>%s</h2><p>%s</p></section>' % (i, i + 1, esc(it), esc(t['sub'])) for i, it in enumerate(t['items'][:4]))
+    css = ('html{scroll-behavior:smooth}.hd{position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:20px;padding:22px clamp(16px,4vw,48px);transition:padding .3s,background .3s,box-shadow .3s}'
+           '.hd b{font-size:22px;transition:font-size .3s}.hd.small{padding:10px clamp(16px,4vw,48px);background:color-mix(in srgb,var(--bg) 75%,transparent);backdrop-filter:blur(12px);box-shadow:0 1px 0 var(--line)}.hd.small b{font-size:17px}'
+           '.lk{display:flex;gap:16px;margin-left:auto}.lk a{color:var(--muted);text-decoration:none;font-size:14px;padding:6px 10px;border-radius:8px}.lk a.on{color:var(--ink);background:color-mix(in srgb,var(--a1) 20%,transparent)}'
+           '.pr{position:absolute;left:0;bottom:0;height:2px;width:100%;transform-origin:0;transform:scaleX(0);background:linear-gradient(90deg,var(--a1),var(--a2))}'
+           '.hero{min-height:70vh;display:grid;place-items:center;text-align:center;padding:24px}.sc{min-height:70vh;max-width:900px;margin:0 auto;padding:12vh 20px;border-top:1px solid var(--line)}.sc b{color:var(--a1)}.sc h2{font-size:clamp(28px,4vw,48px);margin:8px 0}.sc p{color:var(--muted)}'
+           '@media(max-width:640px){.lk{display:none}}' + BTN_CSS + COPY_CSS)
+    body = ('<header class="hd" id="hd"><b>%s</b><nav class="lk">%s</nav><a class="btn sm" href="#">%s</a><i class="pr" id="pr"></i></header><div class="hero"><div><p class="eyebrow">%s</p><h1>%s</h1><p class="sub" style="margin:0 auto">Scroll ↓</p></div></div>%s'
+            % (esc(t['brand']), links, esc(t['cta']), esc(t['label']), esc(t['headline']), secs))
+    js = ('(function(){var h=document.getElementById("hd"),p=document.getElementById("pr"),T=%d,L=document.querySelectorAll("[data-s]");function f(){h.classList.toggle("small",scrollY>T);var m=document.documentElement.scrollHeight-innerHeight;p.style.transform="scaleX("+(m>0?scrollY/m:0)+")"}addEventListener("scroll",f,{passive:true});f();'
+          'var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)L.forEach(function(a){a.classList.toggle("on",a.dataset.s===e.target.id)})})},{rootMargin:"-45%% 0px -50%% 0px"});document.querySelectorAll(".sc").forEach(function(s){io.observe(s)})})();' % th)
+    return css, body, js, ''
+
+
+# 53. Toast stack
+@engine('toast-stack', 'Notification Toast Stack', 'Interactive', 'toast notifications stack slide dismiss ui',
+        'Friendly {label} notifications slide in, stack with depth and dismiss themselves.',
+        ['New toasts slide in from the bottom-right with a spring; older toasts scale down and move up to form a stack (max {max} visible).',
+         'Each toast has an icon, title, message, a progress bar for its {life}s lifetime and a close button.',
+         'Hovering the stack expands it and pauses the timers; a button lets visitors trigger a toast.'])
+def e_toast(c):
+    r = c['r']
+    t = c['t']
+    mx = pick(r, [3, 4])
+    life = pick(r, [4, 5, 6])
+    c['vars'].update(max=mx, life=life)
+    msgs = [('✓', t['items'][0] + ' ready', t['sub'][:70]), ('★', t['stats'][0][0] + ' ' + t['stats'][0][1], 'Thanks for being here.'), ('↗', t['cta'], 'It takes less than a minute.'), ('♥', t['who'][:40], t['quote'][:70])]
+    css = ('body{min-height:100vh;display:flex;flex-direction:column}main{flex:1;display:grid;place-items:center;text-align:center;padding:24px}.stk{position:fixed;right:20px;bottom:20px;width:min(360px,calc(100vw - 40px));z-index:5}'
+           '.ts{position:absolute;right:0;bottom:0;width:100%;display:flex;gap:12px;padding:14px 16px;border-radius:16px;background:var(--surface);box-shadow:0 20px 50px -20px #000a,inset 0 0 0 1px var(--line);transition:transform .5s cubic-bezier(.3,1.3,.5,1),opacity .4s;overflow:hidden}'
+           '.ts .ic{flex:0 0 36px;height:36px;border-radius:10px;display:grid;place-items:center;background:var(--a1);color:var(--on);font-weight:800}.ts b{display:block;font-size:14.5px}.ts p{margin:2px 0 0;color:var(--muted);font-size:13px}'
+           '.ts button{all:unset;cursor:pointer;margin-left:auto;color:var(--muted);align-self:flex-start;padding:0 4px}.ts button:focus-visible{outline:2px solid var(--a2)}.ts i{position:absolute;left:0;bottom:0;height:3px;width:100%;background:var(--a2);transform-origin:0;animation:lf var(--life) linear forwards}'
+           '.stk:hover .ts i{animation-play-state:paused}@keyframes lf{to{transform:scaleX(0)}}.row{justify-content:center}' + NAV_CSS + BTN_CSS + COPY_CSS)
+    body = nav(c) + '<main><div><p class="eyebrow">%s</p><h1>%s</h1><div class="row"><button class="btn" id="add" type="button">Show a notification</button></div></div></main><div class="stk" id="stk" aria-live="polite"></div>' % (esc(t['label']), esc(t['headline']))
+    js = ('(function(){var S=document.getElementById("stk"),M=%s,MAX=%d,LIFE=%d,k=0,hover=0;S.addEventListener("mouseenter",function(){hover=1;lay()});S.addEventListener("mouseleave",function(){hover=0;lay()});'
+          'function lay(){var T=[].slice.call(S.children).reverse();T.forEach(function(t,i){var y=hover?-i*84:-i*12,s=hover?1:1-i*.05;t.style.transform="translateY("+y+"px) scale("+s+")";t.style.opacity=i<MAX?1:0;t.style.zIndex=100-i})}'
+          'function add(){var m=M[k++%%M.length],t=document.createElement("div");t.className="ts";t.style.setProperty("--life",LIFE+"s");t.style.transform="translateY(120%%)";t.innerHTML=\'<span class="ic"></span><div><b></b><p></p></div><button type="button" aria-label="Dismiss">✕</button><i></i>\';'
+          't.querySelector(".ic").textContent=m[0];t.querySelector("b").textContent=m[1];t.querySelector("p").textContent=m[2];S.appendChild(t);requestAnimationFrame(function(){lay()});'
+          'var kill=function(){t.style.opacity=0;setTimeout(function(){t.remove();lay()},400)};t.querySelector("button").addEventListener("click",kill);t.querySelector("i").addEventListener("animationend",kill);if(S.children.length>MAX+1)S.firstChild.remove()}'
+          'document.getElementById("add").addEventListener("click",add);add();setInterval(add,%d)})();' % (jsstr(msgs), mx, life, int(life * 600)))
+    return css, body, js, ''
+
+
+# 54. Animated button set
+@engine('button-showcase', 'Animated Button Set', 'Buttons', 'buttons hover effects gradient border shine liquid fill arrow',
+        'Six polished {label} call-to-action buttons with shine, gradient borders, liquid fill and arrow motion.',
+        ['Each button demonstrates one effect: shine sweep, rotating gradient border, liquid fill, arrow slide, pulse ring and 3D press.',
+         'Effects run on hover and focus; in the preview each button plays its effect in turn every {every}s.',
+         'All effects use transform, opacity and background-position only.'])
+def e_buttons(c):
+    r = c['r']
+    t = c['t']
+    every = pick(r, [1, 1.5])
+    c['vars'].update(every=every)
+    labels = [t['cta'], t['cta2'], 'Get started', 'Learn more', 'Join now', 'Contact us']
+    btns = ''.join('<a href="#" class="b b%d"><span>%s</span></a>' % (i, esc(l)) for i, l in enumerate(labels))
+    css = ('main{min-height:100vh;display:grid;grid-template-columns:minmax(0,1fr);place-items:center;padding:30px 20px;text-align:center}.gr{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:22px;max-width:900px;width:100%;margin-top:30px}'
+           '.b{position:relative;isolation:isolate;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:16px 26px;border-radius:14px;font-weight:800;text-decoration:none;color:var(--on);background:var(--a1);overflow:hidden;transition:transform .2s}'
+           '.b0::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,#ffffff80 50%,transparent 70%);transform:translateX(-120%);transition:transform .7s}.b0:hover::after,.b0.p::after{transform:translateX(120%)}'
+           '@property --ba{syntax:"<angle>";inherits:false;initial-value:0deg}.b1{background:var(--bg);color:var(--ink)}.b1::before{content:"";position:absolute;inset:-2px;z-index:-2;background:conic-gradient(from var(--ba),var(--a1),var(--a2),var(--a3),var(--a1));animation:ba 3s linear infinite}.b1::after{content:"";position:absolute;inset:2px;z-index:-1;border-radius:12px;background:var(--bg)}@keyframes ba{to{--ba:360deg}}'
+           '.b2{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 2px var(--a2)}.b2::before{content:"";position:absolute;z-index:-1;left:-10%;right:-10%;bottom:-120%;height:120%;background:var(--a2);border-radius:40% 45% 0 0;transition:bottom .6s cubic-bezier(.3,.8,.2,1)}.b2:hover::before,.b2.p::before{bottom:0}.b2:hover,.b2.p{color:var(--on)}'
+           '.b3 span::after{content:" →";display:inline-block;transition:transform .3s}.b3:hover span::after,.b3.p span::after{transform:translateX(8px)}'
+           '.b4{background:var(--a3);color:#111}.b4::before{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:0 0 0 0 var(--a3);opacity:0}.b4:hover::before,.b4.p::before{animation:pr 1s ease-out}@keyframes pr{0%{opacity:.9;box-shadow:0 0 0 0 var(--a3)}100%{opacity:0;box-shadow:0 0 0 18px var(--a3)}}.b4{overflow:visible}'
+           '.b5{box-shadow:0 6px 0 color-mix(in srgb,var(--a1) 55%,#000)}.b5:hover,.b5.p{transform:translateY(4px);box-shadow:0 2px 0 color-mix(in srgb,var(--a1) 55%,#000)}.b:focus-visible{outline:2px solid var(--a2);outline-offset:3px}'
+           'main>div{width:100%;max-width:900px}main h2{font-size:clamp(26px,4vw,46px);letter-spacing:var(--ls);font-weight:var(--hw);margin:10px 0}' + NAV_CSS + BTN_CSS + COPY_CSS)
+    body = nav(c) + '<main><div><p class="eyebrow">%s</p><h2>%s</h2><div class="gr">%s</div></div></main>' % (esc(t['brand']), esc(t['headline']), btns)
+    js = '(function(){if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;var B=document.querySelectorAll(".b"),i=0;setInterval(function(){B.forEach(function(b){b.classList.remove("p")});B[i%%B.length].classList.add("p");i++},%d)})();' % int(every * 1000)
+    return css, body, js, ''
+
+
+# 55. Skeleton loader
+@engine('skeleton-reveal', 'Skeleton Loader Reveal', 'Loader', 'skeleton loading shimmer placeholder content reveal',
+        'Shimmering skeleton cards load into real {label} content, then reload, showing a polished loading state.',
+        ['Placeholder blocks shimmer with a moving linear-gradient (background-position animation, {dur}s).',
+         'After 1.6 seconds each card swaps to its real content with a cross-fade and slight lift, staggered.',
+         'The cycle repeats every 6 seconds in the preview; use it while your data loads.'])
+def e_skeleton(c):
+    r = c['r']
+    t = c['t']
+    dur = pick(r, [1.2, 1.6])
+    c['vars'].update(dur=dur)
+    cards = ''.join('<article class="kc" style="--i:%d"><div class="sk"><i class="a"></i><i class="l"></i><i class="l s"></i></div><div class="rl"><span class="av" style="--h:%d">%s</span><h3>%s</h3><p>%s</p></div></article>'
+                    % (i, (i * 70) % 360, esc(it[:1]), esc(it), esc(t['sub'][:80])) for i, it in enumerate(t['items'][:6]))
+    css = ('main{max-width:1100px;margin:0 auto;padding:40px 20px 60px}main h2{font-size:clamp(28px,4.4vw,52px);letter-spacing:var(--ls);font-weight:var(--hw);margin:0 0 24px}'
+           '.gr{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%%,260px),1fr));gap:16px}.kc{position:relative;min-height:170px;padding:22px;border-radius:20px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line)}'
+           '.sk,.rl{position:absolute;inset:22px;transition:opacity .5s,transform .5s;transition-delay:calc(var(--i)*120ms)}.rl{opacity:0;transform:translateY(8px)}.done .sk{opacity:0}.done .rl{opacity:1;transform:none}'
+           '.sk i{display:block;border-radius:8px;background:linear-gradient(90deg,var(--line) 25%%,color-mix(in srgb,var(--a1) 25%%,var(--line)) 50%%,var(--line) 75%%);background-size:300%% 100%%;animation:sh %ss linear infinite}'
+           '.sk .a{width:44px;height:44px;border-radius:50%%}.sk .l{height:14px;margin-top:16px}.sk .s{width:60%%}@keyframes sh{from{background-position:100%% 0}to{background-position:-100%% 0}}'
+           '.av{display:inline-grid;place-items:center;width:44px;height:44px;border-radius:50%%;background:hsl(var(--h) 70%% 55%%);color:#fff;font-weight:800}.rl h3{margin:12px 0 4px}.rl p{color:var(--muted);margin:0;font-size:14px}' % dur
+           + NAV_CSS + BTN_CSS + COPY_CSS)
+    body = nav(c) + '<main id="mn"><h2>%s</h2><div class="gr">%s</div></main>' % (esc(t['headline']), cards)
+    js = '(function(){var m=document.getElementById("mn");if(matchMedia("(prefers-reduced-motion: reduce)").matches){m.classList.add("done");return}function run(){m.classList.remove("done");setTimeout(function(){m.classList.add("done")},1600)}run();setInterval(run,6000)})();'
+    return css, body, js, ''
+
+
+# 56. Loader collection
+@engine('loader-collection', 'CSS Loader Collection', 'Loader', 'loaders spinners css collection dots bars rings',
+        'Eight smooth CSS loaders in {label} colours: rings, dots, bars, orbit, pulse and more.',
+        ['Each loader is pure CSS: transforms and opacity keyframes only, with speeds around {speed}s.',
+         'Loaders sit in a responsive grid of tiles with their names; each has role="status" and a visually hidden label.',
+         'Copy any single loader into your project by taking its tile.'])
+def e_loaders(c):
+    r = c['r']
+    t = c['t']
+    sp = pick(r, [0.8, 1, 1.2])
+    c['vars'].update(speed=sp)
+    names = ['Ring', 'Dots', 'Bars', 'Orbit', 'Pulse', 'Square flip', 'Dual ring', 'Wave']
+    inner = ['<i class="l0"></i>', '<i class="l1"><b></b><b></b><b></b></i>', '<i class="l2"><b></b><b></b><b></b><b></b></i>', '<i class="l3"><b></b></i>', '<i class="l4"></i>', '<i class="l5"></i>', '<i class="l6"></i>', '<i class="l7"><b></b><b></b><b></b><b></b><b></b></i>']
+    tiles = ''.join('<div class="tl" role="status"><div class="lb">%s</div><span>%s</span><em class="sr">Loading</em></div>' % (inner[i], names[i]) for i in range(8))
+    S = '%ss' % sp
+    css = ('main{max-width:1000px;margin:0 auto;padding:40px 20px 60px;text-align:center}main h2{font-size:clamp(26px,4vw,46px);letter-spacing:var(--ls);font-weight:var(--hw);margin:10px 0 26px}.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}'
+           '.gr{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,190px),1fr));gap:14px}.tl{position:relative;display:flex;flex-direction:column;align-items:center;gap:14px;padding:30px 10px;border-radius:18px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line)}.tl span{color:var(--muted);font-size:13px}'
+           '.lb{height:56px;display:grid;place-items:center}.lb i{display:block}.lb b{display:block}'
+           '.l0{width:44px;height:44px;border-radius:50%;border:4px solid var(--line);border-top-color:var(--a1);animation:rt ' + S + ' linear infinite}'
+           '.l1{display:flex!important;gap:6px}.l1 b{width:10px;height:10px;border-radius:50%;background:var(--a1);animation:bn ' + S + ' ease-in-out infinite}.l1 b:nth-child(2){animation-delay:.15s}.l1 b:nth-child(3){animation-delay:.3s}'
+           '.l2{display:flex!important;gap:4px;align-items:center;height:40px}.l2 b{width:6px;height:100%;background:var(--a2);animation:br ' + S + ' ease-in-out infinite}.l2 b:nth-child(2){animation-delay:.1s}.l2 b:nth-child(3){animation-delay:.2s}.l2 b:nth-child(4){animation-delay:.3s}'
+           '.l3{position:relative;width:48px;height:48px;border-radius:50%;box-shadow:inset 0 0 0 2px var(--line);animation:rt ' + S + ' linear infinite}.l3 b{position:absolute;top:-5px;left:50%;width:10px;height:10px;margin-left:-5px;border-radius:50%;background:var(--a3)}'
+           '.l4{width:40px;height:40px;border-radius:50%;background:var(--a1);animation:pl ' + S + ' ease-out infinite}.l5{width:34px;height:34px;background:var(--a2);animation:fl ' + S + ' ease-in-out infinite}'
+           '.l6{width:44px;height:44px;border-radius:50%;border:4px solid transparent;border-top-color:var(--a1);border-bottom-color:var(--a2);animation:rt ' + S + ' cubic-bezier(.5,.2,.5,.8) infinite}'
+           '.l7{display:flex!important;gap:3px}.l7 b{width:6px;height:28px;border-radius:3px;background:var(--a1);animation:wv ' + S + ' ease-in-out infinite}.l7 b:nth-child(2){animation-delay:.1s}.l7 b:nth-child(3){animation-delay:.2s}.l7 b:nth-child(4){animation-delay:.3s}.l7 b:nth-child(5){animation-delay:.4s}'
+           '@keyframes rt{to{transform:rotate(360deg)}}@keyframes bn{50%{transform:translateY(-12px)}}@keyframes br{50%{transform:scaleY(.3)}}@keyframes pl{0%{transform:scale(.2);opacity:1}100%{transform:scale(1.2);opacity:0}}'
+           '@keyframes fl{50%{transform:perspective(120px) rotateY(180deg)}100%{transform:perspective(120px) rotateY(180deg) rotateX(180deg)}}@keyframes wv{50%{transform:scaleY(.4)}}' + NAV_CSS + BTN_CSS + COPY_CSS)
+    body = nav(c) + '<main><p class="eyebrow">%s</p><h2>Loading states that feel fast</h2><div class="gr">%s</div></main>' % (esc(t['brand']), tiles)
+    return css, body, '', ''
+
+
+# 57. Testimonial wall
+@engine('testimonial-wall', 'Scrolling Testimonial Wall', 'Testimonials', 'testimonials wall vertical marquee columns social proof',
+        'Columns of {label} reviews scroll up and down at different speeds into a soft fade, a wall of social proof.',
+        ['{cols} columns each loop a duplicated list of review cards vertically (translateY 0 → −50%) at different speeds; alternate columns run in reverse.',
+         'The wall is masked at the top and bottom with a gradient; hovering a column pauses it.',
+         'Cards include stars, a short quote and an initial avatar.'])
+def e_twall(c):
+    r = c['r']
+    t = c['t']
+    cols = pick(r, [2, 3])
+    c['vars'].update(cols=cols)
+    quotes = [t['quote'], 'Setup was quick and the team loved it from day one.', 'Clear pricing, friendly people, great results.', 'Support replied in minutes. Rare these days.', 'Exactly what we needed — nothing extra.', 'I recommend %s to everyone I know.' % t['brand']]
+    who = [t['who'], 'Aisha R.', 'Vikram S.', 'Lena M.', 'Rohan T.', 'Kavya N.']
+
+    def card(i):
+        return '<figure class="qc"><div class="stars" aria-label="5 stars">★★★★★</div><blockquote>“%s”</blockquote><figcaption><i style="--h:%d">%s</i>%s</figcaption></figure>' % (esc(quotes[i]), (i * 60) % 360, esc(who[i][:1]), esc(who[i]))
+    colh = ''
+    for k in range(cols):
+        order = [(k * 2 + i) % 6 for i in range(6)]
+        inner = ''.join(card(i) for i in order)
+        colh += '<div class="col%s" style="--d:%ds"><div class="bt">%s%s</div></div>' % (' rv' if k % 2 else '', 26 + k * 8, inner, inner)
+    css = ('main{max-width:1100px;margin:0 auto;padding:40px 20px}.hd{text-align:center;margin-bottom:20px}.hd h2{font-size:clamp(28px,4.4vw,52px);letter-spacing:var(--ls);font-weight:var(--hw);margin:10px 0}'
+           '.wall{display:grid;grid-template-columns:repeat(%d,1fr);gap:16px;height:70vh;overflow:hidden;-webkit-mask-image:linear-gradient(transparent,#000 15%%,#000 85%%,transparent);mask-image:linear-gradient(transparent,#000 15%%,#000 85%%,transparent)}'
+           '.bt{display:flex;flex-direction:column;gap:16px;animation:up var(--d) linear infinite}.rv .bt{animation-direction:reverse}.col:hover .bt,.col.rv:hover .bt{animation-play-state:paused}@keyframes up{to{transform:translateY(-50%%)}}'
+           '.qc{margin:0;padding:20px;border-radius:18px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line)}.stars{color:var(--a3);letter-spacing:2px}blockquote{margin:10px 0;line-height:1.5}figcaption{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:14px}'
+           'figcaption i{display:grid;place-items:center;width:30px;height:30px;border-radius:50%%;font-style:normal;color:#fff;font-weight:800;background:hsl(var(--h) 65%% 50%%)}'
+           '@media(max-width:700px){.wall{grid-template-columns:1fr}.col:nth-child(n+2){display:none}}@media(prefers-reduced-motion:reduce){.bt{animation:none}}' % cols + NAV_CSS + BTN_CSS + COPY_CSS)
+    colh = colh.replace('class="col rv"', 'class="col rv"')
+    body = nav(c) + '<main><div class="hd"><p class="eyebrow">Loved by customers</p><h2>Why people choose %s</h2></div><div class="wall">%s</div></main>' % (esc(t['brand']), colh.replace('<div class="col', '<div class="col'))
+    return css, body, '', ''
+
+
+# 58. Feature tabs
+@engine('feature-tabs', 'Sliding Feature Tabs', 'Interactive', 'tabs sliding indicator panels feature auto advance',
+        'Feature tabs for {label} with a sliding pill indicator and smoothly swapping panels that auto-advance.',
+        ['A tablist of {n} tabs; the indicator pill moves and resizes to the selected tab using its offsetLeft/offsetWidth.',
+         'Panels cross-fade and slide 16px; a progress bar inside the active tab shows time until auto-advance ({every}s).',
+         'Full keyboard support: arrow keys move between tabs, following the WAI-ARIA tabs pattern.'])
+def e_tabs(c):
+    r = c['r']
+    t = c['t']
+    n = pick(r, [3, 4])
+    every = pick(r, [4, 5])
+    c['vars'].update(n=n, every=every)
+    tabs = ''.join('<button role="tab" id="t%d" aria-controls="p%d" aria-selected="%s" tabindex="%s">%s<i></i></button>' % (i, i, 'true' if i == 0 else 'false', '0' if i == 0 else '-1', esc(t['items'][i])) for i in range(n))
+    panels = ''.join('<div role="tabpanel" id="p%d" aria-labelledby="t%d" class="pn%s"><div><h3>%s</h3><p>%s</p><ul><li>%s</li><li>%s</li></ul></div><div class="art" style="--h:%d"></div></div>'
+                     % (i, i, ' on' if i == 0 else '', esc(t['items'][i]), esc(t['sub']), esc(t['stats'][i % 3][0] + ' ' + t['stats'][i % 3][1]), esc(t['words'][i % 4].capitalize() + ' by default'), (i * 80 + 30) % 360) for i in range(n))
+    css = ('main{max-width:1050px;margin:0 auto;padding:40px 20px 60px}main h2{text-align:center;font-size:clamp(28px,4.4vw,52px);letter-spacing:var(--ls);font-weight:var(--hw);margin:0 0 24px}'
+           '.tl{position:relative;display:flex;gap:4px;width:max-content;max-width:100%;margin:0 auto 26px;padding:5px;border-radius:99px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);overflow-x:auto}'
+           '.tl button{all:unset;cursor:pointer;position:relative;z-index:1;padding:10px 18px;border-radius:99px;font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden}.tl button[aria-selected=true]{color:var(--on)}.tl button:focus-visible{outline:2px solid var(--a2)}'
+           '.tl button i{position:absolute;left:0;bottom:0;height:2px;width:100%;background:var(--on);transform-origin:0;transform:scaleX(0)}.tl button[aria-selected=true] i{animation:pg var(--ev) linear forwards}@keyframes pg{to{transform:scaleX(1)}}'
+           '.ind{position:absolute;top:5px;bottom:5px;border-radius:99px;background:var(--a1);transition:left .4s cubic-bezier(.3,1.3,.5,1),width .4s}'
+           '.pns{position:relative;min-height:320px}.pn{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center;opacity:0;transform:translateY(16px);transition:.5s;pointer-events:none}.pn.on{opacity:1;transform:none;pointer-events:auto}'
+           '.pn h3{font-size:clamp(24px,3vw,36px);margin:0 0 10px}.pn p{color:var(--muted)}.pn li{margin:6px 0}.art{height:260px;border-radius:22px;background:radial-gradient(circle at 30% 30%,hsl(var(--h) 90% 70%),transparent 55%),linear-gradient(140deg,var(--a1),var(--surface))}'
+           '@media(max-width:760px){.pns{min-height:520px}.pn{grid-template-columns:1fr}.art{height:180px}}' + NAV_CSS + BTN_CSS + COPY_CSS)
+    body = nav(c) + '<main id="mn" style="--ev:%ds"><h2>%s</h2><div class="tl" role="tablist" aria-label="Features"><span class="ind" id="ind"></span>%s</div><div class="pns">%s</div></main>' % (every, esc(t['headline']), tabs, panels)
+    js = ('(function(){var T=[].slice.call(document.querySelectorAll("[role=tab]")),P=document.querySelectorAll("[role=tabpanel]"),ind=document.getElementById("ind"),i=0,tm,E=%d;function sel(k,focus){i=(k+T.length)%%T.length;T.forEach(function(t,j){t.setAttribute("aria-selected",j===i);t.tabIndex=j===i?0:-1;var c=t.querySelector("i");c.style.animation="none";void c.offsetWidth;c.style.animation=""});'
+          'P.forEach(function(p,j){p.classList.toggle("on",j===i)});ind.style.left=T[i].offsetLeft+"px";ind.style.width=T[i].offsetWidth+"px";if(focus)T[i].focus();clearTimeout(tm);if(!matchMedia("(prefers-reduced-motion: reduce)").matches)tm=setTimeout(function(){sel(i+1)},E)}'
+          'T.forEach(function(t,j){t.addEventListener("click",function(){sel(j)});t.addEventListener("keydown",function(e){if(e.key==="ArrowRight")sel(i+1,1);if(e.key==="ArrowLeft")sel(i-1,1)})});addEventListener("resize",function(){sel(i)});sel(0)})();' % (every * 1000))
+    return css, body, js, ''
+
+
+# 59. Before/after compare
+@engine('compare-slider', 'Before/After Slider', 'Interactive', 'before after compare slider drag reveal clip',
+        'Drag a handle to compare the before and after of a {label} transformation, with a gentle auto demo.',
+        ['Two stacked panels: the "after" panel is clipped with clip-path inset() controlled by a CSS variable --p.',
+         'An accessible range input sits on top for keyboard and screen readers; pointer drag updates --p directly.',
+         'Until the visitor interacts, the handle sweeps back and forth ({dur}s) to show the effect.'])
+def e_compare(c):
+    r = c['r']
+    t = c['t']
+    dur = pick(r, [4, 6])
+    c['vars'].update(dur=dur)
+    css = ('main{max-width:1000px;margin:0 auto;padding:36px 20px 60px;text-align:center}main h2{font-size:clamp(28px,4.4vw,52px);letter-spacing:var(--ls);font-weight:var(--hw);margin:10px 0 22px}'
+           '.cmp{--p:50%;position:relative;aspect-ratio:16/9;border-radius:24px;overflow:hidden;box-shadow:0 30px 60px -30px #000a,inset 0 0 0 1px var(--line);touch-action:none}'
+           '.pa,.pb{position:absolute;inset:0;display:grid;place-items:center;font-size:clamp(20px,3vw,34px);font-weight:900;color:#fff}.pa{background:repeating-linear-gradient(45deg,#6b7280 0 18px,#4b5563 18px 36px);filter:saturate(.2)}'
+           '.pb{background:radial-gradient(circle at 70% 30%,var(--a3),transparent 50%),linear-gradient(135deg,var(--a1),var(--a2));clip-path:inset(0 0 0 var(--p))}.pa span,.pb span{padding:8px 16px;border-radius:12px;background:#0006}'
+           '.hd{position:absolute;top:0;bottom:0;left:var(--p);width:3px;margin-left:-1.5px;background:#fff;pointer-events:none}.hd::after{content:"⇆";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;border-radius:50%;background:#fff;color:#111;display:grid;place-items:center;font-weight:900;box-shadow:0 6px 20px #0006}'
+           '.cmp input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0}.cmp input:focus-visible+.hd::after{outline:3px solid var(--a2)}.lab{display:flex;justify-content:space-between;color:var(--muted);margin-top:10px;font-size:14px}' + NAV_CSS + BTN_CSS + COPY_CSS)
+    body = nav(c) + ('<main><p class="eyebrow">%s</p><h2>%s</h2><div class="cmp" id="cmp"><div class="pa"><span>Before</span></div><div class="pb"><span>After %s</span></div><input type="range" min="0" max="100" value="50" aria-label="Compare before and after" id="rg"><i class="hd"></i></div><div class="lab"><span>Before</span><span>After</span></div></main>'
+                     % (esc(t['label']), esc(t['headline']), esc(t['brand'])))
+    js = ('(function(){var c=document.getElementById("cmp"),g=document.getElementById("rg"),user=0,t=0;function set(v){c.style.setProperty("--p",v+"%%");g.value=v}g.addEventListener("input",function(){user=1;set(g.value)});'
+          'c.addEventListener("pointerdown",function(){user=1});if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;(function f(){if(!user){t+=1/(60*%d);set(50+40*Math.sin(t*6.283))}requestAnimationFrame(f)})()})();' % dur)
+    return css, body, js, ''
+
+
+# 60. Event countdown
+@engine('event-countdown', 'Event Countdown', 'CTA', 'countdown timer event flip digits launch date',
+        'A {label} event announcement with a live countdown whose digits flip as seconds tick by.',
+        ['The target date is set in one constant ({days} days from the page load in this demo — replace it with your real event date).',
+         'Each unit (days, hours, minutes, seconds) flips with a short rotateX animation when its value changes.',
+         'Use a real date only; never reset the timer to fake urgency.'])
+def e_countdown(c):
+    r = c['r']
+    t = c['t']
+    days = pick(r, [12, 21, 30, 45])
+    c['vars'].update(days=days)
+    units = ''.join('<div class="u"><b data-u="%s">00</b><span>%s</span></div>' % (k, k.capitalize()) for k in ['days', 'hours', 'minutes', 'seconds'])
+    css = ('main{min-height:100vh;display:grid;place-items:center;text-align:center;padding:30px 20px}main h2{font-size:clamp(30px,5vw,62px);letter-spacing:var(--ls);font-weight:var(--hw);margin:12px auto;max-width:18ch}main p{color:var(--muted);max-width:50ch;margin:0 auto}'
+           '.cd{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:30px 0}.u{flex:0 1 110px;min-width:64px;padding:14px 6px;border-radius:18px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);perspective:300px}'
+           '.u b{display:block;font-size:clamp(32px,6vw,58px);font-weight:900;font-variant-numeric:tabular-nums;color:var(--a1)}.u b.fl{animation:fl .45s}@keyframes fl{0%{transform:rotateX(0)}50%{transform:rotateX(90deg);opacity:.3}100%{transform:rotateX(0)}}.u span{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.12em}'
+           '.note{font-size:12px;margin-top:10px!important}' + NAV_CSS + BTN_CSS + COPY_CSS)
+    body = nav(c) + '<main><div><p class="eyebrow">%s · live event</p><h2>%s</h2><p>%s</p><div class="cd" role="timer" aria-live="off">%s</div><a class="btn" href="#">%s</a><p class="note">Demo date: replace TARGET with your real event date.</p></div></main>' % (esc(t['brand']), esc(t['headline']), esc(t['sub']), units, esc(t['cta']))
+    js = ('(function(){var TARGET=Date.now()+%d*864e5,E=document.querySelectorAll("[data-u]");function tick(){var s=Math.max(0,Math.floor((TARGET-Date.now())/1e3)),v={days:Math.floor(s/86400),hours:Math.floor(s/3600)%%24,minutes:Math.floor(s/60)%%60,seconds:s%%60};'
+          'E.forEach(function(e){var n=("0"+v[e.dataset.u]).slice(-2);if(e.textContent!==n){e.textContent=n;e.classList.remove("fl");void e.offsetWidth;e.classList.add("fl")}})}tick();setInterval(tick,1000)})();' % days)
+    return css, body, js, 'Always count down to a real date.'
+
+
+# 61. Cursor trail
+@engine('cursor-trail', 'Glowing Cursor Trail', 'Interactive', 'cursor trail particles glow pointer canvas',
+        'Your cursor leaves a glowing ribbon of particles across a {label} hero; it draws its own path when idle.',
+        ['A full-screen canvas stores the last {len} pointer positions and draws a tapering, glowing ribbon through them (quadratic curves).',
+         'Small particles spawn along the path and fade; colours shift between --a1 and --a2.',
+         'When the pointer is idle for 2 seconds, an automatic figure-eight path takes over.'])
+def e_trail(c):
+    r = c['r']
+    ln = pick(r, [24, 36, 48])
+    c['vars'].update(len=ln)
+    css = 'body{min-height:100vh;overflow:hidden}canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}' + NAV_CSS + COPY_CSS + center_hero_css()
+    js = ('(function(){var cv=document.getElementById("cv"),x=cv.getContext("2d"),W,H,D=Math.min(devicePixelRatio||1,2),L=%d,P=[],S=[],t=0,last=0,cs=getComputedStyle(document.documentElement),a1=cs.getPropertyValue("--a1").trim(),a2=cs.getPropertyValue("--a2").trim(),red=matchMedia("(prefers-reduced-motion: reduce)").matches;'
+          'function rs(){W=innerWidth;H=innerHeight;cv.width=W*D;cv.height=H*D;x.setTransform(D,0,0,D,0,0)}rs();addEventListener("resize",rs);function push(px,py){P.push([px,py]);if(P.length>L)P.shift();if(Math.random()<.5)S.push([px,py,(Math.random()-.5)*2,(Math.random()-.5)*2,1])}'
+          'addEventListener("pointermove",function(e){last=Date.now();push(e.clientX,e.clientY)});'
+          'function f(){if(red){return}if(Date.now()-last>2000){t+=.03;push(W/2+Math.sin(t)*W*.3,H/2+Math.sin(t*2)*H*.18)}x.clearRect(0,0,W,H);x.lineCap="round";'
+          'for(var i=1;i<P.length;i++){var k=i/P.length;x.strokeStyle=i%%2?a1:a2;x.globalAlpha=k;x.lineWidth=k*10;x.shadowBlur=18;x.shadowColor=a1;x.beginPath();x.moveTo(P[i-1][0],P[i-1][1]);x.lineTo(P[i][0],P[i][1]);x.stroke()}x.shadowBlur=0;'
+          'S=S.filter(function(s){s[0]+=s[2];s[1]+=s[3];s[4]-=.02;x.globalAlpha=Math.max(0,s[4]);x.fillStyle=a2;x.beginPath();x.arc(s[0],s[1],2,0,7);x.fill();return s[4]>0});x.globalAlpha=1;if(!document.hidden)requestAnimationFrame(f)}f();document.addEventListener("visibilitychange",function(){if(!document.hidden)f()})})();' % ln)
+    return css, '<canvas id="cv" aria-hidden="true"></canvas>' + nav(c) + hero_copy(c), js, ''
+
+
+# 62. Terminal typing
+@engine('terminal-typing', 'Typing Terminal', 'Hero', 'terminal typing code animation command line developer',
+        'A sleek terminal window types commands and shows output line by line, for a {label} brand.',
+        ['A window with traffic-light dots holds lines that type one character every {speed}ms with a blinking block cursor.',
+         'Command lines (prefixed with $) type out; output lines appear instantly in a muted colour after a short pause.',
+         'When finished it waits 3 seconds, clears and replays; the copy sits beside it.'])
+def e_term(c):
+    r = c['r']
+    t = c['t']
+    speed = pick(r, [30, 45, 60])
+    c['vars'].update(speed=speed)
+    slug_b = re.sub(r'[^a-z0-9]+', '-', t['brand'].lower()).strip('-')
+    lines = [['$ npx create-%s-app my-project' % slug_b, 1], ['✔ Project created in 1.8s', 0], ['$ cd my-project && npm run dev', 1], ['▲ Ready on http://localhost:3000', 0], ['$ %s deploy --prod' % slug_b, 1], ['✔ %s live: %s' % (t['items'][0], t['stats'][0][0] + ' ' + t['stats'][0][1]), 0]]
+    css = ('body{min-height:100vh}.wrap{display:grid;grid-template-columns:1fr 1.1fr;align-items:center;gap:20px;max-width:1200px;margin:0 auto;min-height:calc(100vh - 80px);padding:0 20px}'
+           '.tm{border-radius:16px;background:#0b0d12;box-shadow:0 40px 80px -30px #000c,inset 0 0 0 1px #ffffff1a;overflow:hidden;font:14px/1.7 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;min-height:280px}'
+           '.bar{display:flex;gap:6px;padding:12px 14px;background:#ffffff0d}.bar i{width:11px;height:11px;border-radius:50%}.bar i:nth-child(1){background:#ff5f57}.bar i:nth-child(2){background:#febc2e}.bar i:nth-child(3){background:#28c840}'
+           '.bd{padding:16px 18px;color:#e6edf3;white-space:pre-wrap;word-break:break-word}.bd .o{color:#8b949e}.bd .ok{color:var(--a1)}.cur{display:inline-block;width:8px;height:1.1em;vertical-align:-3px;background:var(--a1);animation:bl 1s steps(1) infinite}@keyframes bl{50%{opacity:0}}'
+           '@media(max-width:820px){.wrap{grid-template-columns:1fr;padding:20px}}' + NAV_CSS + COPY_CSS + '.copy{padding:20px 0!important}')
+    body = nav(c) + '<div class="wrap">%s<div class="tm" aria-label="Terminal demo"><div class="bar"><i></i><i></i><i></i></div><div class="bd" id="bd"></div></div></div>' % hero_copy(c)
+    js = ('(function(){var L=%s,bd=document.getElementById("bd"),S=%d,red=matchMedia("(prefers-reduced-motion: reduce)").matches;function el(cls,tx){var d=document.createElement("div");if(cls)d.className=cls;d.textContent=tx;bd.appendChild(d);return d}'
+          'function run(){bd.innerHTML="";var i=0;(function line(){if(i>=L.length){var c=document.createElement("span");c.className="cur";bd.appendChild(c);setTimeout(run,3000);return}var l=L[i++];if(!l[1]||red){el(l[0].charAt(0)==="✔"?"ok":"o",l[0]);setTimeout(line,red?0:350);return}'
+          'var d=el("",""),c=document.createElement("span");c.className="cur";bd.appendChild(c);var k=0;(function ty(){d.textContent=l[0].slice(0,++k);if(k<l[0].length)setTimeout(ty,S);else{c.remove();setTimeout(line,400)}})()})()}run()})();' % (jsstr(lines), speed))
+    return css, body, js, ''
+
+
+# 63. Sparkle text
+@engine('sparkle-text', 'Sparkling Headline', 'Text Effect', 'sparkle stars text twinkle headline magic',
+        'Tiny stars twinkle in and out around the key words of a {label} headline.',
+        ['Every {every}ms a small SVG star is added at a random spot over the highlighted words, scales in with a spin and fades out after 800ms.',
+         'The highlighted words use a gradient fill from --a1 to --a3.',
+         'Reduced motion shows static stars instead.'])
+def e_sparkle(c):
+    r = c['r']
+    t = c['t']
+    every = pick(r, [180, 260, 340])
+    c['vars'].update(every=every)
+    words = t['headline'].split(' ')
+    k = max(1, len(words) // 3)
+    head = esc(' '.join(words[:-k])) + ' <span class="sp" id="sp">' + esc(' '.join(words[-k:])) + '</span>'
+    css = ('body{min-height:100vh;display:flex;flex-direction:column}main{flex:1;display:grid;place-items:center;text-align:center;padding:24px}.sp{position:relative;display:inline-block;background:linear-gradient(90deg,var(--a1),var(--a3));-webkit-background-clip:text;background-clip:text;color:transparent}'
+           '.st{position:absolute;width:var(--s);height:var(--s);pointer-events:none;animation:tw .8s ease-in-out forwards}.st svg{width:100%;height:100%;fill:var(--a3)}@keyframes tw{0%{transform:scale(0) rotate(0)}50%{transform:scale(1) rotate(90deg)}100%{transform:scale(0) rotate(180deg)}}'
+           '.sub{margin:0 auto}.row{justify-content:center}' + NAV_CSS + BTN_CSS + COPY_CSS)
+    body = nav(c) + '<main><div><p class="eyebrow">%s</p><h1>%s</h1><p class="sub">%s</p><div class="row"><a class="btn" href="#">%s</a><a class="btn ghost" href="#">%s</a></div></div></main>' % (esc(t['label']), head, esc(t['sub']), esc(t['cta']), esc(t['cta2']))
+    js = ('(function(){var sp=document.getElementById("sp"),red=matchMedia("(prefers-reduced-motion: reduce)").matches,svg=\'<svg viewBox="0 0 24 24"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg>\';'
+          'function add(stay){var s=document.createElement("span");s.className="st";s.setAttribute("aria-hidden","true");s.style.setProperty("--s",(8+Math.random()*14)+"px");s.style.left=(Math.random()*100)+"%%";s.style.top=(Math.random()*100-10)+"%%";s.innerHTML=svg;if(stay)s.style.animation="none";sp.appendChild(s);if(!stay)setTimeout(function(){s.remove()},850)}'
+          'if(red){for(var i=0;i<4;i++)add(1);return}setInterval(function(){add(0)},%d)})();' % every)
+    return css, body, js, ''
+
+
+# 64. Conic aurora mesh
+@engine('conic-aurora', 'Conic Aurora Mesh', 'Background', 'conic gradient mesh aurora rotate noise background css',
+        'A slowly turning conic-gradient aurora with film grain glows behind a {label} headline; pure CSS.',
+        ['Two oversized layers with conic-gradients in the palette rotate in opposite directions ({dur}s per turn); a radial mask softens their edges instead of an expensive blur filter.',
+         'An SVG turbulence noise overlay at low opacity adds film grain so the gradient never bands.',
+         'No JavaScript; reduced motion stops the rotation.'])
+def e_conic(c):
+    r = c['r']
+    dur = pick(r, [20, 30, 45])
+    c['vars'].update(dur=dur)
+    noise = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E"
+    css = ('body{min-height:100vh;overflow:hidden}.au{position:fixed;inset:0;overflow:hidden}.au i{position:absolute;left:50%;top:50%;width:150vmax;height:150vmax;margin:-75vmax;border-radius:50%;opacity:.7;-webkit-mask-image:radial-gradient(circle,#000 20%,transparent 70%);mask-image:radial-gradient(circle,#000 20%,transparent 70%);will-change:transform;animation:sp ' + str(dur) + 's linear infinite}'
+           '.au i:first-child{background:conic-gradient(from 0deg,var(--a1),var(--a2),var(--a3),var(--a1))}.au i:last-child{background:conic-gradient(from 180deg,transparent,var(--a2),transparent 40%,var(--a1),transparent 75%);animation-direction:reverse;mix-blend-mode:overlay}'
+           '.au::after{content:"";position:absolute;inset:0;background:url("' + noise + '");opacity:.18;mix-blend-mode:overlay}@keyframes sp{to{transform:rotate(360deg)}}'
+           '.copy{text-shadow:0 2px 30px #0005}' + NAV_CSS + COPY_CSS + center_hero_css())
+    return css, '<div class="au" aria-hidden="true"><i></i><i></i></div>' + nav(c) + hero_copy(c), '', ''
 
 
 # ── Document + spec builders ───────────────────────────────────────────────
@@ -1227,63 +2113,96 @@ def php_q(s):
 
 
 def main():
+    import gzip
     pal = []
     for x in PALETTES:
         d = dict(name=x[0], bg=x[1], surface=x[2], ink=x[3], muted=x[4], a1=x[5], a2=x[6], a3=x[7], dark=x[8])
         d['onlight'] = luminance(d['a1']) > 0.45
         pal.append(d)
     E = len(ENGINES)
+    T_ = len(THEMES)
     per = -(-COUNT // E)
-    rows = []
-    for ei, e in enumerate(ENGINES):
-        for j in range(per):
-            rows.append((j, ei))
-    rows.sort()
-    rows = rows[:COUNT]
-    out_dir = os.path.join(PLUGIN, 'includes', 'data', 'motion-gen')
-    os.makedirs(out_dir, exist_ok=True)
-    for fn in os.listdir(out_dir):
+    rows = sorted((j, ei) for ei in range(E) for j in range(per))[:COUNT]
+    dump = os.environ.get('DUMP_HTML')
+    if dump:
+        os.makedirs(dump, exist_ok=True)
+    shard_dir = os.path.join(PLUGIN, 'data', 'motion')
+    os.makedirs(shard_dir, exist_ok=True)
+    for fn in os.listdir(shard_dir):
         if fn.endswith('.php'):
-            os.remove(os.path.join(out_dir, fn))
-    with open(os.path.join(out_dir, 'index.php'), 'w') as fh:
+            os.remove(os.path.join(shard_dir, fn))
+    with open(os.path.join(shard_dir, 'index.php'), 'w') as fh:
         fh.write('<?php\n// Silence is golden.\n')
-    meta = []
+    DARK = ('neon-sign', 'code-rain', 'star-warp', 'retro-grid', 'particle-network', 'tunnel-3d')
+    dark_idx = [k for k, p in enumerate(pal) if p['dark']]
+    shards = {}
+    meta_rows = []
     seen = set()
+    posters = {}
+    SH = 80
+    count_per_engine = {}
     for n, (j, ei) in enumerate(rows):
         e = ENGINES[ei]
-        theme = THEMES[(j * 7 + ei * 3) % len(THEMES)]
-        # Neon / code rain / warp / retro look best dark.
-        dark_only = e['slug'] in ('neon-sign', 'code-rain', 'star-warp', 'retro-grid', 'particle-network')
-        candidates = [p for p in pal if p['dark']] if dark_only else pal
-        p = candidates[(j * 5 + ei * 11) % len(candidates)]
+        cand = dark_idx if e['slug'] in DARK else list(range(len(pal)))
+        space = T_ * len(cand)
+        k = (j * 37 + ei * 101) % space
+        ti, pi = k // len(cand), cand[k % len(cand)]
+        theme, p = THEMES[ti], pal[pi]
         f = FONTS[(j + ei * 2) % len(FONTS)]
-        seed = int(hashlib.md5(('%s|%s|%d' % (e['slug'], theme['key'], j)).encode()).hexdigest()[:8], 16)
+        seed = int(hashlib.md5(('%s|%s|%s|%d' % (e['slug'], theme['key'], p['name'], j)).encode()).hexdigest()[:8], 16)
         c = dict(p=p, f=f, t=theme, r=random.Random(seed), v=j, vars={})
         css, body, js, notes = e['fn'](c)
         pal_word = p['name'].split()[0]
         title = '%s %s · %s' % (pal_word, e['name'], theme['label'])
         mid = slug('%s-%s-%s' % (e['slug'], theme['key'], pal_word))
-        if mid in seen:
-            mid = slug('%s-%d' % (mid, j))
+        assert mid not in seen, mid
         seen.add(mid)
         html = doc(title, c, css, body, js)
         sp = spec(title, e, c, notes)
-        premium = (n % 3) != 0  # one in three free
-        summary = fix_a(e['summary'].format(label=lab(theme['label'])))
-        meta.append(dict(id=mid, title=title, cat=e['cat'], premium=premium, summary=summary,
-                         tags='%s %s %s' % (e['tags'], theme['label'].lower(), p['name'].lower()), engine=e['slug']))
-        with open(os.path.join(out_dir, mid + '.php'), 'w', encoding='utf-8') as fh:
-            fh.write("<?php\ndefined( 'ABSPATH' ) || exit;\nreturn array(\n\t'code' => %s,\n\t'spec' => %s,\n);\n" % (php_str(html), php_str(sp)))
-    lines = ["<?php", "/**", " * Motion Studio: generated designs (tools/aihub/gen_motion.py). Metadata only;", " * code and build prompts live in motion-gen/<id>.php and load on demand.", " *", " * @package VitalStackAIHub", " */", "", "defined( 'ABSPATH' ) || exit;", "", "return array("]
-    for m in meta:
-        lines.append("\tarray( 'id' => %s, 'title' => %s, 'cat' => %s, 'premium' => %s, 'summary' => %s, 'tags' => %s, 'src' => 'gen' )," % (
-            php_q(m['id']), php_q(m['title']), php_q(m['cat']), 'true' if m['premium'] else 'false', php_q(m['summary']), php_q(m['tags'])))
-    lines.append(");\n")
+        premium = (n % 3) != 0
+        cnt = count_per_engine.get(ei, 0)
+        count_per_engine[ei] = cnt + 1
+        shard = '%s-%d' % (e['slug'], cnt // SH)
+        shards.setdefault(shard, {})[mid] = [html, sp]
+        meta_rows.append([ei, ti, pi, 1 if premium else 0, cnt // SH])
+        if premium:
+            posters.setdefault('%s-%s' % (e['slug'], slug(pal_word)), mid)
+        if dump:
+            with open(os.path.join(dump, mid + '.html'), 'w', encoding='utf-8') as fh:
+                fh.write(html)
+    for name, data in shards.items():
+        blob = gzip.compress(json.dumps(data, ensure_ascii=False, separators=(',', ':')).encode('utf-8'), 9)
+        with open(os.path.join(shard_dir, name + '.php'), 'wb') as fh:
+            fh.write(b'<?php exit; __halt_compiler();')
+            fh.write(blob)
+    # Compact metadata the plugin expands at runtime.
+    def q(x):
+        return "'" + str(x).replace('\\', '\\\\').replace("'", "\\'") + "'"
+    out = ["<?php", "/**", " * Motion Studio: generated designs (tools/aihub/gen_motion.py), compact form.", " * Expanded by vsai_motion_gen_items(); code and prompts load from data/motion/<shard>.php.", " *", " * @package VitalStackAIHub", " */", "", "defined( 'ABSPATH' ) || exit;", "", "return array("]
+    out.append("\t'engines' => array(")
+    for e in ENGINES:
+        out.append("\t\tarray( %s, %s, %s, %s, %s )," % (q(e['slug']), q(e['name']), q(e['cat']), q(e['tags']), q(e['summary'])))
+    out.append("\t),")
+    out.append("\t'themes' => array(")
+    for t in THEMES:
+        out.append("\t\tarray( %s, %s, %s )," % (q(t['key']), q(t['label']), q(lab(t['label']))))
+    out.append("\t),")
+    out.append("\t'palettes' => array( %s )," % ', '.join(q(p['name']) for p in pal))
+    out.append("\t'rows' => array(")
+    for r_ in meta_rows:
+        out.append("\t\tarray( %d, %d, %d, %d, %d )," % tuple(r_))
+    out.append("\t),")
+    out.append(");\n")
     with open(os.path.join(PLUGIN, 'includes', 'data', 'motion-gen.php'), 'w', encoding='utf-8') as fh:
-        fh.write('\n'.join(lines))
-    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'motion-manifest.json'), 'w') as fh:
-        json.dump(meta, fh, indent=0)
-    print('engines', E, 'designs', len(meta), 'free', sum(1 for m in meta if not m['premium']))
+        fh.write('\n'.join(out))
+    with open(os.path.join(HERE_DIR, 'motion-posters.json'), 'w') as fh:
+        json.dump(posters, fh)
+    with open(os.path.join(HERE_DIR, 'motion-manifest.json'), 'w') as fh:
+        json.dump({'count': len(meta_rows), 'free': sum(1 for r_ in meta_rows if not r_[3]), 'engines': E, 'themes': T_, 'palettes': len(pal), 'shards': len(shards), 'poster_sets': len(posters)}, fh, indent=1)
+    print('engines', E, 'designs', len(meta_rows), 'free', sum(1 for r_ in meta_rows if not r_[3]), 'shards', len(shards), 'poster sets', len(posters))
+
+
+HERE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 if __name__ == '__main__':
