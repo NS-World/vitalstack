@@ -2,7 +2,7 @@
 /**
  * Plugin Name: VitalStack AI Hub
  * Description: A separate, 3D-styled AI section at /ai/: AI Library, AI Commands & Shortcuts, Prompt Bazaar and Motion Studio (animated sections with code). Free and premium items; premium unlocks with an AI Pro plan (monthly, yearly or lifetime).
- * Version: 1.1.0
+ * Version: 1.2.0
  * Requires at least: 6.2
  * Requires PHP: 7.4
  * Author: VitalStack
@@ -14,7 +14,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'VSAI_VERSION', '1.1.0' );
+define( 'VSAI_VERSION', '1.2.0' );
 define( 'VSAI_DIR', plugin_dir_path( __FILE__ ) );
 define( 'VSAI_URL', plugin_dir_url( __FILE__ ) );
 

@@ -74,6 +74,24 @@ add_filter(
 	99
 );
 
+/** A page number past the end (or an unknown category) goes to the nearest real page. */
+add_action(
+	'template_redirect',
+	function () {
+		$page = vsai_current();
+		if ( ! in_array( $page, array( 'prompts', 'motion' ), true ) ) {
+			return;
+		}
+		$st = vsai_list_state_full( $page );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only
+		$bad_cat = isset( $_GET['cat'] ) && '' !== $_GET['cat'] && '' === $st['cat'];
+		if ( $st['asked'] !== $st['pg'] || $bad_cat ) {
+			wp_safe_redirect( vsai_list_url( $page, $st ), 301 );
+			exit;
+		}
+	}
+);
+
 /** Page titles and descriptions. */
 function vsai_meta() {
 	$s    = vsai_sections();
@@ -85,6 +103,29 @@ function vsai_meta() {
 		return array( __( 'AI Pro pricing – VitalStack AI Hub', 'vitalstack-ai-hub' ), __( 'Unlimited access to every premium prompt, motion design, code and AI guide. Monthly, yearly or lifetime. Pay in ₹ or $.', 'vitalstack-ai-hub' ) );
 	}
 	if ( isset( $s[ $page ] ) ) {
+		if ( in_array( $page, array( 'prompts', 'motion' ), true ) ) {
+			$st    = vsai_list_state_full( $page );
+			$title = $s[ $page ][0];
+			$desc  = $s[ $page ][3];
+			if ( $st['cat_name'] ) {
+				$n = 0;
+				foreach ( vsai_items( $page ) as $it ) {
+					$n += (int) ( sanitize_title( $it['cat'] ) === $st['cat'] );
+				}
+				/* translators: 1: category, 2: section name */
+				$title = sprintf( __( '%1$s – %2$s', 'vitalstack-ai-hub' ), 'prompts' === $page ? sprintf( /* translators: %s: category */ __( '%s AI prompts', 'vitalstack-ai-hub' ), $st['cat_name'] ) : sprintf( /* translators: %s: category */ __( '%s motion designs', 'vitalstack-ai-hub' ), $st['cat_name'] ), $s[ $page ][0] );
+				$desc  = 'prompts' === $page
+					/* translators: 1: number, 2: category */
+					? sprintf( __( '%1$d ready-to-use %2$s prompts for ChatGPT, Claude, Gemini and more, with the result you get. Free and Pro.', 'vitalstack-ai-hub' ), $n, $st['cat_name'] )
+					/* translators: 1: number, 2: category */
+					: sprintf( __( '%1$d animated %2$s sections with live previews, full HTML code and detailed AI build prompts. Free and Pro.', 'vitalstack-ai-hub' ), $n, $st['cat_name'] );
+			}
+			if ( $st['pg'] > 1 ) {
+				/* translators: %d: page number */
+				$title .= ' – ' . sprintf( __( 'page %d', 'vitalstack-ai-hub' ), $st['pg'] );
+			}
+			return array( $title . ' – VitalStack AI Hub', $desc );
+		}
 		return array( $s[ $page ][0] . ' – VitalStack AI Hub', $s[ $page ][3] );
 	}
 	return array( __( 'Motion preview – VitalStack AI Hub', 'vitalstack-ai-hub' ), '' );
@@ -103,6 +144,14 @@ add_filter(
 	function ( $robots ) {
 		if ( 'view' === vsai_current() ) {
 			$robots['noindex'] = true; // previews are for people, not search results
+		}
+		// Search results and price filters are for people; category pages and their pages stay indexable.
+		if ( in_array( vsai_current(), array( 'prompts', 'motion' ), true ) ) {
+			$st = vsai_list_state( vsai_current() );
+			if ( '' !== $st['q'] || '' !== $st['price'] ) {
+				$robots['noindex'] = true;
+				$robots['follow']  = true;
+			}
 		}
 		return $robots;
 	}

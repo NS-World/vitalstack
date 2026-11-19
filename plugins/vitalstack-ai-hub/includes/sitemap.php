@@ -21,6 +21,12 @@ class VSAI_Sitemap extends WP_Sitemaps_Provider {
 		foreach ( array_merge( array_keys( vsai_sections() ), array( 'pricing' ) ) as $s ) {
 			$urls[] = array( 'loc' => vsai_url( $s ) );
 		}
+		// One landing page per category of the big sections.
+		foreach ( array( 'prompts', 'motion' ) as $s ) {
+			foreach ( vsai_categories( $s ) as $c ) {
+				$urls[] = array( 'loc' => vsai_list_url( $s, array( 'cat' => sanitize_title( $c ) ) ) );
+			}
+		}
 		return $urls;
 	}
 

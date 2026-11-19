@@ -341,3 +341,22 @@
 @media (max-width: 1100px) { .vsai-plans { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 860px) { .vsai-mo2 { grid-template-columns: 1fr; } }
 @media (max-width: 560px) { .vsai-plans { grid-template-columns: 1fr; } .vsai-plan-price span { font-size: 34px; } }
+
+/* 1.2: paged lists (filters in the URL) */
+.vsai-search { margin: 0; }
+a.vsai-chip { display: inline-flex; align-items: center; text-decoration: none; }
+a.vsai-chip:hover { color: #fff; border-color: rgba(255, 255, 255, .35); }
+.vsai-seg a { display: inline-flex; align-items: center; justify-content: center; padding: 8px 12px; border-radius: 9px; color: var(--ink2); font: 600 13.5px var(--font); text-decoration: none; white-space: nowrap; }
+.vsai-seg a.is-on { background: var(--glass2); color: #fff; }
+.vsai-seg a svg { width: 16px; height: 16px; color: #fcd34d; }
+.vsai-seg a:focus-visible, .vsai-pg:focus-visible { outline: 2px solid var(--c); outline-offset: 2px; }
+.vsai-empty a { color: var(--c); }
+.vsai-pager { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px; margin: 30px 0 10px; }
+.vsai-pg { min-width: 40px; height: 40px; padding: 0 12px; display: inline-flex; align-items: center; justify-content: center; border-radius: 12px; border: 1px solid var(--line); color: var(--ink2); text-decoration: none; font: 600 14px var(--font); background: rgba(255, 255, 255, .03); }
+a.vsai-pg:hover { border-color: var(--v); color: #fff; }
+.vsai-pg.is-on { background: #fff; color: #0b0d24; border-color: #fff; }
+.vsai-pg.is-gap { border: 0; background: none; min-width: 20px; padding: 0; }
+@media (max-width: 640px) {
+	.vsai-seg a { flex: 1; }
+	.vsai-pg.is-arrow { flex: 1 1 40%; }
+}

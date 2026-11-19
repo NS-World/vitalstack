@@ -47,7 +47,40 @@ function vsai_builtin( $type ) {
 		return array();
 	}
 	$items = include VSAI_DIR . 'includes/data/' . $type . '.php';
-	return is_array( $items ) ? $items : array();
+	$items = is_array( $items ) ? $items : array();
+	// Generated catalogue (tools/aihub/gen_*.py), added after the hand-made items.
+	$gen = VSAI_DIR . 'includes/data/' . $type . '-gen.php';
+	if ( file_exists( $gen ) ) {
+		$more  = include $gen;
+		$items = is_array( $more ) ? array_merge( $items, $more ) : $items;
+	}
+	return $items;
+}
+
+/**
+ * Code + build prompt of a generated motion design, loaded only when needed
+ * (full-screen view or a copy). The files exit when opened directly.
+ */
+function vsai_motion_payload( $it ) {
+	static $cache = array();
+	if ( empty( $it['src'] ) || 'gen' !== $it['src'] || ! preg_match( '/^[a-z0-9-]{1,60}$/', (string) $it['id'] ) ) {
+		return array();
+	}
+	if ( ! isset( $cache[ $it['id'] ] ) ) {
+		$file                  = VSAI_DIR . 'includes/data/motion-gen/' . $it['id'] . '.php';
+		$data                  = file_exists( $file ) ? include $file : array();
+		$cache[ $it['id'] ] = is_array( $data ) ? $data : array();
+	}
+	return $cache[ $it['id'] ];
+}
+
+/** The HTML document of a motion item. */
+function vsai_motion_code( $it ) {
+	if ( isset( $it['code'] ) && '' !== (string) $it['code'] ) {
+		return (string) $it['code'];
+	}
+	$p = vsai_motion_payload( $it );
+	return isset( $p['code'] ) ? (string) $p['code'] : '';
 }
 
 /** Items added in wp-admin, in the same shape as the built-in ones. */
@@ -141,6 +174,10 @@ function vsai_categories( $type ) {
 function vsai_full_prompt( $it ) {
 	if ( ! empty( $it['spec'] ) ) {
 		return $it['spec'];
+	}
+	$payload = vsai_motion_payload( $it );
+	if ( ! empty( $payload['spec'] ) ) {
+		return (string) $payload['spec'];
 	}
 	$brief = trim( (string) ( $it['prompt'] ?? '' ) );
 	return '# ' . $it['title'] . " — build prompt (VitalStack Motion Studio)\n\n"

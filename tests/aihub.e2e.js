@@ -1,4 +1,4 @@
-// AI Hub 1.1 end-to-end test: copy limits, Pro gating, pricing, purchase grant, previews.
+// AI Hub 1.1–1.2 end-to-end test: copy limits, Pro gating, pricing, purchase grant, previews.
 // Usage: node tests/aihub.e2e.js /path/to/local/wordpress   (WP_URL defaults to http://localhost:8095)
 const { chromium } = require('playwright'); const { execFileSync } = require('child_process');
 const L = process.env.WP_URL || 'http://localhost:8095', SITE = process.argv[2];
@@ -102,9 +102,46 @@ const EMAIL = 'aihubfree@example.test', PW = 'Qx7!aihub-free-2026';
   ok(/Save \d+% vs monthly/.test(await p.locator('.vsai-plan.is-best .vsai-plan-per').textContent()), 'pricing: honest saving vs monthly');
   const sm = await (await p.goto(L + '/wp-sitemap-aihub-1.xml')).text(); ok(/\/ai\/pricing\//.test(sm), 'sitemap includes /ai/pricing/');
 
+  // ── 1.2: big catalogue, paged lists, generated designs ──
+  const cnt = JSON.parse(php('echo json_encode([count(vsai_items("prompts")), count(vsai_items("motion"))]);'));
+  ok(cnt[0] >= 1042 && cnt[1] === 500, `catalogue: ${cnt[0]} prompts, ${cnt[1]} motion designs`);
+  await p.goto(L + '/ai/prompts/', { waitUntil: 'load' });
+  ok(await p.locator('.vsai-prompt').count() === 30 && /of 1,0\d\d/.test(await p.locator('.vsai-count').textContent()), 'prompts: 30 per page with total count');
+  ok(await p.locator('.vsai-pager a[href*="pg=2"]').count() >= 1, 'prompts: pager links to page 2');
+  await p.click('.vsai-chips a:has-text("Coding")'); await p.waitForLoadState('load');
+  const cats = await p.locator('.vsai-prompt').evaluateAll(els => [...new Set(els.map(e => e.getAttribute('data-cat')))]);
+  ok(/cat=coding/.test(p.url()) && cats.length === 1 && cats[0] === 'Coding' && /Coding AI prompts/.test(await p.title()), 'category chip opens its own indexable page');
+  await p.fill('#vsai-q', 'kubernetes'); await p.press('#vsai-q', 'Enter'); await p.waitForLoadState('load');
+  const robots = await p.locator('meta[name="robots"]').getAttribute('content');
+  ok(/q=kubernetes/.test(p.url()) && /noindex/.test(robots) && await p.locator('.vsai-prompt').count() >= 1, 'search runs on the server and is noindex');
+  const proP = JSON.parse(php('foreach (vsai_builtin("prompts") as $i) { if ($i["premium"] && strlen($i["prompt"]) > 120) { echo json_encode([$i["title"], substr($i["prompt"], 40, 50)]); break; } }'));
+  html = await (await p.goto(L + '/ai/prompts/?q=' + encodeURIComponent(proP[0]))).text();
+  ok(html.includes('vsai-lock') && !html.includes(proP[1].replace(/&/g, '&amp;')), 'Pro prompt text never in a visitor page');
+  const rd = await p.request.get(L + '/ai/motion/?pg=999', { maxRedirects: 0 });
+  ok(rd.status() === 301 && /pg=21/.test(rd.headers()['location'] || ''), 'page past the end redirects to the last page');
+  const gen = JSON.parse(php('$f=null;$p=null; foreach (vsai_items("motion") as $i) { if (($i["src"]??"")!=="gen") continue; if (!$i["premium"] && !$f) $f=$i; if ($i["premium"] && !$p) $p=$i; } echo json_encode([$f["id"],$f["title"],$p["id"],$p["title"]]);'));
+  resetGuest();
+  await p.goto(L + '/ai/motion/?q=' + encodeURIComponent(gen[1]), { waitUntil: 'load' });
+  await p.locator(`[data-open="#mo-${gen[0]}"]`).first().click();
+  await p.locator('.vsai-dialog[open] [data-copy-mo][data-part="prompt"]').click(); await p.waitForTimeout(700);
+  clip = await p.evaluate(() => navigator.clipboard.readText());
+  ok(clip.startsWith('# ' + gen[1]) && /## Motion & interaction/.test(clip), 'generated free design: detailed build prompt copied');
+  await p.locator('.vsai-dialog[open] [data-copy-mo][data-part="code"]').first().click(); await p.waitForTimeout(700);
+  clip = await p.evaluate(() => navigator.clipboard.readText());
+  ok(clip.startsWith('<!doctype html>') && clip.length > 2000, 'generated free design: full HTML copied');
+  html = await (await p.goto(L + '/ai/motion/?q=' + encodeURIComponent(gen[3]))).text();
+  ok(html.includes('assets/posters/' + gen[2] + '.webp') && !html.includes('/ai/motion/view/' + gen[2]), 'generated Pro design: poster only for visitors');
+  const gv = await p.request.get(L + '/ai/motion/view/' + gen[2] + '/', { maxRedirects: 0 });
+  ok(gv.status() === 302, 'generated Pro design: full-screen view locked for visitors');
+  const raw = await p.request.get(L + '/wp-content/plugins/vitalstack-ai-hub/includes/data/motion-gen/' + gen[2] + '.php');
+  ok(!(await raw.text()).includes('<!doctype'), 'design files give nothing when opened directly');
+  const mv = await q.request.get(L + '/ai/motion/view/' + gen[2] + '/');
+  ok(mv.status() === 200 && (await mv.text()).startsWith('<!doctype html>'), 'AI Pro member: generated Pro design opens');
+  const sm2 = await (await p.goto(L + '/wp-sitemap-aihub-1.xml')).text(); ok(/\/ai\/prompts\/\?cat=coding/.test(sm2) && /\/ai\/motion\/\?cat=/.test(sm2), 'sitemap lists category pages');
+
   // Phone layout.
   const m = await b.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true }); const mp = await m.newPage();
-  for (const path of ['/ai/motion/', '/ai/pricing/']) { await mp.goto(L + path, { waitUntil: 'load' }); ok(await mp.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), 'phone: no sideways scroll on ' + path); }
+  for (const path of ['/ai/motion/', '/ai/pricing/', '/ai/prompts/?pg=2', '/ai/motion/?cat=scroll-story']) { await mp.goto(L + path, { waitUntil: 'load' }); ok(await mp.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), 'phone: no sideways scroll on ' + path); }
 
   php(`$u=get_user_by("email","${EMAIL}"); require_once ABSPATH."wp-admin/includes/user.php"; wp_delete_user($u->ID);`); resetGuest();
   ok(errs.length === 0, 'no JS errors ' + errs.join(' | '));

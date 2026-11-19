@@ -98,7 +98,7 @@
 
 	/* Search + category + free/premium filters. */
 	var root = document.querySelector('[data-filter-root]'), list = document.querySelector('[data-list]');
-	if (root && list) {
+	if (root && list && !root.hasAttribute('data-server')) {
 		var q = root.querySelector('[data-q]'), countEl = root.querySelector('[data-count]'), empty = document.querySelector('[data-empty]');
 		var state = { q: '', cat: '', price: '' };
 		var cards = Array.prototype.slice.call(list.children);

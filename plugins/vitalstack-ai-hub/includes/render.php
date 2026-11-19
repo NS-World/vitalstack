@@ -55,6 +55,10 @@ function vsai_head_tags() {
 	list( $title, $desc ) = vsai_meta();
 	$page = vsai_current();
 	$url  = 'home' === $page ? vsai_url() : ( 'view' === $page ? '' : vsai_url( $page ) );
+	if ( in_array( $page, array( 'prompts', 'motion' ), true ) ) {
+		$st  = vsai_list_state_full( $page );
+		$url = vsai_list_url( $page, array( 'cat' => $st['cat'], 'pg' => $st['pg'] ) ); // canonical keeps category + page, drops search and price
+	}
 	if ( $desc ) {
 		echo '<meta name="description" content="' . esc_attr( $desc ) . '">' . "\n";
 	}
@@ -110,16 +114,38 @@ function vsai_lock( $what = '' ) {
 	return $html . '</div></div>';
 }
 
-/** Section heading with search and filters. */
-function vsai_head( $section, $count, $cats, $extra = '' ) {
+/** Section heading with search and filters (client-side for small lists, server-side + pages for big ones). */
+function vsai_head( $section, $count, $cats, $extra = '', $state = null ) {
 	$s = vsai_sections()[ $section ];
 	?>
 	<section class="vsai-hero is-small">
 		<p class="vsai-eyebrow"><span aria-hidden="true"><?php echo esc_html( $s[2] ); ?></span> VitalStack AI</p>
-		<h1 class="vsai-h1"><?php echo esc_html( $s[0] ); ?></h1>
+		<h1 class="vsai-h1"><?php echo esc_html( $state && $state['cat_name'] ? $state['cat_name'] . ' · ' . $s[0] : $s[0] ); ?></h1>
 		<p class="vsai-lead"><?php echo esc_html( $s[3] ); ?></p>
 		<?php echo $extra; // phpcs:ignore WordPress.Security.EscapeOutput -- built from escaped parts by the caller ?>
 	</section>
+	<?php if ( $state ) : ?>
+	<div class="vsai-tools" data-filter-root data-server="1">
+		<form class="vsai-search" role="search" method="get" action="<?php echo esc_url( vsai_url( $section ) ); ?>">
+			<label class="vsai-sr" for="vsai-q"><?php esc_html_e( 'Search', 'vitalstack-ai-hub' ); ?></label>
+			<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 20l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+			<input id="vsai-q" type="search" name="q" maxlength="80" value="<?php echo esc_attr( $state['q'] ); ?>" placeholder="<?php echo esc_attr( sprintf( /* translators: %d: number of items */ __( 'Search %d items…', 'vitalstack-ai-hub' ), $count ) ); ?>">
+			<?php if ( $state['price'] ) : ?><input type="hidden" name="price" value="<?php echo esc_attr( $state['price'] ); ?>"><?php endif; ?>
+		</form>
+		<nav class="vsai-chips" aria-label="<?php esc_attr_e( 'Category', 'vitalstack-ai-hub' ); ?>">
+			<a class="vsai-chip<?php echo $state['cat'] ? '' : ' is-on'; ?>" href="<?php echo esc_url( vsai_list_url( $section, array_merge( $state, array( 'cat' => '' ) ) ) ); ?>"<?php echo $state['cat'] ? '' : ' aria-current="page"'; ?>><?php esc_html_e( 'All', 'vitalstack-ai-hub' ); ?></a>
+			<?php foreach ( $cats as $c ) : $slug = sanitize_title( $c ); ?>
+				<a class="vsai-chip<?php echo $slug === $state['cat'] ? ' is-on' : ''; ?>" href="<?php echo esc_url( vsai_list_url( $section, array_merge( $state, array( 'cat' => $slug ) ) ) ); ?>"<?php echo $slug === $state['cat'] ? ' aria-current="page"' : ''; ?>><?php echo esc_html( $c ); ?></a>
+			<?php endforeach; ?>
+		</nav>
+		<nav class="vsai-seg" aria-label="<?php esc_attr_e( 'Price', 'vitalstack-ai-hub' ); ?>">
+			<?php foreach ( array( '' => __( 'All', 'vitalstack-ai-hub' ), 'free' => __( 'Free', 'vitalstack-ai-hub' ), 'pro' => '' ) as $k => $label ) : ?>
+				<a class="<?php echo $k === $state['price'] ? 'is-on' : ''; ?>" href="<?php echo esc_url( vsai_list_url( $section, array_merge( $state, array( 'price' => $k ) ) ) ); ?>"<?php echo 'pro' === $k ? ' aria-label="' . esc_attr__( 'Pro only', 'vitalstack-ai-hub' ) . '"' : ''; ?>><?php echo 'pro' === $k ? vsai_crown_svg() : esc_html( $label ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></a>
+			<?php endforeach; ?>
+		</nav>
+		<p class="vsai-count" aria-live="polite"><?php echo esc_html( vsai_range_text( $state ) ); ?></p>
+	</div>
+	<?php else : ?>
 	<div class="vsai-tools" data-filter-root>
 		<label class="vsai-search"><span class="vsai-sr"><?php esc_html_e( 'Search', 'vitalstack-ai-hub' ); ?></span>
 			<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 20l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -138,11 +164,183 @@ function vsai_head( $section, $count, $cats, $extra = '' ) {
 		</div>
 		<p class="vsai-count" aria-live="polite" data-count></p>
 	</div>
+	<?php endif; ?>
 	<?php
+}
+
+/* ── Big lists: filters in the URL, one page at a time ─────────────────── */
+
+/** Items per page of the paged sections. */
+function vsai_per_page( $section ) {
+	return (int) apply_filters( 'vsai_per_page', 'motion' === $section ? 24 : 30, $section );
+}
+
+/**
+ * Filter state from the URL: ?q=&cat=&price=&pg=. Values are validated
+ * (category must exist, price free|pro, page a positive number).
+ */
+function vsai_list_state( $section ) {
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended -- read-only filters
+	$q     = isset( $_GET['q'] ) ? sanitize_text_field( wp_unslash( $_GET['q'] ) ) : '';
+	$cat   = isset( $_GET['cat'] ) ? sanitize_title( wp_unslash( $_GET['cat'] ) ) : '';
+	$price = isset( $_GET['price'] ) ? sanitize_key( wp_unslash( $_GET['price'] ) ) : '';
+	$pg    = isset( $_GET['pg'] ) ? absint( $_GET['pg'] ) : 1;
+	// phpcs:enable
+	$q        = function_exists( 'mb_substr' ) ? mb_substr( $q, 0, 80 ) : substr( $q, 0, 80 );
+	$cat_name = '';
+	foreach ( vsai_categories( $section ) as $c ) {
+		if ( sanitize_title( $c ) === $cat ) {
+			$cat_name = $c;
+		}
+	}
+	return array(
+		'section'  => $section,
+		'q'        => $q,
+		'cat'      => $cat_name ? $cat : '',
+		'cat_name' => $cat_name,
+		'price'    => in_array( $price, array( 'free', 'pro' ), true ) ? $price : '',
+		'pg'       => max( 1, min( 1000, $pg ) ),
+		'asked'    => max( 1, $pg ),
+		'total'    => 0,
+		'pages'    => 1,
+		'per'      => vsai_per_page( $section ),
+	);
+}
+
+/** The state with totals filled in and the page clamped (memoised per request). */
+function vsai_list_state_full( $section ) {
+	static $memo = array();
+	if ( ! isset( $memo[ $section ] ) ) {
+		$state             = vsai_list_state( $section );
+		$state['items']    = vsai_list_page( vsai_list_sorted( $section ), $state, function ( $it ) use ( $section ) {
+			return vsai_list_text( $section, $it );
+		} );
+		$memo[ $section ] = $state;
+	}
+	return $memo[ $section ];
+}
+
+/** Items of a paged section in display order (featured motion designs first). */
+function vsai_list_sorted( $section ) {
+	$items = vsai_items( $section );
+	if ( 'motion' === $section ) {
+		usort(
+			$items,
+			function ( $a, $b ) {
+				return (int) ! empty( $b['featured'] ) - (int) ! empty( $a['featured'] );
+			}
+		);
+	}
+	return $items;
+}
+
+/** Searchable text of an item. Pro prompt text is never searched, so a search cannot reveal it. */
+function vsai_list_text( $section, $it ) {
+	if ( 'prompts' === $section ) {
+		return $it['title'] . ' ' . $it['cat'] . ' ' . $it['summary'] . ' ' . $it['tool'] . ' ' . $it['kind'] . ( $it['premium'] ? '' : ' ' . $it['prompt'] );
+	}
+	return $it['title'] . ' ' . $it['cat'] . ' ' . ( $it['summary'] ?? '' ) . ' ' . ( $it['tags'] ?? '' );
+}
+
+/** URL of a list page for a state (empty values and page 1 left out). */
+function vsai_list_url( $section, $state ) {
+	$args = array();
+	foreach ( array( 'q', 'cat', 'price' ) as $k ) {
+		if ( ! empty( $state[ $k ] ) ) {
+			$args[ $k ] = $state[ $k ];
+		}
+	}
+	if ( ! empty( $state['pg'] ) && (int) $state['pg'] > 1 ) {
+		$args['pg'] = (int) $state['pg'];
+	}
+	return $args ? add_query_arg( array_map( 'rawurlencode', $args ), vsai_url( $section ) ) : vsai_url( $section );
+}
+
+/**
+ * Apply the state to the items and return this page's slice. $text is a
+ * callback giving the searchable text of an item.
+ */
+function vsai_list_page( $items, &$state, $text ) {
+	$words = array_filter( preg_split( '/\s+/', strtolower( $state['q'] ) ) );
+	$keep  = array();
+	foreach ( $items as $it ) {
+		if ( $state['cat'] && sanitize_title( $it['cat'] ) !== $state['cat'] ) {
+			continue;
+		}
+		if ( 'free' === $state['price'] && $it['premium'] ) {
+			continue;
+		}
+		if ( 'pro' === $state['price'] && ! $it['premium'] ) {
+			continue;
+		}
+		if ( $words ) {
+			$hay = strtolower( call_user_func( $text, $it ) );
+			foreach ( $words as $w ) {
+				if ( false === strpos( $hay, $w ) ) {
+					continue 2;
+				}
+			}
+		}
+		$keep[] = $it;
+	}
+	$state['total'] = count( $keep );
+	$state['pages'] = max( 1, (int) ceil( $state['total'] / $state['per'] ) );
+	$state['pg']    = min( $state['pg'], $state['pages'] );
+	return array_slice( $keep, ( $state['pg'] - 1 ) * $state['per'], $state['per'] );
+}
+
+/** "Showing 31–60 of 1,042". */
+function vsai_range_text( $state ) {
+	if ( ! $state['total'] ) {
+		return __( 'No results', 'vitalstack-ai-hub' );
+	}
+	$from = ( $state['pg'] - 1 ) * $state['per'] + 1;
+	$to   = min( $state['total'], $state['pg'] * $state['per'] );
+	/* translators: 1: first item number, 2: last item number, 3: total */
+	return sprintf( __( 'Showing %1$s–%2$s of %3$s', 'vitalstack-ai-hub' ), number_format_i18n( $from ), number_format_i18n( $to ), number_format_i18n( $state['total'] ) );
+}
+
+/** Numbered pages: 1 … 4 5 [6] 7 8 … 42, with previous / next. */
+function vsai_pager( $state ) {
+	if ( $state['pages'] < 2 ) {
+		return;
+	}
+	$cur  = $state['pg'];
+	$last = $state['pages'];
+	$show = array_unique( array_filter( array( 1, $cur - 2, $cur - 1, $cur, $cur + 1, $cur + 2, $last ), function ( $n ) use ( $last ) {
+		return $n >= 1 && $n <= $last;
+	} ) );
+	sort( $show );
+	$link = function ( $n ) use ( $state ) {
+		return esc_url( vsai_list_url( $state['section'], array_merge( $state, array( 'pg' => $n ) ) ) );
+	};
+	echo '<nav class="vsai-pager" aria-label="' . esc_attr__( 'Pages', 'vitalstack-ai-hub' ) . '">';
+	echo $cur > 1 ? '<a class="vsai-pg is-arrow" rel="prev" href="' . $link( $cur - 1 ) . '">← ' . esc_html__( 'Previous', 'vitalstack-ai-hub' ) . '</a>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in $link
+	$prev = 0;
+	foreach ( $show as $n ) {
+		if ( $n - $prev > 1 ) {
+			echo '<span class="vsai-pg is-gap" aria-hidden="true">…</span>';
+		}
+		echo $n === $cur ? '<span class="vsai-pg is-on" aria-current="page">' . (int) $n . '</span>' : '<a class="vsai-pg" href="' . $link( $n ) . '">' . (int) $n . '</a>'; // phpcs:ignore WordPress.Security.EscapeOutput
+		$prev = $n;
+	}
+	echo $cur < $last ? '<a class="vsai-pg is-arrow" rel="next" href="' . $link( $cur + 1 ) . '">' . esc_html__( 'Next', 'vitalstack-ai-hub' ) . ' →</a>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput
+	echo '</nav>';
+}
+
+/** Nothing found: say so and offer a way back. */
+function vsai_no_results( $state ) {
+	if ( $state['total'] ) {
+		return;
+	}
+	echo '<p class="vsai-empty">' . esc_html__( 'Nothing matches. Try another word or category.', 'vitalstack-ai-hub' ) . ' <a href="' . esc_url( vsai_url( $state['section'] ) ) . '">' . esc_html__( 'Show everything', 'vitalstack-ai-hub' ) . '</a></p>';
 }
 
 /** data-* attributes every card carries for the filters. */
 function vsai_card_attrs( $it, $extra_text = '' ) {
+	if ( false === $extra_text ) { // server-filtered lists need no search text in the page
+		return ' data-cat="' . esc_attr( $it['cat'] ) . '" data-price="' . ( $it['premium'] ? 'pro' : 'free' ) . '"';
+	}
 	return ' data-cat="' . esc_attr( $it['cat'] ) . '" data-price="' . ( $it['premium'] ? 'pro' : 'free' ) . '" data-text="' . esc_attr( strtolower( $it['title'] . ' ' . $it['cat'] . ' ' . ( $it['summary'] ?? '' ) . ' ' . $extra_text ) ) . '"';
 }
 
@@ -252,7 +450,9 @@ function vsai_render_library() {
 		}
 		echo '</article>';
 	}
-	echo '</div><p class="vsai-empty" data-empty hidden>' . esc_html__( 'Nothing matches. Try another word or category.', 'vitalstack-ai-hub' ) . '</p>';
+	echo '</div>';
+	vsai_no_results( $state );
+	vsai_pager( $state );
 	echo '<p class="vsai-note">' . esc_html__( 'External resources are free and legal to read (official sites, open books and free courses). Paid books are not copied here: our own guides teach the same ideas in plain words.', 'vitalstack-ai-hub' ) . '</p>';
 }
 
@@ -300,11 +500,14 @@ function vsai_render_prompts() {
 		$tools[ $it['tool'] ] = true;
 	}
 	$extra = '<p class="vsai-how">' . esc_html__( 'How to use: copy a prompt, replace the [BRACKETS] with your details, paste it into the tool shown. Results vary a little each time: run it twice and keep the best.', 'vitalstack-ai-hub' ) . '</p>';
-	vsai_head( 'prompts', count( $items ), vsai_categories( 'prompts' ), $extra );
+	$state = vsai_list_state_full( 'prompts' );
+	$all   = count( $items );
+	$items = $state['items'];
+	vsai_head( 'prompts', $all, vsai_categories( 'prompts' ), $extra, $state );
 	echo '<div class="vsai-prompts" data-list>';
 	foreach ( $items as $it ) {
 		$open = ! $it['premium'] || $member;
-		echo '<article class="vsai-prompt"' . vsai_card_attrs( $it, $it['tool'] . ' ' . $it['kind'] . ( $open ? ' ' . $it['prompt'] : '' ) ) . '>';
+		echo '<article class="vsai-prompt" id="p-' . esc_attr( $it['id'] ) . '"' . vsai_card_attrs( $it, false ) . '>';
 		echo '<header><span class="vsai-tool">' . esc_html( $it['tool'] ) . '</span><span class="vsai-tag">' . esc_html( $it['cat'] ) . '</span>' . vsai_badge( $it['premium'] ) . '</header>';
 		echo '<h3>' . esc_html( $it['title'] ) . '</h3><p class="vsai-sum">' . esc_html( $it['summary'] ) . '</p>';
 		if ( $open ) {
@@ -322,7 +525,9 @@ function vsai_render_prompts() {
 		}
 		echo '</article>';
 	}
-	echo '</div><p class="vsai-empty" data-empty hidden>' . esc_html__( 'Nothing matches. Try another word or category.', 'vitalstack-ai-hub' ) . '</p>';
+	echo '</div>';
+	vsai_no_results( $state );
+	vsai_pager( $state );
 }
 
 /* ── Motion Studio ─────────────────────────────────────────────────────── */
@@ -356,19 +561,16 @@ function vsai_left_text() {
 function vsai_render_motion() {
 	$items  = vsai_items( 'motion' );
 	$member = vsai_is_member();
-	usort(
-		$items,
-		function ( $a, $b ) {
-			return (int) ! empty( $b['featured'] ) - (int) ! empty( $a['featured'] );
-		}
-	);
 	$extra = '<p class="vsai-how">' . esc_html__( 'Every design is one HTML file: no library, no build step. Copy the build prompt into Claude, ChatGPT, Cursor or Lovable to make it yours, or copy the finished code into any page or the VitalStack Website Builder.', 'vitalstack-ai-hub' ) . '</p>';
-	vsai_head( 'motion', count( $items ), vsai_categories( 'motion' ), $extra );
+	$state = vsai_list_state_full( 'motion' );
+	$all   = count( $items );
+	$items = $state['items'];
+	vsai_head( 'motion', $all, vsai_categories( 'motion' ), $extra, $state );
 	echo '<div class="vsai-motion" data-list>';
 	foreach ( $items as $it ) {
 		$open   = ! $it['premium'] || $member;
 		$poster = vsai_poster( $it );
-		echo '<article class="vsai-tile' . ( ! empty( $it['featured'] ) ? ' is-featured' : '' ) . '"' . vsai_card_attrs( $it, $it['tags'] ?? '' ) . '>';
+		echo '<article class="vsai-tile' . ( ! empty( $it['featured'] ) ? ' is-featured' : '' ) . '"' . vsai_card_attrs( $it, false ) . '>';
 		echo '<button type="button" class="vsai-frame" data-open="#mo-' . esc_attr( $it['id'] ) . '" aria-label="' . esc_attr( sprintf( /* translators: %s: design name */ __( 'Open %s', 'vitalstack-ai-hub' ), $it['title'] ) ) . '">';
 		if ( $open ) {
 			echo '<iframe title="' . esc_attr( $it['title'] ) . '" sandbox="allow-scripts" tabindex="-1" loading="lazy" data-src="' . esc_url( vsai_view_url( $it, true ) ) . '"></iframe>';
@@ -401,7 +603,9 @@ function vsai_render_motion() {
 		echo '<ul class="vsai-checks"><li>' . esc_html__( 'One HTML file, no libraries', 'vitalstack-ai-hub' ) . '</li><li>' . esc_html__( 'Responsive + reduced-motion ready', 'vitalstack-ai-hub' ) . '</li><li>' . esc_html__( 'Detailed build prompt for AI tools', 'vitalstack-ai-hub' ) . '</li><li>' . esc_html__( 'Use in your and your clients’ sites', 'vitalstack-ai-hub' ) . '</li></ul>';
 		echo '</aside></div></template></article>';
 	}
-	echo '</div><p class="vsai-empty" data-empty hidden>' . esc_html__( 'Nothing matches. Try another word or category.', 'vitalstack-ai-hub' ) . '</p>';
+	echo '</div>';
+	vsai_no_results( $state );
+	vsai_pager( $state );
 	echo '<p class="vsai-note">' . esc_html__( 'Licence: use the designs in your own and your clients’ websites. Reselling or republishing them as a template or prompt pack is not allowed.', 'vitalstack-ai-hub' ) . '</p>';
 	vsai_gate_template();
 }
@@ -428,7 +632,7 @@ function vsai_render_view( $slug ) {
 	if ( $it['premium'] ) {
 		nocache_headers();
 	}
-	$code = (string) $it['code'];
+	$code = vsai_motion_code( $it );
 	// ?demo=1 (gallery tiles): scroll stories play themselves so the tile shows the motion.
 	if ( isset( $_GET['demo'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification -- display only
 		$demo = '<style>html{scrollbar-width:none}html::-webkit-scrollbar{display:none}</style><script>(function(){var d=1,y=0;function s(){var m=document.documentElement.scrollHeight-innerHeight;if(m<20)return;y+=d*Math.max(2,m/700);if(y>=m){y=m;d=-1}else if(y<=0){y=0;d=1}scrollTo(0,y);requestAnimationFrame(s)}setTimeout(s,1500)})();</script>';

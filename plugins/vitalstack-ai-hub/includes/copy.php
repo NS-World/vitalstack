@@ -106,7 +106,7 @@ function vsai_rest_copy( WP_REST_Request $req ) {
 			: new WP_Error( 'login', __( 'You’ve reached your free copy limit. Create a free account or upgrade to keep copying.', 'vitalstack-ai-hub' ), array( 'status' => 401, 'login' => true ) );
 	}
 	vsai_count_copy();
-	$text = 'code' === $req['part'] ? (string) $it['code'] : vsai_full_prompt( $it );
+	$text = 'code' === $req['part'] ? vsai_motion_code( $it ) : vsai_full_prompt( $it );
 	return rest_ensure_response(
 		array(
 			'text' => $text,

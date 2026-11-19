@@ -1,0 +1,7002 @@
+[
+{
+"id": "explain-python-code-line-by-line",
+"title": "Explain Python code line by line",
+"cat": "Coding",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "write-python-unit-tests",
+"title": "Write Python unit tests",
+"cat": "Coding",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "refactor-python-code-for-readability",
+"title": "Refactor Python code for readability",
+"cat": "Coding",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "debug-a-python-error",
+"title": "Debug a Python error",
+"cat": "Coding",
+"tool": "GitHub Copilot",
+"premium": false
+},
+{
+"id": "python-code-review-checklist",
+"title": "Python code review checklist",
+"cat": "Coding",
+"tool": "Cursor",
+"premium": false
+},
+{
+"id": "convert-javascript-code-to-python",
+"title": "Convert JavaScript code to Python",
+"cat": "Coding",
+"tool": "Gemini",
+"premium": true
+},
+{
+"id": "document-python-code",
+"title": "Document Python code",
+"cat": "Coding",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "speed-up-slow-python-code",
+"title": "Speed up slow Python code",
+"cat": "Coding",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "guided-python-project-rest-api",
+"title": "Guided Python project: REST API",
+"cat": "Coding",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "explain-java-code-line-by-line",
+"title": "Explain Java code line by line",
+"cat": "Coding",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "write-java-unit-tests",
+"title": "Write Java unit tests",
+"cat": "Coding",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "refactor-java-code-for-readability",
+"title": "Refactor Java code for readability",
+"cat": "Coding",
+"tool": "GitHub Copilot",
+"premium": false
+},
+{
+"id": "debug-a-java-error",
+"title": "Debug a Java error",
+"cat": "Coding",
+"tool": "Cursor",
+"premium": true
+},
+{
+"id": "java-code-review-checklist",
+"title": "Java code review checklist",
+"cat": "Coding",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "convert-python-code-to-java",
+"title": "Convert Python code to Java",
+"cat": "Coding",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "document-java-code",
+"title": "Document Java code",
+"cat": "Coding",
+"tool": "Claude",
+"premium": true
+},
+{
+"id": "speed-up-slow-java-code",
+"title": "Speed up slow Java code",
+"cat": "Coding",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "guided-java-project-rest-api",
+"title": "Guided Java project: REST API",
+"cat": "Coding",
+"tool": "GitHub Copilot",
+"premium": false
+},
+{
+"id": "explain-javascript-code-line-by-line",
+"title": "Explain JavaScript code line by line",
+"cat": "Coding",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "write-javascript-unit-tests",
+"title": "Write JavaScript unit tests",
+"cat": "Coding",
+"tool": "GitHub Copilot",
+"premium": false
+},
+{
+"id": "refactor-javascript-code-for-readability",
+"title": "Refactor JavaScript code for readability",
+"cat": "Coding",
+"tool": "Cursor",
+"premium": false
+},
+{
+"id": "debug-a-javascript-error",
+"title": "Debug a JavaScript error",
+"cat": "Coding",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "javascript-code-review-checklist",
+"title": "JavaScript code review checklist",
+"cat": "Coding",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "convert-python-code-to-javascript",
+"title": "Convert Python code to JavaScript",
+"cat": "Coding",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "document-javascript-code",
+"title": "Document JavaScript code",
+"cat": "Coding",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "speed-up-slow-javascript-code",
+"title": "Speed up slow JavaScript code",
+"cat": "Coding",
+"tool": "GitHub Copilot",
+"premium": true
+},
+{
+"id": "guided-javascript-project-rest-api",
+"title": "Guided JavaScript project: REST API",
+"cat": "Coding",
+"tool": "Cursor",
+"premium": false
+},
+{
+"id": "explain-typescript-code-line-by-line",
+"title": "Explain TypeScript code line by line",
+"cat": "Coding",
+"tool": "GitHub Copilot",
+"premium": false
+},
+{
+"id": "write-typescript-unit-tests",
+"title": "Write TypeScript unit tests",
+"cat": "Coding",
+"tool": "Cursor",
+"premium": true
+},
+{
+"id": "refactor-typescript-code-for-readability",
+"title": "Refactor TypeScript code for readability",
+"cat": "Coding",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "debug-a-typescript-error",
+"title": "Debug a TypeScript error",
+"cat": "Coding",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "typescript-code-review-checklist",
+"title": "TypeScript code review checklist",
+"cat": "Coding",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "convert-javascript-code-to-typescript",
+"title": "Convert JavaScript code to TypeScript",
+"cat": "Coding",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "document-typescript-code",
+"title": "Document TypeScript code",
+"cat": "Coding",
+"tool": "GitHub Copilot",
+"premium": false
+},
+{
+"id": "speed-up-slow-typescript-code",
+"title": "Speed up slow TypeScript code",
+"cat": "Coding",
+"tool": "Cursor",
+"premium": false
+},
+{
+"id": "guided-typescript-project-typed-rest-api",
+"title": "Guided TypeScript project: typed REST API",
+"cat": "Coding",
+"tool": "Gemini",
+"premium": true
+},
+{
+"id": "explain-c-code-line-by-line",
+"title": "Explain C++ code line by line",
+"cat": "Coding",
+"tool": "Cursor",
+"premium": false
+},
+{
+"id": "write-c-unit-tests",
+"title": "Write C++ unit tests",
+"cat": "Coding",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "refactor-c-code-for-readability",
+"title": "Refactor C++ code for readability",
+"cat": "Coding",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "debug-a-c-error",
+"title": "Debug a C++ error",
+"cat": "Coding",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "c-code-review-checklist",
+"title": "C++ code review checklist",
+"cat": "Coding",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "convert-python-code-to-c",
+"title": "Convert Python code to C++",
+"cat": "Coding",
+"tool": "GitHub Copilot",
+"premium": false
+},
+{
+"id": "document-c-code",
+"title": "Document C++ code",
+"cat": "Coding",
+"tool": "Cursor",
+"premium": true
+},
+{
+"id": "speed-up-slow-c-code",
+"title": "Speed up slow C++ code",
+"cat": "Coding",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "guided-c-project-command-line-tool",
+"title": "Guided C++ project: command-line tool",
+"cat": "Coding",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "explain-c-code-line-by-line-2",
+"title": "Explain C# code line by line",
+"cat": "Coding",
+"tool": "Gemini",
+"premium": true
+},
+{
+"id": "write-c-unit-tests-2",
+"title": "Write C# unit tests",
+"cat": "Coding",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "refactor-c-code-for-readability-2",
+"title": "Refactor C# code for readability",
+"cat": "Coding",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "debug-a-c-error-2",
+"title": "Debug a C# error",
+"cat": "Coding",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "c-code-review-checklist-2",
+"title": "C# code review checklist",
+"cat": "Coding",
+"tool": "GitHub Copilot",
+"premium": false
+},
+{
+"id": "convert-java-code-to-c",
+"title": "Convert Java code to C#",
+"cat": "Coding",
+"tool": "Cursor",
+"premium": false
+},
+{
+"id": "document-c-code-2",
+"title": "Document C# code",
+"cat": "Coding",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "speed-up-slow-c-code-2",
+"title": "Speed up slow C# code",
+"cat": "Coding",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "guided-c-project-minimal-api",
+"title": "Guided C# project: minimal API",
+"cat": "Coding",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "explain-go-code-line-by-line",
+"title": "Explain Go code line by line",
+"cat": "Coding",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "write-go-unit-tests",
+"title": "Write Go unit tests",
+"cat": "Coding",
+"tool": "Claude",
+"premium": true
+},
+{
+"id": "refactor-go-code-for-readability",
+"title": "Refactor Go code for readability",
+"cat": "Coding",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "debug-a-go-error",
+"title": "Debug a Go error",
+"cat": "Coding",
+"tool": "GitHub Copilot",
+"premium": false
+},
+{
+"id": "go-code-review-checklist",
+"title": "Go code review checklist",
+"cat": "Coding",
+"tool": "Cursor",
+"premium": true
+},
+{
+"id": "convert-python-code-to-go",
+"title": "Convert Python code to Go",
+"cat": "Coding",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "document-go-code",
+"title": "Document Go code",
+"cat": "Coding",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "speed-up-slow-go-code",
+"title": "Speed up slow Go code",
+"cat": "Coding",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "guided-go-project-rest-api",
+"title": "Guided Go project: REST API",
+"cat": "Coding",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "explain-rust-code-line-by-line",
+"title": "Explain Rust code line by line",
+"cat": "Coding",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "write-rust-unit-tests",
+"title": "Write Rust unit tests",
+"cat": "Coding",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "refactor-rust-code-for-readability",
+"title": "Refactor Rust code for readability",
+"cat": "Coding",
+"tool": "GitHub Copilot",
+"premium": true
+},
+{
+"id": "debug-a-rust-error",
+"title": "Debug a Rust error",
+"cat": "Coding",
+"tool": "Cursor",
+"premium": false
+},
+{
+"id": "rust-code-review-checklist",
+"title": "Rust code review checklist",
+"cat": "Coding",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "convert-python-code-to-rust",
+"title": "Convert Python code to Rust",
+"cat": "Coding",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "document-rust-code",
+"title": "Document Rust code",
+"cat": "Coding",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "speed-up-slow-rust-code",
+"title": "Speed up slow Rust code",
+"cat": "Coding",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "guided-rust-project-rest-api",
+"title": "Guided Rust project: REST API",
+"cat": "Coding",
+"tool": "GitHub Copilot",
+"premium": false
+},
+{
+"id": "explain-kotlin-code-line-by-line",
+"title": "Explain Kotlin code line by line",
+"cat": "Coding",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "write-kotlin-unit-tests",
+"title": "Write Kotlin unit tests",
+"cat": "Coding",
+"tool": "GitHub Copilot",
+"premium": false
+},
+{
+"id": "refactor-kotlin-code-for-readability",
+"title": "Refactor Kotlin code for readability",
+"cat": "Coding",
+"tool": "Cursor",
+"premium": false
+},
+{
+"id": "debug-a-kotlin-error",
+"title": "Debug a Kotlin error",
+"cat": "Coding",
+"tool": "Gemini",
+"premium": true
+},
+{
+"id": "kotlin-code-review-checklist",
+"title": "Kotlin code review checklist",
+"cat": "Coding",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "convert-java-code-to-kotlin",
+"title": "Convert Java code to Kotlin",
+"cat": "Coding",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "document-kotlin-code",
+"title": "Document Kotlin code",
+"cat": "Coding",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "speed-up-slow-kotlin-code",
+"title": "Speed up slow Kotlin code",
+"cat": "Coding",
+"tool": "GitHub Copilot",
+"premium": false
+},
+{
+"id": "guided-kotlin-project-rest-api",
+"title": "Guided Kotlin project: REST API",
+"cat": "Coding",
+"tool": "Cursor",
+"premium": false
+},
+{
+"id": "explain-swift-code-line-by-line",
+"title": "Explain Swift code line by line",
+"cat": "Coding",
+"tool": "GitHub Copilot",
+"premium": false
+},
+{
+"id": "write-swift-unit-tests",
+"title": "Write Swift unit tests",
+"cat": "Coding",
+"tool": "Cursor",
+"premium": true
+},
+{
+"id": "refactor-swift-code-for-readability",
+"title": "Refactor Swift code for readability",
+"cat": "Coding",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "debug-a-swift-error",
+"title": "Debug a Swift error",
+"cat": "Coding",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "swift-code-review-checklist",
+"title": "Swift code review checklist",
+"cat": "Coding",
+"tool": "Claude",
+"premium": true
+},
+{
+"id": "convert-kotlin-code-to-swift",
+"title": "Convert Kotlin code to Swift",
+"cat": "Coding",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "document-swift-code",
+"title": "Document Swift code",
+"cat": "Coding",
+"tool": "GitHub Copilot",
+"premium": false
+},
+{
+"id": "speed-up-slow-swift-code",
+"title": "Speed up slow Swift code",
+"cat": "Coding",
+"tool": "Cursor",
+"premium": true
+},
+{
+"id": "guided-swift-project-small-ios-screen",
+"title": "Guided Swift project: small iOS screen",
+"cat": "Coding",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "explain-php-code-line-by-line",
+"title": "Explain PHP code line by line",
+"cat": "Coding",
+"tool": "Cursor",
+"premium": false
+},
+{
+"id": "write-php-unit-tests",
+"title": "Write PHP unit tests",
+"cat": "Coding",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "refactor-php-code-for-readability",
+"title": "Refactor PHP code for readability",
+"cat": "Coding",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "debug-a-php-error",
+"title": "Debug a PHP error",
+"cat": "Coding",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "php-code-review-checklist",
+"title": "PHP code review checklist",
+"cat": "Coding",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "convert-javascript-code-to-php",
+"title": "Convert JavaScript code to PHP",
+"cat": "Coding",
+"tool": "GitHub Copilot",
+"premium": true
+},
+{
+"id": "document-php-code",
+"title": "Document PHP code",
+"cat": "Coding",
+"tool": "Cursor",
+"premium": false
+},
+{
+"id": "speed-up-slow-php-code",
+"title": "Speed up slow PHP code",
+"cat": "Coding",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "guided-php-project-rest-api",
+"title": "Guided PHP project: REST API",
+"cat": "Coding",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "explain-ruby-code-line-by-line",
+"title": "Explain Ruby code line by line",
+"cat": "Coding",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "write-ruby-unit-tests",
+"title": "Write Ruby unit tests",
+"cat": "Coding",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "refactor-ruby-code-for-readability",
+"title": "Refactor Ruby code for readability",
+"cat": "Coding",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "debug-a-ruby-error",
+"title": "Debug a Ruby error",
+"cat": "Coding",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "ruby-code-review-checklist",
+"title": "Ruby code review checklist",
+"cat": "Coding",
+"tool": "GitHub Copilot",
+"premium": false
+},
+{
+"id": "convert-python-code-to-ruby",
+"title": "Convert Python code to Ruby",
+"cat": "Coding",
+"tool": "Cursor",
+"premium": false
+},
+{
+"id": "document-ruby-code",
+"title": "Document Ruby code",
+"cat": "Coding",
+"tool": "Gemini",
+"premium": true
+},
+{
+"id": "speed-up-slow-ruby-code",
+"title": "Speed up slow Ruby code",
+"cat": "Coding",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "guided-ruby-project-json-api",
+"title": "Guided Ruby project: JSON API",
+"cat": "Coding",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "software-engineer-mock-interview",
+"title": "Software Engineer mock interview",
+"cat": "Career & Jobs",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "software-engineer-resume-bullet-points",
+"title": "Software Engineer resume bullet points",
+"cat": "Career & Jobs",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "software-engineer-cover-letter",
+"title": "Software Engineer cover letter",
+"cat": "Career & Jobs",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "software-engineer-linkedin-headline-and-about",
+"title": "Software Engineer LinkedIn headline and About",
+"cat": "Career & Jobs",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "software-engineer-30-60-90-day-plan",
+"title": "Software Engineer 30-60-90 day plan",
+"cat": "Career & Jobs",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "frontend-developer-mock-interview",
+"title": "Frontend Developer mock interview",
+"cat": "Career & Jobs",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "frontend-developer-resume-bullet-points",
+"title": "Frontend Developer resume bullet points",
+"cat": "Career & Jobs",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "frontend-developer-cover-letter",
+"title": "Frontend Developer cover letter",
+"cat": "Career & Jobs",
+"tool": "Gemini",
+"premium": true
+},
+{
+"id": "frontend-developer-linkedin-headline-and-about",
+"title": "Frontend Developer LinkedIn headline and About",
+"cat": "Career & Jobs",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "frontend-developer-30-60-90-day-plan",
+"title": "Frontend Developer 30-60-90 day plan",
+"cat": "Career & Jobs",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "backend-developer-mock-interview",
+"title": "Backend Developer mock interview",
+"cat": "Career & Jobs",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "backend-developer-resume-bullet-points",
+"title": "Backend Developer resume bullet points",
+"cat": "Career & Jobs",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "backend-developer-cover-letter",
+"title": "Backend Developer cover letter",
+"cat": "Career & Jobs",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "backend-developer-linkedin-headline-and-about",
+"title": "Backend Developer LinkedIn headline and About",
+"cat": "Career & Jobs",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "backend-developer-30-60-90-day-plan",
+"title": "Backend Developer 30-60-90 day plan",
+"cat": "Career & Jobs",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "full-stack-developer-mock-interview",
+"title": "Full-Stack Developer mock interview",
+"cat": "Career & Jobs",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "full-stack-developer-resume-bullet-points",
+"title": "Full-Stack Developer resume bullet points",
+"cat": "Career & Jobs",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "full-stack-developer-cover-letter",
+"title": "Full-Stack Developer cover letter",
+"cat": "Career & Jobs",
+"tool": "Claude",
+"premium": true
+},
+{
+"id": "full-stack-developer-linkedin-headline-and-about",
+"title": "Full-Stack Developer LinkedIn headline and About",
+"cat": "Career & Jobs",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "full-stack-developer-30-60-90-day-plan",
+"title": "Full-Stack Developer 30-60-90 day plan",
+"cat": "Career & Jobs",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "java-developer-mock-interview",
+"title": "Java Developer mock interview",
+"cat": "Career & Jobs",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "java-developer-resume-bullet-points",
+"title": "Java Developer resume bullet points",
+"cat": "Career & Jobs",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "java-developer-cover-letter",
+"title": "Java Developer cover letter",
+"cat": "Career & Jobs",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "java-developer-linkedin-headline-and-about",
+"title": "Java Developer LinkedIn headline and About",
+"cat": "Career & Jobs",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "java-developer-30-60-90-day-plan",
+"title": "Java Developer 30-60-90 day plan",
+"cat": "Career & Jobs",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "python-developer-mock-interview",
+"title": "Python Developer mock interview",
+"cat": "Career & Jobs",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "python-developer-resume-bullet-points",
+"title": "Python Developer resume bullet points",
+"cat": "Career & Jobs",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "python-developer-cover-letter",
+"title": "Python Developer cover letter",
+"cat": "Career & Jobs",
+"tool": "Gemini",
+"premium": true
+},
+{
+"id": "python-developer-linkedin-headline-and-about",
+"title": "Python Developer LinkedIn headline and About",
+"cat": "Career & Jobs",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "python-developer-30-60-90-day-plan",
+"title": "Python Developer 30-60-90 day plan",
+"cat": "Career & Jobs",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "data-analyst-mock-interview",
+"title": "Data Analyst mock interview",
+"cat": "Career & Jobs",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "data-analyst-resume-bullet-points",
+"title": "Data Analyst resume bullet points",
+"cat": "Career & Jobs",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "data-analyst-cover-letter",
+"title": "Data Analyst cover letter",
+"cat": "Career & Jobs",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "data-analyst-linkedin-headline-and-about",
+"title": "Data Analyst LinkedIn headline and About",
+"cat": "Career & Jobs",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "data-analyst-30-60-90-day-plan",
+"title": "Data Analyst 30-60-90 day plan",
+"cat": "Career & Jobs",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "data-scientist-mock-interview",
+"title": "Data Scientist mock interview",
+"cat": "Career & Jobs",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "data-scientist-resume-bullet-points",
+"title": "Data Scientist resume bullet points",
+"cat": "Career & Jobs",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "data-scientist-cover-letter",
+"title": "Data Scientist cover letter",
+"cat": "Career & Jobs",
+"tool": "Claude",
+"premium": true
+},
+{
+"id": "data-scientist-linkedin-headline-and-about",
+"title": "Data Scientist LinkedIn headline and About",
+"cat": "Career & Jobs",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "data-scientist-30-60-90-day-plan",
+"title": "Data Scientist 30-60-90 day plan",
+"cat": "Career & Jobs",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "machine-learning-engineer-mock-interview",
+"title": "Machine Learning Engineer mock interview",
+"cat": "Career & Jobs",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "machine-learning-engineer-resume-bullet-points",
+"title": "Machine Learning Engineer resume bullet points",
+"cat": "Career & Jobs",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "machine-learning-engineer-cover-letter",
+"title": "Machine Learning Engineer cover letter",
+"cat": "Career & Jobs",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "machine-learning-engineer-linkedin-headline-and-about",
+"title": "Machine Learning Engineer LinkedIn headline and About",
+"cat": "Career & Jobs",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "machine-learning-engineer-30-60-90-day-plan",
+"title": "Machine Learning Engineer 30-60-90 day plan",
+"cat": "Career & Jobs",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "data-engineer-mock-interview",
+"title": "Data Engineer mock interview",
+"cat": "Career & Jobs",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "data-engineer-resume-bullet-points",
+"title": "Data Engineer resume bullet points",
+"cat": "Career & Jobs",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "data-engineer-cover-letter",
+"title": "Data Engineer cover letter",
+"cat": "Career & Jobs",
+"tool": "Gemini",
+"premium": true
+},
+{
+"id": "data-engineer-linkedin-headline-and-about",
+"title": "Data Engineer LinkedIn headline and About",
+"cat": "Career & Jobs",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "data-engineer-30-60-90-day-plan",
+"title": "Data Engineer 30-60-90 day plan",
+"cat": "Career & Jobs",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "devops-engineer-mock-interview",
+"title": "DevOps Engineer mock interview",
+"cat": "Career & Jobs",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "devops-engineer-resume-bullet-points",
+"title": "DevOps Engineer resume bullet points",
+"cat": "Career & Jobs",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "devops-engineer-cover-letter",
+"title": "DevOps Engineer cover letter",
+"cat": "Career & Jobs",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "devops-engineer-linkedin-headline-and-about",
+"title": "DevOps Engineer LinkedIn headline and About",
+"cat": "Career & Jobs",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "devops-engineer-30-60-90-day-plan",
+"title": "DevOps Engineer 30-60-90 day plan",
+"cat": "Career & Jobs",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "cloud-engineer-mock-interview",
+"title": "Cloud Engineer mock interview",
+"cat": "Career & Jobs",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "cloud-engineer-resume-bullet-points",
+"title": "Cloud Engineer resume bullet points",
+"cat": "Career & Jobs",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "cloud-engineer-cover-letter",
+"title": "Cloud Engineer cover letter",
+"cat": "Career & Jobs",
+"tool": "Claude",
+"premium": true
+},
+{
+"id": "cloud-engineer-linkedin-headline-and-about",
+"title": "Cloud Engineer LinkedIn headline and About",
+"cat": "Career & Jobs",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "cloud-engineer-30-60-90-day-plan",
+"title": "Cloud Engineer 30-60-90 day plan",
+"cat": "Career & Jobs",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "qa-automation-engineer-mock-interview",
+"title": "QA Automation Engineer mock interview",
+"cat": "Career & Jobs",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "qa-automation-engineer-resume-bullet-points",
+"title": "QA Automation Engineer resume bullet points",
+"cat": "Career & Jobs",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "qa-automation-engineer-cover-letter",
+"title": "QA Automation Engineer cover letter",
+"cat": "Career & Jobs",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "qa-automation-engineer-linkedin-headline-and-about",
+"title": "QA Automation Engineer LinkedIn headline and About",
+"cat": "Career & Jobs",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "qa-automation-engineer-30-60-90-day-plan",
+"title": "QA Automation Engineer 30-60-90 day plan",
+"cat": "Career & Jobs",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "android-developer-mock-interview",
+"title": "Android Developer mock interview",
+"cat": "Career & Jobs",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "android-developer-resume-bullet-points",
+"title": "Android Developer resume bullet points",
+"cat": "Career & Jobs",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "android-developer-cover-letter",
+"title": "Android Developer cover letter",
+"cat": "Career & Jobs",
+"tool": "Gemini",
+"premium": true
+},
+{
+"id": "android-developer-linkedin-headline-and-about",
+"title": "Android Developer LinkedIn headline and About",
+"cat": "Career & Jobs",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "android-developer-30-60-90-day-plan",
+"title": "Android Developer 30-60-90 day plan",
+"cat": "Career & Jobs",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "ios-developer-mock-interview",
+"title": "iOS Developer mock interview",
+"cat": "Career & Jobs",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "ios-developer-resume-bullet-points",
+"title": "iOS Developer resume bullet points",
+"cat": "Career & Jobs",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "ios-developer-cover-letter",
+"title": "iOS Developer cover letter",
+"cat": "Career & Jobs",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "ios-developer-linkedin-headline-and-about",
+"title": "iOS Developer LinkedIn headline and About",
+"cat": "Career & Jobs",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "ios-developer-30-60-90-day-plan",
+"title": "iOS Developer 30-60-90 day plan",
+"cat": "Career & Jobs",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "ui-ux-designer-mock-interview",
+"title": "UI/UX Designer mock interview",
+"cat": "Career & Jobs",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "ui-ux-designer-resume-bullet-points",
+"title": "UI/UX Designer resume bullet points",
+"cat": "Career & Jobs",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "ui-ux-designer-cover-letter",
+"title": "UI/UX Designer cover letter",
+"cat": "Career & Jobs",
+"tool": "Claude",
+"premium": true
+},
+{
+"id": "ui-ux-designer-linkedin-headline-and-about",
+"title": "UI/UX Designer LinkedIn headline and About",
+"cat": "Career & Jobs",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "ui-ux-designer-30-60-90-day-plan",
+"title": "UI/UX Designer 30-60-90 day plan",
+"cat": "Career & Jobs",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "product-manager-mock-interview",
+"title": "Product Manager mock interview",
+"cat": "Career & Jobs",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "product-manager-resume-bullet-points",
+"title": "Product Manager resume bullet points",
+"cat": "Career & Jobs",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "product-manager-cover-letter",
+"title": "Product Manager cover letter",
+"cat": "Career & Jobs",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "product-manager-linkedin-headline-and-about",
+"title": "Product Manager LinkedIn headline and About",
+"cat": "Career & Jobs",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "product-manager-30-60-90-day-plan",
+"title": "Product Manager 30-60-90 day plan",
+"cat": "Career & Jobs",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "business-analyst-mock-interview",
+"title": "Business Analyst mock interview",
+"cat": "Career & Jobs",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "business-analyst-resume-bullet-points",
+"title": "Business Analyst resume bullet points",
+"cat": "Career & Jobs",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "business-analyst-cover-letter",
+"title": "Business Analyst cover letter",
+"cat": "Career & Jobs",
+"tool": "Gemini",
+"premium": true
+},
+{
+"id": "business-analyst-linkedin-headline-and-about",
+"title": "Business Analyst LinkedIn headline and About",
+"cat": "Career & Jobs",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "business-analyst-30-60-90-day-plan",
+"title": "Business Analyst 30-60-90 day plan",
+"cat": "Career & Jobs",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "cybersecurity-analyst-mock-interview",
+"title": "Cybersecurity Analyst mock interview",
+"cat": "Career & Jobs",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "cybersecurity-analyst-resume-bullet-points",
+"title": "Cybersecurity Analyst resume bullet points",
+"cat": "Career & Jobs",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "cybersecurity-analyst-cover-letter",
+"title": "Cybersecurity Analyst cover letter",
+"cat": "Career & Jobs",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "cybersecurity-analyst-linkedin-headline-and-about",
+"title": "Cybersecurity Analyst LinkedIn headline and About",
+"cat": "Career & Jobs",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "cybersecurity-analyst-30-60-90-day-plan",
+"title": "Cybersecurity Analyst 30-60-90 day plan",
+"cat": "Career & Jobs",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "digital-marketer-mock-interview",
+"title": "Digital Marketer mock interview",
+"cat": "Career & Jobs",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "digital-marketer-resume-bullet-points",
+"title": "Digital Marketer resume bullet points",
+"cat": "Career & Jobs",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "digital-marketer-cover-letter",
+"title": "Digital Marketer cover letter",
+"cat": "Career & Jobs",
+"tool": "Claude",
+"premium": true
+},
+{
+"id": "digital-marketer-linkedin-headline-and-about",
+"title": "Digital Marketer LinkedIn headline and About",
+"cat": "Career & Jobs",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "digital-marketer-30-60-90-day-plan",
+"title": "Digital Marketer 30-60-90 day plan",
+"cat": "Career & Jobs",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "content-writer-mock-interview",
+"title": "Content Writer mock interview",
+"cat": "Career & Jobs",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "content-writer-resume-bullet-points",
+"title": "Content Writer resume bullet points",
+"cat": "Career & Jobs",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "content-writer-cover-letter",
+"title": "Content Writer cover letter",
+"cat": "Career & Jobs",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "content-writer-linkedin-headline-and-about",
+"title": "Content Writer LinkedIn headline and About",
+"cat": "Career & Jobs",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "content-writer-30-60-90-day-plan",
+"title": "Content Writer 30-60-90 day plan",
+"cat": "Career & Jobs",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "graphic-designer-mock-interview",
+"title": "Graphic Designer mock interview",
+"cat": "Career & Jobs",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "graphic-designer-resume-bullet-points",
+"title": "Graphic Designer resume bullet points",
+"cat": "Career & Jobs",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "graphic-designer-cover-letter",
+"title": "Graphic Designer cover letter",
+"cat": "Career & Jobs",
+"tool": "Gemini",
+"premium": true
+},
+{
+"id": "graphic-designer-linkedin-headline-and-about",
+"title": "Graphic Designer LinkedIn headline and About",
+"cat": "Career & Jobs",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "graphic-designer-30-60-90-day-plan",
+"title": "Graphic Designer 30-60-90 day plan",
+"cat": "Career & Jobs",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "project-manager-mock-interview",
+"title": "Project Manager mock interview",
+"cat": "Career & Jobs",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "project-manager-resume-bullet-points",
+"title": "Project Manager resume bullet points",
+"cat": "Career & Jobs",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "project-manager-cover-letter",
+"title": "Project Manager cover letter",
+"cat": "Career & Jobs",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "project-manager-linkedin-headline-and-about",
+"title": "Project Manager LinkedIn headline and About",
+"cat": "Career & Jobs",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "project-manager-30-60-90-day-plan",
+"title": "Project Manager 30-60-90 day plan",
+"cat": "Career & Jobs",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "hr-executive-mock-interview",
+"title": "HR Executive mock interview",
+"cat": "Career & Jobs",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "hr-executive-resume-bullet-points",
+"title": "HR Executive resume bullet points",
+"cat": "Career & Jobs",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "hr-executive-cover-letter",
+"title": "HR Executive cover letter",
+"cat": "Career & Jobs",
+"tool": "Claude",
+"premium": true
+},
+{
+"id": "hr-executive-linkedin-headline-and-about",
+"title": "HR Executive LinkedIn headline and About",
+"cat": "Career & Jobs",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "hr-executive-30-60-90-day-plan",
+"title": "HR Executive 30-60-90 day plan",
+"cat": "Career & Jobs",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "sales-executive-mock-interview",
+"title": "Sales Executive mock interview",
+"cat": "Career & Jobs",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "sales-executive-resume-bullet-points",
+"title": "Sales Executive resume bullet points",
+"cat": "Career & Jobs",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "sales-executive-cover-letter",
+"title": "Sales Executive cover letter",
+"cat": "Career & Jobs",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "sales-executive-linkedin-headline-and-about",
+"title": "Sales Executive LinkedIn headline and About",
+"cat": "Career & Jobs",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "sales-executive-30-60-90-day-plan",
+"title": "Sales Executive 30-60-90 day plan",
+"cat": "Career & Jobs",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "customer-support-specialist-mock-interview",
+"title": "Customer Support Specialist mock interview",
+"cat": "Career & Jobs",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "customer-support-specialist-resume-bullet-points",
+"title": "Customer Support Specialist resume bullet points",
+"cat": "Career & Jobs",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "customer-support-specialist-cover-letter",
+"title": "Customer Support Specialist cover letter",
+"cat": "Career & Jobs",
+"tool": "Gemini",
+"premium": true
+},
+{
+"id": "customer-support-specialist-linkedin-headline-and-about",
+"title": "Customer Support Specialist LinkedIn headline and About",
+"cat": "Career & Jobs",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "customer-support-specialist-30-60-90-day-plan",
+"title": "Customer Support Specialist 30-60-90 day plan",
+"cat": "Career & Jobs",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "accountant-mock-interview",
+"title": "Accountant mock interview",
+"cat": "Career & Jobs",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "accountant-resume-bullet-points",
+"title": "Accountant resume bullet points",
+"cat": "Career & Jobs",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "accountant-cover-letter",
+"title": "Accountant cover letter",
+"cat": "Career & Jobs",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "accountant-linkedin-headline-and-about",
+"title": "Accountant LinkedIn headline and About",
+"cat": "Career & Jobs",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "accountant-30-60-90-day-plan",
+"title": "Accountant 30-60-90 day plan",
+"cat": "Career & Jobs",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "teacher-mock-interview",
+"title": "Teacher mock interview",
+"cat": "Career & Jobs",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "teacher-resume-bullet-points",
+"title": "Teacher resume bullet points",
+"cat": "Career & Jobs",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "teacher-cover-letter",
+"title": "Teacher cover letter",
+"cat": "Career & Jobs",
+"tool": "Claude",
+"premium": true
+},
+{
+"id": "teacher-linkedin-headline-and-about",
+"title": "Teacher LinkedIn headline and About",
+"cat": "Career & Jobs",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "teacher-30-60-90-day-plan",
+"title": "Teacher 30-60-90 day plan",
+"cat": "Career & Jobs",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "embedded-systems-engineer-mock-interview",
+"title": "Embedded Systems Engineer mock interview",
+"cat": "Career & Jobs",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "embedded-systems-engineer-resume-bullet-points",
+"title": "Embedded Systems Engineer resume bullet points",
+"cat": "Career & Jobs",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "embedded-systems-engineer-cover-letter",
+"title": "Embedded Systems Engineer cover letter",
+"cat": "Career & Jobs",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "embedded-systems-engineer-linkedin-headline-and-about",
+"title": "Embedded Systems Engineer LinkedIn headline and About",
+"cat": "Career & Jobs",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "embedded-systems-engineer-30-60-90-day-plan",
+"title": "Embedded Systems Engineer 30-60-90 day plan",
+"cat": "Career & Jobs",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "salesforce-developer-mock-interview",
+"title": "Salesforce Developer mock interview",
+"cat": "Career & Jobs",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "salesforce-developer-resume-bullet-points",
+"title": "Salesforce Developer resume bullet points",
+"cat": "Career & Jobs",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "salesforce-developer-cover-letter",
+"title": "Salesforce Developer cover letter",
+"cat": "Career & Jobs",
+"tool": "Gemini",
+"premium": true
+},
+{
+"id": "salesforce-developer-linkedin-headline-and-about",
+"title": "Salesforce Developer LinkedIn headline and About",
+"cat": "Career & Jobs",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "salesforce-developer-30-60-90-day-plan",
+"title": "Salesforce Developer 30-60-90 day plan",
+"cat": "Career & Jobs",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "learn-the-arrays-and-prefix-sums-pattern",
+"title": "Learn the Arrays and prefix sums pattern",
+"cat": "DSA & Interviews",
+"tool": "Claude",
+"premium": true
+},
+{
+"id": "arrays-and-prefix-sums-practice-set-with-hints",
+"title": "Arrays and prefix sums practice set with hints",
+"cat": "DSA & Interviews",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "learn-the-two-pointers-pattern",
+"title": "Learn the Two pointers pattern",
+"cat": "DSA & Interviews",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "two-pointers-practice-set-with-hints",
+"title": "Two pointers practice set with hints",
+"cat": "DSA & Interviews",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "learn-the-sliding-window-pattern",
+"title": "Learn the Sliding window pattern",
+"cat": "DSA & Interviews",
+"tool": "Claude",
+"premium": true
+},
+{
+"id": "sliding-window-practice-set-with-hints",
+"title": "Sliding window practice set with hints",
+"cat": "DSA & Interviews",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "learn-the-binary-search-pattern",
+"title": "Learn the Binary search pattern",
+"cat": "DSA & Interviews",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "binary-search-practice-set-with-hints",
+"title": "Binary search practice set with hints",
+"cat": "DSA & Interviews",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "learn-the-linked-lists-pattern",
+"title": "Learn the Linked lists pattern",
+"cat": "DSA & Interviews",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "linked-lists-practice-set-with-hints",
+"title": "Linked lists practice set with hints",
+"cat": "DSA & Interviews",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "learn-the-stacks-and-monotonic-stacks-pattern",
+"title": "Learn the Stacks and monotonic stacks pattern",
+"cat": "DSA & Interviews",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "stacks-and-monotonic-stacks-practice-set-with-hints",
+"title": "Stacks and monotonic stacks practice set with hints",
+"cat": "DSA & Interviews",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "learn-the-queues-and-deques-pattern",
+"title": "Learn the Queues and deques pattern",
+"cat": "DSA & Interviews",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "queues-and-deques-practice-set-with-hints",
+"title": "Queues and deques practice set with hints",
+"cat": "DSA & Interviews",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "learn-the-hashing-pattern",
+"title": "Learn the Hashing pattern",
+"cat": "DSA & Interviews",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "hashing-practice-set-with-hints",
+"title": "Hashing practice set with hints",
+"cat": "DSA & Interviews",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "learn-the-recursion-pattern",
+"title": "Learn the Recursion pattern",
+"cat": "DSA & Interviews",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "recursion-practice-set-with-hints",
+"title": "Recursion practice set with hints",
+"cat": "DSA & Interviews",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "learn-the-backtracking-pattern",
+"title": "Learn the Backtracking pattern",
+"cat": "DSA & Interviews",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "backtracking-practice-set-with-hints",
+"title": "Backtracking practice set with hints",
+"cat": "DSA & Interviews",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "learn-the-binary-trees-pattern",
+"title": "Learn the Binary trees pattern",
+"cat": "DSA & Interviews",
+"tool": "Claude",
+"premium": true
+},
+{
+"id": "binary-trees-practice-set-with-hints",
+"title": "Binary trees practice set with hints",
+"cat": "DSA & Interviews",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "learn-the-binary-search-trees-pattern",
+"title": "Learn the Binary search trees pattern",
+"cat": "DSA & Interviews",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "binary-search-trees-practice-set-with-hints",
+"title": "Binary search trees practice set with hints",
+"cat": "DSA & Interviews",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "learn-the-heaps-and-priority-queues-pattern",
+"title": "Learn the Heaps and priority queues pattern",
+"cat": "DSA & Interviews",
+"tool": "Claude",
+"premium": true
+},
+{
+"id": "heaps-and-priority-queues-practice-set-with-hints",
+"title": "Heaps and priority queues practice set with hints",
+"cat": "DSA & Interviews",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "learn-the-graph-bfs-and-dfs-pattern",
+"title": "Learn the Graph BFS and DFS pattern",
+"cat": "DSA & Interviews",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "graph-bfs-and-dfs-practice-set-with-hints",
+"title": "Graph BFS and DFS practice set with hints",
+"cat": "DSA & Interviews",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "learn-the-shortest-paths-pattern",
+"title": "Learn the Shortest paths pattern",
+"cat": "DSA & Interviews",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "shortest-paths-practice-set-with-hints",
+"title": "Shortest paths practice set with hints",
+"cat": "DSA & Interviews",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "learn-the-union-find-pattern",
+"title": "Learn the Union-Find pattern",
+"cat": "DSA & Interviews",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "union-find-practice-set-with-hints",
+"title": "Union-Find practice set with hints",
+"cat": "DSA & Interviews",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "learn-the-topological-sort-pattern",
+"title": "Learn the Topological sort pattern",
+"cat": "DSA & Interviews",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "topological-sort-practice-set-with-hints",
+"title": "Topological sort practice set with hints",
+"cat": "DSA & Interviews",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "learn-the-1d-dynamic-programming-pattern",
+"title": "Learn the 1D dynamic programming pattern",
+"cat": "DSA & Interviews",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "1d-dynamic-programming-practice-set-with-hints",
+"title": "1D dynamic programming practice set with hints",
+"cat": "DSA & Interviews",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "learn-the-2d-dynamic-programming-pattern",
+"title": "Learn the 2D dynamic programming pattern",
+"cat": "DSA & Interviews",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "2d-dynamic-programming-practice-set-with-hints",
+"title": "2D dynamic programming practice set with hints",
+"cat": "DSA & Interviews",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "learn-the-knapsack-patterns-pattern",
+"title": "Learn the Knapsack patterns pattern",
+"cat": "DSA & Interviews",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "knapsack-patterns-practice-set-with-hints",
+"title": "Knapsack patterns practice set with hints",
+"cat": "DSA & Interviews",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "learn-the-greedy-algorithms-pattern",
+"title": "Learn the Greedy algorithms pattern",
+"cat": "DSA & Interviews",
+"tool": "Claude",
+"premium": true
+},
+{
+"id": "greedy-algorithms-practice-set-with-hints",
+"title": "Greedy algorithms practice set with hints",
+"cat": "DSA & Interviews",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "learn-the-tries-pattern",
+"title": "Learn the Tries pattern",
+"cat": "DSA & Interviews",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "tries-practice-set-with-hints",
+"title": "Tries practice set with hints",
+"cat": "DSA & Interviews",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "learn-the-bit-manipulation-pattern",
+"title": "Learn the Bit manipulation pattern",
+"cat": "DSA & Interviews",
+"tool": "Claude",
+"premium": true
+},
+{
+"id": "bit-manipulation-practice-set-with-hints",
+"title": "Bit manipulation practice set with hints",
+"cat": "DSA & Interviews",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "learn-the-intervals-pattern",
+"title": "Learn the Intervals pattern",
+"cat": "DSA & Interviews",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "intervals-practice-set-with-hints",
+"title": "Intervals practice set with hints",
+"cat": "DSA & Interviews",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "learn-the-segment-trees-and-fenwick-trees-pattern",
+"title": "Learn the Segment trees and Fenwick trees pattern",
+"cat": "DSA & Interviews",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "segment-trees-and-fenwick-trees-practice-set-with-hints",
+"title": "Segment trees and Fenwick trees practice set with hints",
+"cat": "DSA & Interviews",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "explain-a-physics-concept-simply",
+"title": "Explain a Physics concept simply",
+"cat": "Study & Exams",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "physics-practice-questions-with-answers",
+"title": "Physics practice questions with answers",
+"cat": "Study & Exams",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "physics-one-page-revision-notes",
+"title": "Physics one-page revision notes",
+"cat": "Study & Exams",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "explain-a-chemistry-concept-simply",
+"title": "Explain a Chemistry concept simply",
+"cat": "Study & Exams",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "chemistry-practice-questions-with-answers",
+"title": "Chemistry practice questions with answers",
+"cat": "Study & Exams",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "chemistry-one-page-revision-notes",
+"title": "Chemistry one-page revision notes",
+"cat": "Study & Exams",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "explain-a-biology-concept-simply",
+"title": "Explain a Biology concept simply",
+"cat": "Study & Exams",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "biology-practice-questions-with-answers",
+"title": "Biology practice questions with answers",
+"cat": "Study & Exams",
+"tool": "Claude",
+"premium": true
+},
+{
+"id": "biology-one-page-revision-notes",
+"title": "Biology one-page revision notes",
+"cat": "Study & Exams",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "explain-a-mathematics-concept-simply",
+"title": "Explain a Mathematics concept simply",
+"cat": "Study & Exams",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "mathematics-practice-questions-with-answers",
+"title": "Mathematics practice questions with answers",
+"cat": "Study & Exams",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "mathematics-one-page-revision-notes",
+"title": "Mathematics one-page revision notes",
+"cat": "Study & Exams",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "explain-a-history-concept-simply",
+"title": "Explain a History concept simply",
+"cat": "Study & Exams",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "history-practice-questions-with-answers",
+"title": "History practice questions with answers",
+"cat": "Study & Exams",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "history-one-page-revision-notes",
+"title": "History one-page revision notes",
+"cat": "Study & Exams",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "explain-a-geography-concept-simply",
+"title": "Explain a Geography concept simply",
+"cat": "Study & Exams",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "geography-practice-questions-with-answers",
+"title": "Geography practice questions with answers",
+"cat": "Study & Exams",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "geography-one-page-revision-notes",
+"title": "Geography one-page revision notes",
+"cat": "Study & Exams",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "explain-a-economics-concept-simply",
+"title": "Explain a Economics concept simply",
+"cat": "Study & Exams",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "economics-practice-questions-with-answers",
+"title": "Economics practice questions with answers",
+"cat": "Study & Exams",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "economics-one-page-revision-notes",
+"title": "Economics one-page revision notes",
+"cat": "Study & Exams",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "explain-a-political-science-concept-simply",
+"title": "Explain a Political Science concept simply",
+"cat": "Study & Exams",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "political-science-practice-questions-with-answers",
+"title": "Political Science practice questions with answers",
+"cat": "Study & Exams",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "political-science-one-page-revision-notes",
+"title": "Political Science one-page revision notes",
+"cat": "Study & Exams",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "explain-a-accountancy-concept-simply",
+"title": "Explain a Accountancy concept simply",
+"cat": "Study & Exams",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "accountancy-practice-questions-with-answers",
+"title": "Accountancy practice questions with answers",
+"cat": "Study & Exams",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "accountancy-one-page-revision-notes",
+"title": "Accountancy one-page revision notes",
+"cat": "Study & Exams",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "explain-a-computer-science-concept-simply",
+"title": "Explain a Computer Science concept simply",
+"cat": "Study & Exams",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "computer-science-practice-questions-with-answers",
+"title": "Computer Science practice questions with answers",
+"cat": "Study & Exams",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "computer-science-one-page-revision-notes",
+"title": "Computer Science one-page revision notes",
+"cat": "Study & Exams",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "explain-a-english-grammar-concept-simply",
+"title": "Explain a English Grammar concept simply",
+"cat": "Study & Exams",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "english-grammar-practice-questions-with-answers",
+"title": "English Grammar practice questions with answers",
+"cat": "Study & Exams",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "english-grammar-one-page-revision-notes",
+"title": "English Grammar one-page revision notes",
+"cat": "Study & Exams",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "explain-a-statistics-concept-simply",
+"title": "Explain a Statistics concept simply",
+"cat": "Study & Exams",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "statistics-practice-questions-with-answers",
+"title": "Statistics practice questions with answers",
+"cat": "Study & Exams",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "statistics-one-page-revision-notes",
+"title": "Statistics one-page revision notes",
+"cat": "Study & Exams",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "explain-a-business-studies-concept-simply",
+"title": "Explain a Business Studies concept simply",
+"cat": "Study & Exams",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "business-studies-practice-questions-with-answers",
+"title": "Business Studies practice questions with answers",
+"cat": "Study & Exams",
+"tool": "Claude",
+"premium": true
+},
+{
+"id": "business-studies-one-page-revision-notes",
+"title": "Business Studies one-page revision notes",
+"cat": "Study & Exams",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "explain-a-environmental-science-concept-simply",
+"title": "Explain a Environmental Science concept simply",
+"cat": "Study & Exams",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "environmental-science-practice-questions-with-answers",
+"title": "Environmental Science practice questions with answers",
+"cat": "Study & Exams",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "environmental-science-one-page-revision-notes",
+"title": "Environmental Science one-page revision notes",
+"cat": "Study & Exams",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "explain-a-psychology-concept-simply",
+"title": "Explain a Psychology concept simply",
+"cat": "Study & Exams",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "psychology-practice-questions-with-answers",
+"title": "Psychology practice questions with answers",
+"cat": "Study & Exams",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "psychology-one-page-revision-notes",
+"title": "Psychology one-page revision notes",
+"cat": "Study & Exams",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "jee-main-study-plan",
+"title": "JEE Main study plan",
+"cat": "Study & Exams",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "jee-main-mock-test-and-analysis",
+"title": "JEE Main mock test and analysis",
+"cat": "Study & Exams",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "neet-ug-study-plan",
+"title": "NEET UG study plan",
+"cat": "Study & Exams",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "neet-ug-mock-test-and-analysis",
+"title": "NEET UG mock test and analysis",
+"cat": "Study & Exams",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "upsc-cse-prelims-study-plan",
+"title": "UPSC CSE Prelims study plan",
+"cat": "Study & Exams",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "upsc-cse-prelims-mock-test-and-analysis",
+"title": "UPSC CSE Prelims mock test and analysis",
+"cat": "Study & Exams",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "cat-study-plan",
+"title": "CAT study plan",
+"cat": "Study & Exams",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "cat-mock-test-and-analysis",
+"title": "CAT mock test and analysis",
+"cat": "Study & Exams",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "gate-study-plan",
+"title": "GATE study plan",
+"cat": "Study & Exams",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "gate-mock-test-and-analysis",
+"title": "GATE mock test and analysis",
+"cat": "Study & Exams",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "cbse-class-10-boards-study-plan",
+"title": "CBSE Class 10 boards study plan",
+"cat": "Study & Exams",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "cbse-class-10-boards-mock-test-and-analysis",
+"title": "CBSE Class 10 boards mock test and analysis",
+"cat": "Study & Exams",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "cbse-class-12-boards-study-plan",
+"title": "CBSE Class 12 boards study plan",
+"cat": "Study & Exams",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "cbse-class-12-boards-mock-test-and-analysis",
+"title": "CBSE Class 12 boards mock test and analysis",
+"cat": "Study & Exams",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "sat-study-plan",
+"title": "SAT study plan",
+"cat": "Study & Exams",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "sat-mock-test-and-analysis",
+"title": "SAT mock test and analysis",
+"cat": "Study & Exams",
+"tool": "Claude",
+"premium": true
+},
+{
+"id": "ielts-academic-study-plan",
+"title": "IELTS Academic study plan",
+"cat": "Study & Exams",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "ielts-academic-mock-test-and-analysis",
+"title": "IELTS Academic mock test and analysis",
+"cat": "Study & Exams",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "gre-study-plan",
+"title": "GRE study plan",
+"cat": "Study & Exams",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "gre-mock-test-and-analysis",
+"title": "GRE mock test and analysis",
+"cat": "Study & Exams",
+"tool": "Claude",
+"premium": true
+},
+{
+"id": "gmat-focus-edition-study-plan",
+"title": "GMAT Focus Edition study plan",
+"cat": "Study & Exams",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "gmat-focus-edition-mock-test-and-analysis",
+"title": "GMAT Focus Edition mock test and analysis",
+"cat": "Study & Exams",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "toefl-ibt-study-plan",
+"title": "TOEFL iBT study plan",
+"cat": "Study & Exams",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "toefl-ibt-mock-test-and-analysis",
+"title": "TOEFL iBT mock test and analysis",
+"cat": "Study & Exams",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "30-day-instagram-content-calendar",
+"title": "30-day Instagram content calendar",
+"cat": "Social Media",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "instagram-captions-that-convert",
+"title": "Instagram captions that convert",
+"cat": "Social Media",
+"tool": "Claude",
+"premium": true
+},
+{
+"id": "instagram-hooks-for-the-first-line",
+"title": "Instagram hooks for the first line",
+"cat": "Social Media",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "optimise-your-instagram-profile",
+"title": "Optimise your Instagram profile",
+"cat": "Social Media",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "instagram-carousel-outline",
+"title": "Instagram carousel outline",
+"cat": "Social Media",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "instagram-comment-and-dm-replies",
+"title": "Instagram comment and DM replies",
+"cat": "Social Media",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "30-day-linkedin-content-calendar",
+"title": "30-day LinkedIn content calendar",
+"cat": "Social Media",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "linkedin-captions-that-convert",
+"title": "LinkedIn captions that convert",
+"cat": "Social Media",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "linkedin-hooks-for-the-first-line",
+"title": "LinkedIn hooks for the first line",
+"cat": "Social Media",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "optimise-your-linkedin-profile",
+"title": "Optimise your LinkedIn profile",
+"cat": "Social Media",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "linkedin-carousel-outline",
+"title": "LinkedIn carousel outline",
+"cat": "Social Media",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "linkedin-comment-and-dm-replies",
+"title": "LinkedIn comment and DM replies",
+"cat": "Social Media",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "30-day-x-twitter-content-calendar",
+"title": "30-day X (Twitter) content calendar",
+"cat": "Social Media",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "x-twitter-captions-that-convert",
+"title": "X (Twitter) captions that convert",
+"cat": "Social Media",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "x-twitter-hooks-for-the-first-line",
+"title": "X (Twitter) hooks for the first line",
+"cat": "Social Media",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "optimise-your-x-twitter-profile",
+"title": "Optimise your X (Twitter) profile",
+"cat": "Social Media",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "x-twitter-thread-outline",
+"title": "X (Twitter) thread outline",
+"cat": "Social Media",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "x-twitter-comment-and-dm-replies",
+"title": "X (Twitter) comment and DM replies",
+"cat": "Social Media",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "30-day-facebook-content-calendar",
+"title": "30-day Facebook content calendar",
+"cat": "Social Media",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "facebook-captions-that-convert",
+"title": "Facebook captions that convert",
+"cat": "Social Media",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "facebook-hooks-for-the-first-line",
+"title": "Facebook hooks for the first line",
+"cat": "Social Media",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "optimise-your-facebook-profile",
+"title": "Optimise your Facebook profile",
+"cat": "Social Media",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "facebook-carousel-outline",
+"title": "Facebook carousel outline",
+"cat": "Social Media",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "facebook-comment-and-dm-replies",
+"title": "Facebook comment and DM replies",
+"cat": "Social Media",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "30-day-pinterest-content-calendar",
+"title": "30-day Pinterest content calendar",
+"cat": "Social Media",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "pinterest-captions-that-convert",
+"title": "Pinterest captions that convert",
+"cat": "Social Media",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "pinterest-hooks-for-the-first-line",
+"title": "Pinterest hooks for the first line",
+"cat": "Social Media",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "optimise-your-pinterest-profile",
+"title": "Optimise your Pinterest profile",
+"cat": "Social Media",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "pinterest-pin-set-outline",
+"title": "Pinterest pin set outline",
+"cat": "Social Media",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "pinterest-comment-and-dm-replies",
+"title": "Pinterest comment and DM replies",
+"cat": "Social Media",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "30-day-threads-content-calendar",
+"title": "30-day Threads content calendar",
+"cat": "Social Media",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "threads-captions-that-convert",
+"title": "Threads captions that convert",
+"cat": "Social Media",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "threads-hooks-for-the-first-line",
+"title": "Threads hooks for the first line",
+"cat": "Social Media",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "optimise-your-threads-profile",
+"title": "Optimise your Threads profile",
+"cat": "Social Media",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "threads-thread-outline",
+"title": "Threads thread outline",
+"cat": "Social Media",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "threads-comment-and-dm-replies",
+"title": "Threads comment and DM replies",
+"cat": "Social Media",
+"tool": "Claude",
+"premium": true
+},
+{
+"id": "30-day-whatsapp-business-content-calendar",
+"title": "30-day WhatsApp Business content calendar",
+"cat": "Social Media",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "whatsapp-business-captions-that-convert",
+"title": "WhatsApp Business captions that convert",
+"cat": "Social Media",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "whatsapp-business-hooks-for-the-first-line",
+"title": "WhatsApp Business hooks for the first line",
+"cat": "Social Media",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "optimise-your-whatsapp-business-profile",
+"title": "Optimise your WhatsApp Business profile",
+"cat": "Social Media",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "whatsapp-business-broadcast-outline",
+"title": "WhatsApp Business broadcast outline",
+"cat": "Social Media",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "whatsapp-business-comment-and-dm-replies",
+"title": "WhatsApp Business comment and DM replies",
+"cat": "Social Media",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "30-day-youtube-shorts-content-calendar",
+"title": "30-day YouTube Shorts content calendar",
+"cat": "Social Media",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "youtube-shorts-captions-that-convert",
+"title": "YouTube Shorts captions that convert",
+"cat": "Social Media",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "youtube-shorts-hooks-for-the-first-line",
+"title": "YouTube Shorts hooks for the first line",
+"cat": "Social Media",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "optimise-your-youtube-shorts-profile",
+"title": "Optimise your YouTube Shorts profile",
+"cat": "Social Media",
+"tool": "Claude",
+"premium": true
+},
+{
+"id": "youtube-shorts-script-outline",
+"title": "YouTube Shorts script outline",
+"cat": "Social Media",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "youtube-shorts-comment-and-dm-replies",
+"title": "YouTube Shorts comment and DM replies",
+"cat": "Social Media",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "one-page-business-plan-for-a-caf",
+"title": "One-page business plan for a caf\u00e9",
+"cat": "Business",
+"tool": "Claude",
+"premium": true
+},
+{
+"id": "caf-customer-personas",
+"title": "Caf\u00e9 customer personas",
+"cat": "Business",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "caf-competitor-analysis",
+"title": "Caf\u00e9 competitor analysis",
+"cat": "Business",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "90-day-marketing-plan-for-a-caf",
+"title": "90-day marketing plan for a caf\u00e9",
+"cat": "Business",
+"tool": "Gemini",
+"premium": true
+},
+{
+"id": "one-page-business-plan-for-a-bakery",
+"title": "One-page business plan for a bakery",
+"cat": "Business",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "bakery-customer-personas",
+"title": "Bakery customer personas",
+"cat": "Business",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "bakery-competitor-analysis",
+"title": "Bakery competitor analysis",
+"cat": "Business",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "90-day-marketing-plan-for-a-bakery",
+"title": "90-day marketing plan for a bakery",
+"cat": "Business",
+"tool": "Claude",
+"premium": true
+},
+{
+"id": "one-page-business-plan-for-a-clothing-boutique",
+"title": "One-page business plan for a clothing boutique",
+"cat": "Business",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "clothing-boutique-customer-personas",
+"title": "Clothing boutique customer personas",
+"cat": "Business",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "clothing-boutique-competitor-analysis",
+"title": "Clothing boutique competitor analysis",
+"cat": "Business",
+"tool": "Claude",
+"premium": true
+},
+{
+"id": "90-day-marketing-plan-for-a-clothing-boutique",
+"title": "90-day marketing plan for a clothing boutique",
+"cat": "Business",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "one-page-business-plan-for-a-gym",
+"title": "One-page business plan for a gym",
+"cat": "Business",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "gym-customer-personas",
+"title": "Gym customer personas",
+"cat": "Business",
+"tool": "Claude",
+"premium": true
+},
+{
+"id": "gym-competitor-analysis",
+"title": "Gym competitor analysis",
+"cat": "Business",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "90-day-marketing-plan-for-a-gym",
+"title": "90-day marketing plan for a gym",
+"cat": "Business",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "one-page-business-plan-for-a-beauty-salon",
+"title": "One-page business plan for a beauty salon",
+"cat": "Business",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "beauty-salon-customer-personas",
+"title": "Beauty salon customer personas",
+"cat": "Business",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "beauty-salon-competitor-analysis",
+"title": "Beauty salon competitor analysis",
+"cat": "Business",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "90-day-marketing-plan-for-a-beauty-salon",
+"title": "90-day marketing plan for a beauty salon",
+"cat": "Business",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "one-page-business-plan-for-a-dental-clinic",
+"title": "One-page business plan for a dental clinic",
+"cat": "Business",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "dental-clinic-customer-personas",
+"title": "Dental clinic customer personas",
+"cat": "Business",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "dental-clinic-competitor-analysis",
+"title": "Dental clinic competitor analysis",
+"cat": "Business",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "90-day-marketing-plan-for-a-dental-clinic",
+"title": "90-day marketing plan for a dental clinic",
+"cat": "Business",
+"tool": "Claude",
+"premium": true
+},
+{
+"id": "one-page-business-plan-for-a-real-estate-agency",
+"title": "One-page business plan for a real estate agency",
+"cat": "Business",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "real-estate-agency-customer-personas",
+"title": "Real estate agency customer personas",
+"cat": "Business",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "real-estate-agency-competitor-analysis",
+"title": "Real estate agency competitor analysis",
+"cat": "Business",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "90-day-marketing-plan-for-a-real-estate-agency",
+"title": "90-day marketing plan for a real estate agency",
+"cat": "Business",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "one-page-business-plan-for-a-coaching-institute",
+"title": "One-page business plan for a coaching institute",
+"cat": "Business",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "coaching-institute-customer-personas",
+"title": "Coaching institute customer personas",
+"cat": "Business",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "coaching-institute-competitor-analysis",
+"title": "Coaching institute competitor analysis",
+"cat": "Business",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "90-day-marketing-plan-for-a-coaching-institute",
+"title": "90-day marketing plan for a coaching institute",
+"cat": "Business",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "one-page-business-plan-for-a-saas-startup",
+"title": "One-page business plan for a SaaS startup",
+"cat": "Business",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "saas-startup-customer-personas",
+"title": "SaaS startup customer personas",
+"cat": "Business",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "saas-startup-competitor-analysis",
+"title": "SaaS startup competitor analysis",
+"cat": "Business",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "90-day-marketing-plan-for-a-saas-startup",
+"title": "90-day marketing plan for a SaaS startup",
+"cat": "Business",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "one-page-business-plan-for-a-e-commerce-store",
+"title": "One-page business plan for a e-commerce store",
+"cat": "Business",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "e-commerce-store-customer-personas",
+"title": "E-commerce store customer personas",
+"cat": "Business",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "e-commerce-store-competitor-analysis",
+"title": "E-commerce store competitor analysis",
+"cat": "Business",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "90-day-marketing-plan-for-a-e-commerce-store",
+"title": "90-day marketing plan for a e-commerce store",
+"cat": "Business",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "one-page-business-plan-for-a-restaurant",
+"title": "One-page business plan for a restaurant",
+"cat": "Business",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "restaurant-customer-personas",
+"title": "Restaurant customer personas",
+"cat": "Business",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "restaurant-competitor-analysis",
+"title": "Restaurant competitor analysis",
+"cat": "Business",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "90-day-marketing-plan-for-a-restaurant",
+"title": "90-day marketing plan for a restaurant",
+"cat": "Business",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "one-page-business-plan-for-a-travel-agency",
+"title": "One-page business plan for a travel agency",
+"cat": "Business",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "travel-agency-customer-personas",
+"title": "Travel agency customer personas",
+"cat": "Business",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "travel-agency-competitor-analysis",
+"title": "Travel agency competitor analysis",
+"cat": "Business",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "90-day-marketing-plan-for-a-travel-agency",
+"title": "90-day marketing plan for a travel agency",
+"cat": "Business",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "one-page-business-plan-for-a-event-management-company",
+"title": "One-page business plan for a event management company",
+"cat": "Business",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "event-management-company-customer-personas",
+"title": "Event management company customer personas",
+"cat": "Business",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "event-management-company-competitor-analysis",
+"title": "Event management company competitor analysis",
+"cat": "Business",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "90-day-marketing-plan-for-a-event-management-company",
+"title": "90-day marketing plan for a event management company",
+"cat": "Business",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "one-page-business-plan-for-a-interior-design-studio",
+"title": "One-page business plan for a interior design studio",
+"cat": "Business",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "interior-design-studio-customer-personas",
+"title": "Interior design studio customer personas",
+"cat": "Business",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "interior-design-studio-competitor-analysis",
+"title": "Interior design studio competitor analysis",
+"cat": "Business",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "90-day-marketing-plan-for-a-interior-design-studio",
+"title": "90-day marketing plan for a interior design studio",
+"cat": "Business",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "one-page-business-plan-for-a-digital-marketing-agency",
+"title": "One-page business plan for a digital marketing agency",
+"cat": "Business",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "digital-marketing-agency-customer-personas",
+"title": "Digital marketing agency customer personas",
+"cat": "Business",
+"tool": "Gemini",
+"premium": true
+},
+{
+"id": "digital-marketing-agency-competitor-analysis",
+"title": "Digital marketing agency competitor analysis",
+"cat": "Business",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "90-day-marketing-plan-for-a-digital-marketing-agency",
+"title": "90-day marketing plan for a digital marketing agency",
+"cat": "Business",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "one-page-business-plan-for-a-photography-studio",
+"title": "One-page business plan for a photography studio",
+"cat": "Business",
+"tool": "Gemini",
+"premium": true
+},
+{
+"id": "photography-studio-customer-personas",
+"title": "Photography studio customer personas",
+"cat": "Business",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "photography-studio-competitor-analysis",
+"title": "Photography studio competitor analysis",
+"cat": "Business",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "90-day-marketing-plan-for-a-photography-studio",
+"title": "90-day marketing plan for a photography studio",
+"cat": "Business",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "one-page-business-plan-for-a-organic-farm-brand",
+"title": "One-page business plan for a organic farm brand",
+"cat": "Business",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "organic-farm-brand-customer-personas",
+"title": "Organic farm brand customer personas",
+"cat": "Business",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "organic-farm-brand-competitor-analysis",
+"title": "Organic farm brand competitor analysis",
+"cat": "Business",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "90-day-marketing-plan-for-a-organic-farm-brand",
+"title": "90-day marketing plan for a organic farm brand",
+"cat": "Business",
+"tool": "Gemini",
+"premium": true
+},
+{
+"id": "one-page-business-plan-for-a-pet-store",
+"title": "One-page business plan for a pet store",
+"cat": "Business",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "pet-store-customer-personas",
+"title": "Pet store customer personas",
+"cat": "Business",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "pet-store-competitor-analysis",
+"title": "Pet store competitor analysis",
+"cat": "Business",
+"tool": "Gemini",
+"premium": true
+},
+{
+"id": "90-day-marketing-plan-for-a-pet-store",
+"title": "90-day marketing plan for a pet store",
+"cat": "Business",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "one-page-business-plan-for-a-mobile-repair-shop",
+"title": "One-page business plan for a mobile repair shop",
+"cat": "Business",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "mobile-repair-shop-customer-personas",
+"title": "Mobile repair shop customer personas",
+"cat": "Business",
+"tool": "Gemini",
+"premium": true
+},
+{
+"id": "mobile-repair-shop-competitor-analysis",
+"title": "Mobile repair shop competitor analysis",
+"cat": "Business",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "90-day-marketing-plan-for-a-mobile-repair-shop",
+"title": "90-day marketing plan for a mobile repair shop",
+"cat": "Business",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "one-page-business-plan-for-a-courier-and-logistics-busin",
+"title": "One-page business plan for a courier and logistics business",
+"cat": "Business",
+"tool": "Gemini",
+"premium": false
+},
+{
+"id": "courier-and-logistics-business-customer-personas",
+"title": "Courier and logistics business customer personas",
+"cat": "Business",
+"tool": "Claude",
+"premium": true
+},
+{
+"id": "courier-and-logistics-business-competitor-analysis",
+"title": "Courier and logistics business competitor analysis",
+"cat": "Business",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "90-day-marketing-plan-for-a-courier-and-logistics-busine",
+"title": "90-day marketing plan for a courier and logistics business",
+"cat": "Business",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "cinematic-photo-product-shot",
+"title": "Cinematic photo product shot",
+"cat": "Image Generation",
+"tool": "Midjourney",
+"premium": true
+},
+{
+"id": "cinematic-photo-portrait",
+"title": "Cinematic photo portrait",
+"cat": "Image Generation",
+"tool": "Stable Diffusion",
+"premium": false
+},
+{
+"id": "cinematic-photo-scene-or-poster",
+"title": "Cinematic photo scene or poster",
+"cat": "Image Generation",
+"tool": "ChatGPT Images",
+"premium": false
+},
+{
+"id": "studio-product-photo-product-shot",
+"title": "Studio product photo product shot",
+"cat": "Image Generation",
+"tool": "Midjourney",
+"premium": true
+},
+{
+"id": "studio-product-photo-portrait",
+"title": "Studio product photo portrait",
+"cat": "Image Generation",
+"tool": "Stable Diffusion",
+"premium": false
+},
+{
+"id": "studio-product-photo-scene-or-poster",
+"title": "Studio product photo scene or poster",
+"cat": "Image Generation",
+"tool": "ChatGPT Images",
+"premium": false
+},
+{
+"id": "watercolor-product-shot",
+"title": "Watercolor product shot",
+"cat": "Image Generation",
+"tool": "Midjourney",
+"premium": false
+},
+{
+"id": "watercolor-portrait",
+"title": "Watercolor portrait",
+"cat": "Image Generation",
+"tool": "Stable Diffusion",
+"premium": true
+},
+{
+"id": "watercolor-scene-or-poster",
+"title": "Watercolor scene or poster",
+"cat": "Image Generation",
+"tool": "ChatGPT Images",
+"premium": false
+},
+{
+"id": "flat-vector-illustration-product-shot",
+"title": "Flat vector illustration product shot",
+"cat": "Image Generation",
+"tool": "Midjourney",
+"premium": false
+},
+{
+"id": "flat-vector-illustration-portrait",
+"title": "Flat vector illustration portrait",
+"cat": "Image Generation",
+"tool": "Stable Diffusion",
+"premium": true
+},
+{
+"id": "flat-vector-illustration-scene-or-poster",
+"title": "Flat vector illustration scene or poster",
+"cat": "Image Generation",
+"tool": "ChatGPT Images",
+"premium": false
+},
+{
+"id": "isometric-3d-product-shot",
+"title": "Isometric 3D product shot",
+"cat": "Image Generation",
+"tool": "Midjourney",
+"premium": false
+},
+{
+"id": "isometric-3d-portrait",
+"title": "Isometric 3D portrait",
+"cat": "Image Generation",
+"tool": "Stable Diffusion",
+"premium": true
+},
+{
+"id": "isometric-3d-scene-or-poster",
+"title": "Isometric 3D scene or poster",
+"cat": "Image Generation",
+"tool": "ChatGPT Images",
+"premium": false
+},
+{
+"id": "clay-3d-render-product-shot",
+"title": "Clay 3D render product shot",
+"cat": "Image Generation",
+"tool": "Midjourney",
+"premium": false
+},
+{
+"id": "clay-3d-render-portrait",
+"title": "Clay 3D render portrait",
+"cat": "Image Generation",
+"tool": "Stable Diffusion",
+"premium": false
+},
+{
+"id": "clay-3d-render-scene-or-poster",
+"title": "Clay 3D render scene or poster",
+"cat": "Image Generation",
+"tool": "ChatGPT Images",
+"premium": true
+},
+{
+"id": "anime-product-shot",
+"title": "Anime product shot",
+"cat": "Image Generation",
+"tool": "Midjourney",
+"premium": false
+},
+{
+"id": "anime-portrait",
+"title": "Anime portrait",
+"cat": "Image Generation",
+"tool": "Stable Diffusion",
+"premium": false
+},
+{
+"id": "anime-scene-or-poster",
+"title": "Anime scene or poster",
+"cat": "Image Generation",
+"tool": "ChatGPT Images",
+"premium": true
+},
+{
+"id": "pixel-art-product-shot",
+"title": "Pixel art product shot",
+"cat": "Image Generation",
+"tool": "Midjourney",
+"premium": false
+},
+{
+"id": "pixel-art-portrait",
+"title": "Pixel art portrait",
+"cat": "Image Generation",
+"tool": "Stable Diffusion",
+"premium": false
+},
+{
+"id": "pixel-art-scene-or-poster",
+"title": "Pixel art scene or poster",
+"cat": "Image Generation",
+"tool": "ChatGPT Images",
+"premium": true
+},
+{
+"id": "line-art-product-shot",
+"title": "Line art product shot",
+"cat": "Image Generation",
+"tool": "Midjourney",
+"premium": false
+},
+{
+"id": "line-art-portrait",
+"title": "Line art portrait",
+"cat": "Image Generation",
+"tool": "Stable Diffusion",
+"premium": false
+},
+{
+"id": "line-art-scene-or-poster",
+"title": "Line art scene or poster",
+"cat": "Image Generation",
+"tool": "ChatGPT Images",
+"premium": false
+},
+{
+"id": "oil-painting-product-shot",
+"title": "Oil painting product shot",
+"cat": "Image Generation",
+"tool": "Midjourney",
+"premium": true
+},
+{
+"id": "oil-painting-portrait",
+"title": "Oil painting portrait",
+"cat": "Image Generation",
+"tool": "Stable Diffusion",
+"premium": false
+},
+{
+"id": "oil-painting-scene-or-poster",
+"title": "Oil painting scene or poster",
+"cat": "Image Generation",
+"tool": "ChatGPT Images",
+"premium": false
+},
+{
+"id": "cyberpunk-neon-product-shot",
+"title": "Cyberpunk neon product shot",
+"cat": "Image Generation",
+"tool": "Midjourney",
+"premium": true
+},
+{
+"id": "cyberpunk-neon-portrait",
+"title": "Cyberpunk neon portrait",
+"cat": "Image Generation",
+"tool": "Stable Diffusion",
+"premium": false
+},
+{
+"id": "cyberpunk-neon-scene-or-poster",
+"title": "Cyberpunk neon scene or poster",
+"cat": "Image Generation",
+"tool": "ChatGPT Images",
+"premium": false
+},
+{
+"id": "minimalist-poster-product-shot",
+"title": "Minimalist poster product shot",
+"cat": "Image Generation",
+"tool": "Midjourney",
+"premium": true
+},
+{
+"id": "minimalist-poster-portrait",
+"title": "Minimalist poster portrait",
+"cat": "Image Generation",
+"tool": "Stable Diffusion",
+"premium": false
+},
+{
+"id": "minimalist-poster-scene-or-poster",
+"title": "Minimalist poster scene or poster",
+"cat": "Image Generation",
+"tool": "ChatGPT Images",
+"premium": false
+},
+{
+"id": "vintage-35mm-film-product-shot",
+"title": "Vintage 35mm film product shot",
+"cat": "Image Generation",
+"tool": "Midjourney",
+"premium": false
+},
+{
+"id": "vintage-35mm-film-portrait",
+"title": "Vintage 35mm film portrait",
+"cat": "Image Generation",
+"tool": "Stable Diffusion",
+"premium": true
+},
+{
+"id": "vintage-35mm-film-scene-or-poster",
+"title": "Vintage 35mm film scene or poster",
+"cat": "Image Generation",
+"tool": "ChatGPT Images",
+"premium": false
+},
+{
+"id": "woodblock-print-product-shot",
+"title": "Woodblock print product shot",
+"cat": "Image Generation",
+"tool": "Midjourney",
+"premium": false
+},
+{
+"id": "woodblock-print-portrait",
+"title": "Woodblock print portrait",
+"cat": "Image Generation",
+"tool": "Stable Diffusion",
+"premium": true
+},
+{
+"id": "woodblock-print-scene-or-poster",
+"title": "Woodblock print scene or poster",
+"cat": "Image Generation",
+"tool": "ChatGPT Images",
+"premium": false
+},
+{
+"id": "low-poly-product-shot",
+"title": "Low-poly product shot",
+"cat": "Image Generation",
+"tool": "Midjourney",
+"premium": false
+},
+{
+"id": "low-poly-portrait",
+"title": "Low-poly portrait",
+"cat": "Image Generation",
+"tool": "Stable Diffusion",
+"premium": true
+},
+{
+"id": "low-poly-scene-or-poster",
+"title": "Low-poly scene or poster",
+"cat": "Image Generation",
+"tool": "ChatGPT Images",
+"premium": false
+},
+{
+"id": "paper-cut-out-product-shot",
+"title": "Paper cut-out product shot",
+"cat": "Image Generation",
+"tool": "Midjourney",
+"premium": false
+},
+{
+"id": "paper-cut-out-portrait",
+"title": "Paper cut-out portrait",
+"cat": "Image Generation",
+"tool": "Stable Diffusion",
+"premium": false
+},
+{
+"id": "paper-cut-out-scene-or-poster",
+"title": "Paper cut-out scene or poster",
+"cat": "Image Generation",
+"tool": "ChatGPT Images",
+"premium": true
+},
+{
+"id": "art-deco-product-shot",
+"title": "Art Deco product shot",
+"cat": "Image Generation",
+"tool": "Midjourney",
+"premium": false
+},
+{
+"id": "art-deco-portrait",
+"title": "Art Deco portrait",
+"cat": "Image Generation",
+"tool": "Stable Diffusion",
+"premium": false
+},
+{
+"id": "art-deco-scene-or-poster",
+"title": "Art Deco scene or poster",
+"cat": "Image Generation",
+"tool": "ChatGPT Images",
+"premium": true
+},
+{
+"id": "retro-70s-product-shot",
+"title": "Retro 70s product shot",
+"cat": "Image Generation",
+"tool": "Midjourney",
+"premium": false
+},
+{
+"id": "retro-70s-portrait",
+"title": "Retro 70s portrait",
+"cat": "Image Generation",
+"tool": "Stable Diffusion",
+"premium": false
+},
+{
+"id": "retro-70s-scene-or-poster",
+"title": "Retro 70s scene or poster",
+"cat": "Image Generation",
+"tool": "ChatGPT Images",
+"premium": true
+},
+{
+"id": "double-exposure-product-shot",
+"title": "Double exposure product shot",
+"cat": "Image Generation",
+"tool": "Midjourney",
+"premium": false
+},
+{
+"id": "double-exposure-portrait",
+"title": "Double exposure portrait",
+"cat": "Image Generation",
+"tool": "Stable Diffusion",
+"premium": false
+},
+{
+"id": "double-exposure-scene-or-poster",
+"title": "Double exposure scene or poster",
+"cat": "Image Generation",
+"tool": "ChatGPT Images",
+"premium": false
+},
+{
+"id": "macro-photography-product-shot",
+"title": "Macro photography product shot",
+"cat": "Image Generation",
+"tool": "Midjourney",
+"premium": true
+},
+{
+"id": "macro-photography-portrait",
+"title": "Macro photography portrait",
+"cat": "Image Generation",
+"tool": "Stable Diffusion",
+"premium": false
+},
+{
+"id": "macro-photography-scene-or-poster",
+"title": "Macro photography scene or poster",
+"cat": "Image Generation",
+"tool": "ChatGPT Images",
+"premium": false
+},
+{
+"id": "cold-email-that-gets-replies",
+"title": "Cold email that gets replies",
+"cat": "Sales",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "follow-up-sequence-after-no-reply",
+"title": "Follow-up sequence after no reply",
+"cat": "Sales",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "handle-sales-objections",
+"title": "Handle sales objections",
+"cat": "Sales",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "discovery-call-script",
+"title": "Discovery call script",
+"cat": "Sales",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "sales-proposal-outline",
+"title": "Sales proposal outline",
+"cat": "Sales",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "linkedin-connection-and-dm-messages",
+"title": "LinkedIn connection and DM messages",
+"cat": "Sales",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "value-proposition-canvas",
+"title": "Value proposition canvas",
+"cat": "Sales",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "price-increase-announcement",
+"title": "Price increase announcement",
+"cat": "Sales",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "win-back-message-for-lost-customers",
+"title": "Win-back message for lost customers",
+"cat": "Sales",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "sales-call-summary-and-next-steps",
+"title": "Sales call summary and next steps",
+"cat": "Sales",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "ideal-customer-profile-icp",
+"title": "Ideal customer profile (ICP)",
+"cat": "Sales",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "product-demo-script",
+"title": "Product demo script",
+"cat": "Sales",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "referral-request-message",
+"title": "Referral request message",
+"cat": "Sales",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "sales-battlecard-vs-a-competitor",
+"title": "Sales battlecard vs a competitor",
+"cat": "Sales",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "negotiation-preparation",
+"title": "Negotiation preparation",
+"cat": "Sales",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "whatsapp-sales-catalogue-copy",
+"title": "WhatsApp sales catalogue copy",
+"cat": "Sales",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "upsell-and-cross-sell-ideas",
+"title": "Upsell and cross-sell ideas",
+"cat": "Sales",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "sales-email-subject-line-tester",
+"title": "Sales email subject line tester",
+"cat": "Sales",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "quarterly-sales-plan",
+"title": "Quarterly sales plan",
+"cat": "Sales",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "customer-testimonial-request",
+"title": "Customer testimonial request",
+"cat": "Sales",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "google-ads-search-ad-copy",
+"title": "Google Ads search ad copy",
+"cat": "Marketing",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "meta-facebook-instagram-ad-variations",
+"title": "Meta (Facebook/Instagram) ad variations",
+"cat": "Marketing",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "landing-page-copy-2",
+"title": "Landing page copy",
+"cat": "Marketing",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "seo-blog-post-brief",
+"title": "SEO blog post brief",
+"cat": "Marketing",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "email-newsletter",
+"title": "Email newsletter",
+"cat": "Marketing",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "brand-voice-guide",
+"title": "Brand voice guide",
+"cat": "Marketing",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "product-launch-plan",
+"title": "Product launch plan",
+"cat": "Marketing",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "marketing-campaign-ideas",
+"title": "Marketing campaign ideas",
+"cat": "Marketing",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "google-business-profile-optimisation",
+"title": "Google Business Profile optimisation",
+"cat": "Marketing",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "customer-survey-questions",
+"title": "Customer survey questions",
+"cat": "Marketing",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "influencer-outreach-message",
+"title": "Influencer outreach message",
+"cat": "Marketing",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "unique-selling-points-finder",
+"title": "Unique selling points finder",
+"cat": "Marketing",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "content-repurposing-plan",
+"title": "Content repurposing plan",
+"cat": "Marketing",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "email-welcome-sequence",
+"title": "Email welcome sequence",
+"cat": "Marketing",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "marketing-kpi-dashboard-plan",
+"title": "Marketing KPI dashboard plan",
+"cat": "Marketing",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "tagline-and-slogan-generator",
+"title": "Tagline and slogan generator",
+"cat": "Marketing",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "affiliate-programme-pitch",
+"title": "Affiliate programme pitch",
+"cat": "Marketing",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "seasonal-sale-promotion",
+"title": "Seasonal sale promotion",
+"cat": "Marketing",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "customer-journey-map",
+"title": "Customer journey map",
+"cat": "Marketing",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "press-release",
+"title": "Press release",
+"cat": "Marketing",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "a-b-test-ideas-for-a-web-page",
+"title": "A/B test ideas for a web page",
+"cat": "Marketing",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "brand-name-ideas",
+"title": "Brand name ideas",
+"cat": "Marketing",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "lead-magnet-ideas",
+"title": "Lead magnet ideas",
+"cat": "Marketing",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "positioning-statement",
+"title": "Positioning statement",
+"cat": "Marketing",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "marketing-budget-split",
+"title": "Marketing budget split",
+"cat": "Marketing",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "blog-post-outline-to-full-draft",
+"title": "Blog post outline to full draft",
+"cat": "Writing",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "proofread-and-explain-the-fixes",
+"title": "Proofread and explain the fixes",
+"cat": "Writing",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "summarise-a-long-article",
+"title": "Summarise a long article",
+"cat": "Writing",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "write-a-professional-email",
+"title": "Write a professional email",
+"cat": "Writing",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "short-story-from-a-prompt",
+"title": "Short story from a prompt",
+"cat": "Writing",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "speech-for-an-event",
+"title": "Speech for an event",
+"cat": "Writing",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "paraphrase-without-plagiarism",
+"title": "Paraphrase without plagiarism",
+"cat": "Writing",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "product-description",
+"title": "Product description",
+"cat": "Writing",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "personal-statement-sop",
+"title": "Personal statement / SOP",
+"cat": "Writing",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "rewrite-for-clarity",
+"title": "Rewrite for clarity",
+"cat": "Writing",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "headline-generator",
+"title": "Headline generator",
+"cat": "Writing",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "write-a-poem",
+"title": "Write a poem",
+"cat": "Writing",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "book-chapter-outline",
+"title": "Book chapter outline",
+"cat": "Writing",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "meeting-minutes-from-notes",
+"title": "Meeting minutes from notes",
+"cat": "Writing",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "apology-message",
+"title": "Apology message",
+"cat": "Writing",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "explain-a-complex-idea-with-analogies",
+"title": "Explain a complex idea with analogies",
+"cat": "Writing",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "write-a-linkedin-article",
+"title": "Write a LinkedIn article",
+"cat": "Writing",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "script-for-an-explainer-video",
+"title": "Script for an explainer video",
+"cat": "Writing",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "write-a-bio-in-three-lengths",
+"title": "Write a bio in three lengths",
+"cat": "Writing",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "edit-for-word-count",
+"title": "Edit for word count",
+"cat": "Writing",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "rewrite-in-a-formal-tone",
+"title": "Rewrite in a formal tone",
+"cat": "Writing",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "rewrite-in-a-friendly-tone",
+"title": "Rewrite in a friendly tone",
+"cat": "Writing",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "rewrite-in-a-persuasive-tone",
+"title": "Rewrite in a persuasive tone",
+"cat": "Writing",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "rewrite-in-a-simple-for-a-12-year-old-tone",
+"title": "Rewrite in a simple (for a 12-year-old) tone",
+"cat": "Writing",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "rewrite-in-a-confident-tone",
+"title": "Rewrite in a confident tone",
+"cat": "Writing",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "rewrite-in-a-empathetic-tone",
+"title": "Rewrite in a empathetic tone",
+"cat": "Writing",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "rewrite-in-a-humorous-tone",
+"title": "Rewrite in a humorous tone",
+"cat": "Writing",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "rewrite-in-a-concise-tone",
+"title": "Rewrite in a concise tone",
+"cat": "Writing",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "rewrite-in-a-storytelling-tone",
+"title": "Rewrite in a storytelling tone",
+"cat": "Writing",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "rewrite-in-a-professional-academic-tone",
+"title": "Rewrite in a professional-academic tone",
+"cat": "Writing",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "slow-dolly-in-reveal-video-shot",
+"title": "Slow dolly-in reveal video shot",
+"cat": "Video & Reels",
+"tool": "AI video (Veo / Sora / Runway)",
+"premium": false
+},
+{
+"id": "orbit-around-a-product-video-shot",
+"title": "Orbit around a product video shot",
+"cat": "Video & Reels",
+"tool": "AI video (Veo / Sora / Runway)",
+"premium": false
+},
+{
+"id": "drone-flyover-video-shot",
+"title": "Drone flyover video shot",
+"cat": "Video & Reels",
+"tool": "AI video (Veo / Sora / Runway)",
+"premium": true
+},
+{
+"id": "tracking-shot-walking-video-shot",
+"title": "Tracking shot walking video shot",
+"cat": "Video & Reels",
+"tool": "AI video (Veo / Sora / Runway)",
+"premium": false
+},
+{
+"id": "macro-detail-shot-video-shot",
+"title": "Macro detail shot video shot",
+"cat": "Video & Reels",
+"tool": "AI video (Veo / Sora / Runway)",
+"premium": false
+},
+{
+"id": "time-lapse-sky-video-shot",
+"title": "Time-lapse sky video shot",
+"cat": "Video & Reels",
+"tool": "AI video (Veo / Sora / Runway)",
+"premium": true
+},
+{
+"id": "whip-pan-transition-video-shot",
+"title": "Whip-pan transition video shot",
+"cat": "Video & Reels",
+"tool": "AI video (Veo / Sora / Runway)",
+"premium": false
+},
+{
+"id": "top-down-flat-lay-video-shot",
+"title": "Top-down flat lay video shot",
+"cat": "Video & Reels",
+"tool": "AI video (Veo / Sora / Runway)",
+"premium": false
+},
+{
+"id": "rack-focus-foreground-to-background-video-shot",
+"title": "Rack focus foreground to background video shot",
+"cat": "Video & Reels",
+"tool": "AI video (Veo / Sora / Runway)",
+"premium": true
+},
+{
+"id": "slow-motion-pour-video-shot",
+"title": "Slow-motion pour video shot",
+"cat": "Video & Reels",
+"tool": "AI video (Veo / Sora / Runway)",
+"premium": false
+},
+{
+"id": "low-angle-hero-shot-video-shot",
+"title": "Low-angle hero shot video shot",
+"cat": "Video & Reels",
+"tool": "AI video (Veo / Sora / Runway)",
+"premium": false
+},
+{
+"id": "handheld-documentary-video-shot",
+"title": "Handheld documentary video shot",
+"cat": "Video & Reels",
+"tool": "AI video (Veo / Sora / Runway)",
+"premium": false
+},
+{
+"id": "parallax-still-to-motion-video-shot",
+"title": "Parallax still to motion video shot",
+"cat": "Video & Reels",
+"tool": "AI video (Veo / Sora / Runway)",
+"premium": true
+},
+{
+"id": "crane-up-establishing-shot-video-shot",
+"title": "Crane up establishing shot video shot",
+"cat": "Video & Reels",
+"tool": "AI video (Veo / Sora / Runway)",
+"premium": false
+},
+{
+"id": "product-spin-on-turntable-video-shot",
+"title": "Product spin on turntable video shot",
+"cat": "Video & Reels",
+"tool": "AI video (Veo / Sora / Runway)",
+"premium": false
+},
+{
+"id": "through-the-window-push-video-shot",
+"title": "Through-the-window push video shot",
+"cat": "Video & Reels",
+"tool": "AI video (Veo / Sora / Runway)",
+"premium": true
+},
+{
+"id": "night-city-bokeh-video-shot",
+"title": "Night city bokeh video shot",
+"cat": "Video & Reels",
+"tool": "AI video (Veo / Sora / Runway)",
+"premium": false
+},
+{
+"id": "underwater-glide-video-shot",
+"title": "Underwater glide video shot",
+"cat": "Video & Reels",
+"tool": "AI video (Veo / Sora / Runway)",
+"premium": false
+},
+{
+"id": "split-screen-before-and-after-video-shot",
+"title": "Split-screen before and after video shot",
+"cat": "Video & Reels",
+"tool": "AI video (Veo / Sora / Runway)",
+"premium": true
+},
+{
+"id": "pov-first-person-video-shot",
+"title": "POV first-person video shot",
+"cat": "Video & Reels",
+"tool": "AI video (Veo / Sora / Runway)",
+"premium": false
+},
+{
+"id": "stop-motion-style-video-shot",
+"title": "Stop-motion style video shot",
+"cat": "Video & Reels",
+"tool": "AI video (Veo / Sora / Runway)",
+"premium": false
+},
+{
+"id": "seasons-transition-video-shot",
+"title": "Seasons transition video shot",
+"cat": "Video & Reels",
+"tool": "AI video (Veo / Sora / Runway)",
+"premium": false
+},
+{
+"id": "floating-particles-mood-video-shot",
+"title": "Floating particles mood video shot",
+"cat": "Video & Reels",
+"tool": "AI video (Veo / Sora / Runway)",
+"premium": true
+},
+{
+"id": "logo-reveal-video-shot",
+"title": "Logo reveal video shot",
+"cat": "Video & Reels",
+"tool": "AI video (Veo / Sora / Runway)",
+"premium": false
+},
+{
+"id": "30-second-reel-script-for-a-fitness-coach",
+"title": "30-second Reel script for a fitness coach",
+"cat": "Video & Reels",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "30-second-reel-script-for-a-home-cook",
+"title": "30-second Reel script for a home cook",
+"cat": "Video & Reels",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "30-second-reel-script-for-a-personal-finance-creator",
+"title": "30-second Reel script for a personal finance creator",
+"cat": "Video & Reels",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "30-second-reel-script-for-a-tech-reviewer",
+"title": "30-second Reel script for a tech reviewer",
+"cat": "Video & Reels",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "30-second-reel-script-for-a-travel-vlogger",
+"title": "30-second Reel script for a travel vlogger",
+"cat": "Video & Reels",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "30-second-reel-script-for-a-skincare-brand",
+"title": "30-second Reel script for a skincare brand",
+"cat": "Video & Reels",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "30-second-reel-script-for-a-real-estate-agent",
+"title": "30-second Reel script for a real estate agent",
+"cat": "Video & Reels",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "30-second-reel-script-for-a-coding-teacher",
+"title": "30-second Reel script for a coding teacher",
+"cat": "Video & Reels",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "30-second-reel-script-for-a-caf-owner",
+"title": "30-second Reel script for a caf\u00e9 owner",
+"cat": "Video & Reels",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "30-second-reel-script-for-a-fashion-boutique",
+"title": "30-second Reel script for a fashion boutique",
+"cat": "Video & Reels",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "30-second-reel-script-for-a-productivity-creator",
+"title": "30-second Reel script for a productivity creator",
+"cat": "Video & Reels",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "30-second-reel-script-for-a-language-tutor",
+"title": "30-second Reel script for a language tutor",
+"cat": "Video & Reels",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "30-second-reel-script-for-a-photographer",
+"title": "30-second Reel script for a photographer",
+"cat": "Video & Reels",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "30-second-reel-script-for-a-gamer",
+"title": "30-second Reel script for a gamer",
+"cat": "Video & Reels",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "30-second-reel-script-for-a-parenting-creator",
+"title": "30-second Reel script for a parenting creator",
+"cat": "Video & Reels",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "30-second-reel-script-for-a-small-business-coach",
+"title": "30-second Reel script for a small business coach",
+"cat": "Video & Reels",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "lo-fi-hip-hop-song-prompt",
+"title": "Lo-fi hip hop song prompt",
+"cat": "Music & Audio",
+"tool": "Suno",
+"premium": false
+},
+{
+"id": "synthwave-song-prompt",
+"title": "Synthwave song prompt",
+"cat": "Music & Audio",
+"tool": "Suno",
+"premium": false
+},
+{
+"id": "acoustic-folk-song-prompt",
+"title": "Acoustic folk song prompt",
+"cat": "Music & Audio",
+"tool": "Suno",
+"premium": true
+},
+{
+"id": "edm-festival-anthem-song-prompt",
+"title": "Edm festival anthem song prompt",
+"cat": "Music & Audio",
+"tool": "Suno",
+"premium": false
+},
+{
+"id": "bollywood-romantic-song-prompt",
+"title": "Bollywood romantic song prompt",
+"cat": "Music & Audio",
+"tool": "Suno",
+"premium": false
+},
+{
+"id": "punjabi-bhangra-pop-song-prompt",
+"title": "Punjabi bhangra pop song prompt",
+"cat": "Music & Audio",
+"tool": "Suno",
+"premium": true
+},
+{
+"id": "cinematic-orchestral-song-prompt",
+"title": "Cinematic orchestral song prompt",
+"cat": "Music & Audio",
+"tool": "Suno",
+"premium": false
+},
+{
+"id": "jazz-cafe-song-prompt",
+"title": "Jazz cafe song prompt",
+"cat": "Music & Audio",
+"tool": "Suno",
+"premium": false
+},
+{
+"id": "indie-pop-song-prompt",
+"title": "Indie pop song prompt",
+"cat": "Music & Audio",
+"tool": "Suno",
+"premium": true
+},
+{
+"id": "trap-song-prompt",
+"title": "Trap song prompt",
+"cat": "Music & Audio",
+"tool": "Suno",
+"premium": false
+},
+{
+"id": "classical-piano-song-prompt",
+"title": "Classical piano song prompt",
+"cat": "Music & Audio",
+"tool": "Suno",
+"premium": false
+},
+{
+"id": "reggae-song-prompt",
+"title": "Reggae song prompt",
+"cat": "Music & Audio",
+"tool": "Suno",
+"premium": false
+},
+{
+"id": "rock-anthem-song-prompt",
+"title": "Rock anthem song prompt",
+"cat": "Music & Audio",
+"tool": "Suno",
+"premium": true
+},
+{
+"id": "ambient-meditation-song-prompt",
+"title": "Ambient meditation song prompt",
+"cat": "Music & Audio",
+"tool": "Suno",
+"premium": false
+},
+{
+"id": "kids-song-song-prompt",
+"title": "Kids song song prompt",
+"cat": "Music & Audio",
+"tool": "Suno",
+"premium": false
+},
+{
+"id": "sufi-qawwali-inspired-song-prompt",
+"title": "Sufi qawwali inspired song prompt",
+"cat": "Music & Audio",
+"tool": "Suno",
+"premium": true
+},
+{
+"id": "k-pop-dance-song-prompt",
+"title": "K-pop dance song prompt",
+"cat": "Music & Audio",
+"tool": "Suno",
+"premium": false
+},
+{
+"id": "country-song-prompt",
+"title": "Country song prompt",
+"cat": "Music & Audio",
+"tool": "Suno",
+"premium": false
+},
+{
+"id": "afrobeats-song-prompt",
+"title": "Afrobeats song prompt",
+"cat": "Music & Audio",
+"tool": "Suno",
+"premium": true
+},
+{
+"id": "podcast-intro-jingle-song-prompt",
+"title": "Podcast intro jingle song prompt",
+"cat": "Music & Audio",
+"tool": "Suno",
+"premium": false
+},
+{
+"id": "podcast-episode-outline",
+"title": "Podcast episode outline",
+"cat": "Music & Audio",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "voice-over-script-with-direction",
+"title": "Voice-over script with direction",
+"cat": "Music & Audio",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "song-lyrics-with-a-hook",
+"title": "Song lyrics with a hook",
+"cat": "Music & Audio",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "clean-up-a-transcript",
+"title": "Clean up a transcript",
+"cat": "Music & Audio",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "sound-design-brief",
+"title": "Sound design brief",
+"cat": "Music & Audio",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "radio-or-audio-ad",
+"title": "Radio or audio ad",
+"cat": "Music & Audio",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "meditation-script",
+"title": "Meditation script",
+"cat": "Music & Audio",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "audiobook-chapter-narration-notes",
+"title": "Audiobook chapter narration notes",
+"cat": "Music & Audio",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "youtube-video-music-cues",
+"title": "YouTube video music cues",
+"cat": "Music & Audio",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "jingle-lyrics-for-a-brand",
+"title": "Jingle lyrics for a brand",
+"cat": "Music & Audio",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "write-an-excel-or-sheets-formula",
+"title": "Write an Excel or Sheets formula",
+"cat": "Data & Excel",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "xlookup-vs-vlookup-explained-with-your-data",
+"title": "XLOOKUP vs VLOOKUP explained with your data",
+"cat": "Data & Excel",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "build-a-pivot-table-summary",
+"title": "Build a pivot table summary",
+"cat": "Data & Excel",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "clean-messy-data",
+"title": "Clean messy data",
+"cat": "Data & Excel",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "sql-query-from-plain-english",
+"title": "SQL query from plain English",
+"cat": "Data & Excel",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "explain-a-sql-query",
+"title": "Explain a SQL query",
+"cat": "Data & Excel",
+"tool": "Claude",
+"premium": true
+},
+{
+"id": "sql-window-functions-tutor",
+"title": "SQL window functions tutor",
+"cat": "Data & Excel",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "analyse-a-dataset-with-pandas",
+"title": "Analyse a dataset with pandas",
+"cat": "Data & Excel",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "choose-the-right-chart",
+"title": "Choose the right chart",
+"cat": "Data & Excel",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "power-bi-dax-measure",
+"title": "Power BI DAX measure",
+"cat": "Data & Excel",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "interpret-statistical-results",
+"title": "Interpret statistical results",
+"cat": "Data & Excel",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "a-b-test-result-check",
+"title": "A/B test result check",
+"cat": "Data & Excel",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "monthly-report-narrative",
+"title": "Monthly report narrative",
+"cat": "Data & Excel",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "design-a-database-schema",
+"title": "Design a database schema",
+"cat": "Data & Excel",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "excel-dashboard-plan",
+"title": "Excel dashboard plan",
+"cat": "Data & Excel",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "regex-for-data-extraction",
+"title": "Regex for data extraction",
+"cat": "Data & Excel",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "forecast-with-simple-methods",
+"title": "Forecast with simple methods",
+"cat": "Data & Excel",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "google-sheets-automation-with-apps-script",
+"title": "Google Sheets automation with Apps Script",
+"cat": "Data & Excel",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "data-dictionary",
+"title": "Data dictionary",
+"cat": "Data & Excel",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "kpi-definition-sheet",
+"title": "KPI definition sheet",
+"cat": "Data & Excel",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "survey-data-analysis-plan",
+"title": "Survey data analysis plan",
+"cat": "Data & Excel",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "conditional-formatting-rules",
+"title": "Conditional formatting rules",
+"cat": "Data & Excel",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "explain-a-machine-learning-model-result",
+"title": "Explain a machine learning model result",
+"cat": "Data & Excel",
+"tool": "Claude",
+"premium": true
+},
+{
+"id": "convert-data-between-formats",
+"title": "Convert data between formats",
+"cat": "Data & Excel",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "excel-vba-macro",
+"title": "Excel VBA macro",
+"cat": "Data & Excel",
+"tool": "ChatGPT",
+"premium": false
+},
+{
+"id": "spot-anomalies-in-numbers",
+"title": "Spot anomalies in numbers",
+"cat": "Data & Excel",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "cohort-retention-analysis",
+"title": "Cohort retention analysis",
+"cat": "Data & Excel",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "create-sample-test-data",
+"title": "Create sample test data",
+"cat": "Data & Excel",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "explain-a-dataset-to-a-non-technical-audience",
+"title": "Explain a dataset to a non-technical audience",
+"cat": "Data & Excel",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "sheets-query-function-helper",
+"title": "Sheets QUERY function helper",
+"cat": "Data & Excel",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "plan-my-week-with-time-blocks",
+"title": "Plan my week with time blocks",
+"cat": "Productivity",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "break-a-big-project-into-tasks",
+"title": "Break a big project into tasks",
+"cat": "Productivity",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "eisenhower-matrix-sort",
+"title": "Eisenhower matrix sort",
+"cat": "Productivity",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "daily-review-and-shutdown-routine",
+"title": "Daily review and shutdown routine",
+"cat": "Productivity",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "write-smart-goals",
+"title": "Write SMART goals",
+"cat": "Productivity",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "habit-tracker-plan",
+"title": "Habit tracker plan",
+"cat": "Productivity",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "inbox-zero-email-triage",
+"title": "Inbox zero email triage",
+"cat": "Productivity",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "meeting-agenda",
+"title": "Meeting agenda",
+"cat": "Productivity",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "focus-session-plan-pomodoro",
+"title": "Focus session plan (Pomodoro)",
+"cat": "Productivity",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "decision-making-helper",
+"title": "Decision-making helper",
+"cat": "Productivity",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "personal-sop-for-a-repeated-task",
+"title": "Personal SOP for a repeated task",
+"cat": "Productivity",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "learn-any-skill-in-30-days",
+"title": "Learn any skill in 30 days",
+"cat": "Productivity",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "reduce-procrastination",
+"title": "Reduce procrastination",
+"cat": "Productivity",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "quarterly-personal-review",
+"title": "Quarterly personal review",
+"cat": "Productivity",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "note-taking-system-setup",
+"title": "Note-taking system setup",
+"cat": "Productivity",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "turn-notes-into-an-action-plan",
+"title": "Turn notes into an action plan",
+"cat": "Productivity",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "delegation-brief",
+"title": "Delegation brief",
+"cat": "Productivity",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "morning-routine-design",
+"title": "Morning routine design",
+"cat": "Productivity",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "workload-and-boundaries-message",
+"title": "Workload and boundaries message",
+"cat": "Productivity",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "simplify-a-process",
+"title": "Simplify a process",
+"cat": "Productivity",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "exam-week-schedule",
+"title": "Exam week schedule",
+"cat": "Productivity",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "remote-work-routine",
+"title": "Remote work routine",
+"cat": "Productivity",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "project-status-update",
+"title": "Project status update",
+"cat": "Productivity",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "read-a-book-faster-and-remember-it",
+"title": "Read a book faster and remember it",
+"cat": "Productivity",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "brain-dump-to-priorities",
+"title": "Brain dump to priorities",
+"cat": "Productivity",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "calendar-audit",
+"title": "Calendar audit",
+"cat": "Productivity",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "checklist-for-any-process",
+"title": "Checklist for any process",
+"cat": "Productivity",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "goal-to-daily-action-planner",
+"title": "Goal-to-daily-action planner",
+"cat": "Productivity",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "write-clearer-slack-or-teams-messages",
+"title": "Write clearer Slack or Teams messages",
+"cat": "Productivity",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "life-admin-system",
+"title": "Life admin system",
+"cat": "Productivity",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "monthly-budget-plan",
+"title": "Monthly budget plan",
+"cat": "Personal Finance",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "emergency-fund-plan",
+"title": "Emergency fund plan",
+"cat": "Personal Finance",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "pay-off-debt-faster",
+"title": "Pay off debt faster",
+"cat": "Personal Finance",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "explain-an-investment-term",
+"title": "Explain an investment term",
+"cat": "Personal Finance",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "compound-interest-calculator-walk-through",
+"title": "Compound interest calculator walk-through",
+"cat": "Personal Finance",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "financial-goals-plan",
+"title": "Financial goals plan",
+"cat": "Personal Finance",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "understand-my-salary-slip",
+"title": "Understand my salary slip",
+"cat": "Personal Finance",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "spending-analysis-from-a-statement",
+"title": "Spending analysis from a statement",
+"cat": "Personal Finance",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "insurance-basics-checklist",
+"title": "Insurance basics checklist",
+"cat": "Personal Finance",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "side-income-ideas",
+"title": "Side income ideas",
+"cat": "Personal Finance",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "rent-vs-buy-a-home",
+"title": "Rent vs buy a home",
+"cat": "Personal Finance",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "loan-emi-explained",
+"title": "Loan EMI explained",
+"cat": "Personal Finance",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "money-talk-with-a-partner",
+"title": "Money talk with a partner",
+"cat": "Personal Finance",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "teach-kids-about-money",
+"title": "Teach kids about money",
+"cat": "Personal Finance",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "retirement-savings-estimate",
+"title": "Retirement savings estimate",
+"cat": "Personal Finance",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "subscription-audit",
+"title": "Subscription audit",
+"cat": "Personal Finance",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "freelancer-finances-setup",
+"title": "Freelancer finances setup",
+"cat": "Personal Finance",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "understand-a-credit-score",
+"title": "Understand a credit score",
+"cat": "Personal Finance",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "spot-a-financial-scam",
+"title": "Spot a financial scam",
+"cat": "Personal Finance",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "year-end-money-review",
+"title": "Year-end money review",
+"cat": "Personal Finance",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "fat-loss-workout-plan",
+"title": "Fat loss workout plan",
+"cat": "Health & Fitness",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "muscle-gain-workout-plan",
+"title": "Muscle gain workout plan",
+"cat": "Health & Fitness",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "beginner-strength-workout-plan",
+"title": "Beginner strength workout plan",
+"cat": "Health & Fitness",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "running-a-first-5k-workout-plan",
+"title": "Running a first 5k workout plan",
+"cat": "Health & Fitness",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "home-workouts-with-no-equipment-workout-plan",
+"title": "Home workouts with no equipment workout plan",
+"cat": "Health & Fitness",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "better-flexibility-and-mobility-workout-plan",
+"title": "Better flexibility and mobility workout plan",
+"cat": "Health & Fitness",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "back-friendly-core-strength-workout-plan",
+"title": "Back-friendly core strength workout plan",
+"cat": "Health & Fitness",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "fitness-after-40-workout-plan",
+"title": "Fitness after 40 workout plan",
+"cat": "Health & Fitness",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "busy-schedule-20-minute-workouts-workout-plan",
+"title": "Busy-schedule 20-minute workouts workout plan",
+"cat": "Health & Fitness",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "improving-posture-for-desk-workers-workout-plan",
+"title": "Improving posture for desk workers workout plan",
+"cat": "Health & Fitness",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "vegetarian-indian-meal-plan",
+"title": "Vegetarian indian meal plan",
+"cat": "Health & Fitness",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "high-protein-vegetarian-meal-plan",
+"title": "High-protein vegetarian meal plan",
+"cat": "Health & Fitness",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "vegan-meal-plan",
+"title": "Vegan meal plan",
+"cat": "Health & Fitness",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "budget-friendly-meal-plan",
+"title": "Budget-friendly meal plan",
+"cat": "Health & Fitness",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "eggetarian-meal-plan",
+"title": "Eggetarian meal plan",
+"cat": "Health & Fitness",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "mediterranean-style-meal-plan",
+"title": "Mediterranean-style meal plan",
+"cat": "Health & Fitness",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "diabetes-friendly-meal-plan",
+"title": "Diabetes-friendly meal plan",
+"cat": "Health & Fitness",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "student-hostel-meal-plan",
+"title": "Student hostel meal plan",
+"cat": "Health & Fitness",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "weight-loss-calorie-deficit-meal-plan",
+"title": "Weight-loss calorie deficit meal plan",
+"cat": "Health & Fitness",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "balanced-family-meal-plan",
+"title": "Balanced family meal plan",
+"cat": "Health & Fitness",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "job-description",
+"title": "Job description",
+"cat": "HR & Workplace",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "interview-question-bank",
+"title": "Interview question bank",
+"cat": "HR & Workplace",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "onboarding-plan-for-a-new-hire",
+"title": "Onboarding plan for a new hire",
+"cat": "HR & Workplace",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "performance-review-feedback",
+"title": "Performance review feedback",
+"cat": "HR & Workplace",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "difficult-conversation-script",
+"title": "Difficult conversation script",
+"cat": "HR & Workplace",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "company-policy-draft",
+"title": "Company policy draft",
+"cat": "HR & Workplace",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "employee-engagement-survey",
+"title": "Employee engagement survey",
+"cat": "HR & Workplace",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "recognition-and-appreciation-messages",
+"title": "Recognition and appreciation messages",
+"cat": "HR & Workplace",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "exit-interview-questions",
+"title": "Exit interview questions",
+"cat": "HR & Workplace",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "offer-letter-draft",
+"title": "Offer letter draft",
+"cat": "HR & Workplace",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "team-building-activity-ideas",
+"title": "Team building activity ideas",
+"cat": "HR & Workplace",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "training-needs-analysis",
+"title": "Training needs analysis",
+"cat": "HR & Workplace",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "workplace-announcement",
+"title": "Workplace announcement",
+"cat": "HR & Workplace",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "resolve-a-team-conflict",
+"title": "Resolve a team conflict",
+"cat": "HR & Workplace",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "internship-programme-plan",
+"title": "Internship programme plan",
+"cat": "HR & Workplace",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "mathematics-lesson-plan",
+"title": "Mathematics lesson plan",
+"cat": "Teaching",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "science-lesson-plan",
+"title": "Science lesson plan",
+"cat": "Teaching",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "english-lesson-plan",
+"title": "English lesson plan",
+"cat": "Teaching",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "hindi-lesson-plan",
+"title": "Hindi lesson plan",
+"cat": "Teaching",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "social-studies-lesson-plan",
+"title": "Social Studies lesson plan",
+"cat": "Teaching",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "computer-science-lesson-plan",
+"title": "Computer Science lesson plan",
+"cat": "Teaching",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "physics-lesson-plan",
+"title": "Physics lesson plan",
+"cat": "Teaching",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "chemistry-lesson-plan",
+"title": "Chemistry lesson plan",
+"cat": "Teaching",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "biology-lesson-plan",
+"title": "Biology lesson plan",
+"cat": "Teaching",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "economics-lesson-plan",
+"title": "Economics lesson plan",
+"cat": "Teaching",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "history-lesson-plan",
+"title": "History lesson plan",
+"cat": "Teaching",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "geography-lesson-plan",
+"title": "Geography lesson plan",
+"cat": "Teaching",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "art-lesson-plan",
+"title": "Art lesson plan",
+"cat": "Teaching",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "physical-education-lesson-plan",
+"title": "Physical Education lesson plan",
+"cat": "Teaching",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "environmental-studies-lesson-plan",
+"title": "Environmental Studies lesson plan",
+"cat": "Teaching",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "rubric-for-an-assignment",
+"title": "Rubric for an assignment",
+"cat": "Teaching",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "quiz-with-answer-key",
+"title": "Quiz with answer key",
+"cat": "Teaching",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "parent-teacher-meeting-notes",
+"title": "Parent-teacher meeting notes",
+"cat": "Teaching",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "differentiated-worksheet",
+"title": "Differentiated worksheet",
+"cat": "Teaching",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "project-based-learning-unit",
+"title": "Project-based learning unit",
+"cat": "Teaching",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "explain-a-topic-at-three-levels",
+"title": "Explain a topic at three levels",
+"cat": "Teaching",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "classroom-management-plan",
+"title": "Classroom management plan",
+"cat": "Teaching",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "report-card-comments",
+"title": "Report card comments",
+"cat": "Teaching",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "flipped-classroom-pre-work",
+"title": "Flipped classroom pre-work",
+"cat": "Teaching",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "debate-topics-and-structure",
+"title": "Debate topics and structure",
+"cat": "Teaching",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "product-requirements-document-prd",
+"title": "Product requirements document (PRD)",
+"cat": "Product & UX",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "user-stories-with-acceptance-criteria",
+"title": "User stories with acceptance criteria",
+"cat": "Product & UX",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "user-interview-script",
+"title": "User interview script",
+"cat": "Product & UX",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "synthesise-user-research",
+"title": "Synthesise user research",
+"cat": "Product & UX",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "feature-prioritisation-with-rice",
+"title": "Feature prioritisation with RICE",
+"cat": "Product & UX",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "ux-copy-for-an-app-screen",
+"title": "UX copy for an app screen",
+"cat": "Product & UX",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "usability-test-plan",
+"title": "Usability test plan",
+"cat": "Product & UX",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "onboarding-flow-ideas",
+"title": "Onboarding flow ideas",
+"cat": "Product & UX",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "competitive-ux-teardown",
+"title": "Competitive UX teardown",
+"cat": "Product & UX",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "north-star-metric",
+"title": "North star metric",
+"cat": "Product & UX",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "product-roadmap",
+"title": "Product roadmap",
+"cat": "Product & UX",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "release-notes",
+"title": "Release notes",
+"cat": "Product & UX",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "design-critique",
+"title": "Design critique",
+"cat": "Product & UX",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "accessibility-checklist-for-a-feature",
+"title": "Accessibility checklist for a feature",
+"cat": "Product & UX",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "pricing-page-structure",
+"title": "Pricing page structure",
+"cat": "Product & UX",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "jobs-to-be-done-statements",
+"title": "Jobs-to-be-done statements",
+"cat": "Product & UX",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "customer-feedback-categoriser",
+"title": "Customer feedback categoriser",
+"cat": "Product & UX",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "wireframe-description",
+"title": "Wireframe description",
+"cat": "Product & UX",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "experiment-design",
+"title": "Experiment design",
+"cat": "Product & UX",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "personas-for-a-digital-product",
+"title": "Personas for a digital product",
+"cat": "Product & UX",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "stakeholder-update-on-a-product-decision",
+"title": "Stakeholder update on a product decision",
+"cat": "Product & UX",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "empty-state-ideas",
+"title": "Empty state ideas",
+"cat": "Product & UX",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "churn-reasons-analysis",
+"title": "Churn reasons analysis",
+"cat": "Product & UX",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "product-launch-checklist",
+"title": "Product launch checklist",
+"cat": "Product & UX",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "analytics-event-tracking-plan",
+"title": "Analytics event tracking plan",
+"cat": "Product & UX",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "write-a-system-prompt-for-an-ai-assistant",
+"title": "Write a system prompt for an AI assistant",
+"cat": "AI Agents & Automation",
+"tool": "Claude",
+"premium": true
+},
+{
+"id": "design-an-ai-agent-workflow",
+"title": "Design an AI agent workflow",
+"cat": "AI Agents & Automation",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "zapier-or-make-automation-idea-to-steps",
+"title": "Zapier or Make automation idea to steps",
+"cat": "AI Agents & Automation",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "prompt-improver",
+"title": "Prompt improver",
+"cat": "AI Agents & Automation",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "few-shot-examples-builder",
+"title": "Few-shot examples builder",
+"cat": "AI Agents & Automation",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "evaluate-ai-outputs-with-a-rubric",
+"title": "Evaluate AI outputs with a rubric",
+"cat": "AI Agents & Automation",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "rag-chatbot-plan-for-your-documents",
+"title": "RAG chatbot plan for your documents",
+"cat": "AI Agents & Automation",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "structured-data-extraction-prompt",
+"title": "Structured data extraction prompt",
+"cat": "AI Agents & Automation",
+"tool": "Claude",
+"premium": true
+},
+{
+"id": "customer-support-bot-guardrails",
+"title": "Customer support bot guardrails",
+"cat": "AI Agents & Automation",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "automate-a-weekly-report",
+"title": "Automate a weekly report",
+"cat": "AI Agents & Automation",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "claude-code-or-cursor-task-brief",
+"title": "Claude Code or Cursor task brief",
+"cat": "AI Agents & Automation",
+"tool": "Claude",
+"premium": true
+},
+{
+"id": "n8n-workflow-design",
+"title": "n8n workflow design",
+"cat": "AI Agents & Automation",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "chain-prompts-for-a-long-task",
+"title": "Chain prompts for a long task",
+"cat": "AI Agents & Automation",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "ai-use-policy-for-a-team",
+"title": "AI use policy for a team",
+"cat": "AI Agents & Automation",
+"tool": "Claude",
+"premium": true
+},
+{
+"id": "function-calling-tool-definitions",
+"title": "Function calling tool definitions",
+"cat": "AI Agents & Automation",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "email-triage-assistant",
+"title": "Email triage assistant",
+"cat": "AI Agents & Automation",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "meeting-notes-to-tasks-automation",
+"title": "Meeting notes to tasks automation",
+"cat": "AI Agents & Automation",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "agent-memory-and-context-plan",
+"title": "Agent memory and context plan",
+"cat": "AI Agents & Automation",
+"tool": "Claude",
+"premium": true
+},
+{
+"id": "test-cases-for-an-ai-feature",
+"title": "Test cases for an AI feature",
+"cat": "AI Agents & Automation",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "prompt-injection-defence-checklist",
+"title": "Prompt injection defence checklist",
+"cat": "AI Agents & Automation",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "personal-ai-assistant-setup",
+"title": "Personal AI assistant setup",
+"cat": "AI Agents & Automation",
+"tool": "ChatGPT",
+"premium": true
+},
+{
+"id": "workflow-audit-for-ai-opportunities",
+"title": "Workflow audit for AI opportunities",
+"cat": "AI Agents & Automation",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "multi-agent-role-design",
+"title": "Multi-agent role design",
+"cat": "AI Agents & Automation",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "chatbot-conversation-flow",
+"title": "Chatbot conversation flow",
+"cat": "AI Agents & Automation",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "summarise-and-act-on-a-long-document",
+"title": "Summarise and act on a long document",
+"cat": "AI Agents & Automation",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "weekend-getaway-itinerary",
+"title": "Weekend getaway itinerary",
+"cat": "Travel & Life",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "family-holiday-with-kids-itinerary",
+"title": "Family holiday with kids itinerary",
+"cat": "Travel & Life",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "solo-backpacking-trip-itinerary",
+"title": "Solo backpacking trip itinerary",
+"cat": "Travel & Life",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "honeymoon-itinerary",
+"title": "Honeymoon itinerary",
+"cat": "Travel & Life",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "budget-trip-itinerary",
+"title": "Budget trip itinerary",
+"cat": "Travel & Life",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "road-trip-itinerary",
+"title": "Road trip itinerary",
+"cat": "Travel & Life",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "hill-station-trip-itinerary",
+"title": "Hill station trip itinerary",
+"cat": "Travel & Life",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "beach-holiday-itinerary",
+"title": "Beach holiday itinerary",
+"cat": "Travel & Life",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "international-first-trip-itinerary",
+"title": "International first trip itinerary",
+"cat": "Travel & Life",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "pilgrimage-and-heritage-trip-itinerary",
+"title": "Pilgrimage and heritage trip itinerary",
+"cat": "Travel & Life",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "packing-list-generator",
+"title": "Packing list generator",
+"cat": "Travel & Life",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "visa-and-documents-checklist",
+"title": "Visa and documents checklist",
+"cat": "Travel & Life",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "move-to-a-new-city-checklist",
+"title": "Move to a new city checklist",
+"cat": "Travel & Life",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "plan-a-party-or-event",
+"title": "Plan a party or event",
+"cat": "Travel & Life",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "cook-with-what-is-in-the-fridge",
+"title": "Cook with what is in the fridge",
+"cat": "Travel & Life",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "gift-ideas",
+"title": "Gift ideas",
+"cat": "Travel & Life",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "home-organisation-plan",
+"title": "Home organisation plan",
+"cat": "Travel & Life",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "write-a-heartfelt-message",
+"title": "Write a heartfelt message",
+"cat": "Travel & Life",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "learn-a-language-for-travel",
+"title": "Learn a language for travel",
+"cat": "Travel & Life",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "weekly-family-meal-and-chores-planner",
+"title": "Weekly family meal and chores planner",
+"cat": "Travel & Life",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "youtube-video-ideas-for-your-niche",
+"title": "YouTube video ideas for your niche",
+"cat": "YouTube & Creators",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "youtube-script-with-retention-hooks",
+"title": "YouTube script with retention hooks",
+"cat": "YouTube & Creators",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "youtube-titles-and-thumbnails",
+"title": "YouTube titles and thumbnails",
+"cat": "YouTube & Creators",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "youtube-description-and-chapters",
+"title": "YouTube description and chapters",
+"cat": "YouTube & Creators",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "channel-strategy-for-the-first-90-days",
+"title": "Channel strategy for the first 90 days",
+"cat": "YouTube & Creators",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "shorts-from-a-long-video",
+"title": "Shorts from a long video",
+"cat": "YouTube & Creators",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "sponsorship-pitch-to-a-brand",
+"title": "Sponsorship pitch to a brand",
+"cat": "YouTube & Creators",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "analyse-channel-analytics",
+"title": "Analyse channel analytics",
+"cat": "YouTube & Creators",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "podcast-to-youtube-plan",
+"title": "Podcast to YouTube plan",
+"cat": "YouTube & Creators",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "community-post-ideas",
+"title": "Community post ideas",
+"cat": "YouTube & Creators",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "video-hook-rewrite",
+"title": "Video hook rewrite",
+"cat": "YouTube & Creators",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "collaboration-pitch-to-another-creator",
+"title": "Collaboration pitch to another creator",
+"cat": "YouTube & Creators",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "content-batch-production-plan",
+"title": "Content batch production plan",
+"cat": "YouTube & Creators",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "live-stream-plan",
+"title": "Live stream plan",
+"cat": "YouTube & Creators",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "creator-media-kit",
+"title": "Creator media kit",
+"cat": "YouTube & Creators",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "instagram-reel-to-youtube-short-adaptation",
+"title": "Instagram Reel to YouTube Short adaptation",
+"cat": "YouTube & Creators",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "comment-reply-templates-for-creators",
+"title": "Comment reply templates for creators",
+"cat": "YouTube & Creators",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "newsletter-for-creators",
+"title": "Newsletter for creators",
+"cat": "YouTube & Creators",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "course-or-digital-product-from-your-content",
+"title": "Course or digital product from your content",
+"cat": "YouTube & Creators",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "faceless-channel-plan",
+"title": "Faceless channel plan",
+"cat": "YouTube & Creators",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "build-a-saas-landing-page-with-ai",
+"title": "Build a SaaS landing page with AI",
+"cat": "Website Builders",
+"tool": "Lovable / v0 / Bolt / Claude",
+"premium": false
+},
+{
+"id": "build-a-portfolio-for-a-designer-with-ai",
+"title": "Build a portfolio for a designer with AI",
+"cat": "Website Builders",
+"tool": "Lovable / v0 / Bolt / Claude",
+"premium": false
+},
+{
+"id": "build-a-restaurant-website-with-ai",
+"title": "Build a restaurant website with AI",
+"cat": "Website Builders",
+"tool": "Lovable / v0 / Bolt / Claude",
+"premium": true
+},
+{
+"id": "build-a-online-course-landing-page-with-ai",
+"title": "Build a online course landing page with AI",
+"cat": "Website Builders",
+"tool": "Lovable / v0 / Bolt / Claude",
+"premium": false
+},
+{
+"id": "build-a-personal-blog-with-ai",
+"title": "Build a personal blog with AI",
+"cat": "Website Builders",
+"tool": "Lovable / v0 / Bolt / Claude",
+"premium": false
+},
+{
+"id": "build-a-e-commerce-product-page-with-ai",
+"title": "Build a e-commerce product page with AI",
+"cat": "Website Builders",
+"tool": "Lovable / v0 / Bolt / Claude",
+"premium": true
+},
+{
+"id": "build-a-real-estate-listings-site-with-ai",
+"title": "Build a real estate listings site with AI",
+"cat": "Website Builders",
+"tool": "Lovable / v0 / Bolt / Claude",
+"premium": false
+},
+{
+"id": "build-a-gym-website-with-ai",
+"title": "Build a gym website with AI",
+"cat": "Website Builders",
+"tool": "Lovable / v0 / Bolt / Claude",
+"premium": false
+},
+{
+"id": "build-a-event-or-conference-site-with-ai",
+"title": "Build a event or conference site with AI",
+"cat": "Website Builders",
+"tool": "Lovable / v0 / Bolt / Claude",
+"premium": true
+},
+{
+"id": "build-a-nonprofit-donation-site-with-ai",
+"title": "Build a nonprofit donation site with AI",
+"cat": "Website Builders",
+"tool": "Lovable / v0 / Bolt / Claude",
+"premium": false
+},
+{
+"id": "build-a-mobile-app-landing-page-with-ai",
+"title": "Build a mobile app landing page with AI",
+"cat": "Website Builders",
+"tool": "Lovable / v0 / Bolt / Claude",
+"premium": false
+},
+{
+"id": "build-a-doctor-or-clinic-site-with-ai",
+"title": "Build a doctor or clinic site with AI",
+"cat": "Website Builders",
+"tool": "Lovable / v0 / Bolt / Claude",
+"premium": false
+},
+{
+"id": "build-a-photography-portfolio-with-ai",
+"title": "Build a photography portfolio with AI",
+"cat": "Website Builders",
+"tool": "Lovable / v0 / Bolt / Claude",
+"premium": true
+},
+{
+"id": "build-a-agency-website-with-ai",
+"title": "Build a agency website with AI",
+"cat": "Website Builders",
+"tool": "Lovable / v0 / Bolt / Claude",
+"premium": false
+},
+{
+"id": "build-a-wedding-website-with-ai",
+"title": "Build a wedding website with AI",
+"cat": "Website Builders",
+"tool": "Lovable / v0 / Bolt / Claude",
+"premium": false
+},
+{
+"id": "build-a-job-board-with-ai",
+"title": "Build a job board with AI",
+"cat": "Website Builders",
+"tool": "Lovable / v0 / Bolt / Claude",
+"premium": true
+},
+{
+"id": "build-a-admin-dashboard-with-ai",
+"title": "Build a admin dashboard with AI",
+"cat": "Website Builders",
+"tool": "Lovable / v0 / Bolt / Claude",
+"premium": false
+},
+{
+"id": "build-a-coming-soon-page-with-ai",
+"title": "Build a coming soon page with AI",
+"cat": "Website Builders",
+"tool": "Lovable / v0 / Bolt / Claude",
+"premium": false
+},
+{
+"id": "build-a-resume-cv-website-with-ai",
+"title": "Build a resume / CV website with AI",
+"cat": "Website Builders",
+"tool": "Lovable / v0 / Bolt / Claude",
+"premium": true
+},
+{
+"id": "build-a-local-business-site-with-ai",
+"title": "Build a local business site with AI",
+"cat": "Website Builders",
+"tool": "Lovable / v0 / Bolt / Claude",
+"premium": false
+},
+{
+"id": "security-review-of-my-code",
+"title": "Security review of my code",
+"cat": "Cybersecurity",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "phishing-email-check",
+"title": "Phishing email check",
+"cat": "Cybersecurity",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "password-and-2fa-policy",
+"title": "Password and 2FA policy",
+"cat": "Cybersecurity",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "incident-response-plan",
+"title": "Incident response plan",
+"cat": "Cybersecurity",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "threat-model-a-feature",
+"title": "Threat model a feature",
+"cat": "Cybersecurity",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "website-security-checklist",
+"title": "Website security checklist",
+"cat": "Cybersecurity",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "explain-a-vulnerability-simply",
+"title": "Explain a vulnerability simply",
+"cat": "Cybersecurity",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "security-awareness-training-plan",
+"title": "Security awareness training plan",
+"cat": "Cybersecurity",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "secure-api-design-checklist",
+"title": "Secure API design checklist",
+"cat": "Cybersecurity",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "log-analysis-helper",
+"title": "Log analysis helper",
+"cat": "Cybersecurity",
+"tool": "Claude",
+"premium": false
+},
+{
+"id": "backup-and-recovery-plan",
+"title": "Backup and recovery plan",
+"cat": "Cybersecurity",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "privacy-policy-outline",
+"title": "Privacy policy outline",
+"cat": "Cybersecurity",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "secure-home-network-setup",
+"title": "Secure home network setup",
+"cat": "Cybersecurity",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "vendor-security-questionnaire",
+"title": "Vendor security questionnaire",
+"cat": "Cybersecurity",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "dependency-vulnerability-triage",
+"title": "Dependency vulnerability triage",
+"cat": "Cybersecurity",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "social-engineering-red-flags",
+"title": "Social engineering red flags",
+"cat": "Cybersecurity",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "secure-docker-image-checklist",
+"title": "Secure Docker image checklist",
+"cat": "Cybersecurity",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "account-takeover-recovery",
+"title": "Account takeover recovery",
+"cat": "Cybersecurity",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "ctf-and-lab-learning-path",
+"title": "CTF and lab learning path",
+"cat": "Cybersecurity",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "security-headers-for-my-site",
+"title": "Security headers for my site",
+"cat": "Cybersecurity",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "write-a-dockerfile",
+"title": "Write a Dockerfile",
+"cat": "DevOps & Cloud",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "docker-compose-for-local-development",
+"title": "docker-compose for local development",
+"cat": "DevOps & Cloud",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "github-actions-ci-pipeline",
+"title": "GitHub Actions CI pipeline",
+"cat": "DevOps & Cloud",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "kubernetes-deployment-manifests",
+"title": "Kubernetes deployment manifests",
+"cat": "DevOps & Cloud",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "terraform-module",
+"title": "Terraform module",
+"cat": "DevOps & Cloud",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "explain-a-cloud-bill",
+"title": "Explain a cloud bill",
+"cat": "DevOps & Cloud",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "linux-command-helper",
+"title": "Linux command helper",
+"cat": "DevOps & Cloud",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "bash-script-for-automation",
+"title": "Bash script for automation",
+"cat": "DevOps & Cloud",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "nginx-reverse-proxy-config",
+"title": "Nginx reverse proxy config",
+"cat": "DevOps & Cloud",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "monitoring-and-alerting-plan",
+"title": "Monitoring and alerting plan",
+"cat": "DevOps & Cloud",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "debug-a-failing-deployment",
+"title": "Debug a failing deployment",
+"cat": "DevOps & Cloud",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "git-workflow-for-a-team",
+"title": "Git workflow for a team",
+"cat": "DevOps & Cloud",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "fix-a-git-mess",
+"title": "Fix a Git mess",
+"cat": "DevOps & Cloud",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "database-backup-automation",
+"title": "Database backup automation",
+"cat": "DevOps & Cloud",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "ci-cd-pipeline-design",
+"title": "CI/CD pipeline design",
+"cat": "DevOps & Cloud",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "serverless-function",
+"title": "Serverless function",
+"cat": "DevOps & Cloud",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "explain-kubernetes-concepts",
+"title": "Explain Kubernetes concepts",
+"cat": "DevOps & Cloud",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "infrastructure-cost-saving-plan",
+"title": "Infrastructure cost-saving plan",
+"cat": "DevOps & Cloud",
+"tool": "Any chatbot",
+"premium": false
+},
+{
+"id": "runbook-for-a-common-incident",
+"title": "Runbook for a common incident",
+"cat": "DevOps & Cloud",
+"tool": "Any chatbot",
+"premium": true
+},
+{
+"id": "environment-variables-and-secrets-setup",
+"title": "Environment variables and secrets setup",
+"cat": "DevOps & Cloud",
+"tool": "Any chatbot",
+"premium": false
+}
+]
