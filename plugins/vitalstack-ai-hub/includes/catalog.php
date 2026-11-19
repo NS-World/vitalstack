@@ -133,3 +133,27 @@ function vsai_categories( $type ) {
 	}
 	return array_keys( $cats );
 }
+
+/**
+ * The full build prompt of a motion item: its own detailed spec when it has
+ * one, otherwise the short brief wrapped in a complete, structured prompt.
+ */
+function vsai_full_prompt( $it ) {
+	if ( ! empty( $it['spec'] ) ) {
+		return $it['spec'];
+	}
+	$brief = trim( (string) ( $it['prompt'] ?? '' ) );
+	return '# ' . $it['title'] . " — build prompt (VitalStack Motion Studio)\n\n"
+		. "## Goal\n" . $it['summary'] . "\nBuild it as ONE self-contained `index.html`: inline CSS and vanilla JavaScript, no libraries, no external images or fonts, no build step.\n\n"
+		. "## What to build\n" . $brief . "\n\n"
+		. "## Requirements\n"
+		. "- Responsive from 320 px phones to 1920 px desktops; no horizontal page scroll.\n"
+		. "- 60 fps: animate transform and opacity; use requestAnimationFrame for JS motion and pause work when the tab is hidden.\n"
+		. "- Respect `prefers-reduced-motion: reduce` with a calm or static version.\n"
+		. "- Semantic HTML, real buttons and links, visible focus styles, readable contrast.\n"
+		. "- Use CSS custom properties for colours and sizes so the design is easy to re-theme.\n\n"
+		. "## Acceptance checklist\n"
+		. "- Looks and moves as described at desktop and phone sizes.\n"
+		. "- No console errors; works offline from a single file.\n"
+		. '- Keywords: ' . ( $it['tags'] ?? '' ) . "\n";
+}

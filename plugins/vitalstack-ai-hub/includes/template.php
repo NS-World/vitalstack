@@ -37,9 +37,13 @@ $vsai_sections = vsai_sections();
 			<?php foreach ( $vsai_sections as $slug => $s ) : ?>
 				<a href="<?php echo esc_url( vsai_url( $slug ) ); ?>"<?php echo $slug === $vsai_page ? ' aria-current="page" class="is-on"' : ''; ?>><span aria-hidden="true"><?php echo esc_html( $s[2] ); ?></span> <?php echo esc_html( $s[1] ); ?></a>
 			<?php endforeach; ?>
+			<a href="<?php echo esc_url( vsai_url( 'pricing' ) ); ?>"<?php echo 'pricing' === $vsai_page ? ' aria-current="page" class="is-on"' : ''; ?>><?php esc_html_e( 'Pricing', 'vitalstack-ai-hub' ); ?></a>
 			<a class="vsai-nav-main" href="<?php echo esc_url( home_url( '/' ) ); ?>">← <?php esc_html_e( 'Main site', 'vitalstack-ai-hub' ); ?></a>
+			<?php if ( ! vsai_is_member() ) : ?>
+				<a class="vsai-pill is-glow" href="<?php echo esc_url( vsai_url( 'pricing' ) ); ?>"><?php esc_html_e( 'Go Unlimited', 'vitalstack-ai-hub' ); ?></a>
+			<?php endif; ?>
 			<?php if ( is_user_logged_in() ) : ?>
-				<a class="vsai-pill<?php echo vsai_is_member() ? ' is-member' : ''; ?>" href="<?php echo esc_url( function_exists( 'vitalstack_account_url' ) ? vitalstack_account_url() : admin_url( 'profile.php' ) ); ?>"><?php echo vsai_is_member() ? '👑 ' . esc_html__( 'Member', 'vitalstack-ai-hub' ) : esc_html__( 'My account', 'vitalstack-ai-hub' ); ?></a>
+				<a class="vsai-pill<?php echo vsai_is_member() ? ' is-member' : ''; ?>" href="<?php echo esc_url( function_exists( 'vitalstack_account_url' ) ? vitalstack_account_url() : admin_url( 'profile.php' ) ); ?>"><?php echo vsai_is_member() ? vsai_crown_svg() . ' ' . esc_html__( 'AI Pro', 'vitalstack-ai-hub' ) : esc_html__( 'Account', 'vitalstack-ai-hub' ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG + escaped text ?></a>
 			<?php else : ?>
 				<a class="vsai-pill" href="<?php echo esc_url( vsai_signin_url() ); ?>"><?php esc_html_e( 'Sign in', 'vitalstack-ai-hub' ); ?></a>
 			<?php endif; ?>
@@ -60,6 +64,9 @@ $vsai_sections = vsai_sections();
 				break;
 			case 'motion':
 				vsai_render_motion();
+				break;
+			case 'pricing':
+				vsai_render_pricing();
 				break;
 			default:
 				vsai_render_home();

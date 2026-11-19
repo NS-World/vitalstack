@@ -15,7 +15,9 @@ $m = function ( $id, $title, $cat, $premium, $summary, $tags, $code, $prompt ) {
 
 $head = '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">';
 
-return array(
+return array_merge(
+	include __DIR__ . '/motion-v2.php',
+	array(
 	$m(
 		'aurora-hero',
 		'Aurora Hero',
@@ -443,4 +445,4 @@ a{display:block;text-align:center;padding:12px;border-radius:12px;background:#ff
 HTML,
 		'Design a pricing section with three glassmorphism cards (translucent background, backdrop-filter blur, light border) over a slowly rotating, heavily blurred conic-gradient background. Highlight the middle plan with a badge, a slight scale-up and a solid button; others get outlined buttons. Use a responsive auto-fit grid.'
 	),
-);
+) );

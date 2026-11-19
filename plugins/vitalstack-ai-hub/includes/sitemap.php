@@ -18,7 +18,7 @@ class VSAI_Sitemap extends WP_Sitemaps_Provider {
 			return array();
 		}
 		$urls = array( array( 'loc' => vsai_url() ) );
-		foreach ( array_keys( vsai_sections() ) as $s ) {
+		foreach ( array_merge( array_keys( vsai_sections() ), array( 'pricing' ) ) as $s ) {
 			$urls[] = array( 'loc' => vsai_url( $s ) );
 		}
 		return $urls;

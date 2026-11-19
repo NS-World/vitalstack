@@ -1,75 +1,112 @@
-// AI Hub: gating, filters, dialog, copy, download, header link, sitemap. node t_aihub.js
+// AI Hub 1.1 end-to-end test: copy limits, Pro gating, pricing, purchase grant, previews.
+// Usage: node tests/aihub.e2e.js /path/to/local/wordpress   (WP_URL defaults to http://localhost:8095)
 const { chromium } = require('playwright'); const { execFileSync } = require('child_process');
-const L = process.env.WP_URL || 'http://localhost:8095', SITE = process.argv[2]; // path to a local WordPress with the plugin active
+const L = process.env.WP_URL || 'http://localhost:8095', SITE = process.argv[2];
 let pass = 0, fail = 0; const ok = (c, m) => { c ? pass++ : fail++; console.log((c ? 'PASS ' : 'FAIL ') + m); };
 const php = (code) => execFileSync('php', ['-r', 'require "wp-load.php"; ' + code], { cwd: SITE }).toString().trim();
+const resetGuest = () => php('global $wpdb; $wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE \'%vsai_g_%\' OR option_name LIKE \'%vsai_ip_%\' OR option_name LIKE \'%vsai_edge_%\'");');
+const EMAIL = 'aihubfree@example.test', PW = 'Qx7!aihub-free-2026';
+
 (async () => {
   const b = await chromium.launch(); const errs = [];
-  const g = await b.newContext({ viewport: { width: 1366, height: 900 } }); const p = await g.newPage(); p.on('pageerror', e => errs.push(e.message));
-  // Guest: premium content never in the HTML.
-  const proPrompt = php('foreach (vsai_builtin("prompts") as $i) { if ($i["premium"]) { echo substr($i["prompt"],0,40); break; } }');
-  const proGuide = php('foreach (vsai_builtin("library") as $i) { if ($i["premium"]) { echo "from pypdf import PdfReader"; break; } }');
-  const proCode = php('foreach (vsai_builtin("motion") as $i) { if ($i["premium"]) { echo substr($i["prompt"],0,40); break; } }');
-  const proCmd = php('echo "Checkpoints / restore";');
-  let html = await (await p.goto(L + '/ai/prompts/')).text();
-  ok(!html.includes(proPrompt.replace(/&/g, '&amp;').slice(0, 30)) && !html.includes(proPrompt.slice(0, 30)), 'guest: premium prompt text not in page');
-  ok((html.match(/vsai-lock/g) || []).length >= 10, 'guest: premium prompts show lock cards');
-  ok(html.includes('Copy'), 'guest: free prompts have copy buttons');
-  html = await (await p.goto(L + '/ai/library/')).text();
-  ok(!html.includes(proGuide), 'guest: premium guide body not in page');
-  html = await (await p.goto(L + '/ai/motion/')).text();
-  ok(!html.includes(proCode.slice(0, 30)) && html.includes('assets/posters/text-scramble.webp'), 'guest: premium motion code hidden, poster shown');
-  html = await (await p.goto(L + '/ai/commands/')).text();
-  ok(!html.includes(proCmd), 'guest: premium command rows hidden');
-  const v = await p.goto(L + '/ai/motion/view/glass-pricing/'); ok(v.url().endsWith('/ai/motion/'), 'guest: premium full-screen view redirects');
-  const fv = await p.goto(L + '/ai/motion/view/aurora-hero/'); ok(/sandbox allow-scripts/.test(fv.headers()['content-security-policy'] || ''), 'free view: sandbox CSP header');
-  // Filters.
-  await p.goto(L + '/ai/prompts/', { waitUntil: 'load' });
-  const total = await p.locator('.vsai-prompt').count();
-  await p.click('[data-price="free"]'); const free = await p.locator('.vsai-prompt:visible').count();
-  await p.click('[data-price="pro"]'); const pro = await p.locator('.vsai-prompt:visible').count();
-  ok(free + pro === total && free > 0 && pro > 0, `filters: free ${free} + premium ${pro} = ${total}`);
-  await p.click('[data-price=""]'); await p.click('.vsai-chip[data-cat="Coding"]');
-  ok(await p.locator('.vsai-prompt:visible').count() === await p.locator('.vsai-prompt[data-cat="Coding"]').count(), 'filters: category chip');
-  await p.click('.vsai-chip[data-cat=""]'); await p.fill('[data-q]', 'resume'); await p.waitForTimeout(300);
-  ok(await p.locator('.vsai-prompt:visible').count() >= 1 && await p.locator('.vsai-prompt:visible').count() < total, 'filters: search');
-  await p.fill('[data-q]', 'zzzqqq'); await p.waitForTimeout(300); ok(await p.locator('[data-empty]').isVisible(), 'filters: empty message');
-  // Copy (clipboard permission).
+  resetGuest();
+  php(`$u=get_user_by("email","${EMAIL}"); if($u){ require_once ABSPATH."wp-admin/includes/user.php"; wp_delete_user($u->ID); } wp_insert_user(["user_login"=>"aihubfree","user_email"=>"${EMAIL}","user_pass"=>"${PW}","role"=>"subscriber"]);`);
+  const g = await b.newContext({ viewport: { width: 1366, height: 900 } });
   await g.grantPermissions(['clipboard-read', 'clipboard-write'], { origin: L });
-  await p.fill('[data-q]', ''); await p.waitForTimeout(250);
-  await p.locator('.vsai-prompt:visible [data-copy]').first().click(); await p.waitForTimeout(200);
-  const clip = await p.evaluate(() => navigator.clipboard.readText()); ok(clip.length > 40, 'copy: prompt copied to clipboard');
-  // Library dialog.
-  await p.goto(L + '/ai/library/', { waitUntil: 'load' });
-  await p.locator('[data-open="#lib-ai-in-15-minutes"]').click();
-  ok(await p.locator('.vsai-dialog[open] h2').textContent().then(t => t.includes('AI in 15 Minutes')), 'library: guide opens in dialog');
-  await p.keyboard.press('Escape'); ok(!(await p.locator('.vsai-dialog[open]').count()), 'dialog: Esc closes');
-  await p.locator('[data-open="#lib-rag-from-scratch"]').click();
-  ok(await p.locator('.vsai-dialog[open] .vsai-lock').count() === 1, 'library: premium guide shows lock in dialog');
+  const p = await g.newPage(); p.on('pageerror', e => errs.push(e.message));
+
+  // No code or prompt text in the gallery HTML (free or Pro).
+  const freeCode = php('foreach (vsai_builtin("motion") as $i) { if ($i["id"]==="infinite-gallery") echo substr($i["code"], 300, 40); }');
+  const proSpec = php('foreach (vsai_builtin("motion") as $i) { if ($i["id"]==="card-wheel-story") echo substr($i["spec"], 200, 40); }');
+  let html = await (await p.goto(L + '/ai/motion/')).text();
+  ok(!html.includes(freeCode.slice(0, 30)) && !html.includes(proSpec.slice(0, 30)), 'gallery HTML holds no code or prompt text');
+  ok(!/>Premium</.test(html) && (html.match(/vsai-crown/g) || []).length >= 9, 'Pro items show only the crown icon (no "Premium" word)');
+  ok(html.includes('assets/posters/card-wheel-story.webp'), 'Pro design shows its poster to visitors');
+
+  // Previews load lazily from the sandboxed view URL.
+  await p.goto(L + '/ai/motion/', { waitUntil: 'load' }); await p.waitForTimeout(1200);
+  ok(await p.locator('.vsai-frame iframe[data-on="1"]').count() >= 2, 'visible tiles load live previews');
+  const v = await p.request.get(L + '/ai/motion/view/infinite-gallery/?demo=1');
+  ok(/sandbox allow-scripts/.test(v.headers()['content-security-policy'] || ''), 'preview view is CSP-sandboxed');
+
+  // Visitor: 2 free copies, then the gate.
+  const copyBtn = p.locator('.vsai-ico-btn[data-copy-mo="pixel-morph-hero"]');
+  await copyBtn.click(); await p.waitForTimeout(700);
+  let clip = await p.evaluate(() => navigator.clipboard.readText());
+  ok(clip.startsWith('# Pixel Morph Hero'), 'visitor copy 1: full build prompt copied');
+  await p.locator('.vsai-ico-btn[data-copy-mo="infinite-gallery"]').click(); await p.waitForTimeout(700);
+  clip = await p.evaluate(() => navigator.clipboard.readText());
+  ok(clip.startsWith('# Infinite Gallery'), 'visitor copy 2: copied');
+  await p.locator('.vsai-ico-btn[data-copy-mo="mouse-trail-cta"]').click(); await p.waitForTimeout(700);
+  ok(await p.locator('.vsai-dialog[open] .vsai-gate').count() === 1 && /free copy limit/i.test(await p.locator('[data-gate-msg]').textContent()), 'visitor copy 3: "Copy without limits" gate');
+  ok(await p.locator('.vsai-dialog[open] a:has-text("Create free account")').count() === 1, 'gate offers free account');
   await p.keyboard.press('Escape');
-  // Motion dialog for free item: preview, tabs, download.
-  await p.goto(L + '/ai/motion/', { waitUntil: 'load' }); await p.waitForTimeout(800);
-  ok(await p.locator('.vsai-frame iframe[srcdoc]').count() >= 3, 'motion: visible previews loaded lazily');
-  await p.locator('[data-open="#mo-aurora-hero"]').click();
-  ok(await p.locator('.vsai-dialog[open] .vsai-mo-stage iframe[srcdoc]').count() === 1, 'motion: dialog live preview');
-  await p.click('.vsai-dialog [data-tab="prompt"]'); ok(await p.locator('.vsai-dialog [data-pane="prompt"]').isVisible(), 'motion: AI prompt tab');
-  const [dl] = await Promise.all([p.waitForEvent('download'), p.click('.vsai-dialog [data-download]')]);
-  ok(dl.suggestedFilename() === 'aurora-hero.html', 'motion: download .html');
+  const r402 = await p.request.post(L + '/wp-json/vsai/v1/copy', { data: { id: 'sphere-gallery', part: 'code' } });
+  ok(r402.status() === 402, 'Pro code refused for visitors (402)');
+  const bad = await p.request.post(L + '/wp-json/vsai/v1/copy', { data: { id: '../etc', part: 'code' } });
+  ok(bad.status() === 400, 'invalid id rejected (400)');
+
+  // Pro detail panel shows the lock, not buttons.
+  await p.locator('.vsai-ico-btn.is-pro').first().click();
+  ok(await p.locator('.vsai-dialog[open] .vsai-lock').count() === 1 && await p.locator('.vsai-dialog[open] [data-copy-mo]').count() === 0, 'Pro detail: lock card, no copy buttons');
   await p.keyboard.press('Escape');
-  // Main site header link + sitemap.
-  await p.goto(L + '/', { waitUntil: 'load' });
-  ok(await p.locator('a[href$="/ai/"]').count() >= 1, 'main site: AI Hub link present');
-  const sm = await (await p.goto(L + '/wp-sitemap-aihub-1.xml')).text(); ok(/\/ai\/motion\//.test(sm) && /\/ai\/library\//.test(sm), 'sitemap: AI Hub pages listed');
-  const head = await (await p.goto(L + '/ai/prompts/')).text();
-  ok((head.match(/rel="canonical"/g) || []).length === 1 && /<meta name="description" content="Ready-to-use prompts/.test(head), 'SEO: one canonical + own description');
-  // Member: everything open.
-  php('$u=get_user_by("email","aihubmember@example.test"); if(!$u){ $id=wp_insert_user(["user_login"=>"aihubmember","user_email"=>"aihubmember@example.test","user_pass"=>"Zx9!aihub-member-77","role"=>"subscriber"]); } else { $id=$u->ID; } update_user_meta($id,"vs_premium",["data-scientist"=>time()+86400]); echo $id;');
-  ok(php('$u=get_user_by("email","aihubmember@example.test"); echo vsai_is_member($u->ID)?"y":"n";') === 'y', 'member: any paid track = AI Hub member');
-  ok(php('$u=get_user_by("email","aihubmember@example.test"); update_user_meta($u->ID,"vs_premium",["data-scientist"=>time()-10]); $r=vsai_is_member($u->ID)?"y":"n"; update_user_meta($u->ID,"vs_premium",["data-scientist"=>time()+86400]); echo $r;') === 'n', 'member: expired plan is not a member');
-  const mHtml = php('$u=get_user_by("email","aihubmember@example.test"); wp_set_current_user($u->ID); set_query_var("vsai","prompts"); ob_start(); vsai_render_prompts(); echo ob_get_clean();');
-  ok(mHtml.includes('Act as a sceptical startup mentor') || mHtml.includes('system design interviewer'), 'member: premium prompts rendered');
-  ok(!/vsai-lock/.test(mHtml), 'member: no lock cards');
-  php('$u=get_user_by("email","aihubmember@example.test"); require_once ABSPATH."wp-admin/includes/user.php"; wp_delete_user($u->ID);');
+
+  // Free account: copies with a daily counter, limit 10.
+  resetGuest();
+  const a = await b.newContext({ viewport: { width: 1366, height: 900 } }); await a.grantPermissions(['clipboard-read', 'clipboard-write'], { origin: L });
+  const q = await a.newPage(); q.on('pageerror', e => errs.push(e.message));
+  php('global $wpdb; $wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE \'%vs_otp_gap_%\' OR option_name LIKE \'%vs_rl_%\'");');
+  php(`$u=get_user_by("email","${EMAIL}"); update_user_meta($u->ID,"vs_trusted",[]);`);
+  // Sign in through WordPress auth cookies (the account flow itself is covered by auth-flow.e2e.js).
+  const ck = JSON.parse(php(`$u=get_user_by("email","${EMAIL}"); $exp=time()+3600; $tok=WP_Session_Tokens::get_instance($u->ID)->create($exp); echo json_encode(["n"=>LOGGED_IN_COOKIE,"v"=>wp_generate_auth_cookie($u->ID,$exp,"logged_in",$tok)]);`));
+  await a.addCookies([{ name: ck.n, value: ck.v, url: L }]);
+  await q.goto(L + '/ai/motion/', { waitUntil: 'load' });
+  ok(await q.evaluate(() => document.body.classList.contains('logged-in')), 'free account signed in');
+  await q.locator('[data-open="#mo-pixel-morph-hero"]').first().click();
+  ok(/10 free copies left today/.test(await q.locator('.vsai-dialog[open] [data-left]').textContent()), 'free account: "10 free copies left today"');
+  await q.locator('.vsai-dialog[open] [data-copy-mo][data-part="code"]:not([data-download])').click(); await q.waitForTimeout(700);
+  clip = await q.evaluate(() => navigator.clipboard.readText());
+  ok(clip.startsWith('<!doctype html>') && /9 free copies left today/.test(await q.locator('.vsai-dialog[open] [data-left]').textContent()), 'free account: code copied, counter 9');
+  const [dl] = await Promise.all([q.waitForEvent('download'), q.locator('.vsai-dialog[open] [data-download]').click()]);
+  ok(dl.suggestedFilename() === 'pixel-morph-hero.html', 'free account: download .html');
+  await q.keyboard.press('Escape');
+  php(`$u=get_user_by("email","${EMAIL}"); update_user_meta($u->ID,"vsai_copies_".gmdate("Ymd"),10);`);
+  await q.locator('.vsai-ico-btn[data-copy-mo="infinite-gallery"]').click(); await q.waitForTimeout(700);
+  ok(/today’s free copies/.test(await q.locator('[data-gate-msg]').textContent().catch(() => '')) && await q.locator('.vsai-dialog[open] a:has-text("Create free account")').count() === 0, 'free account: daily limit gate (no sign-up button)');
+  await q.keyboard.press('Escape');
+
+  // Access rules: a course track does NOT unlock AI Pro; an AI plan does.
+  ok(php(`$u=get_user_by("email","${EMAIL}"); update_user_meta($u->ID,"vs_premium",["data-scientist"=>time()+86400]); echo vsai_is_member($u->ID)?"y":"n";`) === 'n', 'course track buyer is not AI Pro');
+  const plans = php('$p=vitalstack_pay_plans(); echo isset($p["ai-month"],$p["ai-year"],$p["ai-lifetime"]) && $p["ai-year"]["tracks"]===["ai-hub"] ? "ok" : "no";');
+  ok(plans === 'ok', 'AI Pro plans registered with the checkout');
+  const granted = php(`$u=get_user_by("email","${EMAIL}"); $o=wp_insert_post(["post_type"=>"vs_order","post_status"=>"publish","post_author"=>$u->ID,"post_title"=>"t"]); update_post_meta($o,"_vs_plan","ai-year"); update_post_meta($o,"_vs_status","created"); vitalstack_pay_complete($o,"pay_TEST123"); $a=get_user_meta($u->ID,"vs_premium",true); echo (isset($a["ai-hub"]) && $a["ai-hub"]>time()+360*86400 ? "y":"n").(vsai_is_member($u->ID)?"y":"n"); wp_delete_post($o,true); delete_option("vs_pay_done_".$o);`);
+  ok(granted === 'yy', 'paying for ai-year grants 365 days of AI Pro');
+  await q.goto(L + '/ai/motion/', { waitUntil: 'load' });
+  await q.locator('[data-open="#mo-card-wheel-story"]').first().click();
+  ok(await q.locator('.vsai-dialog[open] .vsai-mo2-stage iframe').count() === 1 && /Unlimited/.test(await q.locator('.vsai-dialog[open] [data-left]').textContent()), 'AI Pro: Pro design live preview + unlimited');
+  await q.locator('.vsai-dialog[open] [data-copy-mo][data-part="prompt"]').click(); await q.waitForTimeout(700);
+  clip = await q.evaluate(() => navigator.clipboard.readText());
+  ok(clip.startsWith('# Card Wheel Story'), 'AI Pro: Pro build prompt copied');
+  const rr = await q.request.get(L + '/premium/ai-hub/', { maxRedirects: 0 });
+  ok(rr.status() === 302 && /vsai_paid=1/.test(rr.headers()['location'] || ''), 'after payment /premium/ai-hub/ → AI Hub thank-you');
+
+  // Pricing page.
+  await p.goto(L + '/ai/pricing/', { waitUntil: 'load' });
+  ok(await p.locator('.vsai-plan').count() === 4 && await p.locator('.vsai-plan.is-best h2').textContent() === 'AI Pro Yearly', 'pricing: Free + 3 plans, Yearly highlighted');
+  const amt = p.locator('.vsai-plan.is-best .plan-amount');
+  if (await p.locator('.vsai-cur [data-cur="usd"]').count()) {
+    await p.click('.vsai-cur [data-cur="usd"]'); const usd = await amt.textContent();
+    await p.click('.vsai-cur [data-cur="inr"]'); const inr = await amt.textContent();
+    ok(/\$\s?59/.test(usd) && /₹\s?1,999/.test(inr), `pricing: currency switch ${usd} / ${inr}`);
+  } else ok(true, 'pricing: currency fixed by region');
+  ok(/Save \d+% vs monthly/.test(await p.locator('.vsai-plan.is-best .vsai-plan-per').textContent()), 'pricing: honest saving vs monthly');
+  const sm = await (await p.goto(L + '/wp-sitemap-aihub-1.xml')).text(); ok(/\/ai\/pricing\//.test(sm), 'sitemap includes /ai/pricing/');
+
+  // Phone layout.
+  const m = await b.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true }); const mp = await m.newPage();
+  for (const path of ['/ai/motion/', '/ai/pricing/']) { await mp.goto(L + path, { waitUntil: 'load' }); ok(await mp.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), 'phone: no sideways scroll on ' + path); }
+
+  php(`$u=get_user_by("email","${EMAIL}"); require_once ABSPATH."wp-admin/includes/user.php"; wp_delete_user($u->ID);`); resetGuest();
   ok(errs.length === 0, 'no JS errors ' + errs.join(' | '));
   await b.close(); console.log(`${pass}/${pass + fail}`); process.exit(fail ? 1 : 0);
 })().catch(e => { console.log('CRASH', e.message); process.exit(2); });

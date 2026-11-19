@@ -50,7 +50,7 @@ function vsai_meta_box( $post ) {
 		}
 		echo '</td></tr>';
 	}
-	echo '<tr><th>' . esc_html__( 'Premium', 'vitalstack-ai-hub' ) . '</th><td><label><input type="checkbox" name="vsai_premium" value="1"' . checked( $v( 'premium' ), '1', false ) . '> ' . esc_html__( 'Only members (any paid plan) see the full item', 'vitalstack-ai-hub' ) . '</label></td></tr>';
+	echo '<tr><th>' . esc_html__( 'Premium', 'vitalstack-ai-hub' ) . '</th><td><label><input type="checkbox" name="vsai_premium" value="1"' . checked( $v( 'premium' ), '1', false ) . '> ' . esc_html__( 'Pro item: only AI Pro members see the full item', 'vitalstack-ai-hub' ) . '</label></td></tr>';
 	if ( current_user_can( 'unfiltered_html' ) ) {
 		echo '<tr><th><label for="vsai_code">' . esc_html__( 'Motion: full HTML document (HTML + CSS + JS)', 'vitalstack-ai-hub' ) . '</label></th><td><textarea id="vsai_code" name="vsai_code" rows="14" class="large-text code">' . esc_textarea( (string) get_post_meta( $post->ID, '_vsai_code', true ) ) . '</textarea><p class="description">' . esc_html__( 'Runs in a sandbox with no network access. Use the featured image as the poster shown to non-members (premium) or as the example result (image prompts).', 'vitalstack-ai-hub' ) . '</p></td></tr>';
 	}
@@ -126,7 +126,7 @@ add_action(
 					$pro = count( array_filter( $all, function ( $i ) { return $i['premium']; } ) );
 					echo '<tr><td><a href="' . esc_url( vsai_url( $slug ) ) . '" target="_blank" rel="noopener">' . esc_html( $s[0] ) . '</a></td><td>' . (int) count( vsai_builtin( $slug ) ) . '</td><td>' . (int) count( vsai_custom( $slug ) ) . '</td><td>' . (int) $pro . '</td></tr>';
 				}
-				echo '</tbody></table><p>' . esc_html__( 'Premium items unlock for any reader with a paid plan (any track, Pro Monthly, Pro Yearly or Founder Lifetime). The “AI Hub” button appears first in the main site’s practice links.', 'vitalstack-ai-hub' ) . '</p></div>';
+				echo '</tbody></table><p>' . esc_html__( 'Pro items unlock with an AI Pro plan (monthly, yearly or lifetime; change prices in Settings → VitalStack Payments). Visitors get 2 free Motion copies, free accounts 10 a day. The “AI Hub” button appears first in the main site’s practice links.', 'vitalstack-ai-hub' ) . '</p></div>';
 			}
 		);
 	}

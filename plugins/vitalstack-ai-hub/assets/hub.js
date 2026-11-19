@@ -131,13 +131,15 @@
 		apply();
 	}
 
-	/* Live previews load only when visible (keeps the page fast). */
-	var loadFrame = function (f) { if (f.hasAttribute('data-srcdoc')) { f.setAttribute('srcdoc', f.getAttribute('data-srcdoc')); f.removeAttribute('data-srcdoc'); } };
+	/* Live previews: load when a tile is near the screen, unload when it leaves (saves CPU and battery). */
+	var loadFrame = function (f) { if (f.hasAttribute('data-src') && f.getAttribute('data-on') !== '1') { f.setAttribute('data-on', '1'); f.src = f.getAttribute('data-src'); } };
+	var unloadFrame = function (f) { if (f.getAttribute('data-on') === '1') { f.setAttribute('data-on', '0'); f.src = 'about:blank'; } };
+	var tileFrames = document.querySelectorAll('.vsai-frame iframe[data-src]');
 	if ('IntersectionObserver' in window) {
-		var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { loadFrame(e.target); io.unobserve(e.target); } }); }, { rootMargin: '200px' });
-		document.querySelectorAll('.vsai-frame iframe[data-srcdoc]').forEach(function (f) { io.observe(f); });
+		var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) loadFrame(e.target); else unloadFrame(e.target); }); }, { rootMargin: '150px' });
+		tileFrames.forEach(function (f) { io.observe(f); });
 	} else {
-		document.querySelectorAll('.vsai-frame iframe[data-srcdoc]').forEach(loadFrame);
+		tileFrames.forEach(loadFrame);
 	}
 
 	/* Copy buttons (works in the page and in the dialog). */
@@ -167,6 +169,52 @@
 		}
 	});
 
+	/* Motion Studio: code and prompts come from the server, within the copy limits. */
+	var gate = function (msg) {
+		var tpl = document.getElementById('vsai-gate'), dlgEl = document.querySelector('.vsai-dialog');
+		if (!tpl || !dlgEl) { alert(msg); return; }
+		var b = dlgEl.querySelector('.vsai-dialog-body'); b.innerHTML = ''; b.appendChild(tpl.content.cloneNode(true));
+		var m = b.querySelector('[data-gate-msg]'); if (m) m.textContent = msg;
+		if (!dlgEl.open) { if (typeof dlgEl.showModal === 'function') dlgEl.showModal(); else dlgEl.setAttribute('open', ''); }
+	};
+	var fetchItem = function (id, part) {
+		var h = { 'Content-Type': 'application/json' };
+		if (T.nonce) h['X-WP-Nonce'] = T.nonce;
+		return fetch(T.rest, { method: 'POST', credentials: 'same-origin', headers: h, body: JSON.stringify({ id: id, part: part }) })
+			.then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok) { var e = new Error(j.message || T.fail); e.code = j.code; throw e; } return j; }); });
+	};
+	document.addEventListener('click', function (e) {
+		var b = e.target.closest('[data-copy-mo]');
+		if (!b) return;
+		e.preventDefault(); e.stopPropagation();
+		var id = b.getAttribute('data-copy-mo'), part = b.getAttribute('data-part') || 'prompt', file = b.getAttribute('data-download');
+		var req = fetchItem(id, part);
+		var done = function (j) {
+			if (j && j.note) document.querySelectorAll('[data-left]').forEach(function (el) { el.textContent = j.note; });
+			var l = b.getAttribute('aria-label') || b.textContent; if (b.textContent.trim()) { b.textContent = file ? '✓' : T.copied; setTimeout(function () { b.textContent = l; }, 1400); } else { b.classList.add('is-done'); setTimeout(function () { b.classList.remove('is-done'); }, 1400); }
+		};
+		var fail = function (err) { if (err && /^(login|limit|upgrade)$/.test(err.code || '')) gate(err.message); else gate(err && err.message ? err.message : T.fail); };
+		if (file) {
+			req.then(function (j) {
+				var url = URL.createObjectURL(new Blob([j.text], { type: 'text/html' }));
+				var a = document.createElement('a'); a.href = url; a.download = file; document.body.appendChild(a); a.click(); a.remove();
+				setTimeout(function () { URL.revokeObjectURL(url); }, 1000); done(j);
+			}).catch(fail);
+			return;
+		}
+		// Safari needs the clipboard write to start inside the click: hand it a promise of the text.
+		if (window.ClipboardItem && navigator.clipboard && navigator.clipboard.write && window.isSecureContext) {
+			var holder = { j: null };
+			var blob = req.then(function (j) { holder.j = j; return new Blob([j.text], { type: 'text/plain' }); });
+			navigator.clipboard.write([new ClipboardItem({ 'text/plain': blob })]).then(function () { done(holder.j); }).catch(function () {
+				req.then(function (j) { copyText(j.text, b); done(j); }).catch(fail);
+			});
+			req.catch(fail);
+			return;
+		}
+		req.then(function (j) { copyText(j.text, b); done(j); }).catch(fail);
+	}, true);
+
 	/* Dialog: fill it from the item's <template>. */
 	var dlg = document.querySelector('.vsai-dialog'), body = dlg && dlg.querySelector('.vsai-dialog-body'), opener = null;
 	var closeDlg = function () { if (dlg.open) dlg.close(); };
@@ -176,7 +224,7 @@
 		var tpl = document.querySelector(o.getAttribute('data-open'));
 		if (!tpl) return;
 		opener = o; body.innerHTML = ''; body.appendChild(tpl.content.cloneNode(true));
-		body.querySelectorAll('iframe[data-srcdoc]').forEach(loadFrame);
+		body.querySelectorAll('iframe[data-src]').forEach(loadFrame);
 		if (typeof dlg.showModal === 'function') dlg.showModal(); else dlg.setAttribute('open', '');
 		var x = dlg.querySelector('[data-close]'); if (x) x.focus();
 	});

@@ -24,7 +24,7 @@ function vsai_url( $section = '' ) {
 
 function vsai_register_routes() {
 	add_rewrite_rule( '^ai/?$', 'index.php?vsai=home', 'top' );
-	add_rewrite_rule( '^ai/(library|commands|prompts|motion)/?$', 'index.php?vsai=$matches[1]', 'top' );
+	add_rewrite_rule( '^ai/(library|commands|prompts|motion|pricing)/?$', 'index.php?vsai=$matches[1]', 'top' );
 	add_rewrite_rule( '^ai/motion/view/([a-z0-9-]{1,60})/?$', 'index.php?vsai=view&vsai_item=$matches[1]', 'top' );
 }
 add_action( 'init', 'vsai_register_routes' );
@@ -52,7 +52,7 @@ add_action(
 
 function vsai_current() {
 	$v = (string) get_query_var( 'vsai' );
-	return in_array( $v, array( 'home', 'library', 'commands', 'prompts', 'motion', 'view' ), true ) ? $v : '';
+	return in_array( $v, array( 'home', 'library', 'commands', 'prompts', 'motion', 'pricing', 'view' ), true ) ? $v : '';
 }
 
 /** Our own page template; the rest of the site is untouched. */
@@ -80,6 +80,9 @@ function vsai_meta() {
 	$page = vsai_current();
 	if ( 'home' === $page ) {
 		return array( __( 'VitalStack AI Hub: library, prompts, commands and motion code', 'vitalstack-ai-hub' ), __( 'Everything AI in one place: an AI library of books and guides, a prompt bazaar for every tool, AI commands and shortcuts, and animated website sections with code. Free and premium.', 'vitalstack-ai-hub' ) );
+	}
+	if ( 'pricing' === $page ) {
+		return array( __( 'AI Pro pricing – VitalStack AI Hub', 'vitalstack-ai-hub' ), __( 'Unlimited access to every premium prompt, motion design, code and AI guide. Monthly, yearly or lifetime. Pay in ₹ or $.', 'vitalstack-ai-hub' ) );
 	}
 	if ( isset( $s[ $page ] ) ) {
 		return array( $s[ $page ][0] . ' – VitalStack AI Hub', $s[ $page ][3] );

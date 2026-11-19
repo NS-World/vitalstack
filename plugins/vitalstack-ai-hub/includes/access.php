@@ -1,7 +1,7 @@
 <?php
 /**
- * Who sees premium AI Hub items: any reader with a paid VitalStack plan
- * (any track, monthly, yearly or lifetime), and site staff.
+ * Who sees premium AI Hub items: readers with an active AI Pro plan
+ * (monthly, yearly or lifetime) and site staff.
  *
  * @package VitalStackAIHub
  */
@@ -13,9 +13,9 @@ function vsai_is_member( $user_id = null ) {
 	$member  = false;
 	if ( $user_id ) {
 		if ( user_can( $user_id, 'edit_posts' ) ) {
-			$member = true;
-		} elseif ( function_exists( 'vitalstack_reader_has_any_premium' ) ) {
-			$member = vitalstack_reader_has_any_premium( $user_id );
+			$member = true; // site staff review everything
+		} elseif ( function_exists( 'vitalstack_user_has_premium' ) ) {
+			$member = vitalstack_user_has_premium( VSAI_TRACK, $user_id ); // an active AI Pro plan
 		}
 	}
 	return (bool) apply_filters( 'vsai_is_member', $member, $user_id );
@@ -23,8 +23,7 @@ function vsai_is_member( $user_id = null ) {
 
 /** Where "Unlock" buttons go: the pricing page (with tracking), or sign-in. */
 function vsai_unlock_url() {
-	$url = function_exists( 'vitalstack_pricing_url' ) ? vitalstack_pricing_url() : home_url( '/pricing/' );
-	return add_query_arg( array( 'utm_source' => 'ai_hub', 'utm_medium' => 'unlock' ), $url ) . '#plans';
+	return vsai_url( 'pricing' );
 }
 
 function vsai_signin_url() {
