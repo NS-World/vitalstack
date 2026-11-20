@@ -49,6 +49,7 @@ emails and are git-ignored on purpose.
 - [`docs/CONTENT-GUIDE.md`](docs/CONTENT-GUIDE.md): **the included 180 lessons + 13 guides, making them yours, writing new ones**
 - [`docs/FRESH-SITE-SETUP.md`](docs/FRESH-SITE-SETUP.md): **new WordPress site from scratch, step by step**
 - [`docs/30-DAY-GROWTH-SPRINT.md`](docs/30-DAY-GROWTH-SPRINT.md): **30-day plan to 500 visitors a day: day-by-day tasks, 10 content formats, scorecard**
+- [`docs/MONTH1-EDU-CONTENT.md`](docs/MONTH1-EDU-CONTENT.md): **30 education posts for 23 Nov – 22 Dec: series, differentiation, calendar**
 - [`docs/MUSIC-AND-DM-AUTOMATION.md`](docs/MUSIC-AND-DM-AUTOMATION.md): **music for posts, free comment-to-DM setup, fast-scroll rules**
 - [`docs/DIGITAL-MARKETING-PLAYBOOK.md`](docs/DIGITAL-MARKETING-PLAYBOOK.md): **social media system: series, weekly calendar, comment-to-DM funnel, scorecard**
 - [`docs/ADSENSE-APPROVAL.md`](docs/ADSENSE-APPROVAL.md): **the final checklist to get AdSense approval**
