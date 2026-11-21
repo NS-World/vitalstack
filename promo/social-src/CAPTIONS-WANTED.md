@@ -11,7 +11,8 @@ say "official". Mentioning the trend in the caption or a hashtag is fine.
 ## Caption
 ```
 Everyone's grinding open-world games this week 🎮
-Meanwhile your code has its own WANTED LEVEL 🚨
+So our crew planned a heist in CODE CITY 😎
+The mission: survive your code's WANTED LEVEL 🚨
 
 ⭐ The Typo
 ⭐⭐ Off by One

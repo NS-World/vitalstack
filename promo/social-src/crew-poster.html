@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#000;font-family:Inter,"Noto Color Emoji",sans-serif}
+.s{width:1080px;height:1350px;position:relative;overflow:hidden;background:#07040f}
+.grid{position:absolute;inset:18px 18px 134px 18px}
+.p{position:absolute;overflow:hidden;border:6px solid #07040f}
+.p .bg{position:absolute;inset:0}
+.p img.c{position:absolute;image-rendering:pixelated}
+.p img.palm{position:absolute;bottom:-10px;opacity:.9}
+.role{position:absolute;z-index:3;background:#07040f;color:#fff;font-family:"Inter Display",Inter;font-weight:900;font-style:italic;font-size:30px;letter-spacing:.04em;padding:8px 16px;text-transform:uppercase}
+.role i{font-style:normal;color:#ffd166}
+.sunset{background:linear-gradient(180deg,#2b0f4c 0%,#8a1f6b 45%,#ff5e7e 75%,#ffb26b 100%)}
+.teal{background:linear-gradient(180deg,#06243a 0%,#0c5a6e 50%,#3fd1c9 100%)}
+.pinkp{background:linear-gradient(160deg,#ff2e63 0%,#7a1fa2 100%)}
+.gold{background:linear-gradient(180deg,#3a1c00 0%,#b85c00 50%,#ffd166 100%)}
+.night{background:radial-gradient(circle at 70% 30%,#3a2a8a 0%,#120a2a 70%)}
+.sun{position:absolute;border-radius:50%;background:linear-gradient(180deg,#ffd166,#ff5e7e);-webkit-mask:repeating-linear-gradient(180deg,#000 0 16px,transparent 16px 22px)}
+.title{position:absolute;z-index:4;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(160deg,#120a2a,#2b0f4c)}
+.title .t1,.title .t2{font-family:"Inter Display",Inter;font-weight:900;font-style:italic;text-transform:uppercase;line-height:.88;letter-spacing:-.03em;color:#fff;
+  text-shadow:5px 5px 0 #ff2e63,10px 10px 0 #5ef2ff}
+.title .t1{font-size:96px}.title .t2{font-size:96px;color:#ffd166}
+.title .t3{margin-top:22px;font-weight:900;font-size:26px;letter-spacing:.3em;color:#5ef2ff}
+.title .stars{font-size:44px;margin-top:12px;letter-spacing:6px}
+.ft{position:absolute;left:0;right:0;bottom:0;height:116px;background:#07040f;border-top:3px solid #ff2e63;display:flex;align-items:center;justify-content:space-between;padding:0 70px}
+.ft img{height:50px}.ft span{color:#5ef2ff;font-weight:800;font-size:31px}
+</style></head><body>
+<section class="s" data-name="crew-poster">
+ <div class="grid">
+  <!-- row 1 -->
+  <div class="p" style="left:0;top:0;width:610px;height:400px;clip-path:polygon(0 0,100% 0,92% 100%,0 100%)">
+    <div class="bg sunset"></div><div class="sun" style="width:240px;height:240px;right:110px;top:70px"></div>
+    <img class="palm" src="crew/palm.svg" style="left:-20px;width:170px">
+    <img class="c" src="crew/dev-shades.svg" style="left:250px;bottom:-20px;width:300px">
+    <div class="role" style="left:20px;top:20px">The <i>Coder</i></div>
+  </div>
+  <div class="p" style="left:560px;top:0;width:484px;height:400px;clip-path:polygon(10% 0,100% 0,100% 100%,0 100%)">
+    <div class="bg teal"></div>
+    <img class="palm" src="crew/palm.svg" style="right:-30px;width:180px;transform:scaleX(-1)">
+    <img class="c" src="crew/bugsy-shades.svg" style="left:110px;bottom:-14px;width:290px">
+    <div class="role" style="right:20px;top:20px">The <i>Detective</i></div>
+  </div>
+  <!-- row 2 -->
+  <div class="p" style="left:0;top:380px;width:320px;height:380px;clip-path:polygon(0 0,100% 6%,100% 100%,0 94%)">
+    <div class="bg pinkp"></div>
+    <img class="c" src="crew/chip-shades.svg" style="left:40px;bottom:-10px;width:240px">
+    <div class="role" style="left:14px;top:34px;font-size:26px">The <i>Hacker</i></div>
+  </div>
+  <div class="p title" style="left:300px;top:380px;width:444px;height:380px;clip-path:polygon(4% 6%,96% 0,100% 94%,0 100%)">
+    <div class="t1">Code</div><div class="t2">City</div>
+    <div class="stars">⭐⭐⭐⭐⭐</div>
+    <div class="t3">WANTED LEVEL</div>
+  </div>
+  <div class="p" style="left:724px;top:380px;width:320px;height:380px;clip-path:polygon(0 0,100% 0,100% 100%,0 94%)">
+    <div class="bg gold"></div>
+    <img class="c" src="crew/byte-shades.svg" style="left:40px;bottom:-8px;width:240px">
+    <div class="role" style="right:14px;top:20px;font-size:26px">The <i>Driver</i></div>
+  </div>
+  <!-- row 3 -->
+  <div class="p" style="left:0;top:740px;width:640px;height:458px;clip-path:polygon(0 4%,100% 0,90% 100%,0 100%)">
+    <div class="bg night"></div><div class="sun" style="width:300px;height:300px;left:170px;top:60px;opacity:.85"></div>
+    <img class="palm" src="crew/palm.svg" style="left:-30px;width:210px">
+    <img class="palm" src="crew/palm.svg" style="right:60px;width:170px;transform:scaleX(-1)">
+    <div style="position:absolute;left:0;right:0;bottom:0;height:70px;background:#07040f;border-top:4px solid #ff2e63"></div>
+    <img class="c" src="crew/car.svg" style="left:90px;bottom:50px;width:460px;filter:drop-shadow(0 0 18px rgba(255,46,99,.8))">
+    <div class="role" style="left:20px;top:40px">The <i>Getaway</i></div>
+  </div>
+  <div class="p" style="left:580px;top:740px;width:464px;height:458px;clip-path:polygon(13% 0,100% 0,100% 100%,0 100%)">
+    <div class="bg sunset" style="filter:hue-rotate(-25deg)"></div>
+    <div style="position:absolute;left:90px;right:30px;top:60px;color:#fff;font-family:'Inter Display',Inter;font-weight:900;font-style:italic;text-transform:uppercase">
+      <div style="font-size:30px;letter-spacing:.2em;color:#ffd166">The mission</div>
+      <div style="font-size:62px;line-height:.95;margin-top:10px;text-shadow:4px 4px 0 #07040f">Fix 5 bugs<br>before<br>Friday</div>
+      <div style="font-size:28px;margin-top:22px;font-style:normal;letter-spacing:.06em;background:#07040f;display:inline-block;padding:8px 14px;color:#5ef2ff">SWIPE TO START ▶</div>
+    </div>
+  </div>
+ </div>
+ <div class="ft"><img src="file:///home/user/vitalstack/brand-kit/logo-dark.png"><span>vitalstack.co.in</span></div>
+</section>
+</body></html>
