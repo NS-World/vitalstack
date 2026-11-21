@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 400"><g fill="#160a2c">
+<path d="M98 400 C104 300 92 200 112 110 L124 112 C106 200 118 300 112 400Z"/>
+<g transform="translate(118 108)">
+<ellipse rx="70" ry="12" transform="rotate(-20) translate(-62 0)"/><ellipse rx="70" ry="12" transform="rotate(20) translate(62 0)"/>
+<ellipse rx="64" ry="11" transform="rotate(-55) translate(-55 0)"/><ellipse rx="64" ry="11" transform="rotate(55) translate(55 0)"/>
+<ellipse rx="60" ry="11" transform="rotate(10) translate(-60 0)"/><ellipse rx="60" ry="11" transform="rotate(-10) translate(60 0)"/>
+<circle r="12"/></g></g></svg>
