@@ -1,6 +1,8 @@
 # "Your code's WANTED LEVEL 🚨": trend post (open-world game hype)
 
-Files: `wanted-1…5.png` (carousel) + `reel-wanted-level.mp4` (17 s, our chiptune inside).
+Files (in the zip): `1-cover-crew-poster.png` → `5-mission-passed.png` (carousel, in this order),
+`alt-cover-wanted-level.png` (spare cover, or post it on its own later) and `reel-code-city.mp4` (18 s, our chiptune inside).
+Cover = "CODE CITY" crew poster: Dev the Coder, Bugsy the Detective, Chip the Hacker, Byte the Driver.
 Post the carousel while the game trend is hot (today / tomorrow, 7:30 pm IST), the reel 2 days later.
 Instagram music for the carousel: search `synthwave`, `retrowave` or `80s` (neon city mood), or a trending
 game-trailer sound with the ↗ arrow.
